@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slack Web API</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { color: #4ecdc4; margin-bottom: 20px; }
+    .auth-section {
+      background: #16213e;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .auth-section input {
+      width: 300px;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background: #0f3460;
+      color: #fff;
+      margin-right: 10px;
+    }
+    .auth-section button {
+      padding: 10px 20px;
+      background: #4ecdc4;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .auth-section button:hover { background: #45b7aa; }
+    .status { display: inline-block; margin-left: 15px; }
+    .status.ok { color: #4ecdc4; }
+    .status.error { color: #ff6b6b; }
+    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+    .sidebar {
+      background: #16213e;
+      border-radius: 8px;
+      padding: 15px;
+      height: fit-content;
+    }
+    .sidebar h3 { color: #4ecdc4; margin-bottom: 15px; font-size: 14px; }
+    .conversation-list { list-style: none; }
+    .conversation-list li {
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 5px;
+      background: #0f3460;
+    }
+    .conversation-list li:hover { background: #1a4a7a; }
+    .conversation-list li.active { background: #4ecdc4; color: #1a1a2e; }
+    .conversation-list .type { font-size: 11px; opacity: 0.7; }
+    .main-panel {
+      background: #16213e;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 500px;
+    }
+    .main-panel h2 { color: #4ecdc4; margin-bottom: 15px; }
+    .messages { max-height: 400px; overflow-y: auto; margin-bottom: 15px; }
+    .message {
+      background: #0f3460;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .message .header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .message .user { font-weight: bold; color: #4ecdc4; }
+    .message .time { font-size: 12px; opacity: 0.6; }
+    .message .text { line-height: 1.5; white-space: pre-wrap; }
+    .send-box { display: flex; gap: 10px; }
+    .send-box input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      background: #0f3460;
+      color: #fff;
+    }
+    .send-box button {
+      padding: 12px 24px;
+      background: #4ecdc4;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .search-section { margin-bottom: 20px; display: flex; gap: 10px; }
+    .search-section input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      background: #0f3460;
+      color: #fff;
+    }
+    .search-section button {
+      padding: 10px 20px;
+      background: #e94560;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .loading { text-align: center; padding: 40px; opacity: 0.6; }
+    .error-msg { background: #ff6b6b22; color: #ff6b6b; padding: 15px; border-radius: 8px; }
+    .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+    .tabs button {
+      padding: 8px 16px;
+      background: #0f3460;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .tabs button.active { background: #4ecdc4; color: #1a1a2e; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Slack Web API</h1>
+    <div class="auth-section">
+      <input type="text" id="apiKey" placeholder="Enter API Key from terminal (sk-...)">
+      <button onclick="connect()">Connect</button>
+      <span id="status" class="status"></span>
+    </div>
+    <div class="grid">
+      <div class="sidebar">
+        <h3>CONVERSATIONS</h3>
+        <div class="tabs">
+          <button class="active" onclick="loadConversations('im,mpim')">DMs</button>
+          <button onclick="loadConversations('public_channel,private_channel')">Channels</button>
+        </div>
+        <ul id="conversationList" class="conversation-list">
+          <li class="loading">Enter API key to connect</li>
+        </ul>
+      </div>
+      <div class="main-panel">
+        <div class="search-section">
+          <input type="text" id="searchQuery" placeholder="Search messages...">
+          <button onclick="searchMessages()">Search</button>
+        </div>
+        <h2 id="channelName">Select a conversation</h2>
+        <div id="messages" class="messages">
+          <div class="loading">Messages will appear here</div>
+        </div>
+        <div class="send-box">
+          <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendMessage()">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    let apiKey = localStorage.getItem('slackApiKey') || '';
+    let currentChannel = null;
+    if (apiKey) {
+      document.getElementById('apiKey').value = apiKey;
+      setTimeout(connect, 100);
+    }
+    async function api(endpoint, options = {}) {
+      const res = await fetch(endpoint, {
+        ...options,
+        headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json', ...options.headers }
+      });
+      if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'API error'); }
+      return res.json();
+    }
+    async function connect() {
+      apiKey = document.getElementById('apiKey').value.trim();
+      if (!apiKey) { alert('Please enter the API key from the terminal'); return; }
+      localStorage.setItem('slackApiKey', apiKey);
+      const status = document.getElementById('status');
+      try {
+        const health = await api('/health');
+        status.textContent = 'Connected as ' + health.user + ' @ ' + health.team;
+        status.className = 'status ok';
+        loadConversations('im,mpim');
+      } catch (e) {
+        status.textContent = 'Error: ' + e.message;
+        status.className = 'status error';
+      }
+    }
+    async function loadConversations(types) {
+      const list = document.getElementById('conversationList');
+      list.innerHTML = '<li class="loading">Loading...</li>';
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      if (event && event.target) event.target.classList.add('active');
+      try {
+        const data = await api('/conversations?types=' + types);
+        list.innerHTML = data.conversations.map(c =>
+          '<li onclick="loadHistory(\'' + c.id + '\', \'' + c.name.replace(/'/g, "\\'") + '\')"><div>' + c.name + '</div><div class="type">' + c.type + '</div></li>'
+        ).join('');
+      } catch (e) { list.innerHTML = '<li class="error-msg">' + e.message + '</li>'; }
+    }
+    async function loadHistory(channelId, name) {
+      currentChannel = channelId;
+      document.getElementById('channelName').textContent = name;
+      document.querySelectorAll('.conversation-list li').forEach(li => li.classList.remove('active'));
+      event.target.closest('li').classList.add('active');
+      const container = document.getElementById('messages');
+      container.innerHTML = '<div class="loading">Loading messages...</div>';
+      try {
+        const data = await api('/conversations/' + channelId + '/history?limit=50');
+        renderMessages(data.messages);
+      } catch (e) { container.innerHTML = '<div class="error-msg">' + e.message + '</div>'; }
+    }
+    function renderMessages(messages) {
+      const container = document.getElementById('messages');
+      if (!messages || messages.length === 0) { container.innerHTML = '<div class="loading">No messages</div>'; return; }
+      container.innerHTML = messages.map(m =>
+        '<div class="message"><div class="header"><span class="user">' + (m.user || m.user_id || 'Unknown') + '</span><span class="time">' + new Date(m.datetime).toLocaleString() + '</span></div><div class="text">' + escapeHtml(m.text || '') + '</div></div>'
+      ).join('');
+      container.scrollTop = container.scrollHeight;
+    }
+    function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+    async function sendMessage() {
+      if (!currentChannel) { alert('Select a conversation first'); return; }
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+      try {
+        await api('/messages', { method: 'POST', body: JSON.stringify({ channel_id: currentChannel, text: text }) });
+        input.value = '';
+        loadHistory(currentChannel, document.getElementById('channelName').textContent);
+      } catch (e) { alert('Error: ' + e.message); }
+    }
+    async function searchMessages() {
+      const query = document.getElementById('searchQuery').value.trim();
+      if (!query) return;
+      document.getElementById('channelName').textContent = 'Search: "' + query + '"';
+      const container = document.getElementById('messages');
+      container.innerHTML = '<div class="loading">Searching...</div>';
+      try {
+        const data = await api('/search?q=' + encodeURIComponent(query));
+        if (data.matches && data.matches.length > 0) {
+          container.innerHTML = data.matches.map(m =>
+            '<div class="message"><div class="header"><span class="user">' + (m.user || 'Unknown') + ' in #' + m.channel + '</span><span class="time">' + new Date(m.datetime).toLocaleString() + '</span></div><div class="text">' + escapeHtml(m.text || '') + '</div></div>'
+          ).join('');
+        } else { container.innerHTML = '<div class="loading">No results found</div>'; }
+      } catch (e) { container.innerHTML = '<div class="error-msg">' + e.message + '</div>'; }
+    }
+  </script>
+</body>
+</html>
