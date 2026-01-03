@@ -22,7 +22,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Publish to npm
+      - name: Publish to npm with provenance
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
