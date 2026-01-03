@@ -11,7 +11,7 @@ A [Model Context Protocol](https://modelcontextprotocol.io/) server that gives C
   <img src="docs/images/demo-main.png" alt="Slack MCP Server Web UI" width="800">
 </p>
 
-> **[Try the Interactive Demo](public/demo.html)** - See the Web UI in action with mock data
+> **[Try the Interactive Demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html)** - See the Web UI in action with mock data
 
 ## Why This Exists
 
