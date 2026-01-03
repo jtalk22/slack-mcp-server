@@ -133,7 +133,7 @@
   <div class="container">
     <h1>Slack Web API</h1>
     <div class="auth-section">
-      <input type="text" id="apiKey" placeholder="Enter API Key from terminal (sk-...)">
+      <input type="text" id="apiKey" placeholder="API Key (default: slack-mcp-local)">
       <button onclick="connect()">Connect</button>
       <span id="status" class="status"></span>
     </div>
@@ -165,12 +165,13 @@
     </div>
   </div>
   <script>
-    let apiKey = localStorage.getItem('slackApiKey') || '';
+    // Default API key matches server default - auto-connects on first visit
+    const DEFAULT_KEY = 'slack-mcp-local';
+    let apiKey = localStorage.getItem('slackApiKey') || DEFAULT_KEY;
     let currentChannel = null;
-    if (apiKey) {
-      document.getElementById('apiKey').value = apiKey;
-      setTimeout(connect, 100);
-    }
+
+    document.getElementById('apiKey').value = apiKey;
+    setTimeout(connect, 100);
     async function api(endpoint, options = {}) {
       const res = await fetch(endpoint, {
         ...options,
@@ -180,8 +181,7 @@
       return res.json();
     }
     async function connect() {
-      apiKey = document.getElementById('apiKey').value.trim();
-      if (!apiKey) { alert('Please enter the API key from the terminal'); return; }
+      apiKey = document.getElementById('apiKey').value.trim() || DEFAULT_KEY;
       localStorage.setItem('slackApiKey', apiKey);
       const status = document.getElementById('status');
       try {
