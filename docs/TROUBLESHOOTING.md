@@ -98,15 +98,18 @@ launchctl load ~/Library/LaunchAgents/com.slack-web-api.plist
 
 ### API Key Invalid
 
-**Default key:** `slack-web-api-2026`
+**Default API Key:** `slack-mcp-local`
 
-The key is hardcoded in `src/web-server.js` for convenience. No need to copy from terminal.
+If you set a custom key, make sure it matches:
+```bash
+SLACK_API_KEY=your-custom-key npm run web
+```
 
 ### Can't Connect to localhost:3000
 
 Check if the server is running:
 ```bash
-curl http://localhost:3000/health -H "Authorization: Bearer slack-web-api-2026"
+curl http://localhost:3000/health -H "Authorization: Bearer slack-mcp-local"
 ```
 
 Check LaunchAgent status:

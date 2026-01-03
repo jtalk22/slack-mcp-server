@@ -32,7 +32,7 @@ import {
 
 // Package info
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "2.0.0";
+const SERVER_VERSION = "1.0.0";
 
 // Initialize server
 const server = new Server(

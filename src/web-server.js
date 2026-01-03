@@ -30,15 +30,9 @@ import {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// API key - use env var or generate random
-const API_KEY = process.env.SLACK_API_KEY || generateApiKey();
-
-function generateApiKey() {
-  const key = "sk-" + Array.from({ length: 32 }, () =>
-    "abcdefghijklmnopqrstuvwxyz0123456789"[Math.floor(Math.random() * 36)]
-  ).join("");
-  return key;
-}
+// Default API key for convenience - override with SLACK_API_KEY env var for production
+const DEFAULT_API_KEY = "slack-mcp-local";
+const API_KEY = process.env.SLACK_API_KEY || DEFAULT_API_KEY;
 
 // Middleware
 app.use(express.json());
