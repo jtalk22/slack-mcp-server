@@ -1,8 +1,6 @@
 # Slack MCP Server
 
 [![CI](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/slack-mcp-server.svg)](https://www.npmjs.com/package/slack-mcp-server)
-[![npm downloads](https://img.shields.io/npm/dm/slack-mcp-server.svg)](https://www.npmjs.com/package/slack-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/jtalk22/slack-mcp-server/pulls)
@@ -48,9 +46,6 @@ cd slack-mcp-server
 npm install
 ```
 
-Or install globally:
-```bash
-npm install -g slack-mcp-server
 ```
 
 ### 2. Get Your Slack Tokens
