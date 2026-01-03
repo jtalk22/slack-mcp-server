@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slack MCP Server - Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0f0f1a;
+      --bg-secondary: #1a1a2e;
+      --bg-tertiary: #16213e;
+      --bg-input: #0f3460;
+      --accent: #4ecdc4;
+      --accent-hover: #45b7aa;
+      --accent-glow: rgba(78, 205, 196, 0.3);
+      --danger: #e94560;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --border-radius: 12px;
+      --transition: all 0.2s ease;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* Gradient background */
+    .bg-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(78, 205, 196, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(233, 69, 96, 0.05) 0%, transparent 50%),
+        var(--bg-primary);
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .logo h1 {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .demo-badge {
+      background: linear-gradient(135deg, var(--danger), #ff8c00);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Status bar */
+    .status-bar {
+      background: var(--bg-tertiary);
+      padding: 16px 20px;
+      border-radius: var(--border-radius);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .status-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .status-text strong {
+      color: var(--accent);
+    }
+
+    .workspace-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .workspace-info span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Main grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      height: calc(100vh - 220px);
+      min-height: 500px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-header h3 {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 10px 16px;
+      background: var(--bg-input);
+      color: var(--text-secondary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .tabs button:hover {
+      background: rgba(78, 205, 196, 0.1);
+      color: var(--accent);
+    }
+
+    .tabs button.active {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .conversation-list {
+      list-style: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .conversation-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .conversation-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .conversation-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .conversation-item {
+      padding: 14px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 6px;
+      background: transparent;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .conversation-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .conversation-item.active {
+      background: linear-gradient(135deg, var(--accent), #3b82f6);
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .conversation-item.active .conv-name,
+    .conversation-item.active .conv-type {
+      color: var(--bg-primary);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .avatar.dm { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+    .avatar.channel { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+    .avatar.group { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+
+    .conv-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .conv-name {
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .conv-type {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .unread-badge {
+      background: var(--danger);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* Main panel */
+    .main-panel {
+      background: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .channel-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .channel-title h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .channel-title .online-status {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-box input {
+      width: 250px;
+      padding: 10px 16px;
+      background: var(--bg-input);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-box button {
+      padding: 10px 20px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .search-box button:hover {
+      background: #d63d56;
+      transform: translateY(-1px);
+    }
+
+    /* Messages */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .messages::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .message {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      transition: var(--transition);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .message-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .message-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .message-user {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .message-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .message-text code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: #f472b6;
+    }
+
+    .message-text pre {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin: 8px 0;
+      overflow-x: auto;
+      border-left: 3px solid var(--accent);
+    }
+
+    .message-text pre code {
+      background: none;
+      padding: 0;
+      color: #e2e8f0;
+      display: block;
+      white-space: pre;
+    }
+
+    .message-reactions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .reaction {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .reaction:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .reaction-count {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .thread-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 8px 12px;
+      background: rgba(78, 205, 196, 0.1);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: pointer;
+      transition: var(--transition);
+      width: fit-content;
+    }
+
+    .thread-indicator:hover {
+      background: rgba(78, 205, 196, 0.15);
+    }
+
+    /* Send box */
+    .send-box {
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      gap: 12px;
+    }
+
+    .send-box input {
+      flex: 1;
+      padding: 14px 20px;
+      background: var(--bg-input);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .send-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .send-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .send-box button {
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--accent), #3b82f6);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .send-box button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .sidebar {
+        max-height: 300px;
+      }
+      .main-panel {
+        min-height: 500px;
+      }
+      .search-box input {
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">S</div>
+        <div>
+          <h1>Slack MCP Server</h1>
+          <div class="subtitle">Model Context Protocol for Slack</div>
+        </div>
+      </div>
+      <div class="demo-badge">Interactive Demo</div>
+    </header>
+
+    <div class="status-bar">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span class="status-text">Connected as <strong>alex.chen</strong> @ <strong>Acme Corp</strong></span>
+      </div>
+      <div class="workspace-info">
+        <span>12 conversations</span>
+        <span>|</span>
+        <span>Last sync: just now</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h3>Conversations</h3>
+          <div class="tabs">
+            <button class="active" onclick="showDMs()">DMs</button>
+            <button onclick="showChannels()">Channels</button>
+          </div>
+        </div>
+        <ul id="conversationList" class="conversation-list">
+          <!-- Populated by JS -->
+        </ul>
+      </aside>
+
+      <main class="main-panel">
+        <div class="panel-header">
+          <div class="channel-title">
+            <h2 id="channelName">Sarah Johnson</h2>
+            <div class="online-status"></div>
+          </div>
+          <div class="search-box">
+            <input type="text" placeholder="Search messages..." id="searchQuery">
+            <button onclick="searchDemo()">Search</button>
+          </div>
+        </div>
+
+        <div id="messages" class="messages">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="send-box">
+          <input type="text" placeholder="Type a message..." id="messageInput">
+          <button onclick="sendDemo()">Send</button>
+        </div>
+      </main>
+    </div>
+
+    <footer class="footer">
+      This is an interactive demo with mock data. <a href="https://github.com/jtalk22/slack-mcp-server">View on GitHub</a> to set up your own instance.
+    </footer>
+  </div>
+
+  <script>
+    // Mock data for demo
+    const mockDMs = [
+      { id: 'D001', name: 'Sarah Johnson', type: 'dm', unread: 3, initials: 'SJ', avatarClass: 'dm' },
+      { id: 'D002', name: 'Mike Chen', type: 'dm', unread: 0, initials: 'MC', avatarClass: 'dm' },
+      { id: 'D003', name: 'Emily Davis', type: 'dm', unread: 1, initials: 'ED', avatarClass: 'dm' },
+      { id: 'D004', name: 'Alex Rivera', type: 'dm', unread: 0, initials: 'AR', avatarClass: 'dm' },
+      { id: 'D005', name: 'Jordan Lee', type: 'dm', unread: 0, initials: 'JL', avatarClass: 'dm' },
+    ];
+
+    const mockChannels = [
+      { id: 'C001', name: '#engineering', type: 'channel', unread: 12, initials: '#', avatarClass: 'channel' },
+      { id: 'C002', name: '#product', type: 'channel', unread: 0, initials: '#', avatarClass: 'channel' },
+      { id: 'C003', name: '#random', type: 'channel', unread: 5, initials: '#', avatarClass: 'channel' },
+      { id: 'C004', name: '#announcements', type: 'channel', unread: 0, initials: '#', avatarClass: 'channel' },
+    ];
+
+    const mockMessages = {
+      'D001': [
+        { user: 'Sarah Johnson', time: '10:32 AM', text: 'Hey! Did you get a chance to review the PR I submitted yesterday?', initials: 'SJ', reactions: [{ emoji: '1', count: 1 }] },
+        { user: 'You', time: '10:35 AM', text: 'Yes! Just finished reviewing it. Left a few comments but overall looks great. The new caching layer should really help with performance.', initials: 'AC', reactions: [] },
+        { user: 'Sarah Johnson', time: '10:38 AM', text: 'Awesome, thanks for the quick turnaround! I\'ll address those comments now.', initials: 'SJ', reactions: [{ emoji: '+1', count: 1 }] },
+        { user: 'Sarah Johnson', time: '10:42 AM', text: 'Quick question - for the `fetchUserData` function, should I use `async/await` or stick with promises?', initials: 'SJ', reactions: [], hasThread: true, threadCount: 4 },
+        { user: 'You', time: '10:45 AM', text: 'I\'d go with async/await - it\'s more readable and matches the rest of our codebase. Here\'s an example:\n\n```javascript\nasync function fetchUserData(userId) {\n  const response = await api.get(`/users/${userId}`);\n  return response.data;\n}\n```', initials: 'AC', reactions: [{ emoji: 'heart', count: 2 }] },
+        { user: 'Sarah Johnson', time: '10:48 AM', text: 'Perfect, that makes sense. I\'ll update the PR with these changes. Should be ready for another review in about an hour.', initials: 'SJ', reactions: [] },
+      ],
+      'D002': [
+        { user: 'Mike Chen', time: '9:15 AM', text: 'Morning! Are we still on for the architecture review at 2pm?', initials: 'MC', reactions: [] },
+        { user: 'You', time: '9:20 AM', text: 'Yes, confirmed! I\'ve prepared the diagrams for the new microservices approach.', initials: 'AC', reactions: [{ emoji: '+1', count: 1 }] },
+        { user: 'Mike Chen', time: '9:22 AM', text: 'Great. Can you share those beforehand so I can review?', initials: 'MC', reactions: [] },
+      ],
+      'C001': [
+        { user: 'DevOps Bot', time: '8:00 AM', text: 'Deployment to staging completed successfully. All tests passing.', initials: 'DB', reactions: [{ emoji: 'rocket', count: 5 }] },
+        { user: 'Emily Davis', time: '9:30 AM', text: 'Team, we\'re seeing some increased latency on the API endpoints. Looking into it now.', initials: 'ED', reactions: [] },
+        { user: 'Alex Rivera', time: '9:45 AM', text: 'I can help investigate. Which endpoints specifically?', initials: 'AR', reactions: [] },
+        { user: 'Emily Davis', time: '9:48 AM', text: 'Mainly `/api/users` and `/api/products`. P95 latency jumped from 200ms to 800ms.', initials: 'ED', reactions: [], hasThread: true, threadCount: 12 },
+        { user: 'You', time: '10:00 AM', text: 'Just checked the database metrics - looks like we have some N+1 queries happening after yesterday\'s deploy. I\'ll submit a fix.', initials: 'AC', reactions: [{ emoji: 'eyes', count: 3 }, { emoji: '+1', count: 2 }] },
+      ]
+    };
+
+    let currentView = 'dms';
+    let currentChannel = 'D001';
+
+    function renderConversations(conversations) {
+      const list = document.getElementById('conversationList');
+      list.innerHTML = conversations.map(c => `
+        <li class="conversation-item ${c.id === currentChannel ? 'active' : ''}" onclick="selectConversation('${c.id}', '${c.name}')">
+          <div class="avatar ${c.avatarClass}">${c.initials}</div>
+          <div class="conv-info">
+            <div class="conv-name">${c.name}</div>
+            <div class="conv-type">${c.type === 'dm' ? 'Direct message' : 'Channel'}</div>
+          </div>
+          ${c.unread > 0 ? `<div class="unread-badge">${c.unread}</div>` : ''}
+        </li>
+      `).join('');
+    }
+
+    function renderMessages(channelId) {
+      const container = document.getElementById('messages');
+      const messages = mockMessages[channelId] || [];
+
+      if (messages.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);">No messages yet</div>';
+        return;
+      }
+
+      container.innerHTML = messages.map((m, i) => `
+        <div class="message" style="animation-delay: ${i * 0.05}s">
+          <div class="message-avatar" style="background: linear-gradient(135deg, ${getAvatarColor(m.initials)})">${m.initials}</div>
+          <div class="message-content">
+            <div class="message-header">
+              <span class="message-user">${m.user}</span>
+              <span class="message-time">${m.time}</span>
+            </div>
+            <div class="message-text">${formatMessageText(m.text)}</div>
+            ${m.reactions && m.reactions.length > 0 ? `
+              <div class="message-reactions">
+                ${m.reactions.map(r => `<div class="reaction">${getEmoji(r.emoji)} <span class="reaction-count">${r.count}</span></div>`).join('')}
+              </div>
+            ` : ''}
+            ${m.hasThread ? `
+              <div class="thread-indicator">
+                <span>View thread</span>
+                <span style="opacity: 0.7">${m.threadCount} replies</span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function formatMessageText(text) {
+      // Convert multiline code blocks to <pre><code>
+      text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+      // Convert inline code to <code>
+      text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+      return text;
+    }
+
+    function getEmoji(name) {
+      const emojis = {
+        '+1': '👍',
+        'heart': '❤️',
+        'rocket': '🚀',
+        'eyes': '👀',
+        '1': '👍',
+        'fire': '🔥',
+        'tada': '🎉',
+        'thinking': '🤔'
+      };
+      return emojis[name] || name;
+    }
+
+    function getAvatarColor(initials) {
+      const colors = [
+        ['#8b5cf6', '#ec4899'],
+        ['#3b82f6', '#06b6d4'],
+        ['#f59e0b', '#ef4444'],
+        ['#10b981', '#3b82f6'],
+        ['#f472b6', '#8b5cf6']
+      ];
+      const index = initials.charCodeAt(0) % colors.length;
+      return colors[index].join(', ');
+    }
+
+    function showDMs() {
+      currentView = 'dms';
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      renderConversations(mockDMs);
+    }
+
+    function showChannels() {
+      currentView = 'channels';
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      renderConversations(mockChannels);
+    }
+
+    function selectConversation(id, name) {
+      currentChannel = id;
+      document.getElementById('channelName').textContent = name;
+
+      // Update active state
+      document.querySelectorAll('.conversation-item').forEach(li => li.classList.remove('active'));
+      event.target.closest('.conversation-item').classList.add('active');
+
+      renderMessages(id);
+    }
+
+    function searchDemo() {
+      const query = document.getElementById('searchQuery').value;
+      if (!query) return;
+
+      document.getElementById('channelName').textContent = `Search: "${query}"`;
+      document.getElementById('messages').innerHTML = `
+        <div class="message">
+          <div class="message-avatar" style="background: linear-gradient(135deg, #8b5cf6, #ec4899)">SJ</div>
+          <div class="message-content">
+            <div class="message-header">
+              <span class="message-user">Sarah Johnson</span>
+              <span class="message-time">Yesterday at 3:42 PM</span>
+            </div>
+            <div class="message-text">Found 3 results for "<strong>${query}</strong>" across your conversations...</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function sendDemo() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const container = document.getElementById('messages');
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      container.innerHTML += `
+        <div class="message">
+          <div class="message-avatar" style="background: linear-gradient(135deg, #10b981, #3b82f6)">AC</div>
+          <div class="message-content">
+            <div class="message-header">
+              <span class="message-user">You</span>
+              <span class="message-time">${now}</span>
+            </div>
+            <div class="message-text">${text}</div>
+          </div>
+        </div>
+      `;
+
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // Initialize
+    renderConversations(mockDMs);
+    renderMessages('D001');
+
+    // Handle enter key
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendDemo();
+    });
+    document.getElementById('searchQuery').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') searchDemo();
+    });
+  </script>
+</body>
+</html>

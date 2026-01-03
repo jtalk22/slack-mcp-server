@@ -1,6 +1,17 @@
 # Slack MCP Server
 
+[![npm version](https://img.shields.io/npm/v/slack-mcp-server.svg)](https://www.npmjs.com/package/slack-mcp-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jtalk22)
+
 A [Model Context Protocol](https://modelcontextprotocol.io/) server that gives Claude full access to your Slack workspace - including **DMs**, channels, and message history.
+
+<p align="center">
+  <img src="docs/images/demo-main.png" alt="Slack MCP Server Web UI" width="800">
+</p>
+
+> **[Try the Interactive Demo](public/demo.html)** - See the Web UI in action with mock data
 
 ## Why This Exists
 
@@ -27,7 +38,7 @@ Official Slack integrations require OAuth and can't access DMs without explicit 
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/slack-mcp-server.git
+git clone https://github.com/jtalk22/slack-mcp-server.git
 cd slack-mcp-server
 
 # Install dependencies
@@ -128,9 +139,16 @@ Since claude.ai doesn't support MCP, you can use the web server:
 npm run web
 ```
 
-Open http://localhost:3000 in your browser.
+Open http://localhost:3000 in your browser. It auto-connects with the default API key (`slack-mcp-local`).
 
-**Default API Key:** `slack-web-api-2026`
+<details>
+<summary><strong>View Web UI Screenshots</strong></summary>
+
+| DMs View | Channels View |
+|----------|---------------|
+| ![DMs](docs/images/demo-main.png) | ![Channels](docs/images/demo-channels.png) |
+
+</details>
 
 ### Auto-Start on Login (macOS)
 
@@ -239,10 +257,12 @@ slack-mcp-server/
 │   ├── tools.js          # MCP tool definitions
 │   └── handlers.js       # Tool implementations
 ├── public/
-│   └── index.html        # Web UI
+│   ├── index.html        # Web UI
+│   └── demo.html         # Interactive demo with mock data
 ├── scripts/
 │   └── token-cli.js      # Token management CLI
 └── docs/
+    ├── images/           # Screenshots
     ├── SETUP.md          # Detailed setup guide
     ├── API.md            # Tool reference
     ├── WEB-API.md        # REST API reference
@@ -257,6 +277,16 @@ Contributions welcome! Please:
 2. Create a feature branch
 3. Make your changes
 4. Submit a pull request
+
+## Support
+
+If you find this useful, consider supporting the project:
+
+- [GitHub Sponsors](https://github.com/sponsors/jtalk22)
+- [Ko-fi](https://ko-fi.com/jtalk22)
+- [Buy Me a Coffee](https://www.buymeacoffee.com/jtalk22)
+
+Star the repo if it helped you!
 
 ## License
 

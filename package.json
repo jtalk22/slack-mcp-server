@@ -24,17 +24,29 @@
     "model-context-protocol",
     "ai",
     "llm",
-    "chatbot"
+    "chatbot",
+    "claude-desktop",
+    "claude-code",
+    "slack-api",
+    "slack-bot",
+    "dm",
+    "direct-messages",
+    "workspace",
+    "automation"
   ],
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/jtalk22"
+  },
   "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/slack-mcp-server.git"
+    "url": "https://github.com/jtalk22/slack-mcp-server.git"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/slack-mcp-server#readme",
+  "homepage": "https://github.com/jtalk22/slack-mcp-server#readme",
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/slack-mcp-server/issues"
+    "url": "https://github.com/jtalk22/slack-mcp-server/issues"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -51,5 +63,8 @@
     "docs/",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "devDependencies": {
+    "playwright": "^1.57.0"
+  }
 }
