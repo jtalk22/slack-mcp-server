@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Token files - NEVER commit these
+.slack-mcp-tokens.json
+*.tokens.json
+.env
+.env.*
+
+# Logs
+*.log
+/tmp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/

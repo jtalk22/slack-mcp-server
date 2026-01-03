@@ -1,0 +1,55 @@
+{
+  "name": "slack-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Slack - Access DMs, channels, and messages from Claude",
+  "type": "module",
+  "main": "src/server.js",
+  "bin": {
+    "slack-mcp-server": "./src/server.js",
+    "slack-mcp-web": "./src/web-server.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "web": "node src/web-server.js",
+    "tokens:status": "node scripts/token-cli.js status",
+    "tokens:refresh": "node scripts/token-cli.js refresh",
+    "tokens:auto": "node scripts/token-cli.js auto",
+    "tokens:clear": "node scripts/token-cli.js clear"
+  },
+  "keywords": [
+    "mcp",
+    "slack",
+    "claude",
+    "anthropic",
+    "model-context-protocol",
+    "ai",
+    "llm",
+    "chatbot"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/slack-mcp-server.git"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/slack-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/slack-mcp-server/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "express": "^4.18.2"
+  },
+  "files": [
+    "src/",
+    "lib/",
+    "public/",
+    "scripts/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ]
+}
