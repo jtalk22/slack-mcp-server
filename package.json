@@ -1,6 +1,6 @@
 {
   "name": "@jtalk22/slack-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MCP server for Slack - Access DMs, channels, and messages from Claude",
   "type": "module",
   "main": "src/server.js",
