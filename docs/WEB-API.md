@@ -12,7 +12,7 @@ npm run web
 The server will:
 1. Start on port 3000
 2. Serve the web UI at http://localhost:3000
-3. Use the hardcoded API key: `slack-web-api-2026`
+3. Use default API key `slack-mcp-local` (or set `SLACK_API_KEY` env var)
 
 ## Auto-Start on Login (Recommended)
 
@@ -66,10 +66,10 @@ launchctl unload ~/Library/LaunchAgents/com.slack-web-api.plist
 All API requests require the API key in the Authorization header:
 
 ```
-Authorization: Bearer slack-web-api-2026
+Authorization: Bearer <your-api-key>
 ```
 
-**Default API Key:** `slack-web-api-2026`
+**Default API Key:** `slack-mcp-local`
 
 To use a custom key:
 ```bash
@@ -245,7 +245,7 @@ curl -H "Authorization: Bearer $API_KEY" http://localhost:3000/users/U05GPEVH7J9
 
 Open http://localhost:3000 in your browser for a visual interface.
 
-The UI auto-connects with the hardcoded API key (`slack-web-api-2026`):
+The UI auto-connects with the default API key:
 1. Select a conversation from the sidebar
 2. View messages, threads, and user info
 3. Search messages across the workspace
