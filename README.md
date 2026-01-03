@@ -1,9 +1,12 @@
 # Slack MCP Server
 
+[![CI](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/slack-mcp-server.svg)](https://www.npmjs.com/package/slack-mcp-server)
+[![npm downloads](https://img.shields.io/npm/dm/slack-mcp-server.svg)](https://www.npmjs.com/package/slack-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/jtalk22)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/jtalk22/slack-mcp-server/pulls)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/jtalk22?style=social)](https://github.com/sponsors/jtalk22)
 
 A [Model Context Protocol](https://modelcontextprotocol.io/) server that gives Claude full access to your Slack workspace - including **DMs**, channels, and message history.
 
