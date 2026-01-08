@@ -2,19 +2,13 @@
 
 *Full workspace access via local session mirroring. DMs, threads, and history—no admin approval required.*
 
-<p align="center">
-  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo.html">
-    <img src="https://img.shields.io/badge/LIVE%20DEMO-Try%20It%20Now-00C853?style=for-the-badge&logo=slack&logoColor=white" alt="Live Demo - Try It Now" height="50">
-  </a>
-</p>
+[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-Try%20It%20Now-00C853?style=for-the-badge&logo=slack&logoColor=white)](https://jtalk22.github.io/slack-mcp-server/public/demo.html)
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue&label=npm" alt="npm"></a>
-  <a href="https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server"><img src="https://img.shields.io/badge/docker-ghcr.io-blue" alt="Docker"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg" alt="Node.js"></a>
-  <a href="https://github.com/sponsors/jtalk22"><img src="https://img.shields.io/github/sponsors/jtalk22?label=Sponsor&logo=github" alt="GitHub Sponsors"></a>
-</p>
+[![npm](https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue&label=npm)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+[![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/jtalk22?label=Sponsor&logo=github)](https://github.com/sponsors/jtalk22)
 
 ---
 
@@ -26,9 +20,7 @@ Screenshotting messages is not a workflow.
 
 This server bridges the gap. It creates a secure, local bridge between Claude and your Slack web session. It gives your AI the same access **you** already have in the browser—search history, summarize threads, find that thing someone sent you three weeks ago—without fighting the platform.
 
-<p align="center">
-  <img src="docs/images/demo-main.png" alt="Slack MCP Server Web UI" width="800">
-</p>
+![Slack MCP Server Web UI](docs/images/demo-main.png)
 
 > **[Try the Interactive Demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html)** - See the Web UI in action
 
