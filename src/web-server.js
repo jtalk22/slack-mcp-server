@@ -67,9 +67,20 @@ const API_KEY = getOrCreateAPIKey();
 app.use(express.json());
 app.use(express.static(join(__dirname, "../public")));
 
-// CORS for local development
+// CORS - restricted to localhost for security
+// Using * would allow any website to make requests to your local server
+const ALLOWED_ORIGINS = [
+  `http://localhost:${PORT}`,
+  `http://127.0.0.1:${PORT}`,
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  const origin = req.headers.origin;
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   if (req.method === "OPTIONS") {
@@ -280,7 +291,8 @@ async function main() {
     console.log(`Credentials loaded from: ${credentials.source}`);
   }
 
-  app.listen(PORT, () => {
+  // Bind to localhost only - prevents access from other devices on the network
+  app.listen(PORT, '127.0.0.1', () => {
     // Print to stderr to keep logs clean (stdout reserved for JSON in some setups)
     console.error(`\n${"═".repeat(60)}`);
     console.error(`  Slack Web API Server v1.1.0`);
@@ -288,6 +300,7 @@ async function main() {
     console.error(`\n  Dashboard: http://localhost:${PORT}/?key=${API_KEY}`);
     console.error(`\n  API Key:   ${API_KEY}`);
     console.error(`\n  curl -H "Authorization: Bearer ${API_KEY}" http://localhost:${PORT}/health`);
+    console.error(`\n  Security: Bound to localhost only (127.0.0.1)`);
     console.error(`\n${"═".repeat(60)}\n`);
   });
 }
