@@ -666,21 +666,6 @@
               <div class="icon">💬</div>
               <div>Click a scenario to see Claude interact with your Slack data</div>
             </div>
-            <div class="user-card" id="userCard">
-              <div class="profile-avatar" id="userAvatar">AC</div>
-              <h4 id="userName">Alex Chen</h4>
-              <div class="title" id="userTitle">Senior Engineer</div>
-              <div class="stats">
-                <div class="stat">
-                  <div class="stat-value" id="userMessages">847</div>
-                  <div class="stat-label">Messages</div>
-                </div>
-                <div class="stat">
-                  <div class="stat-value" id="userChannels">12</div>
-                  <div class="stat-label">Channels</div>
-                </div>
-              </div>
-            </div>
           </div>
         </main>
       </div>
@@ -747,8 +732,6 @@
       const container = document.getElementById('messagesContainer');
       const messages = mockData.messages[channelId] || [];
 
-      document.getElementById('userCard').classList.remove('visible');
-
       if (messages.length === 0) {
         container.innerHTML = '<div class="empty-state"><div class="icon">💬</div><div>No messages</div></div>';
         return;
@@ -772,13 +755,24 @@
       const user = mockData.users[userId];
       if (!user) return;
 
-      document.getElementById('messagesContainer').innerHTML = '';
-      document.getElementById('userAvatar').textContent = user.initials;
-      document.getElementById('userName').textContent = user.name;
-      document.getElementById('userTitle').textContent = user.title;
-      document.getElementById('userMessages').textContent = user.messages;
-      document.getElementById('userChannels').textContent = user.channels;
-      document.getElementById('userCard').classList.add('visible');
+      // Render the user card directly into the container
+      document.getElementById('messagesContainer').innerHTML = `
+        <div class="user-card visible">
+          <div class="profile-avatar">${user.initials}</div>
+          <h4>${user.name}</h4>
+          <div class="title">${user.title}</div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value">${user.messages}</div>
+              <div class="stat-label">Messages</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">${user.channels}</div>
+              <div class="stat-label">Channels</div>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
     function getColor(initials) {
@@ -996,21 +990,6 @@
         <div class="empty-state">
           <div class="icon">💬</div>
           <div>Click a scenario to see Claude interact with your Slack data</div>
-        </div>
-        <div class="user-card" id="userCard">
-          <div class="profile-avatar" id="userAvatar">AC</div>
-          <h4 id="userName">Alex Chen</h4>
-          <div class="title" id="userTitle">Senior Engineer</div>
-          <div class="stats">
-            <div class="stat">
-              <div class="stat-value" id="userMessages">847</div>
-              <div class="stat-label">Messages</div>
-            </div>
-            <div class="stat">
-              <div class="stat-value" id="userChannels">12</div>
-              <div class="stat-label">Channels</div>
-            </div>
-          </div>
         </div>
       `;
 
