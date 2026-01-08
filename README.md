@@ -182,14 +182,17 @@ launchctl load ~/Library/LaunchAgents/com.slack-mcp-server.plist
 Run the server in a container:
 
 ```bash
-# Build locally
+# Pull pre-built image
+docker pull ghcr.io/jtalk22/slack-mcp-server:latest
+
+# Or build locally
 docker build -t slack-mcp-server .
 
 # Run with environment variables
-docker run -e SLACK_TOKEN=xoxc-your-token -e SLACK_COOKIE=xoxd-your-cookie slack-mcp-server
+docker run -e SLACK_TOKEN=xoxc-your-token -e SLACK_COOKIE=xoxd-your-cookie ghcr.io/jtalk22/slack-mcp-server
 
 # Or mount existing token file
-docker run -v ~/.slack-mcp-tokens.json:/root/.slack-mcp-tokens.json slack-mcp-server
+docker run -v ~/.slack-mcp-tokens.json:/root/.slack-mcp-tokens.json ghcr.io/jtalk22/slack-mcp-server
 ```
 
 For MCP configuration with Docker:
@@ -199,7 +202,7 @@ For MCP configuration with Docker:
   "mcpServers": {
     "slack": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "SLACK_TOKEN", "-e", "SLACK_COOKIE", "slack-mcp-server"],
+      "args": ["run", "-i", "--rm", "-e", "SLACK_TOKEN", "-e", "SLACK_COOKIE", "ghcr.io/jtalk22/slack-mcp-server"],
       "env": {
         "SLACK_TOKEN": "xoxc-your-token",
         "SLACK_COOKIE": "xoxd-your-cookie"
