@@ -1,5 +1,4 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
-  "name": "slack-mcp-server",
   "maintainers": ["jtalk22"]
 }
