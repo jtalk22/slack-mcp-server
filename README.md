@@ -2,89 +2,187 @@
 
 [![npm](https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
 [![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)
-[![CI](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/jtalk22/slack-mcp-server/pulls)
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/jtalk22?style=social)](https://github.com/sponsors/jtalk22)
 
-A [Model Context Protocol](https://modelcontextprotocol.io/) server that gives Claude full access to your Slack workspace - including **DMs**, channels, and message history.
+A [Model Context Protocol](https://modelcontextprotocol.io/) server that gives Claude **unrestricted access** to your Slack workspace - including DMs, private channels, and full message history. No OAuth. No app approval. No per-conversation authorization.
 
 <p align="center">
   <img src="docs/images/demo-main.png" alt="Slack MCP Server Web UI" width="800">
 </p>
 
-> **[Try the Interactive Demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html)** - See the Web UI in action with mock data
+> **[Try the Interactive Demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html)** - See the Web UI in action
 
-## Why This Exists
+---
 
-Official Slack integrations require OAuth and can't access DMs without explicit per-conversation authorization. This server uses your browser session tokens to provide the same access you have in Slack's web interface.
+## How It Works: The Cookie Heist
 
-**Works with:**
-- Claude Desktop (macOS/Windows)
-- Claude Code (CLI)
-- claude.ai (via Web UI)
+This server bypasses Slack's OAuth entirely by extracting your browser session tokens. You already have access to everything in Slack's web interface - we just give that same access to Claude.
+
+```mermaid
+sequenceDiagram
+    participant Chrome as Chrome Browser
+    participant Script as AppleScript
+    participant Store as Token Store
+    participant MCP as MCP Server
+    participant Slack as Slack API
+
+    Note over Chrome: You're logged into Slack
+    Script->>Chrome: Execute JavaScript in Slack tab
+    Chrome-->>Script: xoxc- token + xoxd- cookie
+    Script->>Store: Save to ~/.slack-mcp-tokens.json
+    Store->>Store: Encrypt in macOS Keychain
+
+    Note over MCP: Claude asks for DMs
+    MCP->>Store: Load credentials
+    Store-->>MCP: Token + Cookie
+    MCP->>Slack: GET conversations.history
+    Slack-->>MCP: Full message history
+    MCP-->>MCP: Return to Claude
+```
+
+### Why Not OAuth?
+
+```mermaid
+flowchart LR
+    subgraph Traditional["Traditional Slack App (OAuth)"]
+        A[Create App] --> B[Request Scopes]
+        B --> C[Admin Approval]
+        C --> D[User Authorization]
+        D --> E[Limited Access]
+        E --> F["No DMs without<br/>per-conversation consent"]
+    end
+
+    subgraph ThisServer["This Server (Browser Tokens)"]
+        G[Open Slack in Chrome] --> H[Extract Session]
+        H --> I[Full Access]
+        I --> J["All DMs, Channels,<br/>Search, Everything"]
+    end
+
+    style Traditional fill:#ffcccc
+    style ThisServer fill:#ccffcc
+```
+
+**The trade-off:** Tokens expire every 1-2 weeks, but auto-refresh keeps things running seamlessly.
+
+---
 
 ## Features
 
-- **Read Messages** - Fetch history from any DM or channel
-- **Full Export** - Export conversations with threads and resolved usernames
-- **Search** - Search messages across your workspace
-- **Send Messages** - Send to DMs or channels
-- **Auto Token Recovery** - Refreshes expired tokens from Chrome automatically
-- **Rate Limit Handling** - Automatic retry with exponential backoff
-- **Web UI** - Browser interface for use with claude.ai
+### Core Capabilities
+- **Read Any Message** - DMs, private channels, public channels
+- **Full Export** - Conversations with threads and resolved usernames
+- **Search** - Query across your entire workspace
+- **Send Messages** - DMs or channels, with thread support
+- **User Directory** - List and search 500+ users with pagination
+
+### Stability (v1.0.6+)
+- **Auto Token Refresh** - Extracts fresh tokens from Chrome automatically *(macOS only)*
+- **Atomic Writes** - File operations use temp-file-then-rename to prevent corruption
+- **Zombie Protection** - Background timers use `unref()` for clean process exit
+- **Race Condition Safety** - Mutex locks prevent concurrent token extraction
+- **Rate Limit Handling** - Exponential backoff with jitter
+
+### Tools
+| Tool | Description |
+|------|-------------|
+| `slack_health_check` | Verify token validity and workspace info |
+| `slack_token_status` | **New:** Detailed token age, health, and cache stats |
+| `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome |
+| `slack_list_conversations` | List DMs/channels (with lazy discovery cache) |
+| `slack_conversations_history` | Get messages from a channel or DM |
+| `slack_get_full_conversation` | Export full history with threads |
+| `slack_search_messages` | Search across workspace |
+| `slack_send_message` | Send a message to any conversation |
+| `slack_get_thread` | Get thread replies |
+| `slack_users_info` | Get user details |
+| `slack_list_users` | List workspace users (paginated, 500+ supported) |
+
+---
 
 ## Quick Start
 
-### 1. Install
+### Option A: npm (Recommended)
 
 ```bash
-# Clone the repository
+npm install -g @jtalk22/slack-mcp
+```
+
+### Option B: Clone Repository
+
+```bash
 git clone https://github.com/jtalk22/slack-mcp-server.git
 cd slack-mcp-server
-
-# Install dependencies
 npm install
 ```
 
-```
+### Option C: Docker
 
-### 2. Get Your Slack Tokens
-
-You need two tokens from your browser session:
-
-**Option A: Automatic (Recommended)**
 ```bash
-# Open Chrome with Slack (app.slack.com) logged in
-npm run tokens:auto
+docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 ```
 
-**Option B: Manual**
+---
 
-1. Open https://app.slack.com in Chrome
-2. Press F12 → Application → Cookies → Find `d` cookie (starts with `xoxd-`)
-3. Press F12 → Console → Run:
+## Configuration
+
+### Step 1: Get Your Tokens
+
+#### macOS (Automatic)
+```bash
+# Have Chrome open with Slack (app.slack.com) logged in
+npx @jtalk22/slack-mcp tokens:auto
+# Or if cloned: npm run tokens:auto
+```
+
+#### Linux/Windows (Manual)
+
+Auto-refresh requires macOS + Chrome. On other platforms, extract tokens manually:
+
+1. Open https://app.slack.com in your browser
+2. Press F12 → Console → Run:
    ```javascript
+   // Get token
    JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token
    ```
-4. Copy both values and run:
-   ```bash
-   npm run tokens:refresh
+3. Press F12 → Application → Cookies → Copy the `d` cookie value (starts with `xoxd-`)
+4. Create `~/.slack-mcp-tokens.json`:
+   ```json
+   {
+     "SLACK_TOKEN": "xoxc-your-token-here",
+     "SLACK_COOKIE": "xoxd-your-cookie-here",
+     "updated_at": "2024-01-01T00:00:00.000Z"
+   }
    ```
 
-### 3. Configure Claude
+### Step 2: Configure Claude
 
-#### For Claude Desktop
+#### Claude Desktop (macOS)
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "slack": {
-      "command": "node",
-      "args": ["/path/to/slack-mcp-server/src/server.js"],
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
+  }
+}
+```
+
+#### Claude Desktop (Windows)
+
+Edit `%APPDATA%\Claude\claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"],
       "env": {
         "SLACK_TOKEN": "xoxc-your-token",
         "SLACK_COOKIE": "xoxd-your-cookie"
@@ -94,7 +192,9 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-#### For Claude Code
+> **Note:** Windows/Linux users must provide tokens via `env` since auto-refresh is macOS-only.
+
+#### Claude Code (CLI)
 
 Add to `~/.claude.json`:
 
@@ -103,8 +203,8 @@ Add to `~/.claude.json`:
   "mcpServers": {
     "slack": {
       "type": "stdio",
-      "command": "node",
-      "args": ["/path/to/slack-mcp-server/src/server.js"]
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
     }
   }
 }
@@ -112,37 +212,82 @@ Add to `~/.claude.json`:
 
 Claude Code reads tokens from `~/.slack-mcp-tokens.json` automatically.
 
-### 4. Restart Claude
+#### Docker Configuration
 
-The Slack tools will now be available.
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm",
+               "-v", "~/.slack-mcp-tokens.json:/root/.slack-mcp-tokens.json",
+               "ghcr.io/jtalk22/slack-mcp-server"]
+    }
+  }
+}
+```
 
-## Available Tools
+### Step 3: Restart Claude
 
-| Tool | Description |
-|------|-------------|
-| `slack_health_check` | Verify token validity and show workspace info |
-| `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome |
-| `slack_list_conversations` | List DMs and channels with resolved names |
-| `slack_conversations_history` | Get messages from a channel or DM |
-| `slack_get_full_conversation` | Export full history with threads |
-| `slack_search_messages` | Search across workspace |
-| `slack_send_message` | Send a message |
-| `slack_get_thread` | Get thread replies |
-| `slack_users_info` | Get user details |
-| `slack_list_users` | List workspace users |
+Fully quit and reopen Claude. The Slack tools will appear.
+
+---
+
+## Architecture
+
+### Token Persistence (4 Layers)
+
+```
+Priority 1: Environment Variables (SLACK_TOKEN, SLACK_COOKIE)
+    ↓ fallback
+Priority 2: Token File (~/.slack-mcp-tokens.json)
+    ↓ fallback
+Priority 3: macOS Keychain (encrypted)
+    ↓ fallback
+Priority 4: Chrome Auto-Extraction (macOS only)
+```
+
+### Stability Features
+
+#### Atomic Writes
+All file operations (tokens, DM cache) use atomic writes:
+```
+Write to temp file → chmod 600 → rename to target
+```
+This prevents JSON corruption if the process is killed mid-write.
+
+#### Zombie Process Protection
+Background refresh timers use `unref()`:
+```javascript
+const timer = setInterval(refreshTokens, 4 * 60 * 60 * 1000);
+timer.unref(); // Process can exit even if timer is pending
+```
+When Claude closes the MCP connection, the server exits cleanly.
+
+#### Race Condition Prevention
+A mutex lock prevents concurrent Chrome extractions:
+```javascript
+if (refreshInProgress) return null; // Skip if already refreshing
+refreshInProgress = true;
+try { return extractFromChromeInternal(); }
+finally { refreshInProgress = false; }
+```
+
+---
 
 ## Web UI (for claude.ai)
 
-Since claude.ai doesn't support MCP, you can use the web server:
+Since claude.ai doesn't support MCP, use the REST server:
 
 ```bash
 npm run web
+# Or: npx @jtalk22/slack-mcp web
 ```
 
-Open http://localhost:3000 in your browser. It auto-connects with the default API key (`slack-mcp-local`).
+Open http://localhost:3000. API key is auto-generated and displayed in the console.
 
 <details>
-<summary><strong>View Web UI Screenshots</strong></summary>
+<summary><strong>Screenshots</strong></summary>
 
 | DMs View | Channels View |
 |----------|---------------|
@@ -150,183 +295,107 @@ Open http://localhost:3000 in your browser. It auto-connects with the default AP
 
 </details>
 
-### Auto-Start on Login (macOS)
-
-```bash
-# Create LaunchAgent
-cat > ~/Library/LaunchAgents/com.slack-mcp-server.plist << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.slack-mcp-server</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/usr/local/bin/node</string>
-        <string>/path/to/slack-mcp-server/src/web-server.js</string>
-    </array>
-    <key>WorkingDirectory</key>
-    <string>/path/to/slack-mcp-server</string>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>KeepAlive</key>
-    <true/>
-</dict>
-</plist>
-EOF
-
-launchctl load ~/Library/LaunchAgents/com.slack-mcp-server.plist
-```
-
-## Docker
-
-Run the server in a container:
-
-```bash
-# Pull pre-built image
-docker pull ghcr.io/jtalk22/slack-mcp-server:latest
-
-# Or build locally
-docker build -t slack-mcp-server .
-
-# Run with environment variables
-docker run -e SLACK_TOKEN=xoxc-your-token -e SLACK_COOKIE=xoxd-your-cookie ghcr.io/jtalk22/slack-mcp-server
-
-# Or mount existing token file
-docker run -v ~/.slack-mcp-tokens.json:/root/.slack-mcp-tokens.json ghcr.io/jtalk22/slack-mcp-server
-```
-
-For MCP configuration with Docker:
-
-```json
-{
-  "mcpServers": {
-    "slack": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "SLACK_TOKEN", "-e", "SLACK_COOKIE", "ghcr.io/jtalk22/slack-mcp-server"],
-      "env": {
-        "SLACK_TOKEN": "xoxc-your-token",
-        "SLACK_COOKIE": "xoxd-your-cookie"
-      }
-    }
-  }
-}
-```
-
-## Token Management
-
-Tokens are stored in multiple layers for reliability:
-
-1. **Environment variables** - From MCP config
-2. **Token file** - `~/.slack-mcp-tokens.json` (chmod 600)
-3. **macOS Keychain** - Encrypted persistent storage
-4. **Chrome auto-extraction** - Fallback when tokens expire
-
-### When Tokens Expire
-
-Tokens typically last 1-2 weeks. When they expire:
-
-```bash
-# Option 1: In Claude
-slack_refresh_tokens
-
-# Option 2: CLI
-npm run tokens:auto
-```
+---
 
 ## Troubleshooting
 
+### Tokens Expired
+```bash
+# macOS: Auto-refresh from Chrome
+slack_refresh_tokens  # In Claude
+# Or: npm run tokens:auto
+
+# Linux/Windows: Manual update
+# Edit ~/.slack-mcp-tokens.json with fresh values
+```
+
 ### DMs Not Showing
-
-This is handled automatically. The server discovers DMs by calling `conversations.open` for each user (Slack's `conversations.list` doesn't return DMs with browser tokens).
-
-### Rate Limiting
-
-The client implements automatic retry with exponential backoff. If you still hit limits, reduce batch sizes in your queries.
-
-### Claude Desktop Not Seeing Tools
-
-1. Verify JSON syntax in config
-2. Check logs: `~/Library/Logs/Claude/mcp-server-slack.log`
-3. Fully restart Claude Desktop (Cmd+Q, then reopen)
+Use `discover_dms: true` to force discovery:
+```
+slack_list_conversations with discover_dms=true
+```
+This caches DM channel IDs for 24 hours.
 
 ### Chrome Extraction Fails
+- Chrome must be **running** (not minimized to Dock)
+- Slack tab must be open at `app.slack.com`
+- You must be logged in
 
-- Chrome must be running (not just in Dock)
-- Have a Slack tab open at `app.slack.com`
-- Be logged into Slack
+### Claude Desktop Not Seeing Tools
+1. Verify JSON syntax in config file
+2. Check logs: `~/Library/Logs/Claude/mcp*.log`
+3. Fully restart Claude (Cmd+Q, then reopen)
 
-## How It Works
-
-This server uses Slack's internal Web API with browser session tokens (`xoxc-` token and `xoxd-` cookie). This provides the same access level as the Slack web interface.
-
-**Why not a Slack App?**
-
-Slack apps require OAuth and cannot access DMs without explicit per-conversation authorization from users. Browser tokens bypass this limitation.
-
-**Trade-offs:**
-- ✅ Full access to all conversations
-- ✅ No per-conversation authorization
-- ❌ Tokens expire every 1-2 weeks
-- ❌ Requires Chrome for token extraction
-- ❌ Not officially supported by Slack
-
-## Security Notes
-
-- Tokens are stored with `chmod 600` (owner read/write only)
-- macOS Keychain provides encrypted storage
-- Never commit tokens to version control
-- Web server only accessible on localhost by default
+---
 
 ## Project Structure
 
 ```
 slack-mcp-server/
 ├── src/
-│   ├── server.js         # MCP server entry point
+│   ├── server.js         # MCP server (stdio transport)
 │   └── web-server.js     # REST API + Web UI
 ├── lib/
-│   ├── token-store.js    # 4-layer token persistence
-│   ├── slack-client.js   # API client with retry logic
+│   ├── token-store.js    # 4-layer persistence + atomic writes
+│   ├── slack-client.js   # API client, LRU cache, retry logic
 │   ├── tools.js          # MCP tool definitions
 │   └── handlers.js       # Tool implementations
 ├── public/
 │   ├── index.html        # Web UI
-│   └── demo.html         # Interactive demo with mock data
-├── scripts/
-│   └── token-cli.js      # Token management CLI
-└── docs/
-    ├── images/           # Screenshots
-    ├── SETUP.md          # Detailed setup guide
-    ├── API.md            # Tool reference
-    ├── WEB-API.md        # REST API reference
-    └── TROUBLESHOOTING.md
+│   └── demo.html         # Interactive demo
+└── scripts/
+    └── token-cli.js      # Token management CLI
 ```
 
-## Contributing
+---
 
-Contributions welcome! Please:
+## Security
+
+- Token files stored with `chmod 600` (owner-only)
+- macOS Keychain provides encrypted backup
+- Web server binds to localhost only
+- Never commit tokens to version control
+- API keys are cryptographically random (`crypto.randomBytes`)
+
+---
+
+## Platform Support
+
+| Feature | macOS | Linux | Windows |
+|---------|-------|-------|---------|
+| MCP Server | Yes | Yes | Yes |
+| Token File | Yes | Yes | Yes |
+| Auto-Refresh from Chrome | Yes | No | No |
+| Keychain Storage | Yes | No | No |
+| Web UI | Yes | Yes | Yes |
+
+---
+
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Submit a pull request
+4. Run `node --check` on modified files
+5. Submit a pull request
+
+---
 
 ## Support
 
-If you find this useful, consider supporting the project:
+If this saved you from OAuth hell, consider:
 
 - [GitHub Sponsors](https://github.com/sponsors/jtalk22)
-- [Ko-fi](https://ko-fi.com/jtalk22)
-- [Buy Me a Coffee](https://www.buymeacoffee.com/jtalk22)
+- Star the repo
 
-Star the repo if it helped you!
+---
 
 ## License
 
-MIT - See [LICENSE](LICENSE) for details.
+MIT - See [LICENSE](LICENSE)
+
+---
 
 ## Disclaimer
 
-This project uses unofficial Slack APIs. Use at your own risk. The authors are not responsible for any account issues that may arise from using this software.
+This project uses unofficial Slack APIs. Use at your own risk. Not affiliated with or endorsed by Slack Technologies.
