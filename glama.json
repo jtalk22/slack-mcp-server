@@ -1,0 +1,23 @@
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "Slack MCP Server",
+  "description": "Access Slack DMs, channels, and messages from Claude. Browser token auth - no OAuth required.",
+  "maintainers": ["jtalk22"],
+  "categories": ["Communication", "Productivity"],
+  "docker": {
+    "image": "ghcr.io/jtalk22/slack-mcp-server",
+    "tag": "latest",
+    "env": [
+      {
+        "name": "SLACK_TOKEN",
+        "description": "Slack xoxc- token from browser session",
+        "required": true
+      },
+      {
+        "name": "SLACK_COOKIE",
+        "description": "Slack xoxd- cookie from browser session",
+        "required": true
+      }
+    ]
+  }
+}
