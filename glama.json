@@ -1,23 +1,141 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
-  "name": "Slack MCP Server",
-  "description": "Access Slack DMs, channels, and messages from Claude. Browser token auth - no OAuth required.",
+  "name": "slack-mcp-server",
+  "displayName": "Slack MCP Server",
+  "version": "1.0.4",
+  "description": "Full Slack workspace access for Claude - including DMs, channels, and message history. Uses browser token authentication, no OAuth required. Includes Web UI for claude.ai users.",
+  "author": {
+    "name": "jtalk22",
+    "url": "https://github.com/jtalk22"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/jtalk22/slack-mcp-server",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jtalk22/slack-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jtalk22/slack-mcp-server/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "slack",
+    "slack-api",
+    "dm",
+    "direct-messages",
+    "channels",
+    "workspace",
+    "claude",
+    "claude-desktop",
+    "claude-code",
+    "anthropic",
+    "ai-assistant",
+    "automation",
+    "browser-tokens"
+  ],
+  "category": "communication",
+  "tags": [
+    "Slack",
+    "Communication",
+    "Messaging",
+    "DMs",
+    "Channels",
+    "Workspace",
+    "Browser Auth"
+  ],
   "maintainers": ["jtalk22"],
-  "categories": ["Communication", "Productivity"],
+  "mcpVersion": "1.0.0",
+  "capabilities": {
+    "tools": 10,
+    "resources": false,
+    "prompts": false
+  },
+  "features": [
+    "Full DM access without per-conversation authorization",
+    "Channel and message history retrieval",
+    "Full conversation export with threads",
+    "Message search across workspace",
+    "Send messages to DMs and channels",
+    "Auto token refresh from Chrome",
+    "Rate limit handling with exponential backoff",
+    "Web UI for claude.ai users",
+    "Multi-layer token persistence (env, file, keychain)",
+    "macOS and Windows support"
+  ],
+  "requirements": {
+    "node": ">=18.0.0"
+  },
   "docker": {
     "image": "ghcr.io/jtalk22/slack-mcp-server",
-    "tag": "latest",
-    "env": [
-      {
-        "name": "SLACK_TOKEN",
+    "tag": "latest"
+  },
+  "installation": {
+    "npm": "npm install -g @jtalk22/slack-mcp",
+    "docker": "docker pull ghcr.io/jtalk22/slack-mcp-server:latest"
+  },
+  "configuration": {
+    "env": {
+      "SLACK_TOKEN": {
         "description": "Slack xoxc- token from browser session",
         "required": true
       },
-      {
-        "name": "SLACK_COOKIE",
+      "SLACK_COOKIE": {
         "description": "Slack xoxd- cookie from browser session",
         "required": true
       }
-    ]
+    }
+  },
+  "toolCategories": [
+    {
+      "name": "Authentication",
+      "count": 2,
+      "tools": [
+        "slack_health_check",
+        "slack_refresh_tokens"
+      ]
+    },
+    {
+      "name": "Conversations",
+      "count": 4,
+      "tools": [
+        "slack_list_conversations",
+        "slack_conversations_history",
+        "slack_get_full_conversation",
+        "slack_get_thread"
+      ]
+    },
+    {
+      "name": "Messaging",
+      "count": 2,
+      "tools": [
+        "slack_send_message",
+        "slack_search_messages"
+      ]
+    },
+    {
+      "name": "Users",
+      "count": 2,
+      "tools": [
+        "slack_users_info",
+        "slack_list_users"
+      ]
+    }
+  ],
+  "compatibility": {
+    "claude": true,
+    "claude-desktop": true,
+    "claude-code": true
+  },
+  "documentation": {
+    "readme": "https://github.com/jtalk22/slack-mcp-server#readme",
+    "setup": "https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md",
+    "api": "https://github.com/jtalk22/slack-mcp-server/blob/main/docs/API.md",
+    "troubleshooting": "https://github.com/jtalk22/slack-mcp-server/blob/main/docs/TROUBLESHOOTING.md"
+  },
+  "demo": "https://jtalk22.github.io/slack-mcp-server/public/demo.html",
+  "support": {
+    "issues": "https://github.com/jtalk22/slack-mcp-server/issues",
+    "funding": "https://github.com/sponsors/jtalk22"
   }
 }
