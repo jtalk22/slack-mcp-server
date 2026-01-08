@@ -206,7 +206,7 @@ async function main() {
 
   if (passed === total) {
     console.log(`\n✓ ALL TESTS PASSED (${passed}/${total})`);
-    console.log("\nReady to bump version to 1.1.0");
+    console.log("\nWeb UI features verified");
     process.exit(0);
   } else {
     console.log(`\n✗ TESTS FAILED (${passed}/${total})`);

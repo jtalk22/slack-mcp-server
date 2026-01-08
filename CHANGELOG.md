@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.7] - 2026-01-08
+
+### Fixed
+- Version numbers now consistent across all files
+- Error messages reference correct commands (`npm run tokens:auto`)
+- Documentation updated with correct setup instructions
+- `output_file` description reflects security-restricted path
+
+### Changed
+- Verification scripts use generic messages (not version-specific)
+- `token-cli.js` uses shared `KEYCHAIN_SERVICE` constant
+- `handlers.js` uses ES module import for `execSync`
+
+### Documentation
+- Added `slack_token_status` to API reference
+- Fixed clone URL in SETUP.md
+- Updated TROUBLESHOOTING.md with current API key behavior
+
 ## [1.1.6] - 2026-01-08
 
 ### Changed
@@ -109,6 +127,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
+[1.1.7]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.6...v1.1.7
 [1.1.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.2...v1.1.4

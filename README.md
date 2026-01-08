@@ -87,7 +87,7 @@ flowchart LR
 - **Send Messages** - DMs or channels, with thread support
 - **User Directory** - List and search 500+ users with pagination
 
-### Stability (v1.0.6+)
+### Stability
 - **Auto Token Refresh** - Extracts fresh tokens from Chrome automatically *(macOS only)*
 - **Atomic Writes** - File operations use temp-file-then-rename to prevent corruption
 - **Zombie Protection** - Background timers use `unref()` for clean process exit
@@ -294,11 +294,11 @@ npm run web
 # Or: npx @jtalk22/slack-mcp web
 ```
 
-**Magic Link (v1.1.0+):** The console prints a one-click URL with the API key embedded:
+**Magic Link:** The console prints a one-click URL with the API key embedded:
 
 ```
 ════════════════════════════════════════════════════════════
-  Slack Web API Server v1.1.0
+  Slack Web API Server v1.1.7
 ════════════════════════════════════════════════════════════
 
   Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
@@ -393,20 +393,9 @@ slack-mcp-server/
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run `node --check` on modified files
-5. Submit a pull request
+PRs welcome. Run `node --check` on modified files before submitting.
 
----
-
-## Support
-
-If this saved you from OAuth hell, consider:
-
-- [GitHub Sponsors](https://github.com/sponsors/jtalk22)
-- Star the repo
+If you find this project useful, consider [sponsoring](https://github.com/sponsors/jtalk22) or starring the repo.
 
 ---
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * v1.0.6 Verification Script
+ * Core Stability Verification Script
  *
  * Tests:
  * 1. Atomic write - no .tmp artifacts remain after write
@@ -131,7 +131,7 @@ async function testServerExit() {
 
 async function main() {
   console.log("╔════════════════════════════════════════╗");
-  console.log("║  v1.0.6 Verification Tests             ║");
+  console.log("║  Core Stability Verification Tests     ║");
   console.log("╚════════════════════════════════════════╝");
 
   const results = [];
@@ -145,7 +145,7 @@ async function main() {
 
   if (passed === total) {
     console.log(`\n✓ ALL TESTS PASSED (${passed}/${total})`);
-    console.log("\nReady to deploy v1.0.6");
+    console.log("\nCore stability features verified");
     process.exit(0);
   } else {
     console.log(`\n✗ TESTS FAILED (${passed}/${total})`);

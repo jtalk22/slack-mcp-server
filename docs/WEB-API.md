@@ -12,7 +12,7 @@ npm run web
 The server will:
 1. Start on port 3000
 2. Serve the web UI at http://localhost:3000
-3. Use default API key `slack-mcp-local` (or set `SLACK_API_KEY` env var)
+3. Generate a secure API key (saved to `~/.slack-mcp-api-key`)
 
 ## Auto-Start on Login (Recommended)
 
@@ -69,7 +69,11 @@ All API requests require the API key in the Authorization header:
 Authorization: Bearer <your-api-key>
 ```
 
-**Default API Key:** `slack-mcp-local`
+The server generates a cryptographically secure API key on first run, saved to `~/.slack-mcp-api-key`. The key is printed to the console:
+
+```
+Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
+```
 
 To use a custom key:
 ```bash
