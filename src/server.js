@@ -5,7 +5,13 @@
  * A Model Context Protocol server for Slack integration.
  * Provides read/write access to Slack messages, channels, and users.
  *
- * @version 1.0.0
+ * Features:
+ * - Automatic token refresh from Chrome
+ * - LRU user cache with TTL
+ * - Network error retry with exponential backoff
+ * - Background token health monitoring
+ *
+ * @version 1.0.5
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -16,8 +22,10 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 
 import { loadTokens } from "../lib/token-store.js";
+import { checkTokenHealth } from "../lib/slack-client.js";
 import { TOOLS } from "../lib/tools.js";
 import {
+  handleTokenStatus,
   handleHealthCheck,
   handleRefreshTokens,
   handleListConversations,
@@ -30,9 +38,12 @@ import {
   handleListUsers,
 } from "../lib/handlers.js";
 
+// Background refresh interval (4 hours)
+const BACKGROUND_REFRESH_INTERVAL = 4 * 60 * 60 * 1000;
+
 // Package info
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "1.0.0";
+const SERVER_VERSION = "1.0.5";
 
 // Initialize server
 const server = new Server(
@@ -51,6 +62,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     switch (name) {
+      case "slack_token_status":
+        return await handleTokenStatus();
+
       case "slack_health_check":
         return await handleHealthCheck();
 
@@ -104,7 +118,23 @@ async function main() {
     console.error("Will attempt Chrome auto-extraction on first API call");
   } else {
     console.error(`Credentials loaded from: ${credentials.source}`);
+
+    // Check token health on startup
+    const health = await checkTokenHealth({ error: () => {} });
+    if (health.warning) {
+      console.error(`Token age: ${health.age_hours}h - ${health.message}`);
+    }
   }
+
+  // Background token health check (every 4 hours)
+  setInterval(async () => {
+    const health = await checkTokenHealth(console);
+    if (health.refreshed) {
+      console.error("Background: tokens refreshed successfully");
+    } else if (health.critical) {
+      console.error("Background: tokens critical - open Slack in Chrome");
+    }
+  }, BACKGROUND_REFRESH_INTERVAL);
 
   // Start server
   const transport = new StdioServerTransport();
