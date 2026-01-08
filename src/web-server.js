@@ -5,16 +5,21 @@
  * Exposes Slack MCP tools as REST endpoints for browser access.
  * Run alongside or instead of the MCP server for web-based access.
  *
- * @version 1.0.0
+ * @version 1.0.5
  */
 
 import express from "express";
+import { randomBytes } from "crypto";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { existsSync, readFileSync, writeFileSync } from "fs";
+import { execSync } from "child_process";
+import { homedir } from "os";
 import { loadTokens } from "../lib/token-store.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import {
+  handleTokenStatus,
   handleHealthCheck,
   handleRefreshTokens,
   handleListConversations,
@@ -30,9 +35,33 @@ import {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Default API key for convenience - override with SLACK_API_KEY env var for production
-const DEFAULT_API_KEY = "slack-mcp-local";
-const API_KEY = process.env.SLACK_API_KEY || DEFAULT_API_KEY;
+// Secure API key management
+const API_KEY_FILE = join(homedir(), ".slack-mcp-api-key");
+
+function getOrCreateAPIKey() {
+  // Priority 1: Environment variable
+  if (process.env.SLACK_API_KEY) {
+    return process.env.SLACK_API_KEY;
+  }
+
+  // Priority 2: Key file
+  if (existsSync(API_KEY_FILE)) {
+    try {
+      return readFileSync(API_KEY_FILE, "utf-8").trim();
+    } catch {}
+  }
+
+  // Priority 3: Generate new secure key
+  const newKey = `smcp_${randomBytes(24).toString('base64url')}`;
+  try {
+    writeFileSync(API_KEY_FILE, newKey);
+    execSync(`chmod 600 "${API_KEY_FILE}"`);
+  } catch {}
+
+  return newKey;
+}
+
+const API_KEY = getOrCreateAPIKey();
 
 // Middleware
 app.use(express.json());
@@ -92,6 +121,16 @@ app.get("/", (req, res) => {
     ],
     docs: "Add Authorization: Bearer <api-key> header to all requests"
   });
+});
+
+// Token status (detailed health + cache info)
+app.get("/token-status", authenticate, async (req, res) => {
+  try {
+    const result = await handleTokenStatus();
+    res.json(extractContent(result));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // Health check
