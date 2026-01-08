@@ -1,5 +1,7 @@
 # Slack MCP Server
 
+*Full workspace access via local session mirroring. DMs, threads, and history—no admin approval required.*
+
 <p align="center">
   <a href="https://jtalk22.github.io/slack-mcp-server/public/demo.html">
     <img src="https://img.shields.io/badge/LIVE%20DEMO-Try%20It%20Now-00C853?style=for-the-badge&logo=slack&logoColor=white" alt="Live Demo - Try It Now" height="50">
@@ -16,7 +18,13 @@
 
 ---
 
-**Stop fighting Slack's OAuth.** This MCP server gives Claude **full access** to your workspace - DMs, private channels, search, everything. Uses your existing browser session. No admin approval. No per-conversation consent. **Just install and go.**
+### Why This Exists
+
+I built this because I was working with someone to help me manage a complex workload, and we kept hitting walls. They needed context from my messages—"what did X say about Y?"—but Slack's API blocks access to DMs without admin approval.
+
+Screenshotting messages is not a workflow.
+
+This server bridges the gap. It creates a secure, local bridge between Claude and your Slack web session. It gives your AI the same access **you** already have in the browser—search history, summarize threads, find that thing someone sent you three weeks ago—without fighting the platform.
 
 <p align="center">
   <img src="docs/images/demo-main.png" alt="Slack MCP Server Web UI" width="800">
@@ -26,9 +34,9 @@
 
 ---
 
-## How It Works: The Cookie Heist
+## Architecture: Local Session Mirroring
 
-This server bypasses Slack's OAuth entirely by extracting your browser session tokens. You already have access to everything in Slack's web interface - we just give that same access to Claude.
+Instead of authenticating as a bot, this server leverages your existing Chrome session credentials (macOS) or manual token injection (Linux/Windows). It mirrors your user access exactly—if you can see it in Slack, Claude can see it too.
 
 ```mermaid
 sequenceDiagram
@@ -56,7 +64,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    subgraph Traditional["Traditional Slack App (OAuth)"]
+    subgraph Traditional["Official Slack API (OAuth)"]
         A[Create App] --> B[Request Scopes]
         B --> C[Admin Approval]
         C --> D[User Authorization]
@@ -64,17 +72,17 @@ flowchart LR
         E --> F["No DMs without<br/>per-conversation consent"]
     end
 
-    subgraph ThisServer["This Server (Browser Tokens)"]
-        G[Open Slack in Chrome] --> H[Extract Session]
+    subgraph ThisServer["Session Mirroring"]
+        G[Open Slack in Chrome] --> H[Mirror Session]
         H --> I[Full Access]
-        I --> J["All DMs, Channels,<br/>Search, Everything"]
+        I --> J["Your DMs, Channels,<br/>Search, History"]
     end
 
     style Traditional fill:#ffcccc
     style ThisServer fill:#ccffcc
 ```
 
-**The trade-off:** Tokens expire every 1-2 weeks, but auto-refresh keeps things running seamlessly.
+**Trade-off:** Session tokens expire every 1-2 weeks. Auto-refresh (macOS) or manual update keeps things running.
 
 ---
 
