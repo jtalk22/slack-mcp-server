@@ -10,9 +10,16 @@
 
 FROM node:18-alpine
 
+# OCI Image Labels for registry discoverability
 LABEL maintainer="jtalk22"
+LABEL org.opencontainers.image.title="Slack MCP Server"
+LABEL org.opencontainers.image.description="Full Slack access for Claude - DMs, channels, search. No OAuth. No admin approval. Just works."
 LABEL org.opencontainers.image.source="https://github.com/jtalk22/slack-mcp-server"
-LABEL org.opencontainers.image.description="MCP server for Slack - Access DMs, channels & messages from Claude"
+LABEL org.opencontainers.image.url="https://github.com/jtalk22/slack-mcp-server"
+LABEL org.opencontainers.image.documentation="https://github.com/jtalk22/slack-mcp-server#readme"
+LABEL org.opencontainers.image.vendor="jtalk22"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.authors="jtalk22"
 
 WORKDIR /app
 
