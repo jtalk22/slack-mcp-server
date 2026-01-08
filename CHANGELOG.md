@@ -25,12 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Open Graph meta tags to demo page
 - Enhanced Dockerfile with OCI labels
 
-## [1.1.3] - 2026-01-08
-
-### Changed
-- Updated package.json homepage for npm visibility
-
-## [1.1.2] - 2025-01-08
+## [1.1.2] - 2026-01-08
 
 ### Changed
 - Homepage in package.json now points to live demo for npm discoverability
@@ -41,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User profile card now renders correctly in "Who is Alex?" scenario
 - `showUserCard()` dynamically renders card instead of manipulating hidden element
 
-## [1.1.0] - 2025-01-08 - "The Hacker Edition"
+## [1.1.0] - 2025-01-08
 
 ### Added
 - **Magic Link**: One-click dashboard URL with embedded API key
@@ -116,8 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.1.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.4...v1.1.5
-[1.1.4]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.3...v1.1.4
-[1.1.3]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.2...v1.1.3
+[1.1.4]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.2...v1.1.4
 [1.1.2]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.6...v1.1.0
