@@ -1,5 +1,7 @@
 # Slack MCP Server
 
+[![Live Demo](https://img.shields.io/badge/Demo-Try%20Simulator-blue?style=for-the-badge)](https://jtalk22.github.io/slack-mcp-server/public/demo.html)
+
 [![npm](https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
 [![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -284,7 +286,17 @@ npm run web
 # Or: npx @jtalk22/slack-mcp web
 ```
 
-Open http://localhost:3000. API key is auto-generated and displayed in the console.
+**Magic Link (v1.1.0+):** The console prints a one-click URL with the API key embedded:
+
+```
+════════════════════════════════════════════════════════════
+  Slack Web API Server v1.1.0
+════════════════════════════════════════════════════════════
+
+  Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
+```
+
+Just click the link - no copy-paste needed. The key is saved to your browser and stripped from the URL for security.
 
 <details>
 <summary><strong>Screenshots</strong></summary>

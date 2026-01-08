@@ -127,16 +127,73 @@
       cursor: pointer;
     }
     .tabs button.active { background: #4ecdc4; color: #1a1a2e; }
+    /* Auth Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal {
+      background: #16213e;
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 450px;
+      text-align: center;
+      border: 2px solid #4ecdc4;
+    }
+    .modal h2 { color: #4ecdc4; margin-bottom: 20px; }
+    .modal p { color: #aaa; margin-bottom: 25px; line-height: 1.6; }
+    .modal code {
+      background: #0f3460;
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: #4ecdc4;
+    }
+    .modal input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #0f3460;
+      border-radius: 6px;
+      background: #0f3460;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+    .modal input:focus { border-color: #4ecdc4; outline: none; }
+    .modal button {
+      width: 100%;
+      padding: 14px;
+      background: #4ecdc4;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .modal button:hover { background: #45b7aa; }
+    .modal .error { color: #ff6b6b; margin-top: 10px; font-size: 14px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Slack Web API</h1>
-    <div class="auth-section">
-      <input type="text" id="apiKey" placeholder="API Key (default: slack-mcp-local)">
-      <button onclick="connect()">Connect</button>
-      <span id="status" class="status"></span>
+  <!-- Auth Modal -->
+  <div id="authModal" class="modal-overlay">
+    <div class="modal">
+      <h2>Enter API Key</h2>
+      <p>Copy the API key from the console where you ran<br><code>npm run web</code></p>
+      <input type="text" id="modalApiKey" placeholder="smcp_xxxxxxxxxxxx" autofocus>
+      <button onclick="submitApiKey()">Connect</button>
+      <div id="modalError" class="error"></div>
     </div>
+  </div>
+
+  <div class="container">
+    <h1>Slack Web API <span id="status" class="status"></span></h1>
     <div class="grid">
       <div class="sidebar">
         <h3>CONVERSATIONS</h3>
@@ -165,33 +222,88 @@
     </div>
   </div>
   <script>
-    // Default API key matches server default - auto-connects on first visit
-    const DEFAULT_KEY = 'slack-mcp-local';
-    let apiKey = localStorage.getItem('slackApiKey') || DEFAULT_KEY;
+    let apiKey = null;
     let currentChannel = null;
 
-    document.getElementById('apiKey').value = apiKey;
-    setTimeout(connect, 100);
+    // Initialize: check URL param, then localStorage
+    (function init() {
+      const params = new URLSearchParams(window.location.search);
+      const keyFromUrl = params.get('key');
+
+      if (keyFromUrl) {
+        // Save key from magic link and strip from URL
+        apiKey = keyFromUrl;
+        localStorage.setItem('slackApiKey', apiKey);
+        history.replaceState({}, '', window.location.pathname);
+      } else {
+        apiKey = localStorage.getItem('slackApiKey');
+      }
+
+      if (apiKey) {
+        hideModal();
+        connect();
+      } else {
+        showModal();
+      }
+    })();
+
+    function showModal(errorMsg) {
+      document.getElementById('authModal').classList.remove('hidden');
+      document.getElementById('modalError').textContent = errorMsg || '';
+      document.getElementById('modalApiKey').focus();
+    }
+
+    function hideModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function submitApiKey() {
+      const input = document.getElementById('modalApiKey').value.trim();
+      if (!input) {
+        document.getElementById('modalError').textContent = 'Please enter an API key';
+        return;
+      }
+      apiKey = input;
+      localStorage.setItem('slackApiKey', apiKey);
+      hideModal();
+      connect();
+    }
+
+    // Handle Enter key in modal
+    document.getElementById('modalApiKey').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') submitApiKey();
+    });
+
     async function api(endpoint, options = {}) {
       const res = await fetch(endpoint, {
         ...options,
         headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json', ...options.headers }
       });
+      if (res.status === 401 || res.status === 403) {
+        // Auth failed - clear stored key and show modal
+        localStorage.removeItem('slackApiKey');
+        apiKey = null;
+        showModal('Invalid or expired API key. Check console for current key.');
+        throw new Error('Authentication failed');
+      }
       if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'API error'); }
       return res.json();
     }
+
     async function connect() {
-      apiKey = document.getElementById('apiKey').value.trim() || DEFAULT_KEY;
-      localStorage.setItem('slackApiKey', apiKey);
       const status = document.getElementById('status');
+      status.textContent = 'Connecting...';
+      status.className = 'status';
       try {
         const health = await api('/health');
-        status.textContent = 'Connected as ' + health.user + ' @ ' + health.team;
+        status.textContent = '● ' + health.user + ' @ ' + health.team;
         status.className = 'status ok';
         loadConversations('im,mpim');
       } catch (e) {
-        status.textContent = 'Error: ' + e.message;
-        status.className = 'status error';
+        if (e.message !== 'Authentication failed') {
+          status.textContent = 'Error: ' + e.message;
+          status.className = 'status error';
+        }
       }
     }
     async function loadConversations(types) {

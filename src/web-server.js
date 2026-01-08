@@ -5,7 +5,7 @@
  * Exposes Slack MCP tools as REST endpoints for browser access.
  * Run alongside or instead of the MCP server for web-based access.
  *
- * @version 1.0.5
+ * @version 1.1.0
  */
 
 import express from "express";
@@ -281,11 +281,14 @@ async function main() {
   }
 
   app.listen(PORT, () => {
-    console.log(`\n🚀 Slack Web API Server running at http://localhost:${PORT}`);
-    console.log(`\n🔑 API Key: ${API_KEY}`);
-    console.log(`\nExample usage:`);
-    console.log(`  curl -H "Authorization: Bearer ${API_KEY}" http://localhost:${PORT}/health`);
-    console.log(`  curl -H "Authorization: Bearer ${API_KEY}" http://localhost:${PORT}/conversations`);
+    // Print to stderr to keep logs clean (stdout reserved for JSON in some setups)
+    console.error(`\n${"═".repeat(60)}`);
+    console.error(`  Slack Web API Server v1.1.0`);
+    console.error(`${"═".repeat(60)}`);
+    console.error(`\n  Dashboard: http://localhost:${PORT}/?key=${API_KEY}`);
+    console.error(`\n  API Key:   ${API_KEY}`);
+    console.error(`\n  curl -H "Authorization: Bearer ${API_KEY}" http://localhost:${PORT}/health`);
+    console.error(`\n${"═".repeat(60)}\n`);
   });
 }
 
