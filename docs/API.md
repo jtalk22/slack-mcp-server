@@ -21,6 +21,36 @@ Check if Slack tokens are valid.
 
 ---
 
+### slack_token_status
+
+Get detailed token health, age, and cache statistics.
+
+**Parameters:** None
+
+**Returns:**
+```json
+{
+  "token": {
+    "status": "healthy",
+    "age_hours": 2.5,
+    "source": "file",
+    "updated_at": "2026-01-08T12:00:00Z",
+    "message": "Token is healthy"
+  },
+  "auto_refresh": {
+    "enabled": true,
+    "interval": "4 hours",
+    "requires": "Slack tab open in Chrome"
+  },
+  "cache": {
+    "users": { "size": 25, "maxSize": 500, "ttlMs": 3600000 },
+    "dms": { "count": 10, "age_hours": 1.2 }
+  }
+}
+```
+
+---
+
 ### slack_refresh_tokens
 
 Force refresh tokens from Chrome.
@@ -119,7 +149,7 @@ Export full conversation with threads.
 | latest | string | - | Unix timestamp end |
 | max_messages | number | 2000 | Max messages (up to 10000) |
 | include_threads | boolean | true | Fetch thread replies |
-| output_file | string | - | Save to file path |
+| output_file | string | - | Filename (saved to ~/.slack-mcp-exports/) |
 
 **Timestamps:**
 - Dec 1, 2025 = `1733011200`

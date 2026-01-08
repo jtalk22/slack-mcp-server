@@ -3,7 +3,7 @@
  * Token CLI - Manage Slack tokens
  */
 
-import { loadTokens, saveTokens, extractFromChrome, getFromFile, TOKEN_FILE } from "../lib/token-store.js";
+import { loadTokens, saveTokens, extractFromChrome, getFromFile, TOKEN_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
 import { slackAPI } from "../lib/slack-client.js";
 import * as readline from "readline";
 
@@ -141,8 +141,8 @@ async function clearTokens() {
   }
 
   try {
-    execSync('security delete-generic-password -s "slack-mcp-server" -a "token" 2>/dev/null');
-    execSync('security delete-generic-password -s "slack-mcp-server" -a "cookie" 2>/dev/null');
+    execSync(`security delete-generic-password -s "${KEYCHAIN_SERVICE}" -a "token" 2>/dev/null`);
+    execSync(`security delete-generic-password -s "${KEYCHAIN_SERVICE}" -a "cookie" 2>/dev/null`);
     console.log("Deleted keychain entries");
   } catch (e) {
     console.log("No keychain entries to delete");

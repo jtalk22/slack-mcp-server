@@ -12,7 +12,7 @@
 
 ```bash
 cd ~
-git clone https://github.com/yourusername/slack-mcp-server.git
+git clone https://github.com/jtalk22/slack-mcp-server.git
 # or if already exists:
 cd ~/slack-mcp-server
 ```

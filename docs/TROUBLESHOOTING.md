@@ -98,9 +98,15 @@ launchctl load ~/Library/LaunchAgents/com.slack-web-api.plist
 
 ### API Key Invalid
 
-**Default API Key:** `slack-mcp-local`
+The web server generates a unique API key on first run, stored in `~/.slack-mcp-api-key`.
 
-If you set a custom key, make sure it matches:
+The key is printed to the console when you start the server:
+```
+Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
+API Key:   smcp_xxxxxxxxxxxx
+```
+
+You can also set a custom key:
 ```bash
 SLACK_API_KEY=your-custom-key npm run web
 ```
@@ -109,7 +115,8 @@ SLACK_API_KEY=your-custom-key npm run web
 
 Check if the server is running:
 ```bash
-curl http://localhost:3000/health -H "Authorization: Bearer slack-mcp-local"
+# Get your API key from ~/.slack-mcp-api-key
+curl http://localhost:3000/health -H "Authorization: Bearer $(cat ~/.slack-mcp-api-key)"
 ```
 
 Check LaunchAgent status:
