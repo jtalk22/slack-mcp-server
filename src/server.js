@@ -11,7 +11,7 @@
  * - Network error retry with exponential backoff
  * - Background token health monitoring
  *
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -43,7 +43,7 @@ const BACKGROUND_REFRESH_INTERVAL = 4 * 60 * 60 * 1000;
 
 // Package info
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "1.0.5";
+const SERVER_VERSION = "1.0.6";
 
 // Initialize server
 const server = new Server(
@@ -127,7 +127,9 @@ async function main() {
   }
 
   // Background token health check (every 4 hours)
-  setInterval(async () => {
+  // Use unref() so this timer doesn't prevent the process from exiting
+  // when the MCP transport closes (prevents zombie processes)
+  const backgroundTimer = setInterval(async () => {
     const health = await checkTokenHealth(console);
     if (health.refreshed) {
       console.error("Background: tokens refreshed successfully");
@@ -135,6 +137,7 @@ async function main() {
       console.error("Background: tokens critical - open Slack in Chrome");
     }
   }, BACKGROUND_REFRESH_INTERVAL);
+  backgroundTimer.unref();
 
   // Start server
   const transport = new StdioServerTransport();
