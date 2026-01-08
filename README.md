@@ -1,14 +1,22 @@
 # Slack MCP Server
 
-[![Live Demo](https://img.shields.io/badge/Demo-Try%20Simulator-blue?style=for-the-badge)](https://jtalk22.github.io/slack-mcp-server/public/demo.html)
+<p align="center">
+  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo.html">
+    <img src="https://img.shields.io/badge/LIVE%20DEMO-Try%20It%20Now-00C853?style=for-the-badge&logo=slack&logoColor=white" alt="Live Demo - Try It Now" height="50">
+  </a>
+</p>
 
-[![npm](https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
-[![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/jtalk22/slack-mcp-server/pulls)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue&label=npm" alt="npm"></a>
+  <a href="https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server"><img src="https://img.shields.io/badge/docker-ghcr.io-blue" alt="Docker"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg" alt="Node.js"></a>
+  <a href="https://github.com/sponsors/jtalk22"><img src="https://img.shields.io/github/sponsors/jtalk22?label=Sponsor&logo=github" alt="GitHub Sponsors"></a>
+</p>
 
-A [Model Context Protocol](https://modelcontextprotocol.io/) server that gives Claude **unrestricted access** to your Slack workspace - including DMs, private channels, and full message history. No OAuth. No app approval. No per-conversation authorization.
+---
+
+**Stop fighting Slack's OAuth.** This MCP server gives Claude **full access** to your workspace - DMs, private channels, search, everything. Uses your existing browser session. No admin approval. No per-conversation consent. **Just install and go.**
 
 <p align="center">
   <img src="docs/images/demo-main.png" alt="Slack MCP Server Web UI" width="800">
