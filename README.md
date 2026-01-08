@@ -1,5 +1,7 @@
 # Slack MCP Server
 
+[![npm](https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+[![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)
 [![CI](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
