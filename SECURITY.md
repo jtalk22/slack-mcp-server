@@ -21,6 +21,7 @@ This project uses Slack browser session tokens (`xoxc-` and `xoxd-`) which provi
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.1.x   | :white_check_mark: |
 | 1.0.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
