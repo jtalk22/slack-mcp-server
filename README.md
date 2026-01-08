@@ -177,6 +177,38 @@ EOF
 launchctl load ~/Library/LaunchAgents/com.slack-mcp-server.plist
 ```
 
+## Docker
+
+Run the server in a container:
+
+```bash
+# Build locally
+docker build -t slack-mcp-server .
+
+# Run with environment variables
+docker run -e SLACK_TOKEN=xoxc-your-token -e SLACK_COOKIE=xoxd-your-cookie slack-mcp-server
+
+# Or mount existing token file
+docker run -v ~/.slack-mcp-tokens.json:/root/.slack-mcp-tokens.json slack-mcp-server
+```
+
+For MCP configuration with Docker:
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "SLACK_TOKEN", "-e", "SLACK_COOKIE", "slack-mcp-server"],
+      "env": {
+        "SLACK_TOKEN": "xoxc-your-token",
+        "SLACK_COOKIE": "xoxd-your-cookie"
+      }
+    }
+  }
+}
+```
+
 ## Token Management
 
 Tokens are stored in multiple layers for reliability:
