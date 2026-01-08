@@ -2,7 +2,7 @@
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "slack-mcp-server",
   "displayName": "Slack MCP Server",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Full Slack workspace access for Claude - including DMs, channels, and message history. Uses browser token authentication, no OAuth required. Includes Web UI for claude.ai users.",
   "author": {
     "name": "jtalk22",

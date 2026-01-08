@@ -1,6 +1,6 @@
 {
   "name": "@jtalk22/slack-mcp",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "MCP server for Slack - Full access to DMs, channels, and messages from Claude. Browser token auth, no OAuth required.",
   "type": "module",
   "main": "src/server.js",
