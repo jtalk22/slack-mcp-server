@@ -7,10 +7,12 @@
   "main": "src/server.js",
   "bin": {
     "slack-mcp-server": "./src/server.js",
+    "slack-mcp-http": "./src/server-http.js",
     "slack-mcp-web": "./src/web-server.js"
   },
   "scripts": {
     "start": "node src/server.js",
+    "http": "node src/server-http.js",
     "web": "node src/web-server.js",
     "tokens:status": "node scripts/token-cli.js status",
     "tokens:refresh": "node scripts/token-cli.js refresh",

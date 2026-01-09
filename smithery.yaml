@@ -1,8 +1,8 @@
-# Smithery configuration for slack-mcp-server
+# Smithery configuration for slack-mcp-server (HTTP transport)
 # https://smithery.ai/docs/build/project-config/smithery-yaml
 
 startCommand:
-  type: stdio
+  type: http
   configSchema:
     type: object
     required:
@@ -12,17 +12,18 @@ startCommand:
       slackToken:
         type: string
         title: "Slack Token"
-        description: "Your xoxc- token from browser (see README for extraction)"
+        description: "Your xoxc- token from browser session"
       slackCookie:
         type: string
         title: "Slack Cookie"
-        description: "Your xoxd- cookie from browser (see README for extraction)"
+        description: "Your xoxd- cookie from browser session"
   commandFunction: |
     config => ({
-      command: 'npx',
-      args: ['-y', '@jtalk22/slack-mcp'],
+      command: 'node',
+      args: ['src/server-http.js'],
       env: {
         SLACK_TOKEN: config.slackToken,
-        SLACK_COOKIE: config.slackCookie
+        SLACK_COOKIE: config.slackCookie,
+        PORT: '3000'
       }
     })
