@@ -1,0 +1,33 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.jtalk22/slack-mcp-server",
+  "description": "Full Slack workspace access for Claude—DMs, channels, search, threads—without OAuth or admin approval. Uses browser session mirroring.",
+  "version": "1.1.7",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@jtalk22/slack-mcp",
+      "version": "1.1.7",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "tools": [
+    {"name": "slack_health_check", "description": "Verify token validity and workspace info"},
+    {"name": "slack_refresh_tokens", "description": "Auto-extract fresh tokens from Chrome (macOS)"},
+    {"name": "slack_list_conversations", "description": "List DMs and channels"},
+    {"name": "slack_conversations_history", "description": "Get messages from a channel or DM"},
+    {"name": "slack_get_full_conversation", "description": "Export full history with threads"},
+    {"name": "slack_search_messages", "description": "Search across workspace"},
+    {"name": "slack_send_message", "description": "Send a message to any conversation"},
+    {"name": "slack_get_thread", "description": "Get thread replies"},
+    {"name": "slack_users_info", "description": "Get user details"},
+    {"name": "slack_list_users", "description": "List workspace users"}
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jtalk22/slack-mcp-server"
+  },
+  "license": "MIT"
+}
