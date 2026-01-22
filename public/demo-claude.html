@@ -1,0 +1,1838 @@
+<!--
+  Slack MCP Server - Claude Desktop Demo
+  Author: @jtalk22
+  Repository: https://github.com/jtalk22/slack-mcp-server
+  License: MIT
+  Created: January 2026
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="@jtalk22">
+  <title>Slack MCP Server - Claude Desktop Demo</title>
+  <meta name="description" content="See how Claude uses Slack MCP tools to access your workspace - DMs, channels, search, and more.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Slack MCP Server - Claude Desktop Demo">
+  <meta property="og:description" content="Interactive demo showing Claude Desktop using MCP tools to access Slack - search messages, read threads, send updates.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html">
+  <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/demo-claude-preview.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Slack MCP Server - Claude Desktop Demo">
+  <meta name="twitter:description" content="Interactive demo showing Claude using MCP tools to access your Slack workspace.">
+  <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/demo-claude-preview.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       Claude Desktop Color Palette (Dark Mode)
+       ═══════════════════════════════════════════════════════════════ */
+    :root {
+      /* Window chrome */
+      --window-bg: #1a1a1a;
+      --window-chrome: #2d2d2d;
+      --window-border: #3a3a3a;
+      --traffic-red: #ff5f57;
+      --traffic-yellow: #febc2e;
+      --traffic-green: #28c840;
+
+      /* Messages */
+      --user-bubble-bg: #3b3b3b;
+      --claude-bubble-bg: #2a2a2a;
+      --claude-orange: #da7756;
+
+      /* Tool calls */
+      --tool-box-bg: #1f1f1f;
+      --tool-box-border: #3a3a3a;
+      --tool-header-bg: #252525;
+      --tool-name-color: #a0a0a0;
+
+      /* Text */
+      --text-primary: #ffffff;
+      --text-secondary: #b0b0b0;
+      --text-muted: #666666;
+
+      /* Accents */
+      --link-color: #6eb5ff;
+      --code-bg: #2d2d2d;
+      --code-text: #e6e6e6;
+      --success-color: #28c840;
+      --warning-color: #febc2e;
+
+      /* Brand DNA (subliminal) */
+      --text-warm: #E8E4DF;
+
+      /* Shadows */
+      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Typography (SF Pro / System)
+       ═══════════════════════════════════════════════════════════════ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text-primary);
+    }
+
+    .mono {
+      font-family: "SF Mono", "Menlo", "Monaco", monospace;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Page Header
+       ═══════════════════════════════════════════════════════════════ */
+    .page-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(218, 119, 86, 0.2);
+      color: var(--claude-orange);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Scenario Selector
+       ═══════════════════════════════════════════════════════════════ */
+    .scenario-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .scenario-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .scenario-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .scenario-btn.active {
+      background: rgba(218, 119, 86, 0.2);
+      border-color: var(--claude-orange);
+      color: var(--claude-orange);
+    }
+
+    .scenario-btn.playing {
+      animation: pulse-border 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(218, 119, 86, 0.4); }
+      50% { box-shadow: 0 0 0 4px rgba(218, 119, 86, 0); }
+    }
+
+    .scenario-btn .icon {
+      font-size: 18px;
+    }
+
+    .replay-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: rgba(110, 181, 255, 0.1);
+      border: 1px solid rgba(110, 181, 255, 0.3);
+      border-radius: 12px;
+      color: var(--link-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .replay-btn:hover {
+      background: rgba(110, 181, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .replay-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .controls-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .speed-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .speed-control select {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .speed-control select:focus {
+      outline: none;
+      border-color: var(--link-color);
+    }
+
+    .progress-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .progress-bar {
+      width: 80px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success-color);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .share-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .share-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    .share-btn.copied {
+      background: rgba(40, 200, 64, 0.15);
+      border-color: var(--success-color);
+      color: var(--success-color);
+    }
+
+    .share-btn .share-icon {
+      font-size: 14px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Claude Desktop Window Frame
+       ═══════════════════════════════════════════════════════════════ */
+    .claude-window {
+      width: 100%;
+      max-width: 800px;
+      background: var(--window-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      border: 1px solid var(--window-border);
+    }
+
+    .window-chrome {
+      height: 52px;
+      background: var(--window-chrome);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--window-border);
+    }
+
+    .traffic-lights {
+      display: flex;
+      gap: 8px;
+    }
+
+    .traffic-light {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .traffic-light.red { background: var(--traffic-red); }
+    .traffic-light.yellow { background: var(--traffic-yellow); }
+    .traffic-light.green { background: var(--traffic-green); }
+
+    .window-title {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .window-controls {
+      width: 52px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Chat Container
+       ═══════════════════════════════════════════════════════════════ */
+    .chat-container {
+      height: 520px;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      scroll-behavior: smooth;
+    }
+
+    /* Loading Skeleton */
+    .loading-skeleton {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .skeleton-message {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .skeleton-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--window-border) 25%, #4a4a4a 50%, var(--window-border) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s infinite;
+    }
+
+    .skeleton-lines {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .skeleton-line {
+      height: 16px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--window-border) 25%, #4a4a4a 50%, var(--window-border) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s infinite;
+    }
+
+    @keyframes skeleton-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .chat-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb {
+      background: var(--window-border);
+      border-radius: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Message Bubbles
+       ═══════════════════════════════════════════════════════════════ */
+    .message {
+      max-width: 100%;
+      animation: message-appear 0.3s ease-out;
+    }
+
+    @keyframes message-appear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .message-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .message.user .message-avatar {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .message.claude .message-avatar {
+      background: linear-gradient(135deg, var(--claude-orange) 0%, #c56644 100%);
+      color: white;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .message.claude .message-avatar svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .message-sender {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .message.user .message-sender { color: #a5b4fc; }
+    .message.claude .message-sender { color: var(--claude-orange); }
+
+    .message-time {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .message-content {
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .message.user .message-content {
+      background: var(--user-bubble-bg);
+    }
+
+    .message.claude .message-content {
+      background: var(--claude-bubble-bg);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Tool Call Box
+       ═══════════════════════════════════════════════════════════════ */
+    .tool-call {
+      background: var(--tool-box-bg);
+      border: 1px solid var(--tool-box-border);
+      border-radius: 8px;
+      margin: 12px 0;
+      overflow: hidden;
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--tool-header-bg);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .tool-header:hover {
+      background: #2a2a2a;
+    }
+
+    .tool-icon {
+      font-size: 16px;
+    }
+
+    .tool-name {
+      font-family: "SF Mono", monospace;
+      font-size: 13px;
+      color: var(--link-color);
+      font-weight: 500;
+    }
+
+    .tool-status {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .tool-status.running {
+      color: var(--warning-color);
+    }
+
+    .tool-status.running::before {
+      content: '';
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--warning-color);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .tool-status.success {
+      color: var(--success-color);
+    }
+
+    .tool-chevron {
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+      font-size: 10px;
+    }
+
+    .tool-call.expanded .tool-chevron {
+      transform: rotate(180deg);
+    }
+
+    .tool-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .tool-call.expanded .tool-body {
+      max-height: 400px;
+    }
+
+    .tool-section {
+      padding: 12px 16px;
+      border-top: 1px solid var(--tool-box-border);
+    }
+
+    .tool-section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .tool-params {
+      font-family: "SF Mono", monospace;
+      font-size: 13px;
+      color: var(--code-text);
+      background: var(--code-bg);
+      padding: 12px;
+      border-radius: 6px;
+      white-space: pre-wrap;
+    }
+
+    .tool-result {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .tool-result .result-item {
+      padding: 8px 12px;
+      margin: 0 -12px;
+      border-bottom: 1px solid var(--tool-box-border);
+      border-left: 2px solid transparent;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      cursor: default;
+    }
+
+    .tool-result .result-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+      border-left-color: var(--claude-orange);
+    }
+
+    .tool-result .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-channel {
+      color: var(--link-color);
+      font-weight: 500;
+    }
+
+    .result-user {
+      color: #f0abfc;
+      font-weight: 500;
+    }
+
+    .result-time {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Typing Indicator
+       ═══════════════════════════════════════════════════════════════ */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--claude-bubble-bg);
+      border-radius: 12px;
+      width: fit-content;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typing-bounce 1.4s ease-in-out infinite;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.32s; }
+
+    @keyframes typing-bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--claude-orange);
+      margin-left: 1px;
+      animation: cursor-blink 0.8s ease-in-out infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes cursor-blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Input Bar
+       ═══════════════════════════════════════════════════════════════ */
+    .input-bar {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--window-chrome);
+      border-top: 1px solid var(--window-border);
+      gap: 12px;
+    }
+
+    .input-field {
+      flex: 1;
+      background: var(--window-bg);
+      border: 1px solid var(--window-border);
+      border-radius: 24px;
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .tools-button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: rgba(218, 119, 86, 0.15);
+      border: 1px solid rgba(218, 119, 86, 0.3);
+      border-radius: 20px;
+      color: var(--claude-orange);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .tools-button:hover {
+      background: rgba(218, 119, 86, 0.25);
+    }
+
+    .tools-button .icon {
+      font-size: 16px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Tools Dropdown
+       ═══════════════════════════════════════════════════════════════ */
+    .tools-dropdown {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      right: 0;
+      width: 320px;
+      background: var(--window-bg);
+      border: 1px solid var(--window-border);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      z-index: 100;
+    }
+
+    .tools-button:hover .tools-dropdown,
+    .tools-dropdown:hover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--window-border);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dropdown-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .dropdown-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--tool-box-border);
+      cursor: default;
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .dropdown-item-name {
+      font-family: "SF Mono", monospace;
+      font-size: 13px;
+      color: var(--link-color);
+      margin-bottom: 2px;
+    }
+
+    .dropdown-item-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Code Inline
+       ═══════════════════════════════════════════════════════════════ */
+    code {
+      font-family: "SF Mono", monospace;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    em {
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Footer
+       ═══════════════════════════════════════════════════════════════ */
+    .page-footer {
+      margin-top: 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .page-footer a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    .page-footer a:hover {
+      text-decoration: underline;
+    }
+
+    kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      font-family: "SF Mono", monospace;
+      font-size: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+
+    /* Fullscreen / Presentation Mode */
+    body.fullscreen-mode {
+      padding: 0;
+      justify-content: center;
+    }
+
+    body.fullscreen-mode .page-header,
+    body.fullscreen-mode .scenario-bar,
+    body.fullscreen-mode .controls-bar,
+    body.fullscreen-mode .page-footer {
+      display: none !important;
+    }
+
+    body.fullscreen-mode .claude-window {
+      max-width: 100%;
+      height: 100vh;
+      border-radius: 0;
+      border: none;
+    }
+
+    body.fullscreen-mode .chat-container {
+      height: calc(100vh - 52px - 68px);
+    }
+
+    .fullscreen-hint {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: var(--text-secondary);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    body.fullscreen-mode .fullscreen-hint {
+      opacity: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Accessibility
+       ═══════════════════════════════════════════════════════════════ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .scenario-btn:focus-visible,
+    .replay-btn:focus-visible,
+    .tools-button:focus-visible,
+    .speed-control select:focus-visible {
+      outline: 2px solid var(--link-color);
+      outline-offset: 2px;
+    }
+
+    .tool-header:focus-visible {
+      outline: 2px solid var(--link-color);
+      outline-offset: -2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Responsive
+       ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      .page-header h1 {
+        font-size: 22px;
+      }
+
+      .scenario-bar {
+        gap: 8px;
+      }
+
+      .scenario-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+
+      .scenario-btn .label {
+        display: none;
+      }
+
+      .chat-container {
+        height: 450px;
+        padding: 16px;
+      }
+
+      .tools-dropdown {
+        width: 280px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .tools-button:hover .tools-dropdown,
+      .tools-dropdown:hover {
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Production Polish - Title, Captions, Transitions, Closing
+       ═══════════════════════════════════════════════════════════════ */
+
+    /* Title Card */
+    .title-card {
+      position: absolute;
+      inset: 0;
+      top: 32px; /* Below window chrome */
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--window-bg);
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .title-card.visible {
+      display: flex;
+      opacity: 1;
+    }
+
+    .title-card h1 {
+      color: var(--text-warm);
+      letter-spacing: 0.08em;
+      font-weight: 300;
+      font-size: 28px;
+      margin: 16px 0 8px;
+    }
+
+    .title-card .title-logo { font-size: 48px; }
+    .title-card .title-tagline { color: var(--text-secondary); font-size: 16px; }
+    .title-card .title-version { color: var(--text-muted); font-size: 13px; margin-top: 24px; }
+
+    /* Scenario Caption Overlay */
+    .scenario-caption {
+      position: absolute;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      color: var(--text-primary);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .scenario-caption.visible {
+      opacity: 1;
+    }
+
+    /* Smooth Transitions */
+    .chat-container {
+      transition: opacity 0.3s ease;
+    }
+
+    .chat-container.fading {
+      opacity: 0;
+    }
+
+    /* Closing Card */
+    .closing-card {
+      position: absolute;
+      inset: 0;
+      top: 32px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--window-bg);
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .closing-card.visible {
+      display: flex;
+      opacity: 1;
+    }
+
+    .closing-check { font-size: 48px; margin-bottom: 16px; }
+
+    .closing-card h2 {
+      color: var(--text-warm);
+      font-weight: 400;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .closing-cta {
+      color: var(--text-secondary);
+      margin: 8px 0 24px;
+      font-size: 15px;
+    }
+
+    .closing-links code {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: "SF Mono", "Menlo", monospace;
+    }
+
+    .closing-github {
+      margin-top: 24px;
+      color: var(--link-color);
+      font-size: 14px;
+    }
+
+    /* ê Easter Egg - The Rêvasser Wink */
+    .easter-egg {
+      position: absolute;
+      bottom: 16px;
+      right: 20px;
+      color: var(--text-warm);
+      opacity: 0.15;
+      font-size: 14px;
+      font-weight: 300;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    }
+
+    .closing-card.visible .easter-egg {
+      animation: egg-wink 8s ease 2s forwards;
+    }
+
+    @keyframes egg-wink {
+      0%, 100% { opacity: 0.15; }
+      10% { opacity: 0.35; }
+      20% { opacity: 0.15; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <h1>
+      <span>Slack MCP Server</span>
+      <span class="badge">🔧 MCP Demo v1.2</span>
+    </h1>
+    <p>See how Claude uses MCP tools to access your Slack workspace</p>
+  </header>
+
+  <div class="scenario-bar" role="tablist" aria-label="Demo scenarios">
+    <button class="scenario-btn active" data-scenario="search" onclick="runScenario('search')" role="tab" aria-selected="true" aria-label="Search DMs scenario">
+      <span class="icon" aria-hidden="true">🔍</span>
+      <span class="label">Search DMs</span>
+    </button>
+    <button class="scenario-btn" data-scenario="thread" onclick="runScenario('thread')" role="tab" aria-selected="false" aria-label="Get Thread scenario">
+      <span class="icon" aria-hidden="true">📜</span>
+      <span class="label">Get Thread</span>
+    </button>
+    <button class="scenario-btn" data-scenario="list" onclick="runScenario('list')" role="tab" aria-selected="false" aria-label="List DMs scenario">
+      <span class="icon" aria-hidden="true">💬</span>
+      <span class="label">List DMs</span>
+    </button>
+    <button class="scenario-btn" data-scenario="send" onclick="runScenario('send')" role="tab" aria-selected="false" aria-label="Send Message scenario">
+      <span class="icon" aria-hidden="true">✉️</span>
+      <span class="label">Send Message</span>
+    </button>
+    <button class="scenario-btn" data-scenario="multi" onclick="runScenario('multi')" role="tab" aria-selected="false" aria-label="Multi-Tool scenario">
+      <span class="icon" aria-hidden="true">⚡</span>
+      <span class="label">Multi-Tool</span>
+    </button>
+  </div>
+
+  <div class="controls-bar" role="toolbar" aria-label="Demo controls">
+    <button class="replay-btn" id="replayBtn" onclick="replayScenario()" aria-label="Replay current scenario">
+      <span aria-hidden="true">↻</span>
+      <span>Replay</span>
+    </button>
+    <button class="replay-btn" id="autoPlayBtn" onclick="autoPlayAll()" style="background: rgba(40, 200, 64, 0.1); border-color: rgba(40, 200, 64, 0.3); color: var(--success-color);" aria-label="Auto-play all scenarios">
+      <span aria-hidden="true">▶</span>
+      <span>Auto-Play All</span>
+    </button>
+    <div class="speed-control">
+      <label>Speed:</label>
+      <select id="speedSelect" onchange="updateSpeed(this.value)">
+        <option value="0.5">0.5x (Slow - Video)</option>
+        <option value="1" selected>1x (Normal)</option>
+        <option value="1.5">1.5x (Fast)</option>
+        <option value="2">2x (Fastest)</option>
+      </select>
+    </div>
+    <div class="progress-indicator" id="progressIndicator" style="display: none;">
+      <span class="progress-text"></span>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+    <button class="share-btn" onclick="copyShareLink()" aria-label="Copy link to share">
+      <span class="share-icon">🔗</span>
+      <span class="share-text">Share</span>
+    </button>
+  </div>
+
+  <div class="claude-window">
+    <div class="window-chrome">
+      <div class="traffic-lights">
+        <div class="traffic-light red"></div>
+        <div class="traffic-light yellow"></div>
+        <div class="traffic-light green"></div>
+      </div>
+      <div class="window-title">Claude</div>
+      <div class="window-controls"></div>
+    </div>
+
+    <!-- Title Card (auto-play only) -->
+    <div class="title-card" id="titleCard">
+      <div class="title-logo">💬</div>
+      <h1>Slack MCP Server</h1>
+      <p class="title-tagline">Full Slack access for Claude Desktop</p>
+      <p class="title-version">v1.2 • @jtalk22</p>
+    </div>
+
+    <!-- Scenario Caption Overlay -->
+    <div class="scenario-caption" id="scenarioCaption"></div>
+
+    <!-- Closing Card (auto-play only) -->
+    <div class="closing-card" id="closingCard">
+      <div class="closing-check">✅</div>
+      <h2>Demo Complete</h2>
+      <p class="closing-cta">Full Slack access. No OAuth. No admin approval.</p>
+      <div class="closing-links">
+        <code>npm install -g @jtalk22/slack-mcp</code>
+      </div>
+      <p class="closing-github">github.com/jtalk22/slack-mcp-server</p>
+      <span class="easter-egg">ê</span>
+    </div>
+
+    <div class="chat-container" id="chatContainer" role="log" aria-label="Chat demonstration" aria-live="polite">
+      <!-- Loading skeleton shown before first scenario -->
+      <div class="loading-skeleton" id="loadingSkeleton">
+        <div class="skeleton-message">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-lines">
+            <div class="skeleton-line" style="width: 60%"></div>
+            <div class="skeleton-line" style="width: 80%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <div class="input-field">Message Claude...</div>
+      <div class="tools-button">
+        <span class="icon">🔨</span>
+        <span>11 tools</span>
+        <div class="tools-dropdown">
+          <div class="dropdown-header">
+            <span>🔨</span> Available Slack Tools
+          </div>
+          <div class="dropdown-list">
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_search_messages</div>
+              <div class="dropdown-item-desc">Search across your workspace</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_list_conversations</div>
+              <div class="dropdown-item-desc">List DMs and channels</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_conversations_history</div>
+              <div class="dropdown-item-desc">Get messages from a conversation</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_get_thread</div>
+              <div class="dropdown-item-desc">Get all replies in a thread</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_send_message</div>
+              <div class="dropdown-item-desc">Send a message to any channel</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_get_full_conversation</div>
+              <div class="dropdown-item-desc">Export full history with threads</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_users_info</div>
+              <div class="dropdown-item-desc">Get user details</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_list_users</div>
+              <div class="dropdown-item-desc">List workspace users</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_health_check</div>
+              <div class="dropdown-item-desc">Verify token validity</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_token_status</div>
+              <div class="dropdown-item-desc">Check token health</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_refresh_tokens</div>
+              <div class="dropdown-item-desc">Auto-extract fresh tokens</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fullscreen-hint">Press <kbd>F</kbd> or <kbd>Esc</kbd> to exit</div>
+
+  <footer class="page-footer">
+    <p>
+      Made by <a href="https://github.com/jtalk22" target="_blank">@jtalk22</a> ·
+      <a href="https://github.com/jtalk22/slack-mcp-server" target="_blank">GitHub</a> ·
+      <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" target="_blank">npm</a> ·
+      <a href="demo.html">Web UI Demo</a>
+    </p>
+    <p style="margin-top: 8px; font-size: 11px; color: var(--text-muted);">
+      Keyboard: <kbd>1-5</kbd> scenarios · <kbd>R</kbd> replay · <kbd>A</kbd> auto-play · <kbd>F</kbd> fullscreen · <kbd>Esc</kbd> exit
+    </p>
+    <p style="margin-top: 12px; font-size: 11px; color: var(--text-muted);">
+      © 2026 James Lambert · MIT License
+    </p>
+  </footer>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // Scenario Data
+    // ═══════════════════════════════════════════════════════════════
+    const scenarios = {
+      search: {
+        userMessage: "Find all messages about the API key from last week",
+        claudeIntro: "I'll search your Slack workspace for messages about API keys from the past week.",
+        toolCall: {
+          name: "slack_search_messages",
+          params: {
+            query: "API key",
+            count: 20
+          },
+          result: [
+            { channel: "#engineering", user: "Sarah Chen", time: "Jan 15, 2:34 PM", text: "Here's the staging API key: <code>sk-abc123-staging-xyz</code>" },
+            { channel: "DM with Mike", user: "Mike Johnson", time: "Jan 12, 10:15 AM", text: "Don't forget to rotate the API key before the deploy" },
+            { channel: "#alerts", user: "DevOps Bot", time: "Jan 10, 9:00 AM", text: "API key rotation reminder: 3 days until expiry" }
+          ]
+        },
+        claudeSummary: "I found <strong>3 messages</strong> mentioning API keys from last week:\n\n1. <strong>Sarah Chen</strong> shared the staging API key in #engineering on Jan 15th\n2. <strong>Mike Johnson</strong> reminded you about key rotation in a DM on Jan 12th\n3. <strong>DevOps Bot</strong> posted an expiry reminder in #alerts on Jan 10th\n\nWould you like me to get more details on any of these?"
+      },
+
+      thread: {
+        userMessage: "What was decided in the Q4 launch thread?",
+        claudeIntro: "Let me find that thread and get the full context of the discussion.",
+        toolCall: {
+          name: "slack_get_thread",
+          params: {
+            channel: "C04N8JXKZ7M",
+            thread_ts: "1704729600.847293"
+          },
+          result: [
+            { user: "Alex Kim", time: "Jan 8, 3:00 PM", text: "Kicking off Q4 launch planning. Key dates?" },
+            { user: "Sarah Chen", time: "Jan 8, 3:15 PM", text: "Marketing wants the 15th for press embargo lift" },
+            { user: "Mike Johnson", time: "Jan 8, 3:22 PM", text: "Engineering can hit the 12th for feature freeze" },
+            { user: "Jordan Lee", time: "Jan 8, 4:00 PM", text: "Let's lock in: Feature freeze Jan 12, Launch Jan 18" },
+            { user: "Alex Kim", time: "Jan 8, 4:05 PM", text: "✅ Approved. I'll update the roadmap" }
+          ]
+        },
+        claudeSummary: "The Q4 launch thread concluded with these <strong>key decisions</strong>:\n\n• <strong>Feature freeze:</strong> January 12th\n• <strong>Press embargo lift:</strong> January 15th  \n• <strong>Launch date:</strong> January 18th\n\n<strong>Jordan Lee</strong> proposed the final timeline and <strong>Alex Kim</strong> approved it. Would you like me to pull any related threads or documents?"
+      },
+
+      list: {
+        userMessage: "Who has messaged me recently?",
+        claudeIntro: "I'll check your recent direct messages to see who's reached out.",
+        toolCall: {
+          name: "slack_list_conversations",
+          params: {
+            types: "im",
+            limit: 10,
+            discover_dms: true
+          },
+          result: [
+            { name: "Sarah Chen", id: "D04AXQK8N2P", lastMessage: "2 hours ago", preview: "Thanks for the review!" },
+            { name: "Mike Johnson", id: "D04BYR7M3Q1", lastMessage: "Yesterday", preview: "Can we sync on the API changes?" },
+            { name: "Alex Kim", id: "D04CZS6L4R2", lastMessage: "2 days ago", preview: "Q4 roadmap is updated" },
+            { name: "Jordan Lee", id: "D04DWT5K5S3", lastMessage: "3 days ago", preview: "Meeting notes attached" },
+            { name: "DevOps Bot", id: "D04EXU4J6T4", lastMessage: "4 days ago", preview: "Deploy completed successfully" }
+          ]
+        },
+        claudeSummary: "You have recent DMs from <strong>5 people</strong>:\n\n• <strong>Sarah Chen</strong> — 2 hours ago: \"Thanks for the review!\"\n• <strong>Mike Johnson</strong> — Yesterday: Asking about API changes sync\n• <strong>Alex Kim</strong> — 2 days ago: Q4 roadmap update\n• <strong>Jordan Lee</strong> — 3 days ago: Meeting notes\n• <strong>DevOps Bot</strong> — 4 days ago: Deploy notification\n\nWant me to pull the full conversation with any of them?"
+      },
+
+      send: {
+        userMessage: "Send a quick update to #general that the deploy is complete",
+        claudeIntro: "I'll post that update to #general for you.",
+        toolCall: {
+          name: "slack_send_message",
+          params: {
+            channel_id: "C04GENERAL1",
+            text: "✅ Deploy complete! All services are healthy and running on v2.4.1."
+          },
+          result: {
+            success: true,
+            channel: "#general",
+            timestamp: "1705612847.293847",
+            permalink: "https://acme-corp.slack.com/archives/C04GENERAL1/p1705612847293847"
+          }
+        },
+        claudeSummary: "Done! I've posted your update to <strong>#general</strong>:\n\n<em>\"✅ Deploy complete! All services are healthy and running on v2.4.1.\"</em>\n\nThe message was sent at <strong>2:34 PM</strong>. Would you like me to add any follow-up or tag specific people?"
+      },
+
+      multi: {
+        userMessage: "Find the latest deploy thread and summarize it to #updates",
+        claudeIntro: "I'll search for the deploy thread, then post a summary to #updates.",
+        isMultiTool: true,
+        toolCalls: [
+          {
+            name: "slack_search_messages",
+            params: {
+              query: "deploy thread",
+              count: 5
+            },
+            result: [
+              { channel: "#engineering", user: "DevOps Bot", time: "Today, 11:42 AM", text: "🚀 Deploy v2.4.1 starting..." },
+              { channel: "#engineering", user: "Sarah Chen", time: "Today, 11:45 AM", text: "All tests passing, proceeding with rollout" }
+            ]
+          },
+          {
+            name: "slack_send_message",
+            params: {
+              channel_id: "C04UPDATES2K",
+              text: "📋 Deploy Summary (v2.4.1):\n• Started: 11:42 AM\n• Status: Complete\n• Tests: All passing"
+            },
+            result: {
+              success: true,
+              channel: "#updates",
+              timestamp: "1705614000.123456"
+            }
+          }
+        ],
+        claudeSummary: "Done! I found the deploy thread from this morning and posted a summary to <strong>#updates</strong>:\n\n<em>\"📋 Deploy Summary (v2.4.1): Started 11:42 AM, Status: Complete, Tests: All passing\"</em>\n\nThe deploy was led by <strong>Sarah Chen</strong> and completed successfully."
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // Animation Helpers
+    // ═══════════════════════════════════════════════════════════════
+    let speedMultiplier = 1;
+    let currentScenario = 'search';
+
+    const sleep = ms => new Promise(r => setTimeout(r, ms / speedMultiplier));
+
+    function updateSpeed(value) {
+      speedMultiplier = parseFloat(value);
+    }
+
+    function replayScenario() {
+      runScenario(currentScenario);
+    }
+
+    async function typeText(element, text, speed = 25) {
+      // Convert \n\n to proper line breaks for final display
+      const formattedText = text.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+
+      // For short text or fast speed, just fade in
+      if (speedMultiplier >= 1.5 || text.length < 20) {
+        element.style.opacity = '0';
+        element.innerHTML = formattedText;
+        element.style.transition = 'opacity 0.3s ease-out';
+        await sleep(50);
+        element.style.opacity = '1';
+        return;
+      }
+
+      // Character-by-character typing with cursor
+      element.innerHTML = '<span class="typing-cursor"></span>';
+      const cursor = element.querySelector('.typing-cursor');
+
+      // Parse HTML and type text content while preserving tags
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = formattedText;
+      const plainText = tempDiv.textContent;
+
+      let currentIndex = 0;
+      const textSpan = document.createElement('span');
+      element.insertBefore(textSpan, cursor);
+
+      for (const char of plainText) {
+        textSpan.textContent += char;
+        await sleep(speed);
+      }
+
+      // Replace with formatted HTML and remove cursor
+      await sleep(100);
+      element.innerHTML = formattedText;
+    }
+
+    // Claude's sparkle icon SVG
+    const claudeIcon = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.5 9.5L2 12L9.5 14.5L12 22L14.5 14.5L22 12L14.5 9.5L12 2Z"/></svg>`;
+
+    function createMessage(type, sender, time) {
+      const msg = document.createElement('div');
+      msg.className = `message ${type}`;
+      const avatar = type === 'user' ? 'Y' : claudeIcon;
+      msg.innerHTML = `
+        <div class="message-header">
+          <div class="message-avatar">${avatar}</div>
+          <span class="message-sender">${sender}</span>
+          <span class="message-time">${time}</span>
+        </div>
+        <div class="message-content"></div>
+      `;
+      return msg;
+    }
+
+    function createTypingIndicator() {
+      const indicator = document.createElement('div');
+      indicator.className = 'message claude';
+      indicator.id = 'typingIndicator';
+      indicator.innerHTML = `
+        <div class="message-header">
+          <div class="message-avatar">${claudeIcon}</div>
+          <span class="message-sender">Claude</span>
+        </div>
+        <div class="typing-indicator">
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      `;
+      return indicator;
+    }
+
+    function createToolCall(tool, isRunning = true) {
+      const toolEl = document.createElement('div');
+      toolEl.className = 'tool-call';
+
+      let resultHtml = '';
+      if (Array.isArray(tool.result)) {
+        resultHtml = tool.result.map(item => {
+          if (item.channel) {
+            return `<div class="result-item">
+              <span class="result-channel">${item.channel}</span> ·
+              <span class="result-user">${item.user}</span> ·
+              <span class="result-time">${item.time}</span><br>
+              <em>"${item.text}"</em>
+            </div>`;
+          } else if (item.name) {
+            return `<div class="result-item">
+              <span class="result-user">${item.name}</span> ·
+              <span class="result-time">${item.lastMessage}</span><br>
+              <em>"${item.preview}"</em>
+            </div>`;
+          } else {
+            return `<div class="result-item">
+              <span class="result-user">${item.user}</span> ·
+              <span class="result-time">${item.time}</span><br>
+              "${item.text}"
+            </div>`;
+          }
+        }).join('');
+      } else if (tool.result.success) {
+        resultHtml = `<div class="result-item">
+          ✅ Message sent to <span class="result-channel">${tool.result.channel}</span>
+        </div>`;
+      }
+
+      const statusClass = isRunning ? 'running' : 'success';
+      const statusText = isRunning ? 'Running...' : 'Complete';
+
+      toolEl.innerHTML = `
+        <div class="tool-header" onclick="this.parentElement.classList.toggle('expanded')">
+          <span class="tool-icon">🔧</span>
+          <span class="tool-name">${tool.name}</span>
+          <span class="tool-status ${statusClass}">${statusText}</span>
+          <span class="tool-chevron">▼</span>
+        </div>
+        <div class="tool-body">
+          <div class="tool-section">
+            <div class="tool-section-label">Input</div>
+            <div class="tool-params">${JSON.stringify(tool.params, null, 2)}</div>
+          </div>
+          <div class="tool-section">
+            <div class="tool-section-label">Output</div>
+            <div class="tool-result">${resultHtml}</div>
+          </div>
+        </div>
+      `;
+      return toolEl;
+    }
+
+    function updateToolStatus(toolEl, isComplete) {
+      const statusEl = toolEl.querySelector('.tool-status');
+      statusEl.className = `tool-status ${isComplete ? 'success' : 'running'}`;
+      statusEl.textContent = isComplete ? 'Complete' : 'Running...';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Run Scenario
+    // ═══════════════════════════════════════════════════════════════
+    let isRunning = false;
+
+    async function runScenario(scenarioId) {
+      if (isRunning) return;
+      isRunning = true;
+      currentScenario = scenarioId;
+
+      // Update button states
+      const replayBtn = document.getElementById('replayBtn');
+      if (replayBtn) replayBtn.disabled = true;
+
+      document.querySelectorAll('.scenario-btn').forEach(btn => {
+        const isActive = btn.dataset.scenario === scenarioId;
+        btn.classList.toggle('active', isActive);
+        btn.classList.toggle('playing', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+
+      const container = document.getElementById('chatContainer');
+
+      // Show scenario caption
+      const captions = {
+        search: "🔍 Searching Messages",
+        thread: "📜 Reading Thread",
+        list: "💬 Listing DMs",
+        send: "✉️ Sending Message",
+        multi: "🔗 Multi-Tool Workflow"
+      };
+      const caption = document.getElementById('scenarioCaption');
+      caption.textContent = captions[scenarioId] || scenarioId;
+      caption.classList.add('visible');
+      setTimeout(() => caption.classList.remove('visible'), 2000);
+
+      // Smooth transition: fade out, clear, fade in
+      container.classList.add('fading');
+      await sleep(300);
+      container.innerHTML = '';
+      container.classList.remove('fading');
+
+      const scenario = scenarios[scenarioId];
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+      // 1. User message appears
+      const userMsg = createMessage('user', 'You', timeStr);
+      container.appendChild(userMsg);
+      userMsg.querySelector('.message-content').textContent = scenario.userMessage;
+      container.scrollTop = container.scrollHeight;
+
+      await sleep(600);
+
+      // 2. Claude starts typing
+      const typing = createTypingIndicator();
+      container.appendChild(typing);
+      container.scrollTop = container.scrollHeight;
+
+      await sleep(1200);
+
+      // 3. Claude's intro
+      typing.remove();
+      const claudeMsg = createMessage('claude', 'Claude', timeStr);
+      container.appendChild(claudeMsg);
+      const contentEl = claudeMsg.querySelector('.message-content');
+      await typeText(contentEl, scenario.claudeIntro);
+      container.scrollTop = container.scrollHeight;
+
+      await sleep(700);
+
+      // 4. Tool call(s) - handle single or multi-tool scenarios
+      if (scenario.isMultiTool && scenario.toolCalls) {
+        // Multi-tool scenario
+        for (let i = 0; i < scenario.toolCalls.length; i++) {
+          const tool = scenario.toolCalls[i];
+          const toolCall = createToolCall(tool, true);
+          contentEl.appendChild(toolCall);
+          container.scrollTop = container.scrollHeight;
+
+          await sleep(400);
+          toolCall.classList.add('expanded');
+          container.scrollTop = container.scrollHeight;
+
+          await sleep(1200);
+          updateToolStatus(toolCall, true);
+          container.scrollTop = container.scrollHeight;
+
+          if (i < scenario.toolCalls.length - 1) {
+            await sleep(600); // Pause between tools
+          }
+        }
+      } else {
+        // Single tool scenario
+        const toolCall = createToolCall(scenario.toolCall, true);
+        contentEl.appendChild(toolCall);
+        container.scrollTop = container.scrollHeight;
+
+        await sleep(400);
+        toolCall.classList.add('expanded');
+        container.scrollTop = container.scrollHeight;
+
+        await sleep(1500);
+        updateToolStatus(toolCall, true);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      await sleep(500);
+
+      // 5. Claude's summary
+      const summaryP = document.createElement('div');
+      summaryP.style.marginTop = '16px';
+      contentEl.appendChild(summaryP);
+      await typeText(summaryP, scenario.claudeSummary);
+      container.scrollTop = container.scrollHeight;
+
+      // Cleanup
+      document.querySelectorAll('.scenario-btn').forEach(btn => {
+        btn.classList.remove('playing');
+      });
+      if (replayBtn) replayBtn.disabled = false;
+      isRunning = false;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Auto-Play All Scenarios
+    // ═══════════════════════════════════════════════════════════════
+    let isAutoPlaying = false;
+
+    async function autoPlayAll() {
+      if (isAutoPlaying || isRunning) return;
+      isAutoPlaying = true;
+
+      const autoPlayBtn = document.getElementById('autoPlayBtn');
+      if (autoPlayBtn) {
+        autoPlayBtn.innerHTML = '<span>⏹</span><span>Stop</span>';
+        autoPlayBtn.onclick = stopAutoPlay;
+      }
+
+      // Show title card for 3s before starting
+      const titleCard = document.getElementById('titleCard');
+      const chatContainer = document.getElementById('chatContainer');
+      chatContainer.style.display = 'none';
+      titleCard.classList.add('visible');
+      await sleep(3000);
+      titleCard.classList.remove('visible');
+      await sleep(500); // Fade transition
+      chatContainer.style.display = '';
+
+      const scenarioOrder = ['search', 'thread', 'list', 'send', 'multi'];
+
+      for (let i = 0; i < scenarioOrder.length; i++) {
+        if (!isAutoPlaying) break;
+        updateProgress(i + 1, scenarioOrder.length);
+        await runScenario(scenarioOrder[i]);
+        if (!isAutoPlaying) break;
+        await sleep(2000); // Pause between scenarios
+      }
+      updateProgress(0, 0); // Clear progress
+
+      // Show closing card for 4s after completion (only if not stopped)
+      if (isAutoPlaying) {
+        const closingCard = document.getElementById('closingCard');
+        chatContainer.style.display = 'none';
+        await sleep(500);
+        closingCard.classList.add('visible');
+        await sleep(4000);
+        closingCard.classList.remove('visible');
+        await sleep(500);
+        chatContainer.style.display = '';
+      }
+
+      stopAutoPlay();
+    }
+
+    function stopAutoPlay() {
+      isAutoPlaying = false;
+      const autoPlayBtn = document.getElementById('autoPlayBtn');
+      if (autoPlayBtn) {
+        autoPlayBtn.innerHTML = '<span>▶</span><span>Auto-Play All</span>';
+        autoPlayBtn.onclick = autoPlayAll;
+      }
+      updateProgress(0, 0);
+    }
+
+    function updateProgress(current, total) {
+      const indicator = document.getElementById('progressIndicator');
+      if (!indicator) return;
+
+      if (current === 0 || total === 0) {
+        indicator.style.display = 'none';
+        return;
+      }
+
+      indicator.style.display = 'flex';
+      indicator.querySelector('.progress-text').textContent = `${current}/${total}`;
+      indicator.querySelector('.progress-fill').style.width = `${(current / total) * 100}%`;
+    }
+
+    async function copyShareLink() {
+      const btn = document.querySelector('.share-btn');
+      const url = window.location.href.split('?')[0]; // Remove any query params
+
+      try {
+        await navigator.clipboard.writeText(url);
+        btn.classList.add('copied');
+        btn.querySelector('.share-text').textContent = 'Copied!';
+        btn.querySelector('.share-icon').textContent = '✓';
+
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.querySelector('.share-text').textContent = 'Share';
+          btn.querySelector('.share-icon').textContent = '🔗';
+        }, 2000);
+      } catch (err) {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // Keyboard Shortcuts
+    // ═══════════════════════════════════════════════════════════════
+    function toggleFullscreen() {
+      document.body.classList.toggle('fullscreen-mode');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      // Fullscreen can toggle anytime
+      if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+        return;
+      }
+
+      // Escape exits fullscreen first, then stops auto-play
+      if (e.key === 'Escape') {
+        if (document.body.classList.contains('fullscreen-mode')) {
+          toggleFullscreen();
+        } else {
+          stopAutoPlay();
+        }
+        return;
+      }
+
+      if (isRunning) return;
+
+      switch(e.key) {
+        case '1': runScenario('search'); break;
+        case '2': runScenario('thread'); break;
+        case '3': runScenario('list'); break;
+        case '4': runScenario('send'); break;
+        case '5': runScenario('multi'); break;
+        case 'r': case 'R': replayScenario(); break;
+        case 'a': case 'A': autoPlayAll(); break;
+      }
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // Initialize
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      runScenario('search');
+    });
+  </script>
+</body>
+</html>

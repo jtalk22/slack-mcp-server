@@ -19,7 +19,9 @@
     "tokens:status": "node scripts/token-cli.js status",
     "tokens:refresh": "node scripts/token-cli.js refresh",
     "tokens:auto": "node scripts/token-cli.js auto",
-    "tokens:clear": "node scripts/token-cli.js clear"
+    "tokens:clear": "node scripts/token-cli.js clear",
+    "screenshot": "node scripts/capture-screenshots.js",
+    "record-demo": "node scripts/record-demo.js"
   },
   "keywords": [
     "mcp",

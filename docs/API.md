@@ -199,7 +199,7 @@ Search messages across the workspace.
       "ts": "1767368030.607599",
       "channel": "general",
       "channel_id": "C05GPEVH7J9",
-      "user": "James Lambert",
+      "user": "Example User",
       "text": "Here's the project update...",
       "datetime": "2026-01-02T15:33:50.000Z",
       "permalink": "https://..."
