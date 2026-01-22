@@ -7,7 +7,7 @@
 [![npm](https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue&label=npm)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
 [![Docker](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/jtalk22?label=Sponsor&logo=github)](https://github.com/sponsors/jtalk22)
 
 ---
@@ -139,32 +139,37 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 
 ### Step 1: Get Your Tokens
 
-#### macOS (Automatic)
+#### Setup Wizard (Recommended)
+
+The interactive setup wizard handles token extraction and validation automatically:
+
 ```bash
-# Have Chrome open with Slack (app.slack.com) logged in
-npx @jtalk22/slack-mcp tokens:auto
-# Or if cloned: npm run tokens:auto
+npx @jtalk22/slack-mcp --setup
 ```
 
-#### Linux/Windows (Manual)
+- **macOS**: Auto-extracts tokens from Chrome (have Slack open in a tab)
+- **Linux/Windows**: Guides you through manual extraction step-by-step
+- Validates tokens against Slack API before saving
+- Stores tokens securely at `~/.slack-mcp-tokens.json`
 
-Auto-refresh requires macOS + Chrome. On other platforms, extract tokens manually:
+#### Check Token Status
 
-1. Open https://app.slack.com in your browser
-2. Press F12 → Console → Run:
-   ```javascript
-   // Get token
-   JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token
-   ```
-3. Press F12 → Application → Cookies → Copy the `d` cookie value (starts with `xoxd-`)
-4. Create `~/.slack-mcp-tokens.json`:
-   ```json
-   {
-     "SLACK_TOKEN": "xoxc-your-token-here",
-     "SLACK_COOKIE": "xoxd-your-cookie-here",
-     "updated_at": "2024-01-01T00:00:00.000Z"
-   }
-   ```
+```bash
+npx @jtalk22/slack-mcp --status
+```
+
+#### Alternative: Manual Token Scripts
+
+```bash
+# macOS auto-extraction
+npm run tokens:auto
+
+# Manual entry (all platforms)
+npm run tokens:refresh
+
+# Check health
+npm run tokens:status
+```
 
 ### Step 2: Configure Claude
 
