@@ -30,7 +30,7 @@ import {
 } from "../lib/handlers.js";
 
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "1.1.8";
+const SERVER_VERSION = "1.2.0";
 const PORT = process.env.PORT || 3000;
 
 // Create MCP server

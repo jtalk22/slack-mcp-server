@@ -1,19 +1,21 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "Full Slack access for Claude - DMs, channels, search. No OAuth. No admin approval. Just works.",
   "type": "module",
   "main": "src/server.js",
   "bin": {
     "slack-mcp-server": "./src/server.js",
     "slack-mcp-http": "./src/server-http.js",
-    "slack-mcp-web": "./src/web-server.js"
+    "slack-mcp-web": "./src/web-server.js",
+    "slack-mcp-setup": "./scripts/setup-wizard.js"
   },
   "scripts": {
     "start": "node src/server.js",
     "http": "node src/server-http.js",
     "web": "node src/web-server.js",
+    "setup": "node scripts/setup-wizard.js --setup",
     "tokens:status": "node scripts/token-cli.js status",
     "tokens:refresh": "node scripts/token-cli.js refresh",
     "tokens:auto": "node scripts/token-cli.js auto",
@@ -81,7 +83,7 @@
     "url": "https://github.com/jtalk22/slack-mcp-server/issues"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.2",
