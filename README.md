@@ -37,49 +37,11 @@ This server bridges the gap. It creates a secure, local bridge between Claude an
 
 Instead of authenticating as a bot, this server leverages your existing Chrome session credentials (macOS) or manual token injection (Linux/Windows). It mirrors your user access exactly—if you can see it in Slack, Claude can see it too.
 
-```mermaid
-sequenceDiagram
-    participant Chrome as Chrome Browser
-    participant Script as AppleScript
-    participant Store as Token Store
-    participant MCP as MCP Server
-    participant Slack as Slack API
-
-    Note over Chrome: You're logged into Slack
-    Script->>Chrome: Execute JavaScript in Slack tab
-    Chrome-->>Script: xoxc- token + xoxd- cookie
-    Script->>Store: Save to ~/.slack-mcp-tokens.json
-    Store->>Store: Encrypt in macOS Keychain
-
-    Note over MCP: Claude asks for DMs
-    MCP->>Store: Load credentials
-    Store-->>MCP: Token + Cookie
-    MCP->>Slack: GET conversations.history
-    Slack-->>MCP: Full message history
-    MCP-->>MCP: Return to Claude
-```
+![Session Mirroring Flow](docs/images/diagram-session-flow.svg)
 
 ### Why Not OAuth?
 
-```mermaid
-flowchart LR
-    subgraph Traditional["Official Slack API (OAuth)"]
-        A[Create App] --> B[Request Scopes]
-        B --> C[Admin Approval]
-        C --> D[User Authorization]
-        D --> E[Limited Access]
-        E --> F["No DMs without<br/>per-conversation consent"]
-    end
-
-    subgraph ThisServer["Session Mirroring"]
-        G[Open Slack in Chrome] --> H[Mirror Session]
-        H --> I[Full Access]
-        I --> J["Your DMs, Channels,<br/>Search, History"]
-    end
-
-    style Traditional fill:#ffcccc
-    style ThisServer fill:#ccffcc
-```
+![OAuth vs Session Mirroring](docs/images/diagram-oauth-comparison.svg)
 
 **Trade-off:** Session tokens expire every 1-2 weeks. Auto-refresh (macOS) or manual update keeps things running.
 
@@ -297,9 +259,9 @@ finally { refreshInProgress = false; }
 
 ---
 
-## Web UI (for claude.ai)
+## Web UI (for claude.ai — no MCP support)
 
-Since claude.ai doesn't support MCP, use the REST server:
+If you're using claude.ai in a browser (which doesn't support MCP), you can use the REST server instead:
 
 ```bash
 npm run web
@@ -310,7 +272,7 @@ npm run web
 
 ```
 ════════════════════════════════════════════════════════════
-  Slack Web API Server v1.1.7
+  Slack Web API Server v1.2.0
 ════════════════════════════════════════════════════════════
 
   Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx

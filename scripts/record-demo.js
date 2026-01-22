@@ -73,6 +73,10 @@ async function recordDemo() {
   await page.goto(`file://${demoPath}`);
   await page.waitForTimeout(1000);
 
+  // Hold on initial frame for a few seconds (visible first frame in GIF)
+  console.log('⏸️  Holding initial frame (3s)...');
+  await page.waitForTimeout(3000);
+
   // Set slow speed for video recording
   console.log(`⏱️  Setting speed to ${CONFIG.speed}x...`);
   await page.selectOption('#speedSelect', CONFIG.speed);
