@@ -382,6 +382,22 @@ export default {
       );
     }
 
+    // Smithery server card endpoint (static metadata)
+    if (url.pathname === '/.well-known/mcp/server-card.json') {
+      return Response.json({
+        serverInfo: {
+          name: "Slack MCP",
+          version: "1.2.0"
+        },
+        authentication: {
+          required: false
+        },
+        tools: TOOLS,
+        resources: RESOURCES,
+        prompts: PROMPTS
+      }, { headers: corsHeaders });
+    }
+
     // Smithery config schema endpoint
     if (url.pathname === '/.well-known/mcp-config') {
       return Response.json({
