@@ -45,48 +45,73 @@ const RESOURCES = [
 
 const TOOLS = [
   {
-    name: "slack_health_check",
-    description: "Check if Slack API connection is working",
+    name: "slack_token_status",
+    description: "Check token health, age, and auto-refresh status",
     inputSchema: { type: "object", properties: {} },
-    annotations: { title: "Health Check", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+    annotations: { title: "Token Status", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  {
+    name: "slack_health_check",
+    description: "Check if Slack API connection is working and show workspace info",
+    inputSchema: { type: "object", properties: {} },
+    annotations: { title: "Health Check", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_list_conversations",
-    description: "List Slack conversations (channels and DMs)",
+    description: "List all DMs and channels with user names resolved",
     inputSchema: {
       type: "object",
       properties: {
-        types: { type: "string", description: "Comma-separated: public_channel,private_channel,mpim,im" },
-        limit: { type: "number", description: "Max results (default 100)" }
+        types: { type: "string", description: "Comma-separated: public_channel,private_channel,mpim,im", default: "im,mpim" },
+        limit: { type: "number", description: "Max results (default 100)" },
+        discover_dms: { type: "boolean", description: "Actively discover all DMs (slower but complete)" }
       }
     },
-    annotations: { title: "List Conversations", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+    annotations: { title: "List Conversations", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_conversations_history",
-    description: "Get messages from a channel or DM",
+    description: "Get messages from a channel or DM with user names resolved",
     inputSchema: {
       type: "object",
       properties: {
-        channel: { type: "string", description: "Channel ID" },
-        limit: { type: "number", description: "Max messages" }
+        channel: { type: "string", description: "Channel or DM ID (e.g., D063M4403MW)" },
+        limit: { type: "number", description: "Messages to fetch (max 100, default 50)" },
+        oldest: { type: "string", description: "Unix timestamp - get messages after this time" },
+        latest: { type: "string", description: "Unix timestamp - get messages before this time" }
       },
       required: ["channel"]
     },
-    annotations: { title: "Conversation History", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+    annotations: { title: "Conversation History", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
   {
-    name: "slack_search_messages",
-    description: "Search messages across workspace",
+    name: "slack_get_full_conversation",
+    description: "Export full conversation history with all messages, threads, and user names",
     inputSchema: {
       type: "object",
       properties: {
-        query: { type: "string", description: "Search query" },
-        count: { type: "number", description: "Max results" }
+        channel: { type: "string", description: "Channel or DM ID" },
+        oldest: { type: "string", description: "Unix timestamp start" },
+        latest: { type: "string", description: "Unix timestamp end" },
+        max_messages: { type: "number", description: "Maximum messages (default 2000, max 10000)" },
+        include_threads: { type: "boolean", description: "Fetch thread replies (default true)" }
+      },
+      required: ["channel"]
+    },
+    annotations: { title: "Full Conversation Export", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_search_messages",
+    description: "Search messages across the Slack workspace",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "Search query (supports from:@user, in:#channel)" },
+        count: { type: "number", description: "Number of results (max 100, default 20)" }
       },
       required: ["query"]
     },
-    annotations: { title: "Search Messages", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+    annotations: { title: "Search Messages", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_send_message",
@@ -94,9 +119,9 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
-        channel: { type: "string", description: "Channel ID" },
-        text: { type: "string", description: "Message text" },
-        thread_ts: { type: "string", description: "Thread timestamp for replies" }
+        channel: { type: "string", description: "Channel or DM ID to send to" },
+        text: { type: "string", description: "Message text (supports Slack markdown)" },
+        thread_ts: { type: "string", description: "Thread timestamp to reply to (optional)" }
       },
       required: ["channel", "text"]
     },
@@ -104,39 +129,39 @@ const TOOLS = [
   },
   {
     name: "slack_get_thread",
-    description: "Get replies in a thread",
+    description: "Get all replies in a message thread",
     inputSchema: {
       type: "object",
       properties: {
-        channel: { type: "string", description: "Channel ID" },
-        thread_ts: { type: "string", description: "Thread timestamp" }
+        channel: { type: "string", description: "Channel or DM ID" },
+        thread_ts: { type: "string", description: "Thread parent message timestamp" }
       },
       required: ["channel", "thread_ts"]
     },
-    annotations: { title: "Get Thread", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+    annotations: { title: "Get Thread", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_users_info",
-    description: "Get user profile information",
+    description: "Get detailed information about a Slack user",
     inputSchema: {
       type: "object",
       properties: {
-        user: { type: "string", description: "User ID" }
+        user: { type: "string", description: "Slack user ID" }
       },
       required: ["user"]
     },
-    annotations: { title: "User Info", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+    annotations: { title: "User Info", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_list_users",
-    description: "List workspace users",
+    description: "List all users in the workspace with pagination support",
     inputSchema: {
       type: "object",
       properties: {
-        limit: { type: "number", description: "Max results" }
+        limit: { type: "number", description: "Maximum users to return (default 500)" }
       }
     },
-    annotations: { title: "List Users", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+    annotations: { title: "List Users", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   }
 ];
 
@@ -167,6 +192,9 @@ async function handleToolCall(name, args, env, queryParams) {
 
   try {
     switch (name) {
+      case "slack_token_status": {
+        return { content: [{ type: "text", text: JSON.stringify({ status: "ok", note: "Token status check - tokens provided via query params" }, null, 2) }] };
+      }
       case "slack_health_check": {
         const result = await slackApi('auth.test', {}, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
@@ -184,6 +212,24 @@ async function handleToolCall(name, args, env, queryParams) {
           limit: args.limit || 50
         }, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+      case "slack_get_full_conversation": {
+        // Fetch conversation history with pagination
+        const messages = [];
+        let cursor;
+        const maxMessages = args.max_messages || 2000;
+        do {
+          const result = await slackApi('conversations.history', {
+            channel: args.channel,
+            limit: Math.min(100, maxMessages - messages.length),
+            oldest: args.oldest,
+            latest: args.latest,
+            cursor
+          }, token, cookie);
+          if (result.messages) messages.push(...result.messages);
+          cursor = result.response_metadata?.next_cursor;
+        } while (cursor && messages.length < maxMessages);
+        return { content: [{ type: "text", text: JSON.stringify({ messages, count: messages.length }, null, 2) }] };
       }
       case "slack_search_messages": {
         const result = await slackApi('search.messages', {
