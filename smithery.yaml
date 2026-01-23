@@ -1,5 +1,6 @@
 # Smithery configuration for slack-mcp-server (HTTP transport)
 # https://smithery.ai/docs/build/project-config/smithery-yaml
+# v1.2.0 - Updated 2026-01-22
 
 startCommand:
   type: http
