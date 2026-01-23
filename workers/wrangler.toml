@@ -1,0 +1,15 @@
+name = "slack-mcp-server"
+main = "mcp-worker.js"
+compatibility_date = "2024-01-01"
+
+# Secrets (set via `wrangler secret put SLACK_TOKEN`)
+# SLACK_TOKEN = xoxc-...
+# SLACK_COOKIE = xoxd-...
+
+[vars]
+# Non-secret vars go here
+
+# Optional: Custom domain
+# routes = [
+#   { pattern = "slack-mcp.yourdomain.com/*", zone_name = "yourdomain.com" }
+# ]

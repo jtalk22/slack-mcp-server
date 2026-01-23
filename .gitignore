@@ -145,3 +145,12 @@ docs/videos/*.webm
 # Playwright artifacts
 test-results/
 playwright-report/
+
+# Smithery build artifacts
+.smithery/
+
+# Claude Code local files
+.claude/
+
+# Wrangler cache
+workers/.wrangler/
