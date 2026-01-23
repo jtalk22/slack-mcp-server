@@ -9,11 +9,9 @@
   DMs, threads, history—no admin approval.</em>
 </p>
 
-<br>
-
 <p align="center">
   <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-    <img src="docs/images/demo-claude-v1.2.gif" alt="Slack MCP tools in action" width="640">
+    <img src="docs/images/demo-readme.gif" alt="Slack MCP tools in action" width="640">
   </a>
 </p>
 
@@ -31,6 +29,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dm/@jtalk22/slack-mcp?label=downloads&color=CB3837" alt="npm downloads"></a>
+  <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?label=build" alt="Build Status"></a>
   <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="https://img.shields.io/badge/Smithery-Registry-4A154B" alt="Smithery"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://github.com/sponsors/jtalk22"><img src="https://img.shields.io/badge/Sponsor-♡-ea4aaa?logo=github" alt="Sponsor"></a>
