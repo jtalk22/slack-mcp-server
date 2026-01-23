@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <img src="https://assets-worker.james-20a.workers.dev/projects/slack-mcp-server/demo-claude.gif" alt="Claude Desktop using Slack MCP tools" width="640">
+  <img src="docs/images/demo-claude-v1.2.gif" alt="Slack MCP tools in action" width="640">
 </p>
 
 ---
