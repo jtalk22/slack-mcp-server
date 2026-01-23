@@ -387,18 +387,21 @@ export default {
       return Response.json({
         configSchema: {
           type: "object",
+          required: [],
           properties: {
             slackToken: {
               type: "string",
               title: "Slack Token",
               description: "Your xoxc- token from browser session. Optional on macOS (auto-extracted from Chrome).",
-              pattern: "^xoxc-.*$"
+              pattern: "^xoxc-.*$",
+              default: ""
             },
             slackCookie: {
               type: "string",
               title: "Slack Cookie",
               description: "Your xoxd- cookie from browser session. Optional on macOS (auto-extracted from Chrome).",
-              pattern: "^xoxd-.*$"
+              pattern: "^xoxd-.*$",
+              default: ""
             },
             autoRefresh: {
               type: "boolean",
