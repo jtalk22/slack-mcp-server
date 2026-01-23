@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slack MCP Server Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+    h1 {
+      color: #ffffff;
+      font-size: 1.75rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: #94a3b8;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+    .video-wrapper {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      background: #0f0f1a;
+    }
+    video {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #4ecdc4;
+      color: #1a1a2e;
+    }
+    .btn-primary:hover {
+      background: #5eead4;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .back-link {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .back-link a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+    .back-link a:hover {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Slack MCP Server</h1>
+    <p class="subtitle">Full workspace access via local session mirroring</p>
+
+    <div class="video-wrapper">
+      <video id="demo" poster="../docs/images/demo-poster.png" playsinline>
+        <source src="../docs/videos/demo-claude-v1.2.webm" type="video/webm">
+        <source src="../docs/images/demo-claude-v1.2.gif" type="image/gif">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" onclick="togglePlay()">Play / Pause</button>
+      <button class="btn btn-secondary" onclick="restart()">Restart</button>
+    </div>
+
+    <div class="back-link">
+      <a href="https://github.com/jtalk22/slack-mcp-server">← Back to Repository</a>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('demo');
+
+    // Autoplay with 1 second delay
+    setTimeout(() => {
+      video.play().catch(() => {
+        // Autoplay blocked, user will need to click
+        console.log('Autoplay blocked, click to play');
+      });
+    }, 1000);
+
+    function togglePlay() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    function restart() {
+      video.currentTime = 0;
+      video.play();
+    }
+
+    // Loop the video
+    video.addEventListener('ended', () => {
+      video.currentTime = 0;
+      video.play();
+    });
+  </script>
+</body>
+</html>

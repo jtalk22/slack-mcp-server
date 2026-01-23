@@ -23,7 +23,9 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/demo-claude-v1.2.gif" alt="Slack MCP tools in action" width="640">
+  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
+    <img src="docs/images/demo-poster.png" alt="Slack MCP tools in action - click to play" width="640">
+  </a>
 </p>
 
 ---

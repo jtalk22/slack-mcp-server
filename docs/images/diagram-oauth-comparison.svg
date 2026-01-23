@@ -1,77 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340">
   <defs>
     <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#1a1a2e"/>
       <stop offset="100%" style="stop-color:#16213e"/>
     </linearGradient>
-  </defs>
-
-  <!-- Background -->
-  <rect width="900" height="320" fill="url(#bgGrad2)" rx="12"/>
-
-  <!-- Left Side: OAuth (Red-tinted) -->
-  <rect x="30" y="50" width="400" height="240" rx="12" fill="#e94560" opacity="0.1" stroke="#e94560" stroke-width="2"/>
-  <text x="230" y="80" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600">Official Slack API (OAuth)</text>
-
-  <!-- OAuth Flow boxes -->
-  <rect x="50" y="100" width="120" height="36" rx="6" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="110" y="123" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11">Create App</text>
-
-  <path d="M 175 118 L 195 118" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
-
-  <rect x="200" y="100" width="120" height="36" rx="6" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="260" y="123" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11">Request Scopes</text>
-
-  <path d="M 325 118 L 345 118" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
-
-  <rect x="350" y="100" width="70" height="36" rx="6" fill="#e94560" opacity="0.3" stroke="#e94560" stroke-width="1"/>
-  <text x="385" y="118" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600">Admin</text>
-  <text x="385" y="130" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600">Approval</text>
-
-  <path d="M 385 140 L 385 160" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
-
-  <rect x="110" y="165" width="130" height="36" rx="6" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="175" y="188" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11">User Authorization</text>
-
-  <path d="M 245 183 L 265 183" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
-
-  <rect x="270" y="165" width="130" height="36" rx="6" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="335" y="188" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11">Limited Access</text>
-
-  <!-- OAuth Result (blocked) -->
-  <rect x="100" y="220" width="260" height="50" rx="8" fill="#e94560" opacity="0.2" stroke="#e94560" stroke-width="2" stroke-dasharray="4"/>
-  <text x="230" y="242" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">No DMs without</text>
-  <text x="230" y="258" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">per-conversation consent</text>
-
-  <!-- Right Side: Session Mirroring (Green-tinted) -->
-  <rect x="470" y="50" width="400" height="240" rx="12" fill="#4ecdc4" opacity="0.1" stroke="#4ecdc4" stroke-width="2"/>
-  <text x="670" y="80" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600">Session Mirroring</text>
-
-  <!-- Session Mirroring Flow -->
-  <rect x="500" y="110" width="140" height="40" rx="8" fill="#3b82f6" opacity="0.8"/>
-  <text x="570" y="135" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">Open Slack in Chrome</text>
-
-  <path d="M 645 130 L 680 130" stroke="#4ecdc4" stroke-width="3" marker-end="url(#arrowTeal2)"/>
-
-  <rect x="685" y="110" width="140" height="40" rx="8" fill="#da7756" opacity="0.9"/>
-  <text x="755" y="135" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">Mirror Session</text>
-
-  <path d="M 755 155 L 755 175" stroke="#4ecdc4" stroke-width="3" marker-end="url(#arrowTeal2)"/>
-
-  <rect x="615" y="180" width="140" height="40" rx="8" fill="#4ecdc4" opacity="0.9"/>
-  <text x="685" y="205" text-anchor="middle" fill="#1a1a2e" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600">Full Access</text>
-
-  <!-- Session Mirroring Result (success) -->
-  <rect x="520" y="235" width="320" height="45" rx="8" fill="#4ecdc4" opacity="0.2" stroke="#4ecdc4" stroke-width="2"/>
-  <text x="680" y="257" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500">Your DMs, Channels, Search, History</text>
-  <text x="680" y="272" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="11">✓ Same access as your browser</text>
-
-  <!-- VS divider -->
-  <circle cx="450" cy="170" r="20" fill="#1a1a2e" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
-  <text x="450" y="175" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700">vs</text>
-
-  <!-- Arrow markers -->
-  <defs>
     <marker id="arrowRed2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
       <path d="M0,0 L0,6 L9,3 z" fill="#e94560"/>
     </marker>
@@ -79,4 +11,70 @@
       <path d="M0,0 L0,6 L9,3 z" fill="#4ecdc4"/>
     </marker>
   </defs>
+
+  <!-- Background -->
+  <rect width="900" height="340" fill="url(#bgGrad2)" rx="12"/>
+
+  <!-- Left Side: OAuth (Red-tinted) -->
+  <rect x="30" y="50" width="400" height="260" rx="12" fill="#e94560" opacity="0.1" stroke="#e94560" stroke-width="2"/>
+  <text x="230" y="80" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600">Official Slack API (OAuth)</text>
+
+  <!-- OAuth Flow - Row 1 -->
+  <rect x="45" y="100" width="120" height="40" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
+  <text x="105" y="125" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">Create App</text>
+
+  <path d="M 170 120 L 190 120" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+
+  <rect x="195" y="100" width="120" height="40" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
+  <text x="255" y="125" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">Request Scopes</text>
+
+  <path d="M 320 120 L 340 120" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+
+  <rect x="345" y="100" width="75" height="40" rx="8" fill="#e94560" opacity="0.4" stroke="#e94560" stroke-width="1"/>
+  <text x="382" y="116" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Admin</text>
+  <text x="382" y="130" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Approval</text>
+
+  <!-- Arrow down from Admin Approval -->
+  <path d="M 382 145 L 382 170" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+
+  <!-- OAuth Flow - Row 2 -->
+  <rect x="95" y="180" width="140" height="40" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
+  <text x="165" y="205" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">User Authorization</text>
+
+  <path d="M 240 200 L 260 200" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+
+  <rect x="265" y="180" width="140" height="40" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
+  <text x="335" y="205" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">Limited Access</text>
+
+  <!-- OAuth Result (blocked) -->
+  <rect x="70" y="240" width="290" height="55" rx="8" fill="#e94560" opacity="0.15" stroke="#e94560" stroke-width="2" stroke-dasharray="4"/>
+  <text x="215" y="263" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">No DMs without</text>
+  <text x="215" y="281" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">per-conversation consent</text>
+
+  <!-- Right Side: Session Mirroring (Green-tinted) -->
+  <rect x="470" y="50" width="400" height="260" rx="12" fill="#4ecdc4" opacity="0.1" stroke="#4ecdc4" stroke-width="2"/>
+  <text x="670" y="80" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600">Session Mirroring</text>
+
+  <!-- Session Mirroring Flow -->
+  <rect x="495" y="115" width="160" height="45" rx="8" fill="#3b82f6" opacity="0.9"/>
+  <text x="575" y="143" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">Open Slack in Chrome</text>
+
+  <path d="M 660 137 L 700 137" stroke="#4ecdc4" stroke-width="3" marker-end="url(#arrowTeal2)"/>
+
+  <rect x="705" y="115" width="140" height="45" rx="8" fill="#da7756" opacity="0.9"/>
+  <text x="775" y="143" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">Mirror Session</text>
+
+  <path d="M 775 165 L 775 190" stroke="#4ecdc4" stroke-width="3" marker-end="url(#arrowTeal2)"/>
+
+  <rect x="605" y="195" width="160" height="45" rx="8" fill="#4ecdc4" opacity="0.9"/>
+  <text x="685" y="223" text-anchor="middle" fill="#1a1a2e" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600">Full Access</text>
+
+  <!-- Session Mirroring Result (success) -->
+  <rect x="510" y="255" width="340" height="50" rx="8" fill="#4ecdc4" opacity="0.2" stroke="#4ecdc4" stroke-width="2"/>
+  <text x="680" y="277" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500">Your DMs, Channels, Search, History</text>
+  <text x="680" y="294" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="11">✓ Same access as your browser</text>
+
+  <!-- VS divider -->
+  <circle cx="450" cy="180" r="22" fill="#1a1a2e" stroke="#ffffff" stroke-width="2" opacity="0.9"/>
+  <text x="450" y="186" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700">vs</text>
 </svg>
