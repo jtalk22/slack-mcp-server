@@ -149,3 +149,11 @@ main().catch(error => {
   console.error("Fatal error:", error);
   process.exit(1);
 });
+
+/**
+ * Smithery sandbox server for capability scanning
+ * Returns a server instance with mock config for tool discovery
+ */
+export function createSandboxServer() {
+  return server;
+}
