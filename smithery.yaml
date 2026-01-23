@@ -5,24 +5,30 @@ startCommand:
   type: stdio
   configSchema:
     type: object
-    required:
-      - slackToken
-      - slackCookie
     properties:
       slackToken:
         type: string
         title: "Slack Token"
-        description: "Your xoxc- token from browser session"
+        description: "Your xoxc- token from browser session. Optional on macOS (auto-extracted from Chrome)."
+        pattern: "^xoxc-.*$"
       slackCookie:
         type: string
         title: "Slack Cookie"
-        description: "Your xoxd- cookie from browser session"
+        description: "Your xoxd- cookie from browser session. Optional on macOS (auto-extracted from Chrome)."
+        pattern: "^xoxd-.*$"
+      autoRefresh:
+        type: boolean
+        title: "Auto Refresh"
+        description: "Enable automatic token refresh from Chrome (macOS only)"
+        default: true
+    additionalProperties: false
   commandFunction: |-
     (config) => ({
       command: 'node',
       args: ['src/server.js'],
       env: {
-        SLACK_TOKEN: config.slackToken,
-        SLACK_COOKIE: config.slackCookie
+        ...(config.slackToken && { SLACK_TOKEN: config.slackToken }),
+        ...(config.slackCookie && { SLACK_COOKIE: config.slackCookie }),
+        ...(config.autoRefresh === false && { SLACK_NO_AUTO_REFRESH: 'true' })
       }
     })

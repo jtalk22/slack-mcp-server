@@ -9,7 +9,8 @@ const TOOLS = [
   {
     name: "slack_health_check",
     description: "Check if Slack API connection is working",
-    inputSchema: { type: "object", properties: {} }
+    inputSchema: { type: "object", properties: {} },
+    annotations: { title: "Health Check", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_list_conversations",
@@ -20,7 +21,8 @@ const TOOLS = [
         types: { type: "string", description: "Comma-separated: public_channel,private_channel,mpim,im" },
         limit: { type: "number", description: "Max results (default 100)" }
       }
-    }
+    },
+    annotations: { title: "List Conversations", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_conversations_history",
@@ -32,7 +34,8 @@ const TOOLS = [
         limit: { type: "number", description: "Max messages" }
       },
       required: ["channel"]
-    }
+    },
+    annotations: { title: "Conversation History", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_search_messages",
@@ -44,7 +47,8 @@ const TOOLS = [
         count: { type: "number", description: "Max results" }
       },
       required: ["query"]
-    }
+    },
+    annotations: { title: "Search Messages", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_send_message",
@@ -57,7 +61,8 @@ const TOOLS = [
         thread_ts: { type: "string", description: "Thread timestamp for replies" }
       },
       required: ["channel", "text"]
-    }
+    },
+    annotations: { title: "Send Message", readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true }
   },
   {
     name: "slack_get_thread",
@@ -69,7 +74,8 @@ const TOOLS = [
         thread_ts: { type: "string", description: "Thread timestamp" }
       },
       required: ["channel", "thread_ts"]
-    }
+    },
+    annotations: { title: "Get Thread", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_users_info",
@@ -80,7 +86,8 @@ const TOOLS = [
         user: { type: "string", description: "User ID" }
       },
       required: ["user"]
-    }
+    },
+    annotations: { title: "User Info", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
   },
   {
     name: "slack_list_users",
@@ -90,7 +97,8 @@ const TOOLS = [
       properties: {
         limit: { type: "number", description: "Max results" }
       }
-    }
+    },
+    annotations: { title: "List Users", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
   }
 ];
 

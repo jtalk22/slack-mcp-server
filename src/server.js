@@ -19,6 +19,10 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
 import { loadTokens } from "../lib/token-store.js";
@@ -45,16 +49,171 @@ const BACKGROUND_REFRESH_INTERVAL = 4 * 60 * 60 * 1000;
 const SERVER_NAME = "slack-mcp-server";
 const SERVER_VERSION = "1.2.0";
 
+// MCP Prompts - predefined prompt templates for common Slack operations
+const PROMPTS = [
+  {
+    name: "search-recent",
+    description: "Search workspace for messages from the past week",
+    arguments: [
+      {
+        name: "query",
+        description: "Search terms to look for",
+        required: true
+      }
+    ]
+  },
+  {
+    name: "summarize-channel",
+    description: "Get recent activity from a channel for summarization",
+    arguments: [
+      {
+        name: "channel_id",
+        description: "Channel ID to summarize",
+        required: true
+      },
+      {
+        name: "days",
+        description: "Number of days to look back (default 7)",
+        required: false
+      }
+    ]
+  },
+  {
+    name: "find-messages-from",
+    description: "Find all messages from a specific user",
+    arguments: [
+      {
+        name: "username",
+        description: "Username or display name to search for",
+        required: true
+      }
+    ]
+  }
+];
+
+// MCP Resources - data sources the server provides
+const RESOURCES = [
+  {
+    uri: "slack://workspace/info",
+    name: "Workspace Info",
+    description: "Current workspace name, team, and authenticated user",
+    mimeType: "application/json"
+  },
+  {
+    uri: "slack://conversations/list",
+    name: "Conversations",
+    description: "List of available channels and DMs",
+    mimeType: "application/json"
+  }
+];
+
 // Initialize server
 const server = new Server(
   { name: SERVER_NAME, version: SERVER_VERSION },
-  { capabilities: { tools: {} } }
+  { capabilities: { tools: {}, prompts: {}, resources: {} } }
 );
 
 // Register tool list handler
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: TOOLS
 }));
+
+// Register prompts handlers
+server.setRequestHandler(ListPromptsRequestSchema, async () => ({
+  prompts: PROMPTS
+}));
+
+server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+  const { name, arguments: args } = request.params;
+
+  switch (name) {
+    case "search-recent": {
+      const query = args?.query || "";
+      const oneWeekAgo = Math.floor(Date.now() / 1000) - (7 * 24 * 60 * 60);
+      return {
+        messages: [
+          {
+            role: "user",
+            content: {
+              type: "text",
+              text: `Search Slack for "${query}" from the past week. Use the slack_search_messages tool with query: "${query} after:${new Date(oneWeekAgo * 1000).toISOString().split('T')[0]}"`
+            }
+          }
+        ]
+      };
+    }
+    case "summarize-channel": {
+      const channelId = args?.channel_id || "";
+      const days = parseInt(args?.days) || 7;
+      const since = Math.floor(Date.now() / 1000) - (days * 24 * 60 * 60);
+      return {
+        messages: [
+          {
+            role: "user",
+            content: {
+              type: "text",
+              text: `Get the last ${days} days of messages from channel ${channelId} and provide a summary. Use slack_conversations_history with channel_id: "${channelId}" and oldest: "${since}"`
+            }
+          }
+        ]
+      };
+    }
+    case "find-messages-from": {
+      const username = args?.username || "";
+      return {
+        messages: [
+          {
+            role: "user",
+            content: {
+              type: "text",
+              text: `Find messages from ${username}. Use slack_search_messages with query: "from:@${username}"`
+            }
+          }
+        ]
+      };
+    }
+    default:
+      throw new Error(`Unknown prompt: ${name}`);
+  }
+});
+
+// Register resources handlers
+server.setRequestHandler(ListResourcesRequestSchema, async () => ({
+  resources: RESOURCES
+}));
+
+server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+  const { uri } = request.params;
+
+  switch (uri) {
+    case "slack://workspace/info": {
+      const result = await handleHealthCheck();
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: "application/json",
+            text: result.content[0].text
+          }
+        ]
+      };
+    }
+    case "slack://conversations/list": {
+      const result = await handleListConversations({ types: "im,mpim,public_channel,private_channel", limit: 50 });
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: "application/json",
+            text: result.content[0].text
+          }
+        ]
+      };
+    }
+    default:
+      throw new Error(`Unknown resource: ${uri}`);
+  }
+});
 
 // Register tool call handler
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
