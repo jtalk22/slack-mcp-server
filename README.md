@@ -17,8 +17,6 @@
   </a>
 </p>
 
-<br>
-
 <p align="center">
   <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/badge/npm-Install-blue?style=for-the-badge&logo=npm&logoColor=white" alt="npm"></a>
   <a href="https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server"><img src="https://img.shields.io/badge/Docker-Pull-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
