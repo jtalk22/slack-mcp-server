@@ -382,6 +382,36 @@ export default {
       );
     }
 
+    // Smithery config schema endpoint
+    if (url.pathname === '/.well-known/mcp-config') {
+      return Response.json({
+        configSchema: {
+          type: "object",
+          properties: {
+            slackToken: {
+              type: "string",
+              title: "Slack Token",
+              description: "Your xoxc- token from browser session. Optional on macOS (auto-extracted from Chrome).",
+              pattern: "^xoxc-.*$"
+            },
+            slackCookie: {
+              type: "string",
+              title: "Slack Cookie",
+              description: "Your xoxd- cookie from browser session. Optional on macOS (auto-extracted from Chrome).",
+              pattern: "^xoxd-.*$"
+            },
+            autoRefresh: {
+              type: "boolean",
+              title: "Auto Refresh",
+              description: "Enable automatic token refresh from Chrome (macOS only)",
+              default: true
+            }
+          },
+          additionalProperties: false
+        }
+      }, { headers: corsHeaders });
+    }
+
     // MCP endpoint
     if ((url.pathname === '/mcp' || url.pathname === '/') && request.method === 'POST') {
       try {
