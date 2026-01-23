@@ -1,31 +1,39 @@
 <p align="center">
-  <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="docs/assets/icon-512.png" alt="Slack MCP Server" width="120"></a>
+  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo.html"><img src="docs/assets/icon-512.png" alt="Slack MCP Server" width="80"></a>
 </p>
 
 <h1 align="center">Slack MCP Server</h1>
 
 <p align="center">
-  <em>Full workspace access via local session mirroring. DMs, threads, and history—no admin approval required.</em>
+  <em>Give Claude the same Slack access you have.<br>
+  DMs, threads, history—no admin approval.</em>
+</p>
+
+<br>
+
+<p align="center">
+  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
+    <img src="docs/images/demo-claude-v1.2.gif" alt="Slack MCP tools in action" width="640">
+  </a>
+</p>
+
+<br>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/badge/npm-Install-blue?style=for-the-badge&logo=npm&logoColor=white" alt="npm"></a>
+  <a href="https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server"><img src="https://img.shields.io/badge/Docker-Pull-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
 </p>
 
 <p align="center">
-  <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="https://img.shields.io/badge/Smithery-Install-4A154B?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEyIDJMNCAxMmw4IDEwIDgtMTBMMTIgMnoiLz48L3N2Zz4=" alt="Smithery"></a>
   <a href="https://jtalk22.github.io/slack-mcp-server/public/demo.html"><img src="https://img.shields.io/badge/LIVE%20DEMO-Try%20It%20Now-00C853?style=for-the-badge&logo=slack&logoColor=white" alt="Live Demo"></a>
   <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html"><img src="https://img.shields.io/badge/CLAUDE%20DEMO-See%20MCP%20Tools-da7756?style=for-the-badge" alt="Claude Demo"></a>
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/v/@jtalk22/slack-mcp?color=blue&label=npm" alt="npm"></a>
-  <a href="https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server"><img src="https://img.shields.io/badge/docker-ghcr.io-blue" alt="Docker"></a>
+  <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="https://img.shields.io/badge/Smithery-Registry-4A154B" alt="Smithery"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg" alt="Node.js"></a>
   <a href="https://github.com/sponsors/jtalk22"><img src="https://img.shields.io/github/sponsors/jtalk22?label=Sponsor&logo=github" alt="GitHub Sponsors"></a>
-</p>
-
-<p align="center">
-  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-    <img src="docs/images/demo-poster.png" alt="Slack MCP tools in action - click to play" width="640">
-  </a>
 </p>
 
 ---
