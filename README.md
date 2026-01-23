@@ -29,12 +29,13 @@
   <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html"><img src="https://img.shields.io/badge/CLAUDE%20DEMO-See%20MCP%20Tools-da7756?style=for-the-badge" alt="Claude Demo"></a>
 </p>
 
+<br>
+
 <p align="center">
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dm/@jtalk22/slack-mcp?label=downloads" alt="npm downloads"></a>
+  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dm/@jtalk22/slack-mcp?label=downloads&color=CB3837" alt="npm downloads"></a>
   <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="https://img.shields.io/badge/Smithery-Registry-4A154B" alt="Smithery"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg" alt="Node.js"></a>
-  <a href="https://github.com/sponsors/jtalk22"><img src="https://img.shields.io/github/sponsors/jtalk22?label=Sponsor&logo=github" alt="GitHub Sponsors"></a>
+  <a href="https://github.com/sponsors/jtalk22"><img src="https://img.shields.io/badge/Sponsor-♡-ea4aaa?logo=github" alt="Sponsor"></a>
 </p>
 
 ---
