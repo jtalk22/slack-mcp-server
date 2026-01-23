@@ -5,6 +5,44 @@
  * User credentials passed via headers or session.
  */
 
+// MCP Prompts
+const PROMPTS = [
+  {
+    name: "search-recent",
+    description: "Search workspace for messages from the past week",
+    arguments: [{ name: "query", description: "Search terms to look for", required: true }]
+  },
+  {
+    name: "summarize-channel",
+    description: "Get recent activity from a channel for summarization",
+    arguments: [
+      { name: "channel_id", description: "Channel ID to summarize", required: true },
+      { name: "days", description: "Number of days to look back (default 7)", required: false }
+    ]
+  },
+  {
+    name: "find-messages-from",
+    description: "Find all messages from a specific user",
+    arguments: [{ name: "username", description: "Username or display name to search for", required: true }]
+  }
+];
+
+// MCP Resources
+const RESOURCES = [
+  {
+    uri: "slack://workspace/info",
+    name: "Workspace Info",
+    description: "Current workspace name, team, and authenticated user",
+    mimeType: "application/json"
+  },
+  {
+    uri: "slack://conversations/list",
+    name: "Conversations",
+    description: "List of available channels and DMs",
+    mimeType: "application/json"
+  }
+];
+
 const TOOLS = [
   {
     name: "slack_health_check",
@@ -213,7 +251,7 @@ async function handleMcpRequest(request, env, queryParams) {
       case "initialize":
         responses.push(jsonRpcResponse(id, {
           protocolVersion: "2024-11-05",
-          capabilities: { tools: {} },
+          capabilities: { tools: {}, prompts: {}, resources: {} },
           serverInfo: { name: "slack-mcp-server", version: "1.2.0" }
         }));
         break;
@@ -226,6 +264,42 @@ async function handleMcpRequest(request, env, queryParams) {
         const result = await handleToolCall(params.name, params.arguments || {}, env, queryParams);
         responses.push(jsonRpcResponse(id, result));
         break;
+
+      case "prompts/list":
+        responses.push(jsonRpcResponse(id, { prompts: PROMPTS }));
+        break;
+
+      case "prompts/get": {
+        const promptName = params.name;
+        const promptArgs = params.arguments || {};
+        let messages = [];
+        if (promptName === "search-recent") {
+          const query = promptArgs.query || "";
+          messages = [{ role: "user", content: { type: "text", text: `Search Slack for "${query}" from the past week.` }}];
+        } else if (promptName === "summarize-channel") {
+          messages = [{ role: "user", content: { type: "text", text: `Get recent messages from channel ${promptArgs.channel_id} and summarize.` }}];
+        } else if (promptName === "find-messages-from") {
+          messages = [{ role: "user", content: { type: "text", text: `Find messages from ${promptArgs.username}.` }}];
+        }
+        responses.push(jsonRpcResponse(id, { messages }));
+        break;
+      }
+
+      case "resources/list":
+        responses.push(jsonRpcResponse(id, { resources: RESOURCES }));
+        break;
+
+      case "resources/read": {
+        const uri = params.uri;
+        let contents = [];
+        if (uri === "slack://workspace/info") {
+          contents = [{ uri, mimeType: "application/json", text: JSON.stringify({ note: "Use slack_health_check tool for live data" }) }];
+        } else if (uri === "slack://conversations/list") {
+          contents = [{ uri, mimeType: "application/json", text: JSON.stringify({ note: "Use slack_list_conversations tool for live data" }) }];
+        }
+        responses.push(jsonRpcResponse(id, { contents }));
+        break;
+      }
 
       case "notifications/initialized":
         // No response needed for notifications
