@@ -2,6 +2,7 @@
 
 *Full workspace access via local session mirroring. DMs, threads, and history—no admin approval required.*
 
+[![smithery badge](https://smithery.ai/badge/jtalk22/slack-mcp-server)](https://smithery.ai/server/jtalk22/slack-mcp-server)
 [![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-Try%20It%20Now-00C853?style=for-the-badge&logo=slack&logoColor=white)](https://jtalk22.github.io/slack-mcp-server/public/demo.html)
 [![Claude Demo](https://img.shields.io/badge/CLAUDE%20DEMO-See%20MCP%20Tools-da7756?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMThjLTQuNDEgMC04LTMuNTktOC04czMuNTktOCA4LTggOCAzLjU5IDggOC0zLjU5IDgtOCA4eiIvPjwvc3ZnPg==&logoColor=white)](https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html)
 
