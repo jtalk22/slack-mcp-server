@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/icon-512.png" alt="Slack MCP Server" width="120">
+  <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="docs/assets/icon-512.png" alt="Slack MCP Server" width="120"></a>
 </p>
 
 <h1 align="center">Slack MCP Server</h1>
@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <img src="https://assets-worker.james-20a.workers.dev/projects/slack-mcp-server/demo-claude.gif" alt="Claude Desktop using Slack MCP tools" width="800">
+  <img src="https://assets-worker.james-20a.workers.dev/projects/slack-mcp-server/demo-claude.gif" alt="Claude Desktop using Slack MCP tools" width="640">
 </p>
 
 ---
@@ -37,10 +37,6 @@ Screenshotting messages is not a workflow.
 This server bridges the gap. It creates a secure, local bridge between Claude and your Slack web session. It gives your AI the same access **you** already have in the browser—search history, summarize threads, find that thing someone sent you three weeks ago—without fighting the platform.
 
 ![Slack MCP Server Web UI](docs/images/demo-main.png)
-
-> **[Try the Interactive Demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html)** - See the Web UI in action
->
-> **[See Claude Desktop Demo](https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html)** - Watch MCP tools in action
 
 ---
 
