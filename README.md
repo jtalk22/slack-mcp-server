@@ -32,7 +32,6 @@
   <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?label=build" alt="Build Status"></a>
   <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="https://img.shields.io/badge/Smithery-Registry-4A154B" alt="Smithery"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-  <a href="https://github.com/sponsors/jtalk22"><img src="https://img.shields.io/badge/Sponsor-♡-ea4aaa?logo=github" alt="Sponsor"></a>
 </p>
 
 ---
@@ -457,7 +456,7 @@ slack-mcp-server/
 
 PRs welcome. Run `node --check` on modified files before submitting.
 
-If you find this project useful, consider [sponsoring](https://github.com/sponsors/jtalk22) or starring the repo.
+If you find this project useful, consider starring the repo.
 
 ---
 
