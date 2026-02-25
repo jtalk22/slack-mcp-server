@@ -350,6 +350,7 @@ Just click the link - no copy-paste needed. The key is saved to your browser and
 - [Deployment Modes](docs/DEPLOYMENT-MODES.md) - Choose the right operating model (`stdio`, `web`, hosted HTTP, Smithery/Worker)
 - [Use Case Recipes](docs/USE_CASE_RECIPES.md) - 12 copy/paste prompts mapped to current tool contracts
 - [Support Boundaries](docs/SUPPORT-BOUNDARIES.md) - Scope, response targets, and solo-maintainer capacity limits
+- [Growth Metrics](docs/GROWTH-METRICS.md) - Track weekly conversion and support-load targets through this release cycle
 
 If you're evaluating team rollout, start with [Deployment Modes](docs/DEPLOYMENT-MODES.md) before exposing remote endpoints.
 

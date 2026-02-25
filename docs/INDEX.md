@@ -19,6 +19,8 @@ Start here for setup, validation, operations, and support.
 
 - [HN Launch Kit](HN-LAUNCH.md)
 - [Communication Style](COMMUNICATION-STYLE.md)
+- [Growth Metrics Guide](GROWTH-METRICS.md)
+- [Latest Metrics Snapshot](growth-metrics/latest.md)
 - [Changelog](../CHANGELOG.md)
 
 ## Issue Intake
