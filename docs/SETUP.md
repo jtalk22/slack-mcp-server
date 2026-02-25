@@ -25,16 +25,22 @@ npm install
 
 ### 3. Get Slack Tokens
 
-**Option A: Automatic Extraction**
+**Option A: Setup Wizard (recommended)**
 
 1. Open Chrome
 2. Navigate to https://app.slack.com and log in
 3. Run:
    ```bash
-   npm run tokens:auto
+   npx -y @jtalk22/slack-mcp --setup
    ```
 
-**Option B: Manual Extraction**
+**Option B: Automatic Extraction (repo clone workflow)**
+
+```bash
+npm run tokens:auto
+```
+
+**Option C: Manual Extraction**
 
 1. Open https://app.slack.com in Chrome
 2. Press F12 to open DevTools
@@ -114,7 +120,7 @@ You should see your username and team name.
 
 ### "No credentials found"
 
-Run `npm run tokens:auto` with Slack open in Chrome, or `npm run tokens:refresh` to enter manually.
+Run `npx -y @jtalk22/slack-mcp --setup` with Slack open in Chrome, or `npm run tokens:refresh` to enter manually.
 
 ### "invalid_auth" Error
 

@@ -54,10 +54,13 @@ slack_list_conversations limit=50
 # Option 1: In Claude Code/Desktop
 slack_refresh_tokens
 
-# Option 2: CLI
+# Option 2: Package setup wizard
+npx -y @jtalk22/slack-mcp --setup
+
+# Option 3: Repo CLI
 npm run tokens:auto
 
-# Option 3: Manual
+# Option 4: Manual
 npm run tokens:refresh
 ```
 

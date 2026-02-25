@@ -232,7 +232,7 @@ async function showStatus() {
   if (!creds) {
     error("No tokens found");
     print();
-    print("Run setup wizard: npx @jtalk22/slack-mcp --setup");
+    print("Run setup wizard: npx -y @jtalk22/slack-mcp --setup");
     process.exit(1);
   }
 
@@ -257,7 +257,7 @@ async function showStatus() {
     error("Status: INVALID");
     print(`Error: ${e.message}`);
     print();
-    print("Run setup wizard to refresh: npx @jtalk22/slack-mcp --setup");
+    print("Run setup wizard to refresh: npx -y @jtalk22/slack-mcp --setup");
     process.exit(1);
   }
 }
@@ -268,11 +268,11 @@ async function showHelp() {
   print("Full Slack access for Claude via MCP. Session mirroring bypasses OAuth.");
   print();
   print(`${colors.bold}Usage:${colors.reset}`);
-  print("  npx @jtalk22/slack-mcp             Start MCP server (stdio)");
-  print("  npx @jtalk22/slack-mcp --setup     Interactive token setup wizard");
-  print("  npx @jtalk22/slack-mcp --status    Check token health");
-  print("  npx @jtalk22/slack-mcp --version   Print version");
-  print("  npx @jtalk22/slack-mcp --help      Show this help");
+  print("  npx -y @jtalk22/slack-mcp             Start MCP server (stdio)");
+  print("  npx -y @jtalk22/slack-mcp --setup     Interactive token setup wizard");
+  print("  npx -y @jtalk22/slack-mcp --status    Check token health");
+  print("  npx -y @jtalk22/slack-mcp --version   Print version");
+  print("  npx -y @jtalk22/slack-mcp --help      Show this help");
   print();
   print(`${colors.bold}npm scripts:${colors.reset}`);
   print("  npm start              Start MCP server");
@@ -345,8 +345,8 @@ async function main() {
       print(`${colors.green}${colors.bold}Setup complete!${colors.reset}`);
       print();
       print("Next steps:");
-      print("  • Verify: npx @jtalk22/slack-mcp --status");
-      print("  • Start server: npx @jtalk22/slack-mcp");
+      print("  • Verify: npx -y @jtalk22/slack-mcp --status");
+      print("  • Start server: npx -y @jtalk22/slack-mcp");
       print("  • Or add to Claude Desktop config");
     } else {
       print(`${colors.red}Setup failed.${colors.reset} See errors above.`);

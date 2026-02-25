@@ -7,6 +7,8 @@ The Slack Web Server exposes all MCP tools as REST endpoints, accessible from an
 ```bash
 cd ~/slack-mcp-server
 npm run web
+# Or run directly from npm:
+npx -y @jtalk22/slack-mcp web
 ```
 
 The server will:
