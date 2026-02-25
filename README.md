@@ -300,7 +300,7 @@ npm run web
 
 ```
 ════════════════════════════════════════════════════════════
-  Slack Web API Server v1.2.1
+  Slack Web API Server v1.2.2
 ════════════════════════════════════════════════════════════
 
   Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx

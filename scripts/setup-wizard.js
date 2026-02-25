@@ -16,7 +16,7 @@ import { loadTokens, saveTokens, extractFromChrome, isAutoRefreshAvailable, TOKE
 import { slackAPI } from "../lib/slack-client.js";
 
 const IS_MACOS = platform() === 'darwin';
-const VERSION = "1.2.1";
+const VERSION = "1.2.2";
 
 // ANSI colors
 const colors = {

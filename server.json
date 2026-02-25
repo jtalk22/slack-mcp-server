@@ -6,12 +6,12 @@
     "url": "https://github.com/jtalk22/slack-mcp-server",
     "source": "github"
   },
-  "version": "1.2.1",
+  "version": "1.2.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@jtalk22/slack-mcp",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "transport": {
         "type": "stdio"
       },

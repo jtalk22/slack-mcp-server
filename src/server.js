@@ -11,7 +11,7 @@
  * - Network error retry with exponential backoff
  * - Background token health monitoring
  *
- * @version 1.2.1
+ * @version 1.2.2
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -47,7 +47,7 @@ const BACKGROUND_REFRESH_INTERVAL = 4 * 60 * 60 * 1000;
 
 // Package info
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "1.2.1";
+const SERVER_VERSION = "1.2.2";
 
 // MCP Prompts - predefined prompt templates for common Slack operations
 const PROMPTS = [

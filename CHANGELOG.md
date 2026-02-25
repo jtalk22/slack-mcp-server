@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2026-02-25
+
+### Improved
+- Aligned CLI/setup guidance to `npx -y @jtalk22/slack-mcp` across docs and runtime messaging
+- Removed stale token refresh command references
+- Added deployment mode, support boundary, and use case recipe docs
+- Added demo CTA strip and deployment intake issue template for qualified team rollout requests
+
+### Compatibility
+- No API or MCP tool schema changes
+
 ## [1.2.1] - 2026-02-24
 
 ### Fixed
@@ -161,6 +172,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
+[1.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.9...v1.2.0
 [1.1.7]: https://github.com/jtalk22/slack-mcp-server/compare/v1.1.6...v1.1.7
