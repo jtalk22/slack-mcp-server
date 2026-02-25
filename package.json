@@ -25,7 +25,7 @@
     "tokens:clear": "node scripts/token-cli.js clear",
     "screenshot": "node scripts/capture-screenshots.js",
     "record-demo": "node scripts/record-demo.js",
-    "metrics:growth": "node scripts/collect-growth-metrics.js"
+    "metrics:release-health": "node scripts/collect-release-health.js"
   },
   "keywords": [
     "mcp",

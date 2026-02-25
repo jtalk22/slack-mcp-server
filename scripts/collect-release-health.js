@@ -2,10 +2,16 @@
 
 import { execSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { join, resolve } from "node:path";
 
-const REPO = process.env.GROWTH_REPO || "jtalk22/slack-mcp-server";
-const NPM_PACKAGE = process.env.GROWTH_NPM_PACKAGE || "@jtalk22/slack-mcp";
+const REPO =
+  process.env.RELEASE_HEALTH_REPO ||
+  process.env.GROWTH_REPO ||
+  "jtalk22/slack-mcp-server";
+const NPM_PACKAGE =
+  process.env.RELEASE_HEALTH_NPM_PACKAGE ||
+  process.env.GROWTH_NPM_PACKAGE ||
+  "@jtalk22/slack-mcp";
 
 function safeGhApi(path) {
   try {
@@ -38,7 +44,7 @@ function countNonPrIssues(items) {
 
 function buildMarkdown(data) {
   const lines = [];
-  lines.push(`# Growth Metrics Snapshot`);
+  lines.push("# Release Health Snapshot");
   lines.push("");
   lines.push(`- Generated: ${data.generatedAt}`);
   lines.push(`- Repo: \`${REPO}\``);
@@ -61,14 +67,12 @@ function buildMarkdown(data) {
   lines.push(`- 14d unique visitors: ${data.github.viewsUniques ?? "n/a"}`);
   lines.push(`- 14d clones: ${data.github.clonesCount ?? "n/a"}`);
   lines.push(`- 14d unique cloners: ${data.github.clonesUniques ?? "n/a"}`);
-  lines.push(`- first-run confirmations (all-time): ${data.github.successConfirmations ?? "n/a"}`);
   lines.push(`- deployment-intake submissions (all-time): ${data.github.deploymentIntakeCount ?? "n/a"}`);
   lines.push("");
 
-  lines.push("## 14-Day Targets (v1.2.3 Cycle)");
+  lines.push("## 14-Day Reliability Targets (v1.2.3 Cycle)");
   lines.push("");
   lines.push("- weekly downloads: >= 180");
-  lines.push("- external successful first-run confirmations: >= 3");
   lines.push("- qualified deployment-intake submissions: >= 2");
   lines.push("- maintainer support load: <= 2 hours/week");
   lines.push("");
@@ -76,7 +80,7 @@ function buildMarkdown(data) {
   lines.push("## Notes");
   lines.push("");
   lines.push("- Update this snapshot daily during the first week, then every 2-3 days.");
-  lines.push("- Track first-run confirmations and support load manually in issue/discussion notes.");
+  lines.push("- Track deployment-intake quality and support load manually in issue notes.");
 
   return `${lines.join("\n")}\n`;
 }
@@ -105,7 +109,6 @@ async function main() {
   const repoInfo = safeGhApi(`repos/${REPO}`) || {};
   const views = safeGhApi(`repos/${REPO}/traffic/views`) || {};
   const clones = safeGhApi(`repos/${REPO}/traffic/clones`) || {};
-  const successIssues = safeGhApi(`repos/${REPO}/issues?state=all&labels=success-confirmation&per_page=100`) || [];
   const intakeIssues = safeGhApi(`repos/${REPO}/issues?state=all&labels=deployment-intake&per_page=100`) || [];
 
   const data = {
@@ -123,14 +126,13 @@ async function main() {
       viewsUniques: views.uniques ?? null,
       clonesCount: clones.count ?? null,
       clonesUniques: clones.uniques ?? null,
-      successConfirmations: countNonPrIssues(successIssues),
       deploymentIntakeCount: countNonPrIssues(intakeIssues),
     },
   };
 
   const markdown = buildMarkdown(data);
 
-  const metricsDir = resolve("docs", "growth-metrics");
+  const metricsDir = resolve("docs", "release-health");
   const datedPath = join(metricsDir, `${dateSlug}.md`);
   const latestPath = join(metricsDir, "latest.md");
 
