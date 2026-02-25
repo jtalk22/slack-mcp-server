@@ -1,14 +1,15 @@
 ## <version> — <short title>
 
-### Fixed
+### Improved
 - <item>
 - <item>
 
-### Runtime / Security
-- <item>
+### Compatibility
+- No API/tool schema changes.
 
 ### Verify
 ```bash
-<command>
-<command>
+npx -y @jtalk22/slack-mcp --version
+npx -y @jtalk22/slack-mcp --setup
+npx -y @jtalk22/slack-mcp --status
 ```
