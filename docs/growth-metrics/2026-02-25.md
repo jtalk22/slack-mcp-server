@@ -1,6 +1,6 @@
 # Growth Metrics Snapshot
 
-- Generated: 2026-02-25T05:58:51.362Z
+- Generated: 2026-02-25T06:02:10.117Z
 - Repo: `jtalk22/slack-mcp-server`
 - Package: `@jtalk22/slack-mcp`
 
@@ -19,6 +19,8 @@
 - 14d unique visitors: 259
 - 14d clones: 118
 - 14d unique cloners: 67
+- first-run confirmations (all-time): 1
+- deployment-intake submissions (all-time): 1
 
 ## 14-Day Targets (v1.2.3 Cycle)
 

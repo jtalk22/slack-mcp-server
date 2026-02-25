@@ -18,6 +18,8 @@ Outputs:
 - npm latest version
 - GitHub stars, forks, open issues
 - GitHub 14-day traffic views/clones (owner token required via `gh auth`)
+- Count of `success-confirmation` issues
+- Count of `deployment-intake` issues
 
 ## 14-day targets
 
@@ -28,9 +30,9 @@ Outputs:
 
 ## Manual fields to track alongside snapshots
 
-- Count of first-run confirmations from issues/discussions.
-- Count of complete deployment-intake submissions.
 - Weekly support minutes spent.
+- Quality of confirmations (clear commands + environment details).
+- Conversion source notes (HN, search, referrals).
 
 ## Recommended cadence
 

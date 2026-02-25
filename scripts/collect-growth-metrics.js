@@ -31,6 +31,11 @@ function toDateSlug(date) {
   return `${y}-${m}-${d}`;
 }
 
+function countNonPrIssues(items) {
+  if (!Array.isArray(items)) return 0;
+  return items.filter((item) => item && !item.pull_request).length;
+}
+
 function buildMarkdown(data) {
   const lines = [];
   lines.push(`# Growth Metrics Snapshot`);
@@ -56,6 +61,8 @@ function buildMarkdown(data) {
   lines.push(`- 14d unique visitors: ${data.github.viewsUniques ?? "n/a"}`);
   lines.push(`- 14d clones: ${data.github.clonesCount ?? "n/a"}`);
   lines.push(`- 14d unique cloners: ${data.github.clonesUniques ?? "n/a"}`);
+  lines.push(`- first-run confirmations (all-time): ${data.github.successConfirmations ?? "n/a"}`);
+  lines.push(`- deployment-intake submissions (all-time): ${data.github.deploymentIntakeCount ?? "n/a"}`);
   lines.push("");
 
   lines.push("## 14-Day Targets (v1.2.3 Cycle)");
@@ -98,6 +105,8 @@ async function main() {
   const repoInfo = safeGhApi(`repos/${REPO}`) || {};
   const views = safeGhApi(`repos/${REPO}/traffic/views`) || {};
   const clones = safeGhApi(`repos/${REPO}/traffic/clones`) || {};
+  const successIssues = safeGhApi(`repos/${REPO}/issues?state=all&labels=success-confirmation&per_page=100`) || [];
+  const intakeIssues = safeGhApi(`repos/${REPO}/issues?state=all&labels=deployment-intake&per_page=100`) || [];
 
   const data = {
     generatedAt,
@@ -114,6 +123,8 @@ async function main() {
       viewsUniques: views.uniques ?? null,
       clonesCount: clones.count ?? null,
       clonesUniques: clones.uniques ?? null,
+      successConfirmations: countNonPrIssues(successIssues),
+      deploymentIntakeCount: countNonPrIssues(intakeIssues),
     },
   };
 

@@ -121,6 +121,11 @@ Expected:
 
 Proof script for launch threads: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
 
+Share kit for distribution: [docs/SHARE-KIT.md](docs/SHARE-KIT.md)
+
+Successful first run? Post a confirmation:
+- [First-Run Success Template](https://github.com/jtalk22/slack-mcp-server/issues/new?template=first_run_success.md&title=%5BSuccess%5D%20First%20run%20on%20)
+
 ### Option A: npm (Recommended)
 
 ```bash
@@ -351,6 +356,7 @@ Just click the link - no copy-paste needed. The key is saved to your browser and
 - [Use Case Recipes](docs/USE_CASE_RECIPES.md) - 12 copy/paste prompts mapped to current tool contracts
 - [Support Boundaries](docs/SUPPORT-BOUNDARIES.md) - Scope, response targets, and solo-maintainer capacity limits
 - [Growth Metrics](docs/GROWTH-METRICS.md) - Track weekly conversion and support-load targets through this release cycle
+- [Share Kit](docs/SHARE-KIT.md) - Copy/paste distribution blocks for launch threads and proof-first posts
 
 If you're evaluating team rollout, start with [Deployment Modes](docs/DEPLOYMENT-MODES.md) before exposing remote endpoints.
 

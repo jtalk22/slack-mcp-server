@@ -18,6 +18,7 @@ Start here for setup, validation, operations, and support.
 ## Launch and Communication
 
 - [HN Launch Kit](HN-LAUNCH.md)
+- [Share Kit](SHARE-KIT.md)
 - [Communication Style](COMMUNICATION-STYLE.md)
 - [Growth Metrics Guide](GROWTH-METRICS.md)
 - [Latest Metrics Snapshot](growth-metrics/latest.md)
@@ -26,5 +27,6 @@ Start here for setup, validation, operations, and support.
 ## Issue Intake
 
 - [Bug Report Template](../.github/ISSUE_TEMPLATE/bug_report.md)
+- [First-Run Success Template](../.github/ISSUE_TEMPLATE/first_run_success.md)
 - [Feature Request Template](../.github/ISSUE_TEMPLATE/feature_request.md)
 - [Deployment Intake Template](../.github/ISSUE_TEMPLATE/deployment-intake.md)
