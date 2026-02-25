@@ -1,6 +1,6 @@
 # Documentation Index
 
-Start here for setup, validation, operations, and support.
+Start here for setup, compatibility checks, operations, and support.
 
 ## Core
 

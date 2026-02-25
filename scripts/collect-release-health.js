@@ -79,7 +79,7 @@ function buildMarkdown(data) {
 
   lines.push("## Notes");
   lines.push("");
-  lines.push("- Update this snapshot daily during the first week, then every 2-3 days.");
+  lines.push("- Update this snapshot daily during active release windows, then weekly.");
   lines.push("- Track deployment-intake quality and support load manually in issue notes.");
 
   return `${lines.join("\n")}\n`;

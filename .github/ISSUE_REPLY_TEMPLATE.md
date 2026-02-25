@@ -1,4 +1,4 @@
-Thanks for reporting this.
+Thanks for reporting this quickly.
 
 Status: fixed in `<version>`.
 
