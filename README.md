@@ -37,6 +37,8 @@
 
 ---
 
+> Free local-first path: install with `npx -y @jtalk22/slack-mcp`, run on your own machine, and keep full control of session tokens.
+
 ### Why This Exists
 
 I built this because I was working with someone to help me manage a complex workload, and we kept hitting walls. They needed context from my messages—"what did X say about Y?"—and standard app/OAuth flows were too constrained for that workflow.
@@ -100,15 +102,20 @@ Instead of authenticating as a bot, this server leverages your existing Chrome s
 
 **Runtime:** Node.js 20+
 
-### 2-Minute Verify
+### 30-Second Proof
 
 ```bash
 npx -y @jtalk22/slack-mcp --version
-npx -y @jtalk22/slack-mcp --setup
 npx -y @jtalk22/slack-mcp --status
+npx -y @jtalk22/slack-mcp --setup
 ```
 
-If `--status` returns valid workspace/user info, your install path is working.
+Expected:
+- `--version` prints `slack-mcp-server v1.2.x`
+- `--status` returns either valid workspace info or a clear "No tokens found" message
+- `--setup` launches the interactive wizard
+
+Proof script for launch threads: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
 
 ### Option A: npm (Recommended)
 
@@ -321,11 +328,32 @@ Just click the link - no copy-paste needed. The key is saved to your browser and
 
 ## Operations Guides
 
+- [Docs Index](docs/INDEX.md) - One-click index for setup, API, troubleshooting, deployment, and support docs
 - [Deployment Modes](docs/DEPLOYMENT-MODES.md) - Choose the right operating model (`stdio`, `web`, hosted HTTP, Smithery/Worker)
 - [Use Case Recipes](docs/USE_CASE_RECIPES.md) - 12 copy/paste prompts mapped to current tool contracts
 - [Support Boundaries](docs/SUPPORT-BOUNDARIES.md) - Scope, response targets, and solo-maintainer capacity limits
 
 If you're evaluating team rollout, start with [Deployment Modes](docs/DEPLOYMENT-MODES.md) before exposing remote endpoints.
+
+---
+
+## Getting Help Fast
+
+1. Run:
+   ```bash
+   npx -y @jtalk22/slack-mcp --version
+   npx -y @jtalk22/slack-mcp --status
+   ```
+2. If setup fails, run:
+   ```bash
+   npx -y @jtalk22/slack-mcp --setup
+   ```
+3. Open an issue with full environment details:
+   - [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md)
+   - [Deployment Intake Template](.github/ISSUE_TEMPLATE/deployment-intake.md)
+4. Check scope and response targets:
+   - [Support Boundaries](docs/SUPPORT-BOUNDARIES.md)
+   - [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
 
 ---
 
@@ -336,6 +364,9 @@ If you're evaluating team rollout, start with [Deployment Modes](docs/DEPLOYMENT
 # macOS: Auto-refresh from Chrome
 slack_refresh_tokens  # In Claude
 # Or: npm run tokens:auto
+
+# Package setup wizard
+npx -y @jtalk22/slack-mcp --setup
 
 # Linux/Windows: Manual update
 # Edit ~/.slack-mcp-tokens.json with fresh values
