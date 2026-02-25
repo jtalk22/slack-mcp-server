@@ -46,7 +46,7 @@ It does not use Slack app OAuth scopes. It uses your existing signed-in session 
 ### What about token expiry?
 Session tokens expire. `--setup` refreshes credentials, and macOS supports automatic extraction from Chrome.
 
-### Is this intended as a stealth hosted proxy?
+### Is this intended as a hosted proxy pattern?
 No. The free path is local/self-hosted first. Deployment docs describe tradeoffs and support boundaries before team rollout.
 
 ### Is this safe for production teams?

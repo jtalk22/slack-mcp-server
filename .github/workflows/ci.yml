@@ -61,3 +61,6 @@ jobs:
           # Check package.json is valid
           node -e "JSON.parse(require('fs').readFileSync('package.json'))"
           echo "Package.json is valid"
+
+      - name: Check public wording discipline
+        run: bash scripts/check-public-language.sh
