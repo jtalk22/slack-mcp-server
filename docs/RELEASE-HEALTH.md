@@ -1,16 +1,16 @@
-# Growth Metrics Tracking
+# Release Health Tracking
 
-Use this to measure install conversion and support quality during the current free-first cycle.
+Use this to track installation reliability and operational load during the current release cycle.
 
 ## One-command snapshot
 
 ```bash
-node scripts/collect-growth-metrics.js
+node scripts/collect-release-health.js
 ```
 
 Outputs:
-- `docs/growth-metrics/latest.md`
-- `docs/growth-metrics/YYYY-MM-DD.md`
+- `docs/release-health/latest.md`
+- `docs/release-health/YYYY-MM-DD.md`
 
 ## What it captures automatically
 
@@ -18,21 +18,19 @@ Outputs:
 - npm latest version
 - GitHub stars, forks, open issues
 - GitHub 14-day traffic views/clones (owner token required via `gh auth`)
-- Count of `success-confirmation` issues
 - Count of `deployment-intake` issues
 
 ## 14-day targets
 
 - weekly downloads: `>= 180`
-- successful external first-run confirmations: `>= 3`
 - qualified deployment-intake submissions: `>= 2`
 - support load: `<= 2 hours/week`
 
 ## Manual fields to track alongside snapshots
 
 - Weekly support minutes spent.
-- Quality of confirmations (clear commands + environment details).
-- Conversion source notes (HN, search, referrals).
+- Deployment-intake quality (clear use case, owner, timeline).
+- Conversion source notes (search, referrals, docs traffic).
 
 ## Recommended cadence
 
