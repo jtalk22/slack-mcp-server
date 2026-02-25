@@ -34,6 +34,10 @@ jobs:
           node -e "import('./src/server.js')" 2>/dev/null || echo "Server module check complete"
           node -e "import('./lib/tools.js')" 2>/dev/null || echo "Tools module check complete"
 
+      - name: Verify npm install flow
+        if: matrix.node-version == '20.x'
+        run: node scripts/verify-install-flow.js
+
   lint:
     runs-on: ubuntu-latest
 

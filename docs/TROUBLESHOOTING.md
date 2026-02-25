@@ -4,6 +4,26 @@ Common issues and their solutions.
 
 ---
 
+## Install Flow Sanity Check
+
+If first-run setup is failing, validate command resolution in a clean directory:
+
+```bash
+tmpdir="$(mktemp -d)"
+cd "$tmpdir"
+npx -y @jtalk22/slack-mcp --version
+npx -y @jtalk22/slack-mcp --help
+npx -y @jtalk22/slack-mcp --status
+```
+
+Expected:
+- `--version` and `--help` exit `0`
+- `--status` exits non-zero when credentials are not configured
+
+If `--version` fails here, the issue is install/runtime path, not Slack credentials.
+
+---
+
 ## DMs Not Showing Up
 
 **Symptom:** `slack_list_conversations` returns channels but no DMs.

@@ -137,6 +137,20 @@ npm install
 docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 ```
 
+### Install Sanity (Clean Temp Directory)
+
+```bash
+tmpdir="$(mktemp -d)"
+cd "$tmpdir"
+npx -y @jtalk22/slack-mcp --version
+npx -y @jtalk22/slack-mcp --help
+npx -y @jtalk22/slack-mcp --status
+```
+
+Expected:
+- `--version` and `--help` exit `0`
+- `--status` exits non-zero until credentials are configured
+
 ---
 
 ## Configuration

@@ -23,6 +23,20 @@ cd ~/slack-mcp-server
 npm install
 ```
 
+### 2.5 Verify Install Path in a Clean Directory
+
+```bash
+tmpdir="$(mktemp -d)"
+cd "$tmpdir"
+npx -y @jtalk22/slack-mcp --version
+npx -y @jtalk22/slack-mcp --help
+npx -y @jtalk22/slack-mcp --status
+```
+
+Expected:
+- `--version` and `--help` succeed.
+- `--status` returns non-zero until credentials are configured.
+
 ### 3. Get Slack Tokens
 
 **Option A: Setup Wizard (recommended)**
