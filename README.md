@@ -102,7 +102,7 @@ Instead of authenticating as a bot, this server leverages your existing Chrome s
 
 **Runtime:** Node.js 20+
 
-### 30-Second Proof
+### 30-Second Compatibility Check
 
 ```bash
 npx -y @jtalk22/slack-mcp --version
@@ -119,7 +119,7 @@ Expected:
   - `3` connectivity/runtime issue
 - `--setup` launches the interactive wizard
 
-Proof script for launch threads: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
+Launch-ready command set: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
 
 ### Option A: npm (Recommended)
 

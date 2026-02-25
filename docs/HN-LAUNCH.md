@@ -17,7 +17,7 @@ What it does:
 - message send + user lookups
 - local web mode when MCP is unavailable
 
-Quick proof:
+Quick check:
 - `npx -y @jtalk22/slack-mcp --version`
 - `npx -y @jtalk22/slack-mcp --status`
 - `npx -y @jtalk22/slack-mcp --setup`
@@ -52,7 +52,7 @@ No. The free path is local/self-hosted first. Deployment docs describe tradeoffs
 ### Is this safe for production teams?
 Treat as operator-managed infrastructure. Validate with your own risk/compliance controls before broader rollout.
 
-## Install Proof Block
+## Install Check Block
 
 ```bash
 npx -y @jtalk22/slack-mcp --version
