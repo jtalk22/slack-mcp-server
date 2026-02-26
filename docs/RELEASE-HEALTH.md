@@ -11,6 +11,7 @@ node scripts/collect-release-health.js
 Outputs:
 - `docs/release-health/latest.md`
 - `docs/release-health/YYYY-MM-DD.md`
+- `docs/release-health/automation-delta.md` (when delta script is run)
 
 24-hour loop artifacts:
 - `docs/release-health/24h-start.md`
@@ -42,3 +43,24 @@ Outputs:
 
 - Days 1-7: daily snapshot
 - Days 8-14: every 2-3 days
+
+## Automated cadence (low-touch)
+
+- Workflow: `.github/workflows/release-health.yml`
+- Triggers:
+  - scheduled at `07:15` and `19:15` UTC
+  - manual `workflow_dispatch`
+- Outputs per run:
+  - workflow summary with current snapshot and baseline delta
+  - artifacts: `docs/release-health/latest.md`, `docs/release-health/automation-delta.md`
+
+## Local delta command
+
+If you want to compare two explicit snapshots locally:
+
+```bash
+node scripts/build-release-health-delta.js \
+  --before docs/release-health/24h-start.md \
+  --after docs/release-health/24h-end.md \
+  --out docs/release-health/24h-delta.md
+```
