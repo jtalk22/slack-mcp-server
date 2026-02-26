@@ -21,7 +21,7 @@
 - 14d unique cloners: 113
 - deployment-intake submissions (all-time): 1
 
-## 14-Day Reliability Targets (v1.2.3 Cycle)
+## 14-Day Reliability Targets (v2.0.0 Cycle)
 
 - weekly downloads: >= 180
 - qualified deployment-intake submissions: >= 2

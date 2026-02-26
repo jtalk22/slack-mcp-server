@@ -1,18 +1,18 @@
-# Launch Ops Runbook (v2.0.0)
+# Launch Ops Runbook (v2.0.0 Post-Launch Polish)
 
-This runbook defines launch-day monitoring, response rules, and reinforcement loops.
+This runbook defines launch-day monitoring and distribution for the trust-and-infra fanout path (no X/Reddit dependency).
 
-## Same-Day Fanout Order
+## Same-Day Fanout Order (9 Channels)
 
-1. GitHub release publish (`v2.0.0`)
-2. npm publish confirm (`@jtalk22/slack-mcp@2.0.0`)
-3. MCP registry metadata update
-4. Smithery listing metadata parity update
-5. `awesome-mcp-servers` version update PR
-6. Glama listing refresh/update
-7. HN post + first comment
-8. X thread
-9. Reddit technical post
+1. GitHub release page refresh (`v2.0.0` copy + install-proof block)
+2. npm parity confirm (`@jtalk22/slack-mcp@2.0.0`)
+3. MCP registry parity confirm (`2.0.0`)
+4. Smithery listing metadata/parity update (or timestamped propagation note)
+5. `awesome-mcp-servers` listing PR refresh
+6. Glama metadata sync and canonical link verification
+7. HN thread update comment (high-signal install proof + support path)
+8. GitHub Discussions announcement/support threads update
+9. GitHub Pages/docs surface publish + link verification
 
 ## Monitoring Cadence
 
@@ -21,9 +21,9 @@ This runbook defines launch-day monitoring, response rules, and reinforcement lo
 
 Track:
 - install reports and blocker count
-- npm version/install confirmation
-- registry parity status
-- inbound issue volume and severity
+- npm/MCP parity state
+- listing propagation status (Smithery/Glama)
+- inbound issue and discussion severity
 
 ## Triage Rules
 
@@ -33,29 +33,29 @@ P1 install blocker:
 - add fix to patch queue
 
 Non-blocking request:
-- acknowledge and route to issue template
+- acknowledge and route to issue/discussion template
 - provide timeline as best effort
 
 ## Escalation Triggers
 
 1. If install failures exceed 3 unique reports in 24h:
-- pause outbound posting
+- pause outbound promotion
 - prioritize hotfix
 
 2. If support load exceeds 2 hours/day for 2 days:
-- move to stability-only mode
+- switch to stability-only mode
 - defer non-critical requests
 
 ## 24h / 48h / 72h Follow-Up
 
 24h:
-- publish release-health delta and short technical update
+- publish release-health delta and short technical summary
 
 48h:
-- answer top 5 recurring questions in docs
+- patch docs for top recurring setup questions
 
 72h:
-- publish `v2.0.1` only if launch defects are confirmed
+- ship `v2.0.1` only if launch defects are confirmed
 
 ## Evidence Log
 
@@ -65,6 +65,6 @@ Use:
 Capture:
 - channel
 - UTC timestamp
-- URL
+- URL or command evidence
 - action taken
-- observed result
+- observed result (`success|partial|blocked`)

@@ -1,62 +1,69 @@
 # Launch Copy (v2.0.0)
 
-Use this file for channel-specific copy with consistent technical claims.
+Use this file for trust-and-infra channel distribution with consistent technical claims.
 
 ## Short Release Summary (150 words)
 
-`@jtalk22/slack-mcp v2.0.0` is now live. This release is a reliability pass focused on install confidence, deterministic diagnostics, and stable contracts. `--status` is enforced as read-only in install-path checks, `--doctor` is standardized to strict `0/1/2/3` exits, and MCP/web error payloads are normalized for faster triage. Token health now handles missing timestamps as explicit unknown-age state, avoiding false critical warnings. Metadata and distribution parity were tightened for npm and registry consistency, including a parity check script (`npm run verify:version-parity`) for one-command validation across local/npm/registry surfaces. No MCP tools were renamed or removed in this release. If you run Claude Desktop, Claude Code, or web mode, `v2.0.0` is a drop-in upgrade designed to reduce operational noise while keeping the current integration contract intact. Built and operated by `jtalk22`.
+`@jtalk22/slack-mcp v2.0.0` is live as a reliability-focused release. This wave is about install confidence and deterministic behavior: `--status` is enforced as read-only in install-path checks, `--doctor` exits are standardized to `0/1/2/3`, and MCP/web error payloads use a shared structure for faster triage (`status`, `code`, `message`, `next_action`). Token health now handles missing timestamps as explicit `unknown_age` semantics to avoid false critical warnings. Tool compatibility is preserved: no MCP tool names were renamed or removed. Distribution checks were tightened with version parity reporting (`npm run verify:version-parity`) across local metadata, npm, and registry surfaces. For Claude Desktop, Claude Code, and web mode operators, this is a drop-in upgrade designed to reduce setup friction and operational noise while preserving the existing integration contract. Maintainer/operator: `jtalk22` (`james@revasser.nyc`).
 
-## X Thread (7 posts)
+## GitHub Release Refresh Block
 
-1. `Slack MCP Server v2.0.0 is live.`
-   `This wave is about operational reliability, not feature churn.`
-2. `Install checks now enforce read-only --status.`
-   `No refresh side effects during status validation.`
-3. `--doctor exits are deterministic now: 0/1/2/3.`
-   `Ready, missing creds, invalid creds, runtime issue.`
-4. `Diagnostics are normalized across CLI/MCP/Web payloads.`
-   `Fewer ambiguous errors when triaging installs.`
-5. `Missing token timestamps now map to unknown age.`
-   `No false critical warnings from absent metadata.`
-6. `Compatibility stayed stable in v2.0.0.`
-   `No MCP tool rename/removal in this cut.`
-7. `Install proof:`
-   `npx -y @jtalk22/slack-mcp@latest --version`
-   `npx -y @jtalk22/slack-mcp@latest --doctor`
-   `npx -y @jtalk22/slack-mcp@latest --status`
-   `Repo: https://github.com/jtalk22/slack-mcp-server`
-
-## Reddit Post (Technical Variant)
-
-Title:
-- `Slack MCP Server v2.0.0: deterministic install diagnostics, stable tool contracts`
-
-Body:
 ```md
-Released `@jtalk22/slack-mcp@2.0.0` today.
+`v2.0.0` stays focused on reliability and install clarity:
+- `--status` is read-only in install-path checks
+- `--doctor` exits are deterministic (`0/1/2/3`)
+- MCP/web diagnostics are structured consistently
+- no MCP tool renames/removals
 
-Main changes are reliability-focused:
-- install-path verification enforces read-only `--status`
-- `--doctor` exit matrix enforced (`0/1/2/3`)
-- standardized structured error payloads for MCP tool failures and web API errors
-- token health handles missing timestamp as unknown age (no false critical)
-- new version parity report script for npm/local/registry checks
+Install proof:
+`npx -y @jtalk22/slack-mcp@latest --version`
+`npx -y @jtalk22/slack-mcp@latest --doctor`
+`npx -y @jtalk22/slack-mcp@latest --status`
+```
 
-No MCP tool renames or removals in this release.
+## HN Follow-Up Comment Block
 
-Verify:
+```md
+Operator update for `v2.0.0`:
+- install checks now enforce read-only `--status`
+- `--doctor` is deterministic (`0/1/2/3`)
+- compatibility is preserved (no tool rename/removal)
+
+Fast verify:
 `npx -y @jtalk22/slack-mcp@latest --version`
 `npx -y @jtalk22/slack-mcp@latest --doctor`
 `npx -y @jtalk22/slack-mcp@latest --status`
 
-Repo: https://github.com/jtalk22/slack-mcp-server
-npm: https://www.npmjs.com/package/@jtalk22/slack-mcp
-
-Maintainer/operator: `jtalk22` (`james@revasser.nyc`)
+If setup fails, include OS + Node version + runtime mode (`stdio|web|http|worker`) and exact output.
 ```
 
-## Registry Propagation Note
+## GitHub Discussion Update Block
 
-If registry versions are still syncing right after publish, use this sentence:
+```md
+Public polish wave is live on top of `v2.0.0` (no new tag):
+- mobile/web demo UX tightened
+- stale media/version artifacts removed from public demo surfaces
+- docs index curated for high-signal operator guidance
 
-`Release is published; registry metadata is propagating. Timestamp: <UTC timestamp>.`
+Core runtime contract is unchanged.
+```
+
+## Listing/Registry Update Snippets
+
+### awesome-mcp-servers PR description
+
+```md
+Session-based Slack MCP server for local-first operators. Maintains deterministic install diagnostics (`--doctor 0/1/2/3`, read-only `--status`) and stable tool contracts in `v2.0.0`.
+```
+
+### Smithery/Glama parity note
+
+```md
+Metadata refreshed to match `v2.0.0` release surfaces. If listing caches lag, parity is propagating; npm + GitHub release remain authoritative.
+```
+
+## Propagation Note Template
+
+Use when any external listing lags:
+
+`Release is published. Registry/listing metadata is propagating as of <UTC timestamp>.`

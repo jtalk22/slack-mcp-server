@@ -1,6 +1,6 @@
 # HN Launch Kit (v2.0.0)
 
-Use this file for Show HN posting and first-comment follow-up.
+Use this file for Show HN posting and first-comment follow-up within the trust-and-infra fanout path.
 
 ## Title Options
 
@@ -41,6 +41,15 @@ Quick notes:
 
 If anything fails, include OS, Node version, runtime mode (`stdio|web|http|worker`), and exact output.
 ```
+
+## Pairing Sequence (Trust + Infra)
+
+After the HN post goes live, pair with:
+
+1. GitHub Discussion announcement update
+2. GitHub Discussion support-intake thread refresh
+3. Registry/listing parity checks (MCP registry, Smithery, Glama)
+4. `awesome-mcp-servers` listing PR/update
 
 ## FAQ Macro
 

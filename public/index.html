@@ -5,79 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slack Web API</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root {
+      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+      --bg: #0f1736;
+      --panel: #16213e;
+      --panel-alt: #0f3460;
+      --teal: #4ecdc4;
+      --teal-hover: #45b7aa;
+      --danger: #ff6b6b;
+      --search: #e94560;
+      --text: #e8ecff;
+      --muted: #9fb0cf;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #1a1a2e;
-      color: #eee;
+      font-family: var(--font-body);
+      background: radial-gradient(circle at 20% -10%, #1b2f67 0%, var(--bg) 48%);
+      color: var(--text);
       min-height: 100vh;
       padding: 20px;
+      overflow-x: hidden;
     }
     .container { max-width: 1200px; margin: 0 auto; }
-    h1 { color: #4ecdc4; margin-bottom: 20px; }
-    .auth-section {
-      background: #16213e;
-      padding: 20px;
-      border-radius: 8px;
+    h1 {
+      color: var(--teal);
       margin-bottom: 20px;
+      font-family: var(--font-heading);
+      font-size: clamp(1.9rem, 2vw, 2.35rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
     }
-    .auth-section input {
-      width: 300px;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      background: #0f3460;
-      color: #fff;
-      margin-right: 10px;
-    }
-    .auth-section button {
-      padding: 10px 20px;
-      background: #4ecdc4;
-      color: #1a1a2e;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .auth-section button:hover { background: #45b7aa; }
     .status { display: inline-block; margin-left: 15px; }
-    .status.ok { color: #4ecdc4; }
-    .status.error { color: #ff6b6b; }
-    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+    .status.ok { color: var(--teal); }
+    .status.error { color: var(--danger); }
+    .grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 20px; }
     .sidebar {
-      background: #16213e;
-      border-radius: 8px;
+      background: var(--panel);
+      border-radius: 12px;
       padding: 15px;
       height: fit-content;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .sidebar h3 { color: #4ecdc4; margin-bottom: 15px; font-size: 14px; }
+    .sidebar h3 {
+      color: var(--teal);
+      margin-bottom: 15px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: var(--font-heading);
+    }
     .conversation-list { list-style: none; }
     .conversation-list li {
       padding: 10px;
       border-radius: 4px;
       cursor: pointer;
       margin-bottom: 5px;
-      background: #0f3460;
+      background: var(--panel-alt);
     }
     .conversation-list li:hover { background: #1a4a7a; }
-    .conversation-list li.active { background: #4ecdc4; color: #1a1a2e; }
+    .conversation-list li.active { background: var(--teal); color: #1a1a2e; }
     .conversation-list .type { font-size: 11px; opacity: 0.7; }
     .main-panel {
-      background: #16213e;
-      border-radius: 8px;
+      background: var(--panel);
+      border-radius: 12px;
       padding: 20px;
       min-height: 500px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .main-panel h2 { color: #4ecdc4; margin-bottom: 15px; }
+    .main-panel h2 {
+      color: var(--teal);
+      margin-bottom: 15px;
+      font-family: var(--font-heading);
+      letter-spacing: -0.01em;
+    }
     .messages { max-height: 400px; overflow-y: auto; margin-bottom: 15px; }
     .message {
-      background: #0f3460;
+      background: var(--panel-alt);
       padding: 12px;
       border-radius: 8px;
       margin-bottom: 10px;
     }
     .message .header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-    .message .user { font-weight: bold; color: #4ecdc4; }
+    .message .user { font-weight: bold; color: var(--teal); }
     .message .time { font-size: 12px; opacity: 0.6; }
     .message .text { line-height: 1.5; white-space: pre-wrap; }
     .send-box { display: flex; gap: 10px; }
@@ -86,17 +99,19 @@
       padding: 12px;
       border: none;
       border-radius: 4px;
-      background: #0f3460;
+      background: var(--panel-alt);
       color: #fff;
+      min-width: 0;
     }
     .send-box button {
       padding: 12px 24px;
-      background: #4ecdc4;
+      background: var(--teal);
       color: #1a1a2e;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       font-weight: bold;
+      white-space: nowrap;
     }
     .search-section { margin-bottom: 20px; display: flex; gap: 10px; }
     .search-section input {
@@ -104,29 +119,31 @@
       padding: 10px;
       border: none;
       border-radius: 4px;
-      background: #0f3460;
+      background: var(--panel-alt);
       color: #fff;
+      min-width: 0;
     }
     .search-section button {
       padding: 10px 20px;
-      background: #e94560;
+      background: var(--search);
       color: #fff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
+      white-space: nowrap;
     }
-    .loading { text-align: center; padding: 40px; opacity: 0.6; }
-    .error-msg { background: #ff6b6b22; color: #ff6b6b; padding: 15px; border-radius: 8px; }
+    .loading { text-align: center; padding: 40px; opacity: 0.6; color: var(--muted); }
+    .error-msg { background: #ff6b6b22; color: var(--danger); padding: 15px; border-radius: 8px; }
     .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
     .tabs button {
       padding: 8px 16px;
-      background: #0f3460;
+      background: var(--panel-alt);
       color: #fff;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
-    .tabs button.active { background: #4ecdc4; color: #1a1a2e; }
+    .tabs button.active { background: var(--teal); color: #1a1a2e; }
     /* Auth Modal */
     .modal-overlay {
       position: fixed;
@@ -139,36 +156,43 @@
     }
     .modal-overlay.hidden { display: none; }
     .modal {
-      background: #16213e;
-      padding: 40px;
+      background: var(--panel);
+      padding: 36px;
       border-radius: 12px;
-      max-width: 450px;
+      width: min(92vw, 460px);
       text-align: center;
-      border: 2px solid #4ecdc4;
+      border: 2px solid var(--teal);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
     }
-    .modal h2 { color: #4ecdc4; margin-bottom: 20px; }
-    .modal p { color: #aaa; margin-bottom: 25px; line-height: 1.6; }
+    .modal h2 {
+      color: var(--teal);
+      margin-bottom: 20px;
+      font-family: var(--font-heading);
+      letter-spacing: -0.01em;
+    }
+    .modal p { color: #c2c7d6; margin-bottom: 25px; line-height: 1.6; }
     .modal code {
-      background: #0f3460;
+      background: var(--panel-alt);
       padding: 3px 8px;
       border-radius: 4px;
-      color: #4ecdc4;
+      color: var(--teal);
     }
     .modal input {
       width: 100%;
       padding: 14px;
-      border: 2px solid #0f3460;
+      border: 2px solid var(--panel-alt);
       border-radius: 6px;
-      background: #0f3460;
+      background: var(--panel-alt);
       color: #fff;
       font-size: 14px;
       margin-bottom: 15px;
     }
-    .modal input:focus { border-color: #4ecdc4; outline: none; }
+    .modal input:focus { border-color: var(--teal); outline: none; }
     .modal button {
       width: 100%;
       padding: 14px;
-      background: #4ecdc4;
+      background: var(--teal);
       color: #1a1a2e;
       border: none;
       border-radius: 6px;
@@ -176,8 +200,44 @@
       font-weight: bold;
       font-size: 16px;
     }
-    .modal button:hover { background: #45b7aa; }
-    .modal .error { color: #ff6b6b; margin-top: 10px; font-size: 14px; }
+    .modal button:hover { background: var(--teal-hover); }
+    .modal .error { color: var(--danger); margin-top: 10px; font-size: 14px; }
+
+    @media (max-width: 960px) {
+      body { padding: 16px; }
+      .grid { grid-template-columns: minmax(0, 1fr); }
+      .sidebar, .main-panel { padding: 16px; }
+      .messages { max-height: 50vh; }
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 12px; }
+      h1 {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .status {
+        margin-left: 0;
+        font-size: 14px;
+      }
+      .tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .search-section,
+      .send-box {
+        flex-direction: column;
+      }
+      .search-section button,
+      .send-box button {
+        width: 100%;
+      }
+      .modal {
+        width: min(92vw, 460px);
+        padding: 24px 18px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -198,8 +258,8 @@
       <div class="sidebar">
         <h3>CONVERSATIONS</h3>
         <div class="tabs">
-          <button class="active" onclick="loadConversations('im,mpim')">DMs</button>
-          <button onclick="loadConversations('public_channel,private_channel')">Channels</button>
+          <button class="active" onclick="loadConversations('im,mpim', this)">DMs</button>
+          <button onclick="loadConversations('public_channel,private_channel', this)">Channels</button>
         </div>
         <ul id="conversationList" class="conversation-list">
           <li class="loading">Enter API key to connect</li>
@@ -306,23 +366,26 @@
         }
       }
     }
-    async function loadConversations(types) {
+    async function loadConversations(types, sourceButton = null) {
       const list = document.getElementById('conversationList');
       list.innerHTML = '<li class="loading">Loading...</li>';
       document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-      if (event && event.target) event.target.classList.add('active');
+      if (!sourceButton) {
+        sourceButton = document.querySelector('.tabs button:first-child');
+      }
+      if (sourceButton) sourceButton.classList.add('active');
       try {
         const data = await api('/conversations?types=' + types);
         list.innerHTML = data.conversations.map(c =>
-          '<li onclick="loadHistory(\'' + c.id + '\', \'' + c.name.replace(/'/g, "\\'") + '\')"><div>' + c.name + '</div><div class="type">' + c.type + '</div></li>'
+          '<li onclick="loadHistory(\'' + c.id + '\', \'' + c.name.replace(/'/g, "\\'") + '\', this)"><div>' + c.name + '</div><div class="type">' + c.type + '</div></li>'
         ).join('');
       } catch (e) { list.innerHTML = '<li class="error-msg">' + e.message + '</li>'; }
     }
-    async function loadHistory(channelId, name) {
+    async function loadHistory(channelId, name, sourceItem = null) {
       currentChannel = channelId;
       document.getElementById('channelName').textContent = name;
       document.querySelectorAll('.conversation-list li').forEach(li => li.classList.remove('active'));
-      event.target.closest('li').classList.add('active');
+      if (sourceItem) sourceItem.classList.add('active');
       const container = document.getElementById('messages');
       container.innerHTML = '<div class="loading">Loading messages...</div>';
       try {

@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const PKG = "@jtalk22/slack-mcp";
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const strictPublished = process.argv.includes("--strict-published");
-const PUBLISHED_SPEC = strictPublished ? `${PKG}@latest` : PKG;
+const PUBLISHED_SPEC = `${PKG}@latest`;
 const localVersion = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8")).version;
 
 function runNpx(args, options = {}) {

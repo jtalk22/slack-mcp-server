@@ -15,13 +15,20 @@
   <meta name="twitter:description" content="Session-based Slack access for Claude with your existing workspace permissions. Video walkthrough for Slack workflows.">
   <meta name="twitter:image" content="https://raw.githubusercontent.com/jtalk22/slack-mcp-server/main/docs/images/demo-poster.png">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root {
+      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: var(--font-body);
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
       min-height: 100vh;
       display: flex;
@@ -40,6 +47,8 @@
       font-weight: 600;
       text-align: center;
       margin-bottom: 0.5rem;
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
     }
     .subtitle {
       color: #94a3b8;
@@ -137,6 +146,26 @@
     .back-link a:hover {
       color: #ffffff;
     }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem 0.75rem;
+      }
+
+      .cta-strip .links {
+        width: 100%;
+      }
+
+      .controls {
+        gap: 0.75rem;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 0;
+        padding: 0.72rem 0.95rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -156,8 +185,8 @@
 
     <div class="video-wrapper">
       <video id="demo" poster="../docs/images/demo-poster.png" playsinline>
-        <source src="../docs/videos/demo-claude-v1.2.webm" type="video/webm">
-        <source src="../docs/images/demo-claude-v1.2.gif" type="image/gif">
+        <source src="../docs/videos/demo-claude.webm" type="video/webm">
+        <source src="../docs/images/demo-claude.gif" type="image/gif">
         Your browser does not support the video tag.
       </video>
     </div>

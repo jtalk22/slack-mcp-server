@@ -1,17 +1,34 @@
 #!/usr/bin/env node
 /**
  * Screenshot capture script using Playwright
- * Captures polished screenshots of the demo UI for README/docs
+ * Captures desktop + mobile screenshots for README/docs
  */
 
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { readFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..');
+const imagesDir = join(projectRoot, 'docs', 'images');
+
+const viewports = [
+  { width: 390, height: 844, suffix: '390x844' },
+  { width: 360, height: 800, suffix: '360x800' }
+];
+
+async function openPage(browser, filePath, viewport) {
+  const context = await browser.newContext({
+    viewport,
+    deviceScaleFactor: 2,
+    colorScheme: 'dark'
+  });
+  const page = await context.newPage();
+  await page.goto(`file://${filePath}`);
+  await page.waitForTimeout(1000);
+  return { context, page };
+}
 
 async function captureScreenshots() {
   console.log('Launching browser...');
@@ -20,68 +37,94 @@ async function captureScreenshots() {
     headless: true
   });
 
-  const context = await browser.newContext({
-    viewport: { width: 1400, height: 900 },
-    deviceScaleFactor: 2, // Retina quality
-    colorScheme: 'dark'
-  });
-
-  const page = await context.newPage();
-
-  // Load the demo.html file directly
   const demoPath = join(projectRoot, 'public', 'demo.html');
-  const demoHtml = readFileSync(demoPath, 'utf-8');
+  const demoClaudePath = join(projectRoot, 'public', 'demo-claude.html');
+  const indexPath = join(projectRoot, 'public', 'index.html');
 
-  // Serve it as a data URL or file URL
-  await page.goto(`file://${demoPath}`);
+  // Desktop captures from demo.html
+  {
+    const { context, page } = await openPage(browser, demoPath, { width: 1400, height: 900 });
 
-  // Wait for content to render
-  await page.waitForTimeout(1000);
-
-  const imagesDir = join(projectRoot, 'docs', 'images');
-
-  // Screenshot 1: Full UI with DMs
-  console.log('Capturing main UI screenshot...');
-  await page.screenshot({
-    path: join(imagesDir, 'demo-main.png'),
-    clip: { x: 0, y: 0, width: 1400, height: 800 }
-  });
-
-  // Screenshot 2: Conversation view (zoomed)
-  console.log('Capturing conversation screenshot...');
-  const mainPanel = await page.$('.main-panel');
-  if (mainPanel) {
-    await mainPanel.screenshot({
-      path: join(imagesDir, 'demo-messages.png')
+    console.log('Capturing desktop demo screenshots...');
+    await page.screenshot({
+      path: join(imagesDir, 'demo-main.png'),
+      clip: { x: 0, y: 0, width: 1400, height: 800 }
     });
+
+    const mainPanel = await page.$('.main-panel');
+    if (mainPanel) {
+      await mainPanel.screenshot({
+        path: join(imagesDir, 'demo-messages.png')
+      });
+    }
+
+    const sidebar = await page.$('.sidebar');
+    if (sidebar) {
+      await sidebar.screenshot({
+        path: join(imagesDir, 'demo-sidebar.png')
+      });
+    }
+
+    await page.evaluate(() => runScenario('listChannels'));
+    await page.waitForTimeout(2600);
+    await page.screenshot({
+      path: join(imagesDir, 'demo-channels.png'),
+      clip: { x: 0, y: 0, width: 1400, height: 800 }
+    });
+
+    await page.click('.conversation-item:first-child');
+    await page.waitForTimeout(600);
+    await page.screenshot({
+      path: join(imagesDir, 'demo-channel-messages.png'),
+      clip: { x: 0, y: 0, width: 1400, height: 800 }
+    });
+
+    await context.close();
   }
 
-  // Screenshot 3: Sidebar with conversations
-  console.log('Capturing sidebar screenshot...');
-  const sidebar = await page.$('.sidebar');
-  if (sidebar) {
-    await sidebar.screenshot({
-      path: join(imagesDir, 'demo-sidebar.png')
+  // Poster from the Claude demo
+  {
+    const { context, page } = await openPage(browser, demoClaudePath, { width: 1280, height: 800 });
+    console.log('Capturing poster image...');
+    await page.screenshot({
+      path: join(imagesDir, 'demo-poster.png'),
+      clip: { x: 0, y: 0, width: 1280, height: 800 }
     });
+    await context.close();
   }
 
-  // Screenshot 4: Switch to channels view
-  console.log('Capturing channels view...');
-  await page.click('.tabs button:nth-child(2)'); // Click Channels tab
-  await page.waitForTimeout(300);
-  await page.screenshot({
-    path: join(imagesDir, 'demo-channels.png'),
-    clip: { x: 0, y: 0, width: 1400, height: 800 }
-  });
+  // Mobile captures for web, demo, and claude demo pages
+  for (const viewport of viewports) {
+    const label = `${viewport.width}x${viewport.height}`;
+    console.log(`Capturing mobile screenshots (${label})...`);
 
-  // Screenshot 5: Engineering channel messages
-  console.log('Capturing channel messages...');
-  await page.click('.conversation-item:first-child'); // Click first channel
-  await page.waitForTimeout(300);
-  await page.screenshot({
-    path: join(imagesDir, 'demo-channel-messages.png'),
-    clip: { x: 0, y: 0, width: 1400, height: 800 }
-  });
+    {
+      const { context, page } = await openPage(browser, demoPath, viewport);
+      await page.screenshot({
+        path: join(imagesDir, `demo-main-mobile-${viewport.suffix}.png`),
+        fullPage: true
+      });
+      await context.close();
+    }
+
+    {
+      const { context, page } = await openPage(browser, demoClaudePath, viewport);
+      await page.screenshot({
+        path: join(imagesDir, `demo-claude-mobile-${viewport.suffix}.png`),
+        fullPage: true
+      });
+      await context.close();
+    }
+
+    {
+      const { context, page } = await openPage(browser, indexPath, viewport);
+      await page.screenshot({
+        path: join(imagesDir, `web-api-mobile-${viewport.suffix}.png`),
+        fullPage: true
+      });
+      await context.close();
+    }
+  }
 
   await browser.close();
 
@@ -91,6 +134,13 @@ async function captureScreenshots() {
   console.log('  - demo-sidebar.png');
   console.log('  - demo-channels.png');
   console.log('  - demo-channel-messages.png');
+  console.log('  - demo-poster.png');
+  console.log('  - demo-main-mobile-390x844.png');
+  console.log('  - demo-main-mobile-360x800.png');
+  console.log('  - demo-claude-mobile-390x844.png');
+  console.log('  - demo-claude-mobile-360x800.png');
+  console.log('  - web-api-mobile-390x844.png');
+  console.log('  - web-api-mobile-360x800.png');
 }
 
 captureScreenshots().catch(console.error);

@@ -19,22 +19,27 @@
   <meta property="og:description" content="Session-based Slack access for Claude with your existing workspace permissions. Search, thread, and messaging workflows.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html">
-  <meta property="og:image" content="https://assets-worker.james-20a.workers.dev/projects/slack-mcp-server/demo-claude.gif">
+  <meta property="og:image" content="https://raw.githubusercontent.com/jtalk22/slack-mcp-server/main/docs/images/demo-claude.gif">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server - Session-Based Slack Access Demo">
   <meta name="twitter:description" content="Session-based Slack access for Claude with your existing workspace permissions. Search, thread, and messaging workflows.">
-  <meta name="twitter:image" content="https://assets-worker.james-20a.workers.dev/projects/slack-mcp-server/demo-claude.gif">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/jtalk22/slack-mcp-server/main/docs/images/demo-claude.gif">
 
   <!-- Theme -->
   <meta name="theme-color" content="#1a1a1a">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
     /* ═══════════════════════════════════════════════════════════════
        Claude Desktop Color Palette (Dark Mode)
        ═══════════════════════════════════════════════════════════════ */
     :root {
+      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+
       /* Window chrome */
       --window-bg: #1a1a1a;
       --window-chrome: #2d2d2d;
@@ -83,7 +88,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      font-family: var(--font-body);
       font-size: 15px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
@@ -118,6 +123,8 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
     }
 
     .page-header p {
@@ -127,11 +134,11 @@
     .cta-strip {
       width: 100%;
       max-width: 960px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       background: rgba(15, 52, 96, 0.72);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 10px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -183,6 +190,7 @@
       margin-bottom: 24px;
       flex-wrap: wrap;
       justify-content: center;
+      width: min(100%, 960px);
     }
 
     .scenario-btn {
@@ -257,6 +265,9 @@
       gap: 12px;
       margin-bottom: 16px;
       align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: min(100%, 920px);
     }
 
     .speed-control {
@@ -967,31 +978,93 @@
     /* ═══════════════════════════════════════════════════════════════
        Responsive
        ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      body {
+        padding: 14px;
+      }
+
+      .page-header {
+        margin-bottom: 16px;
+      }
+
+      .page-header h1 {
+        font-size: 24px;
+      }
+
+      .scenario-btn {
+        padding: 10px 14px;
+      }
+
+      .controls-bar {
+        gap: 10px;
+      }
+
+      .claude-window {
+        max-width: 100%;
+      }
+    }
+
     @media (max-width: 600px) {
       body {
         padding: 12px;
       }
 
+      .cta-strip {
+        padding: 10px;
+        gap: 8px;
+      }
+
+      .cta-strip .links {
+        width: 100%;
+      }
+
+      .cta-strip .note {
+        font-size: 12px;
+      }
+
       .page-header h1 {
         font-size: 22px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .page-header p {
+        font-size: 14px;
       }
 
       .scenario-bar {
         gap: 8px;
+        margin-bottom: 14px;
       }
 
       .scenario-btn {
-        padding: 10px 14px;
+        padding: 9px 12px;
         font-size: 13px;
+        border-radius: 10px;
       }
 
       .scenario-btn .label {
         display: none;
       }
 
+      .controls-bar {
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .replay-btn,
+      .share-btn {
+        padding: 8px 12px;
+      }
+
+      .speed-control {
+        width: 100%;
+        justify-content: space-between;
+      }
+
       .chat-container {
-        height: 450px;
-        padding: 16px;
+        height: min(55vh, 450px);
+        padding: 14px;
       }
 
       .tools-dropdown {

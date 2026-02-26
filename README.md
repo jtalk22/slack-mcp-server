@@ -5,42 +5,37 @@
 <h1 align="center">Slack MCP Server</h1>
 
 <p align="center">
-  <em>Give Claude the same Slack access you have.<br>
-  DMs, threads, history—using your existing Slack session.</em>
+  <em>Session-based Slack access for Claude using your existing workspace permissions.</em>
 </p>
 
 <p align="center">
   <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-    <img src="docs/images/demo-readme.gif" alt="Slack MCP tools in action" width="640">
+    <img src="docs/images/demo-readme.gif" alt="Slack MCP tools in action" width="620">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/badge/npm-Install-blue?style=for-the-badge&logo=npm&logoColor=white" alt="npm"></a>
-  <a href="https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server"><img src="https://img.shields.io/badge/Docker-Pull-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
-</p>
-
-<p align="center">
-  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo.html"><img src="https://img.shields.io/badge/LIVE%20DEMO-Try%20It%20Now-00C853?style=for-the-badge&logo=slack&logoColor=white" alt="Live Demo"></a>
-  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html"><img src="https://img.shields.io/badge/CLAUDE%20DEMO-See%20MCP%20Tools-da7756?style=for-the-badge" alt="Claude Demo"></a>
-</p>
-
-<br>
-
-<p align="center">
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dm/@jtalk22/slack-mcp?label=downloads&color=CB3837" alt="npm downloads"></a>
+  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/badge/npm-@jtalk22%2Fslack--mcp-CB3837?logo=npm&logoColor=white" alt="npm"></a>
   <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?label=build" alt="Build Status"></a>
-  <a href="https://smithery.ai/server/jtalk22/slack-mcp-server"><img src="https://img.shields.io/badge/Smithery-Registry-4A154B" alt="Smithery"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 
----
+## 30-Second Proof
 
-> **Release:** `v2.0.0` is live with deterministic diagnostics and no MCP tool renames/removals.  
+```bash
+npx -y @jtalk22/slack-mcp@latest --version
+npx -y @jtalk22/slack-mcp@latest --doctor
+npx -y @jtalk22/slack-mcp@latest --status
+```
+
+Expected:
+- `--version` prints `2.0.0`
+- `--doctor` exits with `0|1|2|3`
+- `--status` is read-only and non-mutating
+
+> `v2.0.0` is live with deterministic diagnostics and stable tool contracts.  
 > Release notes: [.github/v2.0.0-release-notes.md](.github/v2.0.0-release-notes.md)  
-> Install proof: [docs/INSTALL-PROOF.md](docs/INSTALL-PROOF.md)
-
-> Free local-first path: install with `npx -y @jtalk22/slack-mcp`, run on your own machine, and keep full control of session tokens.
+> Maintainer/operator: `jtalk22` (`james@revasser.nyc`)
 
 ### Why This Exists
 

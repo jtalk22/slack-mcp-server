@@ -10,11 +10,17 @@
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { mkdirSync, existsSync } from 'fs';
+import { mkdirSync, existsSync, copyFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..');
+const argv = process.argv.slice(2);
+const hasArg = (flag) => argv.includes(flag);
+const argValue = (flag) => {
+  const idx = argv.indexOf(flag);
+  return idx >= 0 && idx + 1 < argv.length ? argv[idx + 1] : null;
+};
 
 // Configuration
 const CONFIG = {
@@ -34,6 +40,9 @@ const CONFIG = {
   }
 };
 
+const canonicalOutput = argValue('--out') || join(projectRoot, 'docs', 'videos', 'demo-claude.webm');
+const archiveOutput = hasArg('--archive');
+
 async function recordDemo() {
   console.log('╔════════════════════════════════════════════════════════════╗');
   console.log('║  Slack MCP Server - Demo Video Recording                   ║');
@@ -47,13 +56,12 @@ async function recordDemo() {
     console.log(`📁 Created directory: ${videosDir}`);
   }
 
-  // Generate timestamped filename
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-  const videoFilename = `demo-claude-${timestamp}.webm`;
+  const timestampedOutput = join(videosDir, `demo-claude-${timestamp}.webm`);
 
   console.log('🚀 Launching browser...');
   const browser = await chromium.launch({
-    headless: false, // Need visible browser for recording
+    headless: true,
   });
 
   const context = await browser.newContext({
@@ -134,13 +142,18 @@ async function recordDemo() {
   console.log('║  ✅ Recording Complete!                                     ║');
   console.log('╚════════════════════════════════════════════════════════════╝');
   console.log();
-  console.log(`📹 Video saved: ${videoPath}`);
+  copyFileSync(videoPath, canonicalOutput);
+  console.log(`📹 Canonical video: ${canonicalOutput}`);
+  if (archiveOutput) {
+    copyFileSync(videoPath, timestampedOutput);
+    console.log(`🗂️  Archived copy: ${timestampedOutput}`);
+  }
   console.log();
   console.log('Next steps:');
-  console.log('  1. Review the video in a media player');
-  console.log('  2. Convert to GIF: npm run gif (requires gifski)');
-  console.log('  3. Or with FFmpeg:');
-  console.log(`     ffmpeg -i "${videoPath}" -vf "fps=15,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" docs/images/demo-claude.gif`);
+  console.log('  1. Review the canonical video in a media player');
+  console.log('  2. Convert to GIF with FFmpeg:');
+  console.log(`     ffmpeg -i "${canonicalOutput}" -vf "fps=15,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" docs/images/demo-claude.gif`);
+  console.log('  3. Re-run with --archive to keep timestamped historical outputs');
 }
 
 recordDemo().catch(err => {

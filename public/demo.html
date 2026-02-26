@@ -22,9 +22,11 @@
   <meta name="description" content="Session-based Slack access for Claude with your existing workspace permissions. Interactive demo for DMs, channels, search, and thread workflows.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
       --bg-primary: #0f0f1a;
       --bg-secondary: #1a1a2e;
       --bg-tertiary: #16213e;
@@ -45,7 +47,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: var(--font-body);
       background: var(--bg-primary);
       color: var(--text-primary);
       min-height: 100vh;
@@ -150,6 +152,7 @@
       font-size: 16px;
       font-weight: 600;
       color: var(--text-primary);
+      font-family: var(--font-heading);
     }
     .claude-header .subtitle {
       font-size: 12px;
@@ -276,6 +279,7 @@
       letter-spacing: 1px;
       color: var(--text-muted);
       margin-bottom: 12px;
+      font-family: var(--font-heading);
     }
 
     .try-buttons .scenarios {
@@ -352,6 +356,7 @@
     .dashboard-title h2 {
       font-size: 18px;
       font-weight: 600;
+      font-family: var(--font-heading);
     }
 
     .status-badge {
@@ -475,6 +480,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      font-family: var(--font-heading);
     }
 
     .online-dot {
@@ -488,6 +494,75 @@
       flex: 1;
       overflow-y: auto;
       padding: 20px 24px;
+    }
+
+    .mobile-scenario-rail {
+      display: none;
+      padding: 14px 16px;
+      background: rgba(15, 52, 96, 0.55);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-rail-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .mobile-rail-head h4 {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-family: var(--font-heading);
+    }
+
+    .mobile-scenario-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .mobile-scenario-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 10px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      font-family: var(--font-body);
+    }
+
+    .mobile-scenario-btn:hover {
+      border-color: var(--accent);
+      background: rgba(78, 205, 196, 0.15);
+    }
+
+    .mobile-scenario-btn .icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .mobile-cta {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .mobile-reset {
+      padding: 4px 10px;
+      font-size: 11px;
     }
 
     .message {
@@ -614,15 +689,52 @@
     @media (max-width: 1000px) {
       .split-container {
         grid-template-columns: 1fr;
+        height: auto;
+        min-height: calc(100vh - 88px);
       }
       .claude-panel {
         display: none;
+      }
+      .mobile-scenario-rail {
+        display: block;
       }
       .dashboard-content {
         grid-template-columns: 1fr;
       }
       .sidebar {
         display: none;
+      }
+      .main-header {
+        padding: 14px 16px;
+      }
+      .messages-container {
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cta-strip {
+        gap: 8px;
+        padding: 10px 12px;
+      }
+      .mobile-scenario-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .mobile-scenario-btn {
+        padding: 10px 6px;
+      }
+      .dashboard-header {
+        padding: 14px 12px;
+      }
+      .dashboard-title h2 {
+        font-size: 16px;
+      }
+      .status-badge {
+        font-size: 11px;
+        padding: 3px 10px;
+      }
+      .messages-container {
+        min-height: 48vh;
       }
     }
   </style>
@@ -704,6 +816,28 @@
         <div style="color: var(--text-muted); font-size: 13px;">
           alex.chen @ Acme Corp
         </div>
+      </div>
+
+      <div class="mobile-scenario-rail" aria-label="Scenario shortcuts">
+        <div class="mobile-rail-head">
+          <h4>Try a Scenario</h4>
+          <button class="reset-btn mobile-reset" onclick="resetDemo()">Reset Demo</button>
+        </div>
+        <div class="mobile-scenario-buttons">
+          <button class="mobile-scenario-btn" onclick="runScenario('findKey')">
+            <span class="icon">🔑</span>
+            <span>Find Key</span>
+          </button>
+          <button class="mobile-scenario-btn" onclick="runScenario('listChannels')">
+            <span class="icon">📋</span>
+            <span>Channels</span>
+          </button>
+          <button class="mobile-scenario-btn" onclick="runScenario('whoIsAlex')">
+            <span class="icon">👤</span>
+            <span>Who is Alex?</span>
+          </button>
+        </div>
+        <p class="mobile-cta">Tap a scenario to drive the live preview with one click.</p>
       </div>
 
       <div class="dashboard-content">
