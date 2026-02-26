@@ -2,22 +2,62 @@
 
 Use this file as copy/paste launch material with no extra edits.
 
-## Launch Post Draft
+## Distribution Variants
 
-Title idea: `Show HN: Slack MCP Server (local-first, session-based Slack access for Claude)`
+### Variant A: Clinical
 
-Post body:
+Title idea: `Show HN: Slack MCP Server (session-based Slack access for Claude)`
 
 ```md
-Built a local-first Slack MCP server so Claude can use the same Slack access already available in your browser session.
+Built a session-based Slack MCP server so Claude can use the same access already available in your Slack web session.
 
-What it does:
-- DMs/channels/thread reads
+What it supports:
+- DM/channel/thread reads
 - workspace search
 - message send + user lookups
 - local web mode when MCP is unavailable
 
-Quick check:
+Verify:
+- `npx -y @jtalk22/slack-mcp --version`
+- `npx -y @jtalk22/slack-mcp --status`
+- `npx -y @jtalk22/slack-mcp --setup`
+
+Repo: https://github.com/jtalk22/slack-mcp-server
+npm: https://www.npmjs.com/package/@jtalk22/slack-mcp
+```
+
+### Variant B: Technical + Light Edge
+
+Title idea: `Show HN: Slack MCP Server (local-first Slack context for Claude)`
+
+```md
+Wanted reliable Slack context in Claude without app-scope bottlenecks, so I built a local-first MCP server around session credentials.
+
+Current scope:
+- search + thread retrieval
+- conversation export with usernames
+- message send flows
+- hosted transport options for operator-managed deployments
+
+Verify:
+- `npx -y @jtalk22/slack-mcp --version`
+- `npx -y @jtalk22/slack-mcp --status`
+- `npx -y @jtalk22/slack-mcp --setup`
+
+Repo: https://github.com/jtalk22/slack-mcp-server
+npm: https://www.npmjs.com/package/@jtalk22/slack-mcp
+```
+
+### Variant C: Strong Edge + Receipts
+
+Title idea: `Show HN: Slack MCP Server (operator-grade Slack workflows for Claude)`
+
+```md
+If you already have Slack access, your assistant should have that same operational context.
+
+This MCP server is built for that exact path, with local-first defaults and explicit deployment tradeoffs.
+
+Verify:
 - `npx -y @jtalk22/slack-mcp --version`
 - `npx -y @jtalk22/slack-mcp --status`
 - `npx -y @jtalk22/slack-mcp --setup`

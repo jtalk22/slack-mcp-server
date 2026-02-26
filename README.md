@@ -120,6 +120,16 @@ Expected:
 
 Launch-ready command set: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
 
+### Known Working Clients
+
+- Claude Desktop (macOS/Windows/Linux)
+- Claude Code CLI
+- Local browser mode (`web`)
+- Hosted Node runtime (`http`)
+- Cloudflare Worker / Smithery transport
+
+Compatibility matrix: [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)
+
 ### Option A: npm (Recommended)
 
 ```bash

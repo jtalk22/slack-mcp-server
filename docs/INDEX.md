@@ -5,6 +5,7 @@ Start here for setup, compatibility checks, operations, and support.
 ## Core
 
 - [Setup Guide](SETUP.md)
+- [Compatibility Matrix](COMPATIBILITY.md)
 - [API Reference](API.md)
 - [Web API Reference](WEB-API.md)
 - [Troubleshooting](TROUBLESHOOTING.md)

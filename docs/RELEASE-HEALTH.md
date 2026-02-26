@@ -12,6 +12,11 @@ Outputs:
 - `docs/release-health/latest.md`
 - `docs/release-health/YYYY-MM-DD.md`
 
+24-hour loop artifacts:
+- `docs/release-health/24h-start.md`
+- `docs/release-health/24h-end.md`
+- `docs/release-health/24h-delta.md`
+
 ## What it captures automatically
 
 - npm downloads (last week, last month)
@@ -31,6 +36,7 @@ Outputs:
 - Weekly support minutes spent.
 - Deployment-intake quality (clear use case, owner, timeline).
 - Conversion source notes (search, referrals, docs traffic).
+- External \"first run succeeded\" confirmations (issues/discussions).
 
 ## Recommended cadence
 

@@ -9,6 +9,8 @@ Use this guide for release notes, issue replies, and changelog entries.
 3. Do not include co-author trailers from tooling.
 4. State exact versions and commands when relevant.
 5. Avoid speculative claims.
+6. Release titles use `vX.Y.Z — <concrete operational outcome>`.
+7. If using a stronger intro line, keep it to one sentence and include command proof in the same release note.
 
 ## Issue Reply Template
 
