@@ -28,6 +28,7 @@ Start here for setup, compatibility checks, operations, and support.
 - [Latest Release Health Snapshot](release-health/latest.md)
 - [Version Parity Report](release-health/version-parity.md)
 - [Launch Log Template](release-health/launch-log-template.md)
+- [Launch Log (2026-02-26)](release-health/launch-log-2026-02-26.md)
 - [Changelog](../CHANGELOG.md)
 
 ## Issue Intake

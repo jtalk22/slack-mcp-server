@@ -17,6 +17,7 @@ const allowPropagation = process.argv.includes("--allow-propagation");
 
 const mcpServerName = serverMeta.name;
 const smitheryEndpoint = "https://server.smithery.ai/jtalk22/slack-mcp-server";
+const smitheryListingUrl = "https://smithery.ai/server/jtalk22/slack-mcp-server";
 
 async function fetchJson(url) {
   const res = await fetch(url);
@@ -26,12 +27,10 @@ async function fetchJson(url) {
   return res.json();
 }
 
-async function fetchText(url) {
+async function fetchStatus(url) {
   const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} for ${url}`);
-  }
-  return res.text();
+  const text = await res.text().catch(() => "");
+  return { ok: res.ok, status: res.status, text };
 }
 
 function row(surface, version, status, note = "") {
@@ -46,6 +45,7 @@ async function main() {
   let npmVersion = null;
   let mcpRegistryVersion = null;
   let smitheryReachable = null;
+  let smitheryStatus = null;
   let npmError = null;
   let mcpError = null;
   let smitheryError = null;
@@ -67,8 +67,18 @@ async function main() {
   }
 
   try {
-    const html = await fetchText(smitheryEndpoint);
-    smitheryReachable = html.length > 0;
+    const apiResult = await fetchStatus(smitheryEndpoint);
+    smitheryStatus = apiResult.status;
+    if (apiResult.ok) {
+      smitheryReachable = true;
+    } else if (apiResult.status === 401 || apiResult.status === 403) {
+      // Auth-gated endpoint still indicates the listing endpoint is live.
+      smitheryReachable = true;
+    } else {
+      const listingResult = await fetchStatus(smitheryListingUrl);
+      smitheryStatus = `${apiResult.status} (api), ${listingResult.status} (listing)`;
+      smitheryReachable = listingResult.ok && listingResult.text.length > 0;
+    }
   } catch (error) {
     smitheryError = String(error?.message || error);
   }
@@ -127,7 +137,9 @@ async function main() {
       "Smithery endpoint",
       "n/a",
       smitheryReachable ? "reachable" : "unreachable",
-      smitheryError ? `check_error: ${smitheryError}` : "Version check is manual."
+      smitheryError
+        ? `check_error: ${smitheryError}`
+        : `status: ${smitheryStatus ?? "unknown"}; version check is manual.`
     ),
     "",
     "## Interpretation",

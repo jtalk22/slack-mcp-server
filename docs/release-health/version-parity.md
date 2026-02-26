@@ -1,6 +1,6 @@
 # Version Parity Report
 
-- Generated: 2026-02-26T12:45:39.684Z
+- Generated: 2026-02-26T13:12:09.197Z
 - Local target version: 2.0.0
 
 ## Surface Matrix
@@ -10,12 +10,12 @@
 | package.json | 2.0.0 | ok |  |
 | server.json (root) | 2.0.0 | ok |  |
 | server.json (package entry) | 2.0.0 | ok |  |
-| npm dist-tag latest | 1.2.4 | mismatch |  |
-| MCP Registry latest | 1.1.8 | mismatch |  |
-| Smithery endpoint | n/a | unreachable | check_error: HTTP 401 for https://server.smithery.ai/jtalk22/slack-mcp-server |
+| npm dist-tag latest | 2.0.0 | ok |  |
+| MCP Registry latest | 2.0.0 | ok |  |
+| Smithery endpoint | n/a | reachable | status: 401; version check is manual. |
 
 ## Interpretation
 
 - Local metadata parity: pass.
-- External parity mismatch: npm latest, MCP registry latest.
-- Propagation mode enabled: external mismatch accepted temporarily.
+- External parity: pass.
+- Propagation mode disabled: external mismatch is a release gate failure.
