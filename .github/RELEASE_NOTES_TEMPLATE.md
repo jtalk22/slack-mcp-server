@@ -1,8 +1,7 @@
 Use title format: `vX.Y.Z — <concrete operational outcome>`
 
 ## <version> — <short title>
-
-<one edge line allowed; keep command proof in the Verify section below>
+<one-sentence technical summary>
 
 ### Improved
 - <item>
