@@ -81,13 +81,13 @@ slack_refresh_tokens
 # Option 2: Package setup wizard
 npx -y @jtalk22/slack-mcp --setup
 
-# Option 3: Doctor diagnostics
+# Option 3: Diagnostics check
 npx -y @jtalk22/slack-mcp --doctor
 
-# Option 3: Repo CLI
+# Option 4: Repo CLI
 npm run tokens:auto
 
-# Option 4: Manual
+# Option 5: Manual
 npm run tokens:refresh
 ```
 

@@ -44,7 +44,7 @@ I built this because I was working with someone to help me manage a complex work
 
 Screenshotting messages is not a workflow.
 
-This server bridges the gap. It creates a secure, local bridge between Claude and your Slack web session. It gives your AI the same access **you** already have in the browser—search history, summarize threads, find that thing someone sent you three weeks ago—without fighting the platform.
+This server bridges the gap. It creates a secure, local bridge between Claude and your Slack web session. It gives your MCP client the same access **you** already have in the browser—search history, summarize threads, and retrieve prior context—without fighting the platform.
 
 ![Slack MCP Server Web UI](docs/images/demo-main.png)
 
@@ -118,7 +118,7 @@ Expected:
   - `3` connectivity/runtime issue
 - `--setup` launches the interactive wizard
 
-Launch-ready command set: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
+Command reference: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
 
 ### Known Working Clients
 
