@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Terms that tend to read as hype/manipulative for technical audiences.
-DISALLOWED='(?i)(\bstealth\b|\bgrowth\b|social-proof|social proof|share kit|\bviral\b|growth loop|\bgrindset\b|\bdominate\b|hack growth)'
+DISALLOWED='(?i)(\bstealth\b|\bgrowth\b|social-proof|social proof|share kit|\bviral\b|growth loop|\bgrindset\b|\bdominate\b|hack growth|edge line|launch-ready)'
 
 SCAN_PATHS=(
   "$ROOT/README.md"
