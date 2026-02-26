@@ -1,0 +1,63 @@
+name: Release Health
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 7,19 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Capture baseline snapshot
+        run: |
+          if [ -f docs/release-health/latest.md ]; then
+            cp docs/release-health/latest.md /tmp/release-health-before.md
+          fi
+
+      - name: Collect current release-health snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/collect-release-health.js
+
+      - name: Build automated delta report
+        run: |
+          if [ -f /tmp/release-health-before.md ]; then
+            node scripts/build-release-health-delta.js \
+              --before /tmp/release-health-before.md \
+              --after docs/release-health/latest.md \
+              --out docs/release-health/automation-delta.md
+          else
+            node scripts/build-release-health-delta.js \
+              --after docs/release-health/latest.md \
+              --out docs/release-health/automation-delta.md
+          fi
+
+      - name: Publish workflow summary
+        run: |
+          cat docs/release-health/latest.md >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          cat docs/release-health/automation-delta.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload release-health artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-health-${{ github.run_id }}
+          path: |
+            docs/release-health/latest.md
+            docs/release-health/automation-delta.md
