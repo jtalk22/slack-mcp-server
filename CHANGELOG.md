@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2026-02-26
+
+### Fixed
+- Made `--status` deterministic and read-only (no Chrome extraction side effects).
+- Standardized `--doctor` behavior with explicit missing/invalid/runtime exit-code coverage in install-flow verification.
+- Corrected token-age handling so missing timestamps report unknown age instead of false critical warnings.
+- Added explicit Apple Events remediation guidance for Chrome extraction failures.
+
+### Improved
+- Unified health/status JSON shape across CLI handlers and web endpoints (`status`, `code`, `message`, `next_action`).
+- Kept MCP tool contracts stable while improving runtime diagnostics and operator guidance.
+
+### Compatibility
+- No MCP tool renames or removals.
+
 ## [1.2.3] - 2026-02-25
 
 ### Improved
@@ -183,6 +198,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
+[1.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.0...v1.2.1

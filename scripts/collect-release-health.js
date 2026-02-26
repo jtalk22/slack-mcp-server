@@ -70,7 +70,7 @@ function buildMarkdown(data) {
   lines.push(`- deployment-intake submissions (all-time): ${data.github.deploymentIntakeCount ?? "n/a"}`);
   lines.push("");
 
-  lines.push("## 14-Day Reliability Targets (v1.2.3 Cycle)");
+  lines.push("## 14-Day Reliability Targets (v1.2.4 Cycle)");
   lines.push("");
   lines.push("- weekly downloads: >= 180");
   lines.push("- qualified deployment-intake submissions: >= 2");

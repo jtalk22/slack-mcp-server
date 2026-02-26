@@ -3,9 +3,11 @@
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const PKG = "@jtalk22/slack-mcp";
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 function runNpx(args, options = {}) {
   const cmdArgs = ["-y", PKG, ...args];
@@ -45,6 +47,40 @@ function printResult(label, result) {
   }
 }
 
+function runLocalSetupStatus(options = {}) {
+  const result = spawnSync("node", [join(repoRoot, "scripts/setup-wizard.js"), "--status"], {
+    cwd: repoRoot,
+    env: options.env,
+    encoding: "utf8",
+    timeout: 120000,
+  });
+
+  return {
+    args: "node scripts/setup-wizard.js --status",
+    status: result.status,
+    stdout: (result.stdout || "").trim(),
+    stderr: (result.stderr || "").trim(),
+    error: result.error,
+  };
+}
+
+function runLocalDoctor(options = {}) {
+  const result = spawnSync("node", [join(repoRoot, "scripts/setup-wizard.js"), "--doctor"], {
+    cwd: repoRoot,
+    env: options.env,
+    encoding: "utf8",
+    timeout: 120000,
+  });
+
+  return {
+    args: "node scripts/setup-wizard.js --doctor",
+    status: result.status,
+    stdout: (result.stdout || "").trim(),
+    stderr: (result.stderr || "").trim(),
+    error: result.error,
+  };
+}
+
 function main() {
   const testHome = mkdtempSync(join(tmpdir(), "slack-mcp-install-check-"));
 
@@ -76,6 +112,40 @@ function main() {
       statusResult.status !== 0,
       "Expected --status to exit non-zero when credentials are missing",
       statusResult.stderr || statusResult.stdout,
+    );
+
+    const localStatusResult = runLocalSetupStatus({ env });
+    printResult("local-status", localStatusResult);
+    assert(
+      localStatusResult.status !== 0,
+      "Expected local --status to exit non-zero when credentials are missing",
+      localStatusResult.stderr || localStatusResult.stdout,
+    );
+    assert(
+      !localStatusResult.stderr.includes("Attempting Chrome auto-extraction"),
+      "Expected local --status to be read-only without auto-extraction side effects",
+      localStatusResult.stderr,
+    );
+
+    const localDoctorMissingResult = runLocalDoctor({ env });
+    printResult("local-doctor-missing", localDoctorMissingResult);
+    assert(
+      localDoctorMissingResult.status === 1,
+      "Expected local --doctor to exit 1 when credentials are missing",
+      localDoctorMissingResult.stderr || localDoctorMissingResult.stdout,
+    );
+
+    const invalidEnv = {
+      ...env,
+      SLACK_TOKEN: "xoxc-invalid-token",
+      SLACK_COOKIE: "xoxd-invalid-cookie",
+    };
+    const localDoctorInvalidResult = runLocalDoctor({ env: invalidEnv });
+    printResult("local-doctor-invalid", localDoctorInvalidResult);
+    assert(
+      localDoctorInvalidResult.status === 2,
+      "Expected local --doctor to exit 2 when credentials are invalid",
+      localDoctorInvalidResult.stderr || localDoctorInvalidResult.stdout,
     );
 
     console.log("\nInstall flow verification passed.");

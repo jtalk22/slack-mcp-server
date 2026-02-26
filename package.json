@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Session-based Slack access for Claude - DMs, channels, search, and threads. Local-first with your existing Slack session.",
   "type": "module",
   "main": "src/server.js",

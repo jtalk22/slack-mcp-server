@@ -99,10 +99,21 @@ curl -H "Authorization: Bearer $API_KEY" http://localhost:3000/health
 **Response:**
 ```json
 {
-  "status": "OK",
+  "status": "ok",
+  "code": "ok",
+  "message": "Slack auth valid",
   "user": "james",
   "team": "Rêvasser"
 }
+```
+
+---
+
+### GET /token-status
+Read-only token diagnostics (age/health/cache stats). This endpoint does not trigger Chrome extraction.
+
+```bash
+curl -H "Authorization: Bearer $API_KEY" http://localhost:3000/token-status
 ```
 
 ---

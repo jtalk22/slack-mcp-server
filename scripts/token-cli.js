@@ -3,7 +3,7 @@
  * Token CLI - Manage Slack tokens
  */
 
-import { loadTokens, saveTokens, extractFromChrome, getFromFile, TOKEN_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
+import { loadTokensReadOnly, saveTokens, extractFromChrome, getFromFile, TOKEN_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
 import { slackAPI } from "../lib/slack-client.js";
 import * as readline from "readline";
 
@@ -35,7 +35,7 @@ async function main() {
 }
 
 async function showStatus() {
-  const creds = loadTokens();
+  const creds = loadTokensReadOnly();
   if (!creds) {
     console.log("No tokens found");
     console.log("");
@@ -46,11 +46,13 @@ async function showStatus() {
   }
 
   console.log("Token source:", creds.source);
-  console.log("Token file:", TOKEN_FILE);
+  if (creds.source === "file") {
+    console.log("Token file:", TOKEN_FILE);
+  }
   console.log("");
 
   try {
-    const result = await slackAPI("auth.test", {});
+    const result = await slackAPI("auth.test", {}, { retryOnAuthFail: false });
     console.log("Status: VALID");
     console.log("User:", result.user);
     console.log("Team:", result.team);

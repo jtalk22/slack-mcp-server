@@ -11,7 +11,9 @@ Check if Slack tokens are valid.
 **Returns:**
 ```json
 {
-  "status": "OK",
+  "status": "ok",
+  "code": "ok",
+  "message": "Slack auth valid",
   "user": "james",
   "team": "Rêvasser",
   "token_source": "environment",
@@ -30,12 +32,15 @@ Get detailed token health, age, and cache statistics.
 **Returns:**
 ```json
 {
+  "status": "healthy",
+  "code": "ok",
+  "message": "Token is healthy",
+  "next_action": null,
   "token": {
     "status": "healthy",
     "age_hours": 2.5,
     "source": "file",
-    "updated_at": "2026-01-08T12:00:00Z",
-    "message": "Token is healthy"
+    "updated_at": "2026-01-08T12:00:00Z"
   },
   "auto_refresh": {
     "enabled": true,
@@ -62,7 +67,9 @@ Force refresh tokens from Chrome.
 **Returns:**
 ```json
 {
-  "status": "SUCCESS",
+  "status": "ok",
+  "code": "refreshed",
+  "message": "Tokens refreshed from Chrome.",
   "user": "james",
   "team": "Rêvasser"
 }

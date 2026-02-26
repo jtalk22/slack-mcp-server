@@ -23,6 +23,7 @@ Expected:
   - `1` missing credentials
   - `2` invalid/expired credentials
   - `3` connectivity/runtime issue
+- `--status` is read-only and never attempts Chrome extraction.
 
 If `--version` fails here, the issue is install/runtime path, not Slack credentials.
 
@@ -212,7 +213,8 @@ tail -50 ~/Library/Logs/Claude/mcp-server-slack.log
 1. Google Chrome must be running (not just in Dock)
 2. Have a Slack tab open at `app.slack.com` (not desktop app)
 3. Be logged into Slack in that tab
-4. Grant accessibility permissions to Terminal/Claude
+4. In Chrome menu, enable `View > Developer > Allow JavaScript from Apple Events`
+5. Grant accessibility permissions to Terminal/Claude
 
 **Check permissions:**
 System Preferences → Privacy & Security → Accessibility → Ensure Terminal is enabled

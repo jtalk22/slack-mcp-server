@@ -11,7 +11,7 @@
  * - Network error retry with exponential backoff
  * - Background token health monitoring
  *
- * @version 1.2.3
+ * @version 1.2.4
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -25,7 +25,7 @@ import {
   ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import { loadTokens } from "../lib/token-store.js";
+import { loadTokensReadOnly } from "../lib/token-store.js";
 import { checkTokenHealth } from "../lib/slack-client.js";
 import { TOOLS } from "../lib/tools.js";
 import {
@@ -47,7 +47,7 @@ const BACKGROUND_REFRESH_INTERVAL = 4 * 60 * 60 * 1000;
 
 // Package info
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "1.2.3";
+const SERVER_VERSION = "1.2.4";
 
 // MCP Prompts - predefined prompt templates for common Slack operations
 const PROMPTS = [
@@ -271,10 +271,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 // Main entry point
 async function main() {
   // Check for credentials at startup
-  const credentials = loadTokens();
+  const credentials = loadTokensReadOnly();
   if (!credentials) {
     console.error("WARNING: No Slack credentials found at startup");
-    console.error("Will attempt Chrome auto-extraction on first API call");
+    console.error("Use npx -y @jtalk22/slack-mcp --setup to configure credentials");
   } else {
     console.error(`Credentials loaded from: ${credentials.source}`);
 

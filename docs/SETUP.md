@@ -40,6 +40,7 @@ Expected:
   - `1` missing credentials
   - `2` invalid/expired credentials
   - `3` connectivity/runtime issue
+- `--status` is read-only and never performs Chrome extraction.
 
 ### 3. Get Slack Tokens
 
@@ -156,3 +157,4 @@ Make sure:
 - Chrome is running (not just in dock)
 - You have a Slack tab open (not the desktop app)
 - You're logged into Slack in that tab
+- In Chrome menu, enable `View > Developer > Allow JavaScript from Apple Events`

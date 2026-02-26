@@ -13,9 +13,9 @@
 import { platform } from "os";
 import * as readline from "readline";
 import {
-  loadTokens,
   saveTokens,
   extractFromChrome,
+  getLastExtractionError,
   isAutoRefreshAvailable,
   TOKEN_FILE,
   getFromFile,
@@ -23,7 +23,7 @@ import {
 } from "../lib/token-store.js";
 
 const IS_MACOS = platform() === 'darwin';
-const VERSION = "1.2.3";
+const VERSION = "1.2.4";
 const MIN_NODE_MAJOR = 20;
 
 // ANSI colors
@@ -118,13 +118,27 @@ async function runMacOSSetup(rl) {
   const tokens = extractFromChrome();
 
   if (!tokens) {
+    const extractionError = getLastExtractionError();
     print();
     error("Could not extract tokens from Chrome.");
+    if (extractionError) {
+      print(`Reason: ${extractionError.message}`);
+      if (extractionError.detail) {
+        print(`Detail: ${extractionError.detail}`);
+      }
+    }
     print();
-    print("Make sure:");
-    print("  1. Chrome is running");
-    print("  2. You have a Slack tab open (app.slack.com)");
-    print("  3. You're logged into that workspace");
+    if (extractionError?.code === "apple_events_javascript_disabled") {
+      print("Fix and retry:");
+      print("  1. In Chrome menu: View > Developer > Allow JavaScript from Apple Events");
+      print("  2. Keep Slack open in a Chrome tab (app.slack.com)");
+      print("  3. Re-run: npx -y @jtalk22/slack-mcp --setup");
+    } else {
+      print("Make sure:");
+      print("  1. Chrome is running");
+      print("  2. You have a Slack tab open (app.slack.com)");
+      print("  3. You're logged into that workspace");
+    }
     print();
 
     const retry = await question(rl, "Try manual entry instead? (y/n): ");
@@ -233,7 +247,7 @@ async function runManualSetup(rl) {
 }
 
 async function showStatus() {
-  const creds = loadTokens();
+  const creds = getDoctorCredentials();
 
   if (!creds) {
     error("No tokens found");
@@ -243,7 +257,9 @@ async function showStatus() {
   }
 
   print(`Token source: ${creds.source}`);
-  print(`Token file: ${TOKEN_FILE}`);
+  if (creds.path) {
+    print(`Token file: ${creds.path}`);
+  }
   if (creds.updatedAt) {
     print(`Last updated: ${creds.updatedAt}`);
   }

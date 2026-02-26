@@ -163,6 +163,7 @@ npx -y @jtalk22/slack-mcp --status
 Expected:
 - `--version` and `--help` exit `0`
 - `--status` exits non-zero until credentials are configured
+- `--status` is read-only and never attempts Chrome extraction
 
 ---
 
@@ -334,7 +335,7 @@ npm run web
 
 ```
 ════════════════════════════════════════════════════════════
-  Slack Web API Server v1.2.3
+  Slack Web API Server v1.2.4
 ════════════════════════════════════════════════════════════
 
   Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
@@ -411,6 +412,7 @@ This caches DM channel IDs for 24 hours.
 - Chrome must be **running** (not minimized to Dock)
 - Slack tab must be open at `app.slack.com`
 - You must be logged in
+- In Chrome menu, enable `View > Developer > Allow JavaScript from Apple Events`
 
 ### Claude Desktop Not Seeing Tools
 1. Verify JSON syntax in config file
