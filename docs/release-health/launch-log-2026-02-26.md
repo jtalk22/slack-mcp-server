@@ -13,6 +13,7 @@
 | 2026-02-26T13:25:00Z | Cloudflare Browser Worker | Validated remote browser endpoint modes | https://slack-browser-ops.james-20a.workers.dev | success | `title`/`text`/`screenshot` modes working behind `x-browser-key` auth. |
 | 2026-02-26T13:25:30Z | Social Fanout Automation | Re-tested X/Reddit submission flows via Cloudflare browser paths | https://x.com/compose/post, https://www.reddit.com/submit | blocked | X compose returns generic failure shell without authenticated session; Reddit submit still blocked by network security. |
 | 2026-02-26T13:30:00Z | GitHub Release | Updated `v2.0.0` notes/title for launch impact | https://github.com/jtalk22/slack-mcp-server/releases/tag/v2.0.0 | success | Release copy now uses `@latest` install proof commands and explicit maintainer attribution. |
+| 2026-02-26T13:44:00Z | Operator Notes Vault | Retrieved launch credentials/context from local Notes + Quick Note stores | local macOS notes databases | partial | Restored local npm auth (`npm whoami` now returns `jtalk222`) from stored npm token; found HN/Reddit credential note but HN login returns bad credentials and Reddit login path remains blocked by network security. |
 
 ## Pending Fanout
 
