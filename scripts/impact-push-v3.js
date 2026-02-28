@@ -15,7 +15,7 @@ const CONFIG = {
   discussionSupport: 13,
   awesomeOwner: "punkpeye",
   awesomeRepo: "awesome-mcp-servers",
-  awesomePrNumber: 2429,
+  awesomePrNumber: 2511,
   mcpServerName: "io.github.jtalk22/slack-mcp-server",
   mcpRegistryUrl:
     "https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest",
@@ -55,6 +55,9 @@ const DISCUSSION_ANNOUNCEMENT_BODY = [
   "",
   VERIFY_BLOCK,
   "",
+  "60-second hosted migration:",
+  MIGRATION_BLOCK,
+  "",
   "Hosted-only breaking scope:",
   "- hosted `/mcp` now requires `SLACK_MCP_HTTP_AUTH_TOKEN` and bearer headers",
   "- browser-origin calls now require `SLACK_MCP_HTTP_ALLOWED_ORIGINS`",
@@ -86,35 +89,40 @@ const DISCUSSION_SUPPORT_BODY = [
 
 const COMMENT_12_MARKER = "<!-- impact-push-v3-discussion-12 -->";
 const COMMENT_13_MARKER = "<!-- impact-push-v3-discussion-13 -->";
-const COMMENT_2429_MARKER = "<!-- impact-push-v3-awesome-2429 -->";
+const COMMENT_AWESOME_MARKER = "<!-- impact-push-v3-awesome -->";
 
-const COMMENT_12_BODY = [
-  COMMENT_12_MARKER,
-  "",
+const QUICK_PROOF_COMMENT_BODY = [
   "Maintainer update:",
   HOOK_LINE,
   "",
   VERIFY_BLOCK,
   "",
-  "Hosted migration uses `SLACK_MCP_HTTP_AUTH_TOKEN` + `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.",
+  "60-second hosted migration:",
+  MIGRATION_BLOCK,
+].join("\n");
+
+const COMMENT_12_BODY = [
+  COMMENT_12_MARKER,
+  "",
+  QUICK_PROOF_COMMENT_BODY,
+  "",
   "If you hit a blocker, post runtime mode + exact output.",
 ].join("\n");
 
 const COMMENT_13_BODY = [
   COMMENT_13_MARKER,
   "",
-  "Migration reminder:",
+  QUICK_PROOF_COMMENT_BODY,
+  "",
+  "Migration scope:",
   "- local `stdio`/`web` users do not need migration",
   "- hosted users need bearer token + CORS allowlist",
-  "",
-  "Emergency local fallback only:",
-  "`SLACK_MCP_HTTP_INSECURE=1 node src/server-http.js`",
   "",
   SUPPORT_LINE,
 ].join("\n");
 
-const COMMENT_2429_BODY = [
-  COMMENT_2429_MARKER,
+const COMMENT_AWESOME_BODY = [
+  COMMENT_AWESOME_MARKER,
   "",
   "Status refresh for `v3.0.0`:",
   "- npm latest: `3.0.0`",
@@ -513,7 +521,7 @@ async function upsertAwesomePrComment({ apply, token, entries }) {
   }
 
   const existing = listRes.json.find(
-    (comment) => comment?.body?.includes(COMMENT_2429_MARKER) && comment?.user?.login === CONFIG.owner
+    (comment) => comment?.body?.includes(COMMENT_AWESOME_MARKER) && comment?.user?.login === CONFIG.owner
   );
 
   if (!apply) {
@@ -533,7 +541,7 @@ async function upsertAwesomePrComment({ apply, token, entries }) {
       {
         method: "PATCH",
         token,
-        body: { body: COMMENT_2429_BODY },
+        body: { body: COMMENT_AWESOME_BODY },
       }
     );
 
@@ -553,7 +561,7 @@ async function upsertAwesomePrComment({ apply, token, entries }) {
     {
       method: "POST",
       token,
-      body: { body: COMMENT_2429_BODY },
+      body: { body: COMMENT_AWESOME_BODY },
     }
   );
 

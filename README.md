@@ -1,11 +1,10 @@
 # Slack MCP Server
 
-Use your existing Slack session with Claude and other MCP clients.  
-Local-first by default (`stdio`/`web`), hosted HTTP when you need a remote endpoint.
+Local-first Slack MCP server using your existing Slack session. Hosted HTTP is secure-default; local `stdio`/`web` workflows stay unchanged.
 
-[Live demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp) · [Compatibility matrix](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/COMPATIBILITY.md)
+[Live demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp)
 
-![Slack MCP tools in action](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-readme.gif)
+![Slack MCP v3 quick proof](https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png)
 
 ## 30-Second Verify
 
@@ -15,21 +14,7 @@ npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
-Expected:
-- `--version` prints `slack-mcp-server v3.0.0`
-- `--doctor` exits with deterministic `0|1|2|3`
-- `--status` is read-only and non-mutating
-
-## Install
-
-```bash
-npm install -g @jtalk22/slack-mcp
-npx -y @jtalk22/slack-mcp --setup
-```
-
-If this project saves you setup time, star the repo: https://github.com/jtalk22/slack-mcp-server
-
-Support ongoing maintenance: [GitHub Sponsors](https://github.com/sponsors/jtalk22), [Ko-fi](https://ko-fi.com/jtalk22), [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
+If this project saves you setup time, star the repo: https://github.com/jtalk22/slack-mcp-server · Support ongoing maintenance: [GitHub Sponsors](https://github.com/sponsors/jtalk22), [Ko-fi](https://ko-fi.com/jtalk22), [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
 
 Maintainer/operator: `jtalk22` (`james@revasser.nyc`)  
 Release: [`v3.0.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.0.0) · Notes: [v3.0.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.0.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
@@ -128,22 +113,22 @@ Instead of authenticating as a bot, this server leverages your existing Chrome s
 
 **Runtime:** Node.js 20+
 
-### 30-Second Compatibility Check
+### First-Time Setup Check
 
 ```bash
-npx -y @jtalk22/slack-mcp --version
-npx -y @jtalk22/slack-mcp --doctor
 npx -y @jtalk22/slack-mcp --setup
+npx -y @jtalk22/slack-mcp --doctor
+npx -y @jtalk22/slack-mcp --status
 ```
 
 Expected:
-- `--version` prints `slack-mcp-server v3.0.x`
+- `--setup` launches the interactive wizard
 - `--doctor` returns one clear next action with exit code:
   - `0` ready
   - `1` missing credentials
   - `2` invalid/expired credentials
   - `3` connectivity/runtime issue
-- `--setup` launches the interactive wizard
+- `--status` is read-only and non-mutating
 
 Command reference: [HN launch kit](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/HN-LAUNCH.md)
 

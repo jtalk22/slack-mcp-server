@@ -1,0 +1,74 @@
+[
+  {
+    "name": "repo_desktop",
+    "url": "https://github.com/jtalk22/slack-mcp-server",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "title": "GitHub - jtalk22/slack-mcp-server: Local-first Slack MCP server for Claude Desktop/Code with secure hosted HTTP mode.",
+    "h1": "Search code, repositories, users, issues, pull requests...",
+    "screenshot": "/Users/jameslambertpro/Developer/GitHub/slack-mcp-server/docs/release-health/social-proof-20260228T051333Z/pre/repo_desktop.png",
+    "status": "ok"
+  },
+  {
+    "name": "repo_mobile",
+    "url": "https://github.com/jtalk22/slack-mcp-server",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "title": "GitHub - jtalk22/slack-mcp-server: Local-first Slack MCP server for Claude Desktop/Code with secure hosted HTTP mode.",
+    "h1": "Search code, repositories, users, issues, pull requests...",
+    "screenshot": "/Users/jameslambertpro/Developer/GitHub/slack-mcp-server/docs/release-health/social-proof-20260228T051333Z/pre/repo_mobile.png",
+    "status": "ok"
+  },
+  {
+    "name": "release_latest_desktop",
+    "url": "https://github.com/jtalk22/slack-mcp-server/releases/latest",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "title": "Release v3.0.0 — Secure-Default Hosted HTTP, Local-First Preserved · jtalk22/slack-mcp-server · GitHub",
+    "h1": "Search code, repositories, users, issues, pull requests...",
+    "screenshot": "/Users/jameslambertpro/Developer/GitHub/slack-mcp-server/docs/release-health/social-proof-20260228T051333Z/pre/release_latest_desktop.png",
+    "status": "ok"
+  },
+  {
+    "name": "release_latest_mobile",
+    "url": "https://github.com/jtalk22/slack-mcp-server/releases/latest",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "title": "Release v3.0.0 — Secure-Default Hosted HTTP, Local-First Preserved · jtalk22/slack-mcp-server · GitHub",
+    "h1": "Search code, repositories, users, issues, pull requests...",
+    "screenshot": "/Users/jameslambertpro/Developer/GitHub/slack-mcp-server/docs/release-health/social-proof-20260228T051333Z/pre/release_latest_mobile.png",
+    "status": "ok"
+  },
+  {
+    "name": "demo_video_mobile",
+    "url": "https://jtalk22.github.io/slack-mcp-server/public/demo-video.html",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "title": "Slack MCP Server Demo",
+    "h1": "Slack MCP Server",
+    "screenshot": "/Users/jameslambertpro/Developer/GitHub/slack-mcp-server/docs/release-health/social-proof-20260228T051333Z/pre/demo_video_mobile.png",
+    "status": "ok"
+  },
+  {
+    "name": "demo_mobile",
+    "url": "https://jtalk22.github.io/slack-mcp-server/public/demo.html",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "title": "Slack MCP Server - Interactive Demo",
+    "h1": null,
+    "screenshot": "/Users/jameslambertpro/Developer/GitHub/slack-mcp-server/docs/release-health/social-proof-20260228T051333Z/pre/demo_mobile.png",
+    "status": "ok"
+  }
+]

@@ -24,6 +24,7 @@
     "tokens:auto": "node scripts/token-cli.js auto",
     "tokens:clear": "node scripts/token-cli.js clear",
     "screenshot": "node scripts/capture-screenshots.js",
+    "build:social-preview": "node scripts/build-social-preview.js",
     "record-demo": "node scripts/record-demo.js",
     "cf:browser": "node scripts/cloudflare-browser-tool.js",
     "metrics:release-health": "node scripts/collect-release-health.js",

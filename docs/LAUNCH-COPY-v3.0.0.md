@@ -8,37 +8,64 @@ Canonical text blocks for GitHub release surfaces, listings, and operator update
 
 ## GitHub Release Block
 
-```md
+````md
 `v3.0.0` flips hosted `/mcp` from permissive to secure-default without breaking local workflows.
 
-Verify first:
-`npx -y @jtalk22/slack-mcp@latest --version`
-`npx -y @jtalk22/slack-mcp@latest --doctor`
-`npx -y @jtalk22/slack-mcp@latest --status`
+```bash
+npx -y @jtalk22/slack-mcp@latest --version
+npx -y @jtalk22/slack-mcp@latest --doctor
+npx -y @jtalk22/slack-mcp@latest --status
+```
 
 What changed:
 - `/mcp` requires bearer auth by default
 - CORS is origin-allowlist driven (`SLACK_MCP_HTTP_ALLOWED_ORIGINS`)
 - no MCP tool renames/removals
 - deterministic diagnostics are preserved
-```
+````
 
 ## Hosted Migration Block
 
-```md
+````md
 Hosted migration in under a minute:
-`SLACK_TOKEN=xoxc-...`
-`SLACK_COOKIE=xoxd-...`
-`SLACK_MCP_HTTP_AUTH_TOKEN=change-this`
-`SLACK_MCP_HTTP_ALLOWED_ORIGINS=https://claude.ai`
-`node src/server-http.js`
+```bash
+export SLACK_TOKEN=xoxc-...
+export SLACK_COOKIE=xoxd-...
+export SLACK_MCP_HTTP_AUTH_TOKEN=change-this
+export SLACK_MCP_HTTP_ALLOWED_ORIGINS=https://claude.ai
+node src/server-http.js
+```
 
 Requests must include:
 `Authorization: Bearer <SLACK_MCP_HTTP_AUTH_TOKEN>`
 
 Emergency local fallback only:
 `SLACK_MCP_HTTP_INSECURE=1 node src/server-http.js`
+````
+
+## v3 Quick Proof Maintainer Comment
+
+````md
+Maintainer update:
+`v3.0.0` flips hosted `/mcp` from permissive to secure-default without breaking local workflows.
+
+```bash
+npx -y @jtalk22/slack-mcp@latest --version
+npx -y @jtalk22/slack-mcp@latest --doctor
+npx -y @jtalk22/slack-mcp@latest --status
 ```
+
+Hosted migration in under a minute:
+```bash
+export SLACK_TOKEN=xoxc-...
+export SLACK_COOKIE=xoxd-...
+export SLACK_MCP_HTTP_AUTH_TOKEN=change-this
+export SLACK_MCP_HTTP_ALLOWED_ORIGINS=https://claude.ai
+node src/server-http.js
+```
+
+If you hit a blocker, include runtime mode + exact output.
+````
 
 ## GitHub Discussion Announcement
 

@@ -35,3 +35,25 @@
 | 2026-02-28T04:56:08.043Z | Smithery | Reachability check (listing) | https://smithery.ai/server/jtalk22/slack-mcp-server | partial | HTTP 429 |
 | 2026-02-28T04:56:38.306Z | Glama | Reachability check (server) | https://glama.ai/mcp/servers/jtalk22/slack-mcp-server | blocked | HTTP 504 |
 | 2026-02-28T04:56:39.343Z | Glama | Reachability check (api) | https://glama.ai/mcp/api | success | HTTP 200 |
+| 2026-02-28T05:19:01.115Z | GitHub Release | Sync v3.0.0 body | https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.0.0 | success | Release body already aligned. |
+| 2026-02-28T05:19:01.703Z | GitHub Discussions | Sync discussion #12 | https://github.com/jtalk22/slack-mcp-server/discussions/12 | success | Title/body updated to v3 hook+proof format. |
+| 2026-02-28T05:19:01.876Z | GitHub Discussions | Sync discussion #13 | https://github.com/jtalk22/slack-mcp-server/discussions/13 | success | Discussion already aligned. |
+| 2026-02-28T05:19:02.566Z | GitHub Discussions | Upsert discussion #12 maintainer comment | https://github.com/jtalk22/slack-mcp-server/discussions/12#discussioncomment-15952962 | success | Existing maintainer comment updated. |
+| 2026-02-28T05:19:03.281Z | GitHub Discussions | Upsert discussion #13 maintainer comment | https://github.com/jtalk22/slack-mcp-server/discussions/13#discussioncomment-15952963 | success | Existing maintainer comment updated. |
+| 2026-02-28T05:19:03.795Z | awesome-mcp-servers | Upsert PR #2429 status comment | https://github.com/punkpeye/awesome-mcp-servers/pull/2429#issuecomment-3976370602 | success | Existing status comment updated. |
+| 2026-02-28T05:19:04.014Z | MCP Registry | Parity poll | https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest | success | Registry resolves 3.0.0. |
+| 2026-02-28T05:19:04.347Z | Smithery | Reachability check (API) | https://server.smithery.ai/jtalk22/slack-mcp-server | partial | HTTP 429 |
+| 2026-02-28T05:19:04.456Z | Smithery | Reachability check (listing) | https://smithery.ai/server/jtalk22/slack-mcp-server | partial | HTTP 429 |
+| 2026-02-28T05:19:05.185Z | Glama | Reachability check (server) | https://glama.ai/mcp/servers/jtalk22/slack-mcp-server | success | HTTP 200 |
+| 2026-02-28T05:19:05.433Z | Glama | Reachability check (api) | https://glama.ai/mcp/api | success | HTTP 200 |
+| 2026-02-28T05:20:59.405Z | GitHub Release | Sync v3.0.0 body | https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.0.0 | success | Release body already aligned. |
+| 2026-02-28T05:20:59.640Z | GitHub Discussions | Sync discussion #12 | https://github.com/jtalk22/slack-mcp-server/discussions/12 | success | Discussion already aligned. |
+| 2026-02-28T05:20:59.859Z | GitHub Discussions | Sync discussion #13 | https://github.com/jtalk22/slack-mcp-server/discussions/13 | success | Discussion already aligned. |
+| 2026-02-28T05:21:00.410Z | GitHub Discussions | Upsert discussion #12 maintainer comment | https://github.com/jtalk22/slack-mcp-server/discussions/12#discussioncomment-15952962 | success | Existing maintainer comment updated. |
+| 2026-02-28T05:21:01.034Z | GitHub Discussions | Upsert discussion #13 maintainer comment | https://github.com/jtalk22/slack-mcp-server/discussions/13#discussioncomment-15952963 | success | Existing maintainer comment updated. |
+| 2026-02-28T05:21:01.720Z | awesome-mcp-servers | Upsert PR #2511 status comment | https://github.com/punkpeye/awesome-mcp-servers/pull/2511#issuecomment-3976419937 | success | Status comment created. |
+| 2026-02-28T05:21:01.970Z | MCP Registry | Parity poll | https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest | success | Registry resolves 3.0.0. |
+| 2026-02-28T05:21:02.193Z | Smithery | Reachability check (API) | https://server.smithery.ai/jtalk22/slack-mcp-server | partial | HTTP 429 |
+| 2026-02-28T05:21:02.365Z | Smithery | Reachability check (listing) | https://smithery.ai/server/jtalk22/slack-mcp-server | partial | HTTP 429 |
+| 2026-02-28T05:21:03.105Z | Glama | Reachability check (server) | https://glama.ai/mcp/servers/jtalk22/slack-mcp-server | success | HTTP 200 |
+| 2026-02-28T05:21:03.298Z | Glama | Reachability check (api) | https://glama.ai/mcp/api | success | HTTP 200 |
