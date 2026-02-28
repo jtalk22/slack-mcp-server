@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jtalk22/slack-mcp-server",
   "title": "Slack MCP Server",
-  "description": "Session-based Slack MCP for Claude and MCP clients. Local-first stdio/web with secure-default hosted HTTP in v3.",
+  "description": "Session-based Slack MCP for Claude and MCP clients: local-first workflows, secure-default HTTP.",
   "websiteUrl": "https://jtalk22.github.io/slack-mcp-server/",
   "icons": [
     {
