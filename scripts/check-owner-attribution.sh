@@ -53,6 +53,14 @@ is_allowed_owner_committer() {
   fi
 
   if [[ "$ALLOW_GITHUB_WEB_COMMITTER" == "1" ]]; then
+    if [[ "$committer_name" == "$EXPECTED_NAME" ]]; then
+      if [[ "$committer_email" == "${EXPECTED_NAME}@users.noreply.github.com" || "$committer_email" =~ ^[0-9]+\+${EXPECTED_NAME}@users\.noreply\.github\.com$ ]]; then
+        if is_allowed_owner_author "$author_name" "$author_email"; then
+          return 0
+        fi
+      fi
+    fi
+
     if [[ "$committer_name" == "GitHub" && "$committer_email" == "noreply@github.com" ]]; then
       if is_allowed_owner_author "$author_name" "$author_email"; then
         return 0
