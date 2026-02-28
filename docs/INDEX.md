@@ -26,11 +26,6 @@ Start here for setup, compatibility checks, operations, and support.
 - [Install Proof Block](INSTALL-PROOF.md)
 - [Release Notes (v3.0.0)](../.github/v3.0.0-release-notes.md)
 - [Communication Style](COMMUNICATION-STYLE.md)
-- [Release Health Guide](RELEASE-HEALTH.md)
-- [Latest Release Health Snapshot](release-health/latest.md)
-- [Version Parity Report](release-health/version-parity.md)
-- [Prepublish Dry Run Report](release-health/prepublish-dry-run.md)
-- [Launch Log Template](release-health/launch-log-template.md)
 - [Changelog](../CHANGELOG.md)
 
 ## Issue Intake

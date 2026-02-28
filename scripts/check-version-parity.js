@@ -12,7 +12,9 @@ const serverMeta = JSON.parse(readFileSync(join(repoRoot, "server.json"), "utf8"
 
 const outputArg = process.argv.includes("--out")
   ? process.argv[process.argv.indexOf("--out") + 1]
-  : "docs/release-health/version-parity.md";
+  : process.argv.includes("--public")
+    ? "docs/release-health/version-parity.md"
+    : "output/release-health/version-parity.md";
 const allowPropagation = process.argv.includes("--allow-propagation");
 
 const mcpServerName = serverMeta.name;

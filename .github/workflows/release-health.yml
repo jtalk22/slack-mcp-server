@@ -26,8 +26,8 @@ jobs:
 
       - name: Capture baseline snapshot
         run: |
-          if [ -f docs/release-health/latest.md ]; then
-            cp docs/release-health/latest.md /tmp/release-health-before.md
+          if [ -f output/release-health/latest.md ]; then
+            cp output/release-health/latest.md /tmp/release-health-before.md
           fi
 
       - name: Collect current release-health snapshot
@@ -40,24 +40,24 @@ jobs:
           if [ -f /tmp/release-health-before.md ]; then
             node scripts/build-release-health-delta.js \
               --before /tmp/release-health-before.md \
-              --after docs/release-health/latest.md \
-              --out docs/release-health/automation-delta.md
+              --after output/release-health/latest.md \
+              --out output/release-health/automation-delta.md
           else
             node scripts/build-release-health-delta.js \
-              --after docs/release-health/latest.md \
-              --out docs/release-health/automation-delta.md
+              --after output/release-health/latest.md \
+              --out output/release-health/automation-delta.md
           fi
 
       - name: Publish workflow summary
         run: |
-          cat docs/release-health/latest.md >> "$GITHUB_STEP_SUMMARY"
+          cat output/release-health/latest.md >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          cat docs/release-health/automation-delta.md >> "$GITHUB_STEP_SUMMARY"
+          cat output/release-health/automation-delta.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload release-health artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-health-${{ github.run_id }}
           path: |
-            docs/release-health/latest.md
-            docs/release-health/automation-delta.md
+            output/release-health/latest.md
+            output/release-health/automation-delta.md

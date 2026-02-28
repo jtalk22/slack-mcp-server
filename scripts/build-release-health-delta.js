@@ -16,8 +16,8 @@ const METRICS = [
   "deployment-intake submissions (all-time)",
 ];
 
-const DEFAULT_AFTER = resolve("docs", "release-health", "latest.md");
-const DEFAULT_OUT = resolve("docs", "release-health", "automation-delta.md");
+const DEFAULT_AFTER = resolve("output", "release-health", "latest.md");
+const DEFAULT_OUT = resolve("output", "release-health", "automation-delta.md");
 const TARGETS = {
   "npm downloads (last week)": { operator: ">=", value: 180 },
   "deployment-intake submissions (all-time)": { operator: ">=", value: 2 },

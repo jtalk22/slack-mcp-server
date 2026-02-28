@@ -7,7 +7,9 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-const REPORT_PATH = resolve(ROOT, "docs", "release-health", "prepublish-dry-run.md");
+const REPORT_PATH = process.env.PREPUBLISH_REPORT_PATH
+  ? resolve(ROOT, process.env.PREPUBLISH_REPORT_PATH)
+  : resolve(ROOT, "output", "release-health", "prepublish-dry-run.md");
 
 const EXPECTED_NAME = process.env.EXPECTED_GIT_NAME || "jtalk22";
 const EXPECTED_EMAIL = process.env.EXPECTED_GIT_EMAIL || "james@revasser.nyc";
@@ -95,6 +97,8 @@ function markerScanStep() {
     pattern,
     "--glob",
     "!docs/release-health/**",
+    "--glob",
+    "!output/release-health/**",
     ...scanPaths
   ]);
 
@@ -230,7 +234,7 @@ function main() {
   const packSnapshot = npmPackSnapshot();
   const report = buildReport(steps, packSnapshot);
 
-  mkdirSync(resolve(ROOT, "docs", "release-health"), { recursive: true });
+  mkdirSync(dirname(REPORT_PATH), { recursive: true });
   writeFileSync(REPORT_PATH, `${report}\n`);
 
   console.log(`Wrote ${REPORT_PATH}`);

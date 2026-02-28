@@ -12,6 +12,12 @@ const NPM_PACKAGE =
   process.env.RELEASE_HEALTH_NPM_PACKAGE ||
   process.env.GROWTH_NPM_PACKAGE ||
   "@jtalk22/slack-mcp";
+const argv = process.argv.slice(2);
+
+function argValue(flag) {
+  const idx = argv.indexOf(flag);
+  return idx >= 0 && idx + 1 < argv.length ? argv[idx + 1] : null;
+}
 
 function safeGhApi(path) {
   try {
@@ -132,7 +138,13 @@ async function main() {
 
   const markdown = buildMarkdown(data);
 
-  const metricsDir = resolve("docs", "release-health");
+  const explicitOutDir = argValue("--out-dir");
+  const publicMode = argv.includes("--public");
+  const metricsDir = explicitOutDir
+    ? resolve(explicitOutDir)
+    : publicMode
+      ? resolve("docs", "release-health")
+      : resolve("output", "release-health");
   const datedPath = join(metricsDir, `${dateSlug}.md`);
   const latestPath = join(metricsDir, "latest.md");
 

@@ -145,6 +145,8 @@ docs/videos/*.webm
 # Playwright artifacts
 test-results/
 playwright-report/
+.playwright-cli/
+output/
 output/playwright/
 docs/release-health/social-proof-*/
 
