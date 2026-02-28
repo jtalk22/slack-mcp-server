@@ -141,6 +141,7 @@ vite.config.ts.timestamp-*
 # Playwright test recordings (keep named demo files)
 docs/videos/*.webm
 !docs/videos/demo-*.webm
+docs/images/demo-claude-mobile-20s.gif
 
 # Playwright artifacts
 test-results/
