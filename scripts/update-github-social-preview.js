@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { chromium } from "playwright";
-import { existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, mkdirSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 
 const argv = process.argv.slice(2);
 const hasFlag = (flag) => argv.includes(flag);
@@ -15,6 +15,12 @@ const repo = argValue("--repo") || "jtalk22/slack-mcp-server";
 const imagePath = resolve(
   argValue("--image") || "docs/images/social-preview-v3.png"
 );
+const profileDir = resolve(
+  argValue("--profile-dir") || ".cache/playwright/github-social-preview"
+);
+const evidencePath = resolve(
+  argValue("--evidence") || "output/release-health/social-preview-settings.png"
+);
 const headed = hasFlag("--headed");
 const loginTimeoutMs = Number(argValue("--login-timeout-ms") || 10 * 60 * 1000);
 const settingsUrl = `https://github.com/${repo}/settings`;
@@ -26,14 +32,17 @@ if (!existsSync(imagePath)) {
 
 console.log(`Repo: ${repo}`);
 console.log(`Image: ${imagePath}`);
+console.log(`Profile: ${profileDir}`);
 console.log(`Opening: ${settingsUrl}`);
 
-const browser = await chromium.launch({
+mkdirSync(profileDir, { recursive: true });
+mkdirSync(dirname(evidencePath), { recursive: true });
+
+const context = await chromium.launchPersistentContext(profileDir, {
   channel: "chrome",
   headless: !headed,
+  viewport: { width: 1440, height: 1100 },
 });
-
-const context = await browser.newContext();
 const page = await context.newPage();
 
 const waitForAuthenticatedSettings = async () => {
@@ -60,26 +69,54 @@ try {
     await waitForAuthenticatedSettings();
   }
 
-  // Ensure the settings page is fully loaded before interacting.
-  await page.waitForLoadState("networkidle", { timeout: 120000 });
+  // GitHub settings pages often keep long-lived background requests, so
+  // networkidle can hang even when UI is interactive.
+  await page.waitForLoadState("domcontentloaded", { timeout: 120000 });
 
-  const fileInput = page.locator('input[type="file"]').first();
-  await fileInput.waitFor({ timeout: 60000 });
+  const socialHeading = page.getByText("Social preview", { exact: true }).first();
+  await socialHeading.waitFor({ timeout: 120000 });
+  await socialHeading.scrollIntoViewIfNeeded();
+
+  // In current GitHub settings, upload is often behind an Edit button.
+  const editButtons = page.getByRole("button", { name: /^Edit$/i });
+  const editCount = await editButtons.count();
+  if (editCount > 0) {
+    for (let i = 0; i < editCount; i += 1) {
+      const btn = editButtons.nth(i);
+      if (await btn.isVisible()) {
+        try {
+          await btn.click({ timeout: 3000 });
+          break;
+        } catch {
+          // Try next visible Edit button.
+        }
+      }
+    }
+  }
+
+  const fileInput = page.locator('#repo-image-file-input, input[type="file"]').first();
+  await fileInput.waitFor({ state: "attached", timeout: 90000 });
   await fileInput.setInputFiles(imagePath);
+  await page.waitForTimeout(1500);
 
   // GitHub UI labels can vary; try likely save/update actions.
   const saveCandidates = [
-    'button:has-text("Update social preview")',
-    'button:has-text("Update social image")',
-    'button:has-text("Save changes")',
-    'button:has-text("Upload")',
+    /update social preview/i,
+    /update social image/i,
+    /save changes/i,
+    /^save$/i,
+    /upload/i,
+    /^apply$/i,
+    /^done$/i,
   ];
 
   let clicked = false;
-  for (const selector of saveCandidates) {
-    const button = page.locator(selector).first();
-    if (await button.count()) {
+  for (const rx of saveCandidates) {
+    const button = page.getByRole("button", { name: rx }).first();
+    const count = await button.count();
+    if (count > 0) {
       try {
+        await button.scrollIntoViewIfNeeded();
         await button.click({ timeout: 5000 });
         clicked = true;
         break;
@@ -87,6 +124,14 @@ try {
         // Keep trying other candidates.
       }
     }
+  }
+
+  if (!clicked) {
+    const visibleButtons = await page
+      .locator("button:visible")
+      .evaluateAll((els) => els.map((el) => el.textContent?.trim() || "").filter(Boolean))
+      .catch(() => []);
+    console.log("Visible buttons during upload:", visibleButtons.join(" | "));
   }
 
   if (!clicked) {
@@ -99,11 +144,12 @@ try {
     console.log("Social preview update action submitted.");
   }
 
+  await page.screenshot({ path: evidencePath, fullPage: true });
+  console.log(`Saved evidence screenshot: ${evidencePath}`);
   console.log("Done.");
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
 } finally {
   await context.close();
-  await browser.close();
 }
