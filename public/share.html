@@ -4,26 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server v3.0.0</title>
-  <meta name="description" content="Session-based Slack MCP server for Claude. Local-first stdio/web, secure-default hosted HTTP in v3.">
+  <meta name="description" content="Session-based Slack MCP for Claude. Local-first stdio/web with secure-default hosted HTTP in v3.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server v3.0.0">
-  <meta property="og:description" content="Session-based Slack MCP for Claude. Local-first stdio/web, secure-default hosted HTTP in v3.">
+  <meta property="og:description" content="Session-based Slack MCP for Claude. Local-first stdio/web with secure-default hosted HTTP in v3.">
   <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/share.html">
   <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server v3.0.0">
-  <meta name="twitter:description" content="Session-based Slack MCP for Claude. Local-first stdio/web, secure-default hosted HTTP in v3.">
+  <meta name="twitter:description" content="Session-based Slack MCP for Claude. Local-first stdio/web with secure-default hosted HTTP in v3.">
   <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
   <style>
     :root {
       --bg-1: #0b1436;
       --bg-2: #0e1d49;
-      --panel: #11295e;
-      --line: rgba(130, 160, 224, 0.35);
-      --text: #eaf2ff;
-      --muted: #b8c7e8;
+      --line: rgba(131, 161, 224, 0.36);
+      --text: #edf4ff;
+      --muted: #b4c4e8;
+      --link-bg: rgba(17, 57, 120, 0.7);
+      --link-bg-hover: rgba(22, 71, 148, 0.85);
       --accent: #54d8cf;
     }
     * { box-sizing: border-box; }
@@ -32,88 +33,94 @@
       min-height: 100vh;
       color: var(--text);
       background:
-        radial-gradient(900px 420px at 12% 8%, #2b4f98 0%, transparent 62%),
-        radial-gradient(900px 460px at 100% 100%, #164a8b 0%, transparent 64%),
+        radial-gradient(900px 430px at 12% 0%, #2b4f98 0%, transparent 60%),
+        radial-gradient(980px 480px at 100% 100%, #124b8c 0%, transparent 64%),
         linear-gradient(145deg, var(--bg-1), var(--bg-2));
       font-family: "Space Grotesk", "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
       display: grid;
       place-items: center;
-      padding: 24px;
+      padding: 20px;
     }
     .wrap {
-      width: min(920px, 100%);
+      width: min(980px, 100%);
       border: 1px solid var(--line);
-      background: linear-gradient(160deg, rgba(19, 44, 96, 0.72), rgba(9, 19, 50, 0.9));
       border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+      background: linear-gradient(165deg, rgba(17, 41, 92, 0.72), rgba(10, 22, 56, 0.9));
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+      padding: 16px;
     }
     h1 {
-      margin: 0 0 10px;
-      line-height: 1.1;
+      margin: 0;
+      line-height: 1.08;
       letter-spacing: -0.02em;
-      font-size: clamp(30px, 5vw, 44px);
+      font-size: clamp(30px, 5vw, 48px);
     }
-    p {
-      margin: 0 0 12px;
+    .sub {
+      margin: 8px 0 14px;
       color: var(--muted);
-      font-size: clamp(16px, 2.3vw, 21px);
+      font-size: clamp(16px, 2.4vw, 22px);
+      line-height: 1.25;
     }
-    .proof {
-      margin: 14px 0 16px;
-      border: 1px solid rgba(129, 155, 213, 0.36);
-      background: #081a46;
+    .preview {
+      display: block;
       border-radius: 12px;
-      padding: 12px 14px;
-      font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: clamp(13px, 2.2vw, 17px);
-      line-height: 1.45;
-      color: #d7e6ff;
-      overflow-x: auto;
-      white-space: pre;
+      overflow: hidden;
+      border: 1px solid rgba(135, 163, 225, 0.4);
+      text-decoration: none;
+      margin-bottom: 14px;
     }
-    .actions {
+    .preview img {
+      width: 100%;
+      display: block;
+    }
+    .links {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
+      margin-bottom: 8px;
     }
-    a.btn {
+    .links a {
       display: inline-block;
-      border-radius: 10px;
-      border: 1px solid rgba(132, 159, 220, 0.48);
-      background: #113a7a;
-      color: #ecf4ff;
       text-decoration: none;
-      padding: 10px 13px;
+      border: 1px solid rgba(131, 161, 224, 0.5);
+      border-radius: 10px;
+      padding: 9px 12px;
+      color: var(--text);
+      background: var(--link-bg);
       font-weight: 600;
-      font-size: 15px;
+      font-size: 14px;
     }
-    a.btn.primary {
-      background: linear-gradient(90deg, #59d7cf, #53c6d6);
-      color: #062034;
-      border-color: rgba(83, 198, 214, 0.66);
-    }
+    .links a:hover { background: var(--link-bg-hover); }
     .note {
-      margin-top: 12px;
       color: #9fb4de;
       font-size: 13px;
+      line-height: 1.45;
+    }
+    .note strong { color: var(--accent); }
+    @media (max-width: 640px) {
+      body { padding: 10px; }
+      .wrap { padding: 12px; }
     }
   </style>
 </head>
 <body>
   <main class="wrap">
     <h1>Slack MCP Server v3.0.0</h1>
-    <p>Session-based Slack access for Claude and MCP clients. Local-first stdio/web, secure-default hosted HTTP in v3.</p>
-    <div class="proof">npx -y @jtalk22/slack-mcp@latest --version
-npx -y @jtalk22/slack-mcp@latest --doctor
-npx -y @jtalk22/slack-mcp@latest --status</div>
-    <div class="actions">
-      <a class="btn primary" href="https://github.com/jtalk22/slack-mcp-server" rel="noopener">Open Repository</a>
-      <a class="btn" href="https://github.com/jtalk22/slack-mcp-server/releases/latest" rel="noopener">Latest Release</a>
-      <a class="btn" href="https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4" rel="noopener">20-second Mobile Demo</a>
+    <p class="sub">Session-based Slack MCP for Claude and MCP clients. Local-first stdio/web, secure-default hosted HTTP in v3.</p>
+
+    <a class="preview" href="https://github.com/jtalk22/slack-mcp-server" rel="noopener">
+      <img src="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png" alt="Slack MCP Server social preview card">
+    </a>
+
+    <div class="links">
+      <a href="https://github.com/jtalk22/slack-mcp-server" rel="noopener">Repository</a>
+      <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest" rel="noopener">Latest Release</a>
+      <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html" rel="noopener">Live Demo</a>
+      <a href="https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4" rel="noopener">20s Mobile Clip</a>
+      <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" rel="noopener">npm Package</a>
     </div>
-    <div class="note">Maintainer/operator: jtalk22 (james@revasser.nyc)</div>
+
+    <p class="note"><strong>Verify in 30 seconds:</strong> <code>--version</code>, <code>--doctor</code>, <code>--status</code>. Maintainer/operator: <code>jtalk22</code> (<code>james@revasser.nyc</code>).</p>
   </main>
 </body>
 </html>

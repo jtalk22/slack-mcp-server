@@ -26,7 +26,8 @@ const outputGif = resolve(
   argValue("--out-gif") || join(ROOT, "docs", "images", "demo-claude-mobile-20s.gif")
 );
 
-const startSeconds = Number(argValue("--start") || 6);
+// Start from a frame where tool execution is already visible.
+const startSeconds = Number(argValue("--start") || 8);
 const durationSeconds = Number(argValue("--duration") || 20);
 
 function run(label, args) {

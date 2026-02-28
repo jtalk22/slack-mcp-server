@@ -8,6 +8,7 @@ DISALLOWED='(?i)(\bstealth\b|\bgrowth\b|social-proof|social proof|share kit|\bvi
 
 SCAN_PATHS=(
   "$ROOT/README.md"
+  "$ROOT/index.html"
   "$ROOT/docs"
   "$ROOT/public"
   "$ROOT/.github/ISSUE_REPLY_TEMPLATE.md"

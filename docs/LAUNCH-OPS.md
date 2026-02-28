@@ -61,7 +61,7 @@ Non-blocking request:
 ## Evidence Log
 
 Use:
-- `docs/release-health/launch-log-template.md`
+- local `output/release-health/launch-log-template.md` (private by default)
 
 Capture:
 - channel

@@ -10,16 +10,18 @@ npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
-[Live demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4) · [Share card](https://jtalk22.github.io/slack-mcp-server/public/share.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+[![Live demo poster](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
-[![20-second mobile demo preview](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-claude-mobile-poster.png)](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4)
+Motion proof: [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4) · [Live demo walkthrough](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
+
+[Share card](https://jtalk22.github.io/slack-mcp-server/public/share.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp) · [Setup guide](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md) · [Deployment modes](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/DEPLOYMENT-MODES.md)
 
 Hosted migration note: `v3.0.0` keeps local `stdio`/`web` flows unchanged; hosted `/mcp` requires `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
 
 Maintainer/operator: `jtalk22` (`james@revasser.nyc`)  
 Release: [`v3.0.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.0.0) · Notes: [v3.0.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.0.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
 
-If this project is useful, starring the repo helps other operators find it: https://github.com/jtalk22/slack-mcp-server
+If this saved you setup time, consider starring the repo. Maintenance support: [GitHub Sponsors](https://github.com/sponsors/jtalk22) · [Ko-fi](https://ko-fi.com/jtalk22) · [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
 
 ## v3.0.0 at a Glance
 

@@ -1,33 +1,25 @@
-# Release Health Snapshot
+# Public Health Snapshot
 
-- Generated: 2026-02-26T16:19:37.402Z
-- Repo: `jtalk22/slack-mcp-server`
-- Package: `@jtalk22/slack-mcp`
+- Generated: 2026-02-28T14:37:49Z
+- Cycle: `v3.0.0` (no new tag)
 
-## Install Signals
+## Distribution Parity
 
-- npm downloads (last week): 532
-- npm downloads (last month): 1011
-- npm latest version: 2.0.0
+| Surface | State |
+|---|---|
+| npm `latest` | `3.0.0` |
+| GitHub latest release | `v3.0.0` |
+| MCP registry latest | `3.0.0` |
 
-## GitHub Reach
+## Public Reach (14-day GitHub window)
 
 - stars: 13
 - forks: 8
-- open issues: 0
-- 14d views: 498
-- 14d unique visitors: 263
-- 14d clones: 338
-- 14d unique cloners: 113
-- deployment-intake submissions (all-time): 1
-
-## 14-Day Reliability Targets (v2.0.0 Cycle)
-
-- weekly downloads: >= 180
-- qualified deployment-intake submissions: >= 2
-- maintainer support load: <= 2 hours/week
+- watchers: 1
+- views: 554 (`284` unique)
+- clones: 770 (`181` unique)
 
 ## Notes
 
-- Update this snapshot daily during active release windows, then weekly.
-- Track deployment-intake quality and support load manually in issue notes.
+- GitHub traffic is delayed; same-day spikes and dips can be underreported for ~24 hours.
+- Full operator telemetry and run artifacts stay private-by-default under local `output/release-health/`.
