@@ -28,6 +28,7 @@
     "build:demo-mobile": "node scripts/build-mobile-demo.js",
     "build:demo-mobile:gif": "node scripts/build-mobile-demo.js --gif",
     "record-demo": "node scripts/record-demo.js",
+    "social-preview:update": "node scripts/update-github-social-preview.js --headed",
     "cf:browser": "node scripts/cloudflare-browser-tool.js",
     "metrics:release-health": "node scripts/collect-release-health.js",
     "metrics:release-health:delta": "node scripts/build-release-health-delta.js",
