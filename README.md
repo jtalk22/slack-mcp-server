@@ -1,20 +1,21 @@
 # Slack MCP Server
 
-Local-first Slack MCP server using your existing Slack session. Hosted HTTP is secure-default; local `stdio`/`web` workflows stay unchanged.
+Session-based Slack MCP for Claude and MCP clients. Local-first `stdio`/`web` with secure-default hosted HTTP in v3.
 
-## 30-Second Verify
+## Install + Verify
 
 ```bash
+npx -y @jtalk22/slack-mcp --setup
 npx -y @jtalk22/slack-mcp@latest --version
 npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
+[Setup guide](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md) · [30-second verify reference](https://github.com/jtalk22/slack-mcp-server/blob/main/README.md#install--verify) · [Autoplay demo landing](https://jtalk22.github.io/slack-mcp-server/) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+
 [![Live demo poster](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
-Motion proof: [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4) · [Live demo walkthrough](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
-
-[Share card](https://jtalk22.github.io/slack-mcp-server/public/share.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp) · [Setup guide](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md) · [Deployment modes](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/DEPLOYMENT-MODES.md)
+Motion proof: [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4) · [Live demo walkthrough](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Share card](https://jtalk22.github.io/slack-mcp-server/public/share.html)
 
 Hosted migration note: `v3.0.0` keeps local `stdio`/`web` flows unchanged; hosted `/mcp` requires `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
 

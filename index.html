@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Slack MCP Server</title>
-  <meta name="description" content="Session-based Slack MCP for Claude. Local-first stdio/web with secure-default hosted HTTP in v3.">
+  <title>Slack MCP Server v3.0.0 - Install in 30 Seconds</title>
+  <meta name="description" content="Session-based Slack MCP for Claude and MCP clients. Local-first stdio/web with secure-default hosted HTTP in v3.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Slack MCP Server">
-  <meta property="og:description" content="Session-based Slack MCP for Claude. Local-first stdio/web with secure-default hosted HTTP in v3.">
+  <meta property="og:title" content="Slack MCP Server v3.0.0">
+  <meta property="og:description" content="Session-based Slack MCP for Claude and MCP clients. Local-first stdio/web with secure-default hosted HTTP in v3.">
   <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/">
   <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server">
-  <meta name="twitter:description" content="Session-based Slack MCP for Claude. Local-first stdio/web with secure-default hosted HTTP in v3.">
+  <meta name="twitter:title" content="Slack MCP Server v3.0.0">
+  <meta name="twitter:description" content="Session-based Slack MCP for Claude and MCP clients. Local-first stdio/web with secure-default hosted HTTP in v3.">
   <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,14 +23,15 @@
     :root {
       --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
       --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-      --bg-1: #0b1538;
-      --bg-2: #0f214f;
-      --panel: rgba(11, 27, 67, 0.8);
+      --bg-1: #091433;
+      --bg-2: #10214f;
+      --panel: rgba(11, 27, 67, 0.82);
       --panel-border: rgba(130, 161, 225, 0.35);
       --text: #edf3ff;
       --muted: #afc0e4;
       --accent: #53d2cb;
-      --accent-2: #8ec3ff;
+      --button-bg: rgba(18, 57, 121, 0.75);
+      --button-border: rgba(134, 161, 224, 0.45);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,171 +41,145 @@
       color: var(--text);
       min-height: 100vh;
       background:
-        radial-gradient(880px 440px at 10% 0%, #2b4d95 0%, transparent 58%),
-        radial-gradient(980px 460px at 100% 100%, #114584 0%, transparent 64%),
+        radial-gradient(900px 460px at 10% 0%, #2b4d95 0%, transparent 58%),
+        radial-gradient(1020px 500px at 100% 100%, #114584 0%, transparent 64%),
         linear-gradient(145deg, var(--bg-1), var(--bg-2));
-      padding: 26px 18px 28px;
+      padding: 22px 16px 26px;
     }
 
     .shell {
-      max-width: 1140px;
+      max-width: 1160px;
       margin: 0 auto;
       border: 1px solid var(--panel-border);
       border-radius: 18px;
       background: linear-gradient(160deg, var(--panel), rgba(8, 20, 55, 0.92));
-      box-shadow: 0 24px 46px rgba(0, 0, 0, 0.33);
+      box-shadow: 0 24px 46px rgba(0, 0, 0, 0.32);
       overflow: hidden;
     }
 
     .hero {
-      padding: 28px 28px 20px;
+      padding: 22px 24px 16px;
       border-bottom: 1px solid rgba(141, 167, 226, 0.2);
     }
 
     .hero h1 {
       font-family: var(--font-heading);
       letter-spacing: -0.02em;
-      font-size: clamp(2rem, 3.5vw, 2.85rem);
-      line-height: 1.05;
-      margin-bottom: 10px;
+      font-size: clamp(1.95rem, 3.6vw, 2.85rem);
+      line-height: 1.04;
+      margin-bottom: 8px;
     }
 
     .hero p {
       color: var(--muted);
-      font-size: clamp(1rem, 1.4vw, 1.18rem);
-      max-width: 880px;
-      margin-bottom: 16px;
+      font-size: clamp(0.96rem, 1.35vw, 1.14rem);
+      max-width: 940px;
+      margin-bottom: 12px;
     }
+
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .cta-row a {
+      text-decoration: none;
+      color: #e9f4ff;
+      border: 1px solid var(--button-border);
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: var(--button-bg);
+      font-size: 0.91rem;
+      font-weight: 600;
+    }
+
+    .cta-row a strong { color: var(--accent); }
 
     .verify {
       background: #091c4c;
       border: 1px solid rgba(128, 157, 217, 0.4);
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 11px 13px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: clamp(0.82rem, 1.1vw, 1rem);
-      line-height: 1.5;
+      font-size: clamp(0.8rem, 1.05vw, 0.96rem);
+      line-height: 1.45;
       color: #dce9ff;
       overflow-x: auto;
       white-space: pre;
-      margin-bottom: 14px;
     }
 
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-size: 0.93rem;
+    .stage {
+      padding: 16px 24px 20px;
     }
 
-    .links a {
-      color: #dff1ff;
-      text-decoration: none;
-      border: 1px solid rgba(137, 164, 224, 0.4);
-      background: rgba(15, 48, 103, 0.7);
-      border-radius: 999px;
-      padding: 6px 11px;
-    }
-
-    .links a:hover {
-      background: rgba(20, 65, 135, 0.88);
-    }
-
-    .proof-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 18px;
-      padding: 18px 28px 24px;
-    }
-
-    .card {
-      border: 1px solid rgba(133, 160, 222, 0.3);
+    .video-shell {
+      border: 1px solid rgba(133, 160, 222, 0.35);
       border-radius: 14px;
-      background: rgba(8, 20, 52, 0.55);
-      padding: 14px;
-      min-height: 100%;
-    }
-
-    .card h2 {
-      font-family: var(--font-heading);
-      font-size: 1.12rem;
-      margin-bottom: 9px;
-      letter-spacing: -0.01em;
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 12px;
-      line-height: 1.45;
-    }
-
-    .poster-link {
-      display: block;
-      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(126, 153, 216, 0.35);
-      text-decoration: none;
+      position: relative;
+      background: #081334;
+      min-height: 280px;
     }
 
-    .poster-link img {
+    video {
+      display: block;
       width: 100%;
-      display: block;
+      height: auto;
+      background: #050b1f;
     }
 
-    .mini-links {
-      display: grid;
-      gap: 10px;
+    .video-controls {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
-    .mini-links a {
-      display: block;
+    .video-controls button,
+    .video-controls a {
+      border: 1px solid rgba(135, 163, 225, 0.55);
+      background: rgba(9, 30, 74, 0.88);
+      color: #e8f2ff;
+      border-radius: 10px;
+      padding: 7px 11px;
       text-decoration: none;
-      color: var(--text);
-      border: 1px solid rgba(133, 160, 222, 0.3);
-      border-radius: 12px;
-      padding: 10px 12px;
-      background: rgba(13, 37, 82, 0.68);
-      line-height: 1.35;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    .mini-links a strong {
-      display: block;
-      color: var(--accent);
-      margin-bottom: 2px;
-      font-family: var(--font-heading);
-      letter-spacing: -0.01em;
-    }
-
-    .mini-links a span {
-      color: var(--muted);
-      font-size: 0.88rem;
+    .video-status {
+      margin-left: auto;
+      margin-top: 8px;
+      color: #9fb6e3;
+      font-size: 0.83rem;
     }
 
     .footer {
       border-top: 1px solid rgba(141, 167, 226, 0.2);
-      padding: 14px 28px 18px;
-      font-size: 0.9rem;
+      padding: 12px 24px 16px;
+      font-size: 0.88rem;
       color: var(--muted);
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .footer a {
-      color: var(--accent-2);
-    }
+    .footer a { color: #9ac3ff; }
 
-    @media (max-width: 900px) {
-      .proof-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 640px) {
-      body { padding: 12px; }
-      .hero, .proof-grid, .footer { padding-left: 14px; padding-right: 14px; }
-      .hero { padding-top: 16px; }
-      .links { font-size: 0.86rem; }
+    @media (max-width: 760px) {
+      body { padding: 10px; }
+      .hero, .stage, .footer { padding-left: 12px; padding-right: 12px; }
+      .video-shell { min-height: 200px; }
+      .video-controls { left: 8px; bottom: 8px; }
+      .video-controls button,
+      .video-controls a { padding: 6px 9px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -212,51 +187,69 @@
   <main class="shell">
     <section class="hero">
       <h1>Slack MCP Server</h1>
-      <p>Session-based Slack MCP for Claude and MCP clients. Local-first `stdio`/`web` workflows stay stable in v3, with secure-default hosted HTTP.</p>
-      <div class="verify">npx -y @jtalk22/slack-mcp@latest --version
+      <p>Session-based Slack MCP for Claude and MCP clients with local-first `stdio`/`web` and secure-default hosted HTTP in v3.</p>
+      <div class="cta-row">
+        <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md"><strong>Install</strong> (`npx --setup`)</a>
+        <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/README.md#install--verify"><strong>Verify</strong> (30s commands)</a>
+        <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest"><strong>Latest Release</strong> (`v3.0.0`)</a>
+      </div>
+      <div class="verify">npx -y @jtalk22/slack-mcp --setup
+npx -y @jtalk22/slack-mcp@latest --version
 npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status</div>
-      <div class="links">
-        <a href="public/demo-video.html">Live Demo</a>
-        <a href="docs/videos/demo-claude-mobile-20s.mp4">20-second Mobile Clip</a>
-        <a href="public/share.html">Share Card</a>
-        <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest">Latest Release</a>
-        <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp">npm</a>
-      </div>
     </section>
 
-    <section class="proof-grid">
-      <article class="card">
-        <h2>Static Proof</h2>
-        <p>Product surface in one frame. This route is stable and share-safe.</p>
-        <a class="poster-link" href="public/demo-video.html">
-          <img src="docs/images/demo-poster.png" alt="Slack MCP Server demo poster">
-        </a>
-      </article>
-      <article class="card">
-        <h2>Motion Proof</h2>
-        <p>Short mobile-first clip plus direct migration/ops entry points.</p>
-        <div class="mini-links">
-          <a href="docs/videos/demo-claude-mobile-20s.mp4">
-            <strong>20-second mobile clip</strong>
-            <span>Shows search tool call and output in the first few seconds.</span>
-          </a>
-          <a href="https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md">
-            <strong>Hosted migration intake</strong>
-            <span>Use for secure-default hosted rollout support.</span>
-          </a>
-          <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md">
-            <strong>Setup guide</strong>
-            <span>Step-by-step token and client configuration.</span>
-          </a>
+    <section class="stage">
+      <div class="video-shell">
+        <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-claude-mobile-poster.png" aria-label="Slack MCP demo autoplay">
+          <source src="docs/videos/demo-claude-mobile-20s.mp4" type="video/mp4">
+        </video>
+        <div class="video-controls">
+          <button type="button" id="playBtn">Play</button>
+          <button type="button" id="pauseBtn">Pause</button>
+          <a href="public/demo-video.html">Live Demo Page</a>
+          <a href="public/share.html">Share Surface</a>
         </div>
-      </article>
+      </div>
+      <div class="video-status" id="videoStatus">Autoplay check in progress...</div>
     </section>
 
     <footer class="footer">
       <span>Maintainer/operator: <strong>jtalk22</strong> (<a href="mailto:james@revasser.nyc">james@revasser.nyc</a>)</span>
-      <span>If this saved setup time, please star and support: <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a> · <a href="https://github.com/sponsors/jtalk22">Sponsors</a> · <a href="https://ko-fi.com/jtalk22">Ko-fi</a></span>
+      <span>If this saved setup time, please <a href="https://github.com/jtalk22/slack-mcp-server">star the repo</a> and consider <a href="https://github.com/sponsors/jtalk22">supporting maintenance</a>.</span>
     </footer>
   </main>
+
+  <script>
+    const video = document.getElementById('heroVideo');
+    const statusEl = document.getElementById('videoStatus');
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+
+    async function ensureAutoplay() {
+      try {
+        await video.play();
+        statusEl.textContent = 'Autoplay active (muted).';
+      } catch {
+        statusEl.textContent = 'Autoplay blocked by browser policy. Use Play to start.';
+      }
+    }
+
+    playBtn.addEventListener('click', async () => {
+      try {
+        await video.play();
+        statusEl.textContent = 'Playback active.';
+      } catch {
+        statusEl.textContent = 'Playback blocked. Check browser media settings.';
+      }
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      video.pause();
+      statusEl.textContent = 'Playback paused.';
+    });
+
+    ensureAutoplay();
+  </script>
 </body>
 </html>

@@ -18,6 +18,8 @@ const outputArg = process.argv.includes("--out")
 const allowPropagation = process.argv.includes("--allow-propagation");
 
 const mcpServerName = serverMeta.name;
+const expectedWebsiteUrl = serverMeta.websiteUrl;
+const expectedDescriptionPrefix = serverMeta.description;
 const smitheryEndpoint = "https://server.smithery.ai/jtalk22/slack-mcp-server";
 const smitheryListingUrl = "https://smithery.ai/server/jtalk22/slack-mcp-server";
 
@@ -46,6 +48,8 @@ async function main() {
 
   let npmVersion = null;
   let mcpRegistryVersion = null;
+  let mcpRegistryWebsiteUrl = null;
+  let mcpRegistryDescription = null;
   let smitheryReachable = null;
   let smitheryStatus = null;
   let npmError = null;
@@ -64,6 +68,8 @@ async function main() {
       `https://registry.modelcontextprotocol.io/v0/servers/${encodeURIComponent(mcpServerName)}/versions/latest`
     );
     mcpRegistryVersion = registry?.server?.version || null;
+    mcpRegistryWebsiteUrl = registry?.server?.websiteUrl || null;
+    mcpRegistryDescription = registry?.server?.description || null;
   } catch (error) {
     mcpError = String(error?.message || error);
   }
@@ -90,12 +96,23 @@ async function main() {
     { name: "package.json vs server.json package", ok: localVersion === localServerPkgVersion },
     { name: "npm latest", ok: npmVersion === localVersion },
     { name: "MCP registry latest", ok: mcpRegistryVersion === localVersion },
+    { name: "MCP registry websiteUrl", ok: mcpRegistryWebsiteUrl === expectedWebsiteUrl },
+    {
+      name: "MCP registry description prefix",
+      ok: typeof mcpRegistryDescription === "string" && mcpRegistryDescription.startsWith(expectedDescriptionPrefix),
+    },
   ];
 
+  const externalMismatchNames = new Set([
+    "npm latest",
+    "MCP registry latest",
+    "MCP registry websiteUrl",
+    "MCP registry description prefix",
+  ]);
   const externalMismatches = parityChecks
-    .filter((check) => !check.ok && (check.name === "npm latest" || check.name === "MCP registry latest"));
+    .filter((check) => !check.ok && externalMismatchNames.has(check.name));
   const hardFailures = parityChecks
-    .filter((check) => !check.ok && check.name !== "npm latest" && check.name !== "MCP registry latest");
+    .filter((check) => !check.ok && !externalMismatchNames.has(check.name));
 
   const now = new Date().toISOString();
   const lines = [
@@ -136,6 +153,20 @@ async function main() {
       mcpError ? `fetch_error: ${mcpError}` : ""
     ),
     row(
+      "MCP Registry websiteUrl",
+      mcpRegistryWebsiteUrl,
+      mcpRegistryWebsiteUrl === expectedWebsiteUrl ? "ok" : "mismatch",
+      `expected: ${expectedWebsiteUrl}`
+    ),
+    row(
+      "MCP Registry description",
+      mcpRegistryDescription,
+      typeof mcpRegistryDescription === "string" && mcpRegistryDescription.startsWith(expectedDescriptionPrefix)
+        ? "ok"
+        : "mismatch",
+      `expected_prefix: ${expectedDescriptionPrefix}`
+    ),
+    row(
       "Smithery endpoint",
       "n/a",
       smitheryReachable ? "reachable" : "unreachable",
@@ -152,6 +183,15 @@ async function main() {
     externalMismatches.length === 0
       ? "- External parity: pass."
       : `- External parity mismatch: ${externalMismatches.map((f) => f.name).join(", ")}.`,
+    "",
+    "## Actionable Drift Notes",
+    "",
+    mcpRegistryWebsiteUrl === expectedWebsiteUrl
+      ? "- MCP registry `websiteUrl` matches local metadata."
+      : "- MCP registry `websiteUrl` drift detected. Update registry metadata or re-publish metadata-bearing release to align canonical install landing URL.",
+    typeof mcpRegistryDescription === "string" && mcpRegistryDescription.startsWith(expectedDescriptionPrefix)
+      ? "- MCP registry description prefix matches local metadata."
+      : "- MCP registry description drift detected. Align registry listing description with local `server.json` wording.",
     externalMismatches.length === 0
       ? "- Propagation mode: not needed (external parity is already aligned)."
       : (allowPropagation

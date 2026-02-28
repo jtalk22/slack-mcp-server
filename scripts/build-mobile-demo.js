@@ -25,6 +25,9 @@ const outputPoster = resolve(
 const outputGif = resolve(
   argValue("--out-gif") || join(ROOT, "docs", "images", "demo-claude-mobile-20s.gif")
 );
+const validationDir = resolve(
+  argValue("--validation-dir") || join(ROOT, "output", "release-health", "mobile-first3-frames")
+);
 
 // Start from a frame where tool execution is already visible.
 const startSeconds = Number(argValue("--start") || 8);
@@ -136,9 +139,30 @@ if (hasArg("--gif")) {
   }
 }
 
+if (hasArg("--validate-first3")) {
+  mkdirSync(validationDir, { recursive: true });
+  for (let second = 0; second < 3; second += 1) {
+    run(`Capture validation frame @ +${second}s`, [
+      "-y",
+      "-ss",
+      String(second),
+      "-i",
+      outputVideo,
+      "-frames:v",
+      "1",
+      "-update",
+      "1",
+      join(validationDir, `frame-${second}s.png`),
+    ]);
+  }
+}
+
 console.log("\n✅ Mobile demo artifacts ready");
 console.log(`- Video:  ${outputVideo} (${formatSize(outputVideo)})`);
 console.log(`- Poster: ${outputPoster} (${formatSize(outputPoster)})`);
 if (hasArg("--gif") && existsSync(outputGif)) {
   console.log(`- GIF:    ${outputGif} (${formatSize(outputGif)})`);
+}
+if (hasArg("--validate-first3")) {
+  console.log(`- Validation frames: ${validationDir}`);
 }
