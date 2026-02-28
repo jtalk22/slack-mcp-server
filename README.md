@@ -1,26 +1,13 @@
-<p align="center">
-  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo.html"><img src="docs/assets/icon-512.png" alt="Slack MCP Server" width="80"></a>
-</p>
+# Slack MCP Server
 
-<h1 align="center">Slack MCP Server</h1>
+Use your existing Slack session with Claude and other MCP clients.  
+Local-first by default (`stdio`/`web`), hosted HTTP when you need a remote endpoint.
 
-<p align="center">
-  <em>Session-based Slack access for Claude using your existing workspace permissions.</em>
-</p>
+[Live demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp) · [Compatibility matrix](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/COMPATIBILITY.md)
 
-<p align="center">
-  <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-    <img src="docs/images/demo-readme.gif" alt="Slack MCP tools in action" width="620">
-  </a>
-</p>
+![Slack MCP tools in action](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-readme.gif)
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/badge/npm-@jtalk22%2Fslack--mcp-CB3837?logo=npm&logoColor=white" alt="npm"></a>
-  <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?label=build" alt="Build Status"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-</p>
-
-## 30-Second Proof
+## 30-Second Verify
 
 ```bash
 npx -y @jtalk22/slack-mcp@latest --version
@@ -29,13 +16,52 @@ npx -y @jtalk22/slack-mcp@latest --status
 ```
 
 Expected:
-- `--version` prints `2.0.0`
-- `--doctor` exits with `0|1|2|3`
+- `--version` prints `slack-mcp-server v3.0.0`
+- `--doctor` exits with deterministic `0|1|2|3`
 - `--status` is read-only and non-mutating
 
-> `v2.0.0` is live with deterministic diagnostics and stable tool contracts.  
-> Release notes: [.github/v2.0.0-release-notes.md](.github/v2.0.0-release-notes.md)  
-> Maintainer/operator: `jtalk22` (`james@revasser.nyc`)
+## Install
+
+```bash
+npm install -g @jtalk22/slack-mcp
+npx -y @jtalk22/slack-mcp --setup
+```
+
+If this project saves you setup time, star the repo: https://github.com/jtalk22/slack-mcp-server
+
+Maintainer/operator: `jtalk22` (`james@revasser.nyc`)  
+Release notes: [v3.0.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.0.0-release-notes.md)
+
+## v3.0.0 at a Glance
+
+- Hosted HTTP `/mcp` now requires bearer auth by default (`SLACK_MCP_HTTP_AUTH_TOKEN`).
+- Hosted HTTP CORS now uses explicit allowlisting (`SLACK_MCP_HTTP_ALLOWED_ORIGINS`).
+- Local-first paths (`stdio`, `web`) stay compatible.
+- MCP tool names stay stable (no renames/removals).
+
+## 60-Second Hosted Migration
+
+```bash
+export SLACK_TOKEN=xoxc-...
+export SLACK_COOKIE=xoxd-...
+export SLACK_MCP_HTTP_AUTH_TOKEN=change-this
+export SLACK_MCP_HTTP_ALLOWED_ORIGINS=https://claude.ai
+node src/server-http.js
+```
+
+Request with:
+
+```bash
+Authorization: Bearer <SLACK_MCP_HTTP_AUTH_TOKEN>
+```
+
+Emergency local fallback only:
+
+```bash
+SLACK_MCP_HTTP_INSECURE=1 node src/server-http.js
+```
+
+For guided hosted rollout requirements, open: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
 
 ### Why This Exists
 
@@ -45,7 +71,7 @@ Screenshotting messages is not a workflow.
 
 This server bridges the gap. It creates a secure, local bridge between Claude and your Slack web session. It gives your MCP client the same access **you** already have in the browser—search history, summarize threads, and retrieve prior context—without fighting the platform.
 
-![Slack MCP Server Web UI](docs/images/demo-main.png)
+![Slack MCP Server Web UI](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-main.png)
 
 ---
 
@@ -53,11 +79,11 @@ This server bridges the gap. It creates a secure, local bridge between Claude an
 
 Instead of authenticating as a bot, this server leverages your existing Chrome session credentials (macOS) or manual token injection (Linux/Windows). It mirrors your user access exactly—if you can see it in Slack, Claude can see it too.
 
-![Session Mirroring Flow](docs/images/diagram-session-flow.svg)
+![Session Mirroring Flow](https://jtalk22.github.io/slack-mcp-server/docs/images/diagram-session-flow.svg)
 
 ### Why Not OAuth?
 
-![OAuth vs Session Mirroring](docs/images/diagram-oauth-comparison.svg)
+![OAuth vs Session Mirroring](https://jtalk22.github.io/slack-mcp-server/docs/images/diagram-oauth-comparison.svg)
 
 **Trade-off:** Session tokens expire every 1-2 weeks. Auto-refresh (macOS) or manual update keeps things running.
 
@@ -83,7 +109,7 @@ Instead of authenticating as a bot, this server leverages your existing Chrome s
 | Tool | Description |
 |------|-------------|
 | `slack_health_check` | Verify token validity and workspace info |
-| `slack_token_status` | **New:** Detailed token age, health, and cache stats |
+| `slack_token_status` | Detailed token age, health, and cache stats |
 | `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome |
 | `slack_list_conversations` | List DMs/channels (with lazy discovery cache) |
 | `slack_conversations_history` | Get messages from a channel or DM |
@@ -109,7 +135,7 @@ npx -y @jtalk22/slack-mcp --setup
 ```
 
 Expected:
-- `--version` prints `slack-mcp-server v2.0.x`
+- `--version` prints `slack-mcp-server v3.0.x`
 - `--doctor` returns one clear next action with exit code:
   - `0` ready
   - `1` missing credentials
@@ -117,7 +143,7 @@ Expected:
   - `3` connectivity/runtime issue
 - `--setup` launches the interactive wizard
 
-Command reference: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
+Command reference: [HN launch kit](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/HN-LAUNCH.md)
 
 ### Known Working Clients
 
@@ -127,7 +153,7 @@ Command reference: [docs/HN-LAUNCH.md](docs/HN-LAUNCH.md)
 - Hosted Node runtime (`http`)
 - Cloudflare Worker / Smithery transport
 
-Compatibility matrix: [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)
+Compatibility matrix: [compatibility matrix](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/COMPATIBILITY.md)
 
 ### Option A: npm (Recommended)
 
@@ -340,7 +366,7 @@ npm run web
 
 ```
 ════════════════════════════════════════════════════════════
-  Slack Web API Server v2.0.0
+  Slack Web API Server v3.0.0
 ════════════════════════════════════════════════════════════
 
   Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
@@ -353,21 +379,40 @@ Just click the link - no copy-paste needed. The key is saved to your browser and
 
 | DMs View | Channels View |
 |----------|---------------|
-| ![DMs](docs/images/demo-main.png) | ![Channels](docs/images/demo-channels.png) |
+| ![DMs](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-main.png) | ![Channels](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-channels.png) |
 
 </details>
 
 ---
 
+## Hosted HTTP Mode (Secure Defaults)
+
+Use this mode only when you need a remote MCP endpoint:
+
+```bash
+SLACK_TOKEN=xoxc-...
+SLACK_COOKIE=xoxd-...
+SLACK_MCP_HTTP_AUTH_TOKEN=change-this
+SLACK_MCP_HTTP_ALLOWED_ORIGINS=https://claude.ai
+node src/server-http.js
+```
+
+Behavior:
+- `/mcp` requires `Authorization: Bearer <SLACK_MCP_HTTP_AUTH_TOKEN>` by default.
+- Cross-origin browser calls are denied unless origin is listed in `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
+- For local testing only, you can opt out with `SLACK_MCP_HTTP_INSECURE=1`.
+
+---
+
 ## Operations Guides
 
-- [Docs Index](docs/INDEX.md) - One-click index for setup, API, troubleshooting, deployment, and support docs
-- [Deployment Modes](docs/DEPLOYMENT-MODES.md) - Choose the right operating model (`stdio`, `web`, hosted HTTP, Smithery/Worker)
-- [Use Case Recipes](docs/USE_CASE_RECIPES.md) - 12 copy/paste prompts mapped to current tool contracts
-- [Support Boundaries](docs/SUPPORT-BOUNDARIES.md) - Scope, response targets, and solo-maintainer capacity limits
-- [Release Health](docs/RELEASE-HEALTH.md) - Track setup reliability and support-load targets through this release cycle
+- [Docs Index](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/INDEX.md) - One-click index for setup, API, troubleshooting, deployment, and support docs
+- [Deployment Modes](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/DEPLOYMENT-MODES.md) - Choose the right operating model (`stdio`, `web`, hosted HTTP, Smithery/Worker)
+- [Use Case Recipes](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/USE_CASE_RECIPES.md) - 12 copy/paste prompts mapped to current tool contracts
+- [Support Boundaries](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SUPPORT-BOUNDARIES.md) - Scope, response targets, and solo-maintainer capacity limits
+- [Release Health](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/RELEASE-HEALTH.md) - Track setup reliability and support-load targets through this release cycle
 
-If you're evaluating team rollout, start with [Deployment Modes](docs/DEPLOYMENT-MODES.md) before exposing remote endpoints.
+If you're evaluating team rollout, start with [Deployment Modes](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/DEPLOYMENT-MODES.md) before exposing remote endpoints.
 
 ---
 
@@ -383,11 +428,13 @@ If you're evaluating team rollout, start with [Deployment Modes](docs/DEPLOYMENT
    npx -y @jtalk22/slack-mcp --setup
    ```
 3. Open an issue with full environment details:
-   - [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md)
-   - [Deployment Intake Template](.github/ISSUE_TEMPLATE/deployment-intake.md)
-4. Check scope and response targets:
-   - [Support Boundaries](docs/SUPPORT-BOUNDARIES.md)
-   - [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
+   - [Bug Report Template](https://github.com/jtalk22/slack-mcp-server/issues/new?template=bug_report.md)
+   - [Deployment Intake Template](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
+4. For guided hosted rollout support:
+   - [GitHub Discussions](https://github.com/jtalk22/slack-mcp-server/discussions)
+5. Check scope and response targets:
+   - [Support Boundaries](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SUPPORT-BOUNDARIES.md)
+   - [Troubleshooting Guide](https://github.com/jtalk22/slack-mcp-server/blob/main/docs/TROUBLESHOOTING.md)
 
 ---
 
@@ -473,13 +520,13 @@ slack-mcp-server/
 
 PRs welcome. Run `node --check` on modified files before submitting.
 
-If you find this project useful, consider starring the repo.
+If this project saves you setup time, consider starring the repository.
 
 ---
 
 ## License
 
-MIT - See [LICENSE](LICENSE)
+MIT - See LICENSE
 
 ---
 

@@ -1,69 +1,70 @@
-# HN Launch Kit (v2.0.0)
+# HN Launch Kit (v3.0.0)
 
-Use this file for Show HN posting and first-comment follow-up within the trust-and-infra fanout path.
+Use this for Show HN and follow-up comments.
 
 ## Title Options
 
-- `Show HN: Slack MCP Server v2.0.0 (deterministic Slack MCP diagnostics)`
-- `Show HN: Slack MCP Server v2.0.0 (session-based Slack access, stable contracts)`
-- `Show HN: Slack MCP Server v2.0.0 (local-first Slack context for Claude)`
+- `Show HN: Slack MCP Server v3.0.0 (secure-default hosted mode, local-first unchanged)`
+- `Show HN: Slack MCP Server v3.0.0 (session-based Slack access for MCP clients)`
+- `Show HN: Slack MCP Server v3.0.0 (hosted HTTP now auth-by-default)`
 
-## Launch Post Template
+## Main Post Draft
 
 ```md
-Released `@jtalk22/slack-mcp@2.0.0` today.
+Released `@jtalk22/slack-mcp@3.0.0`.
 
-This release focuses on install reliability and deterministic diagnostics:
-- read-only `--status` behavior enforced in install-path verification
-- deterministic `--doctor` exits (`0/1/2/3`)
-- structured MCP/web error payloads for triage consistency
-- token health handles missing timestamp as unknown age, not false critical
-- no MCP tool renames or removals
+This release keeps local session-mirroring intact (`stdio`, `web`) and hardens hosted HTTP defaults:
+- `/mcp` requires bearer auth by default
+- CORS requires explicit origin allowlisting
+- no MCP tool renames/removals
+- `--doctor` stays deterministic (`0/1/2/3`)
+- `--status` stays read-only
 
-Verify:
+Verify in 30 seconds:
 - `npx -y @jtalk22/slack-mcp@latest --version`
 - `npx -y @jtalk22/slack-mcp@latest --doctor`
 - `npx -y @jtalk22/slack-mcp@latest --status`
 
 Repo: https://github.com/jtalk22/slack-mcp-server
 npm: https://www.npmjs.com/package/@jtalk22/slack-mcp
+Release notes: https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.0.0-release-notes.md
 Maintainer/operator: `jtalk22` (`james@revasser.nyc`)
 ```
 
 ## First Comment Draft
 
 ```md
-Quick notes:
-- Default path is local-first (`stdio`) and remains fully supported.
-- `--status` is read-only by design in this release.
-- `--doctor` has deterministic exit codes for automation and triage.
-- If registry pages lag, metadata is propagating; npm and GitHub release are authoritative first.
+Additional operator notes:
+- Local users (`stdio`, `web`) do not need migration.
+- Hosted users need `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS` configured.
+- Emergency local fallback is available via `SLACK_MCP_HTTP_INSECURE=1`.
 
-If anything fails, include OS, Node version, runtime mode (`stdio|web|http|worker`), and exact output.
+If something fails, include:
+- OS + Node version
+- runtime mode (`stdio|web|http|worker`)
+- exact command + output
 ```
 
-## Pairing Sequence (Trust + Infra)
+## Reply Macros
 
-After the HN post goes live, pair with:
+### Why not Slack OAuth?
 
-1. GitHub Discussion announcement update
-2. GitHub Discussion support-intake thread refresh
-3. Registry/listing parity checks (MCP registry, Smithery, Glama)
-4. `awesome-mcp-servers` listing PR/update
+Session mirroring uses the access already present in the signed-in Slack web session, which is useful for operator workflows where a bot scope model is too limiting.
 
-## FAQ Macro
+### Is hosted required?
 
-### Why session-based instead of OAuth app scopes?
-Session mirroring provides the same access visible in the signed-in Slack web session.
+No. Local-first use is still the default and fully supported.
 
-### Is hosted deployment required?
-No. Local operator path is primary. Hosted paths are optional.
+### Did the tool API change?
 
-### Are tool contracts changed in v2.0.0?
-No. This release keeps existing MCP tool names.
+No MCP tool names were removed or renamed in `v3.0.0`.
 
-### What should I run first?
-Use:
+### Why a major version?
+
+Hosted HTTP defaults changed to auth-by-default behavior, which can change existing hosted deployments.
+
+### What should users run first?
+
 ```bash
 npx -y @jtalk22/slack-mcp@latest --version
 npx -y @jtalk22/slack-mcp@latest --doctor

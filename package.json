@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Session-based Slack access for Claude - DMs, channels, search, and threads. Local-first with your existing Slack session.",
   "type": "module",
   "main": "src/server.js",
@@ -28,7 +28,8 @@
     "cf:browser": "node scripts/cloudflare-browser-tool.js",
     "metrics:release-health": "node scripts/collect-release-health.js",
     "metrics:release-health:delta": "node scripts/build-release-health-delta.js",
-    "verify:version-parity": "node scripts/check-version-parity.js"
+    "verify:version-parity": "node scripts/check-version-parity.js",
+    "verify:release-dry-run": "node scripts/release-preflight.js"
   },
   "keywords": [
     "mcp",
@@ -88,9 +89,14 @@
     "lib/",
     "public/",
     "scripts/",
-    "docs/",
+    "docs/*.md",
+    "docs/assets/",
+    "docs/images/*.png",
+    "docs/images/*.svg",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "server.json",
+    "smithery.yaml"
   ],
   "devDependencies": {
     "playwright": "^1.57.0"

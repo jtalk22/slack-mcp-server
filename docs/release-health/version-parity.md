@@ -1,21 +1,21 @@
 # Version Parity Report
 
-- Generated: 2026-02-26T16:15:27.835Z
-- Local target version: 2.0.0
+- Generated: 2026-02-28T03:51:28.365Z
+- Local target version: 3.0.0
 
 ## Surface Matrix
 
 | Surface | Version | Status | Notes |
 |---|---|---|---|
-| package.json | 2.0.0 | ok |  |
-| server.json (root) | 2.0.0 | ok |  |
-| server.json (package entry) | 2.0.0 | ok |  |
-| npm dist-tag latest | 2.0.0 | ok |  |
-| MCP Registry latest | 2.0.0 | ok |  |
+| package.json | 3.0.0 | ok |  |
+| server.json (root) | 3.0.0 | ok |  |
+| server.json (package entry) | 3.0.0 | ok |  |
+| npm dist-tag latest | 2.0.0 | mismatch |  |
+| MCP Registry latest | 2.0.0 | mismatch |  |
 | Smithery endpoint | n/a | reachable | status: 401; version check is manual. |
 
 ## Interpretation
 
 - Local metadata parity: pass.
-- External parity: pass.
-- Propagation mode disabled: external mismatch is a release gate failure.
+- External parity mismatch: npm latest, MCP registry latest.
+- Propagation mode enabled: external mismatch accepted temporarily.

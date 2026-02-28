@@ -161,6 +161,33 @@ cat /tmp/slack-web-api.log
 cat /tmp/slack-web-api.error.log
 ```
 
+### Hosted HTTP `/mcp` Returns 503 or 401
+
+If you run `node src/server-http.js`, `/mcp` is protected by default.
+
+`503 http_auth_token_missing` means you did not set:
+
+```bash
+SLACK_MCP_HTTP_AUTH_TOKEN=change-this
+```
+
+`401 unauthorized` means your request is missing or using the wrong bearer token.
+
+Example request:
+
+```bash
+curl http://localhost:3000/mcp \
+  -H "Authorization: Bearer $SLACK_MCP_HTTP_AUTH_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0.0"}}}'
+```
+
+For local-only testing (not remote exposure), you can opt out:
+
+```bash
+SLACK_MCP_HTTP_INSECURE=1 node src/server-http.js
+```
+
 ---
 
 ## Claude Desktop Issues

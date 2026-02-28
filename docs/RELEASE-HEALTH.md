@@ -28,6 +28,15 @@ If external registries are still propagating immediately after publish:
 npm run verify:version-parity -- --allow-propagation
 ```
 
+## Prepublish dry run
+
+```bash
+npm run verify:release-dry-run
+```
+
+Output:
+- `docs/release-health/prepublish-dry-run.md`
+
 24-hour loop artifacts:
 - `docs/release-health/24h-start.md`
 - `docs/release-health/24h-end.md`

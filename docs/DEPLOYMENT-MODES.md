@@ -15,7 +15,7 @@ Use this guide to choose the right operating mode before rollout.
 |------|---------------|----------|---------------|----------|-------|
 | Local MCP (`stdio`) | `npx -y @jtalk22/slack-mcp` | Individual daily usage in Claude | `SLACK_TOKEN` + `SLACK_COOKIE` via token file/env | Local process | Lowest ops burden |
 | Local Web UI (`web`) | `npx -y @jtalk22/slack-mcp web` | Browser-first usage, manual search/send | Same as above + generated API key | `localhost` by default | Useful when MCP is not available |
-| Hosted MCP (`http`) | `node src/server-http.js` | Controlled hosted integration | Env-injected Slack token/cookie | Remote endpoint | Requires runtime hardening and monitoring |
+| Hosted MCP (`http`) | `node src/server-http.js` | Controlled hosted integration | Env-injected Slack token/cookie + HTTP bearer token | Remote endpoint | `/mcp` is bearer-protected by default; configure CORS allowlist |
 | Smithery/Worker | `wrangler deploy` + Smithery publish flow | Registry distribution for hosted consumers | Query/env token handoff | Remote endpoint | Keep worker version parity with npm release |
 
 ## Team Deployment Guidance
@@ -44,5 +44,12 @@ If you are deploying for more than one operator:
 ### Hosted (`http` or Worker)
 
 1. Verify `version` parity across `package.json`, server metadata, and health responses.
-2. Confirm `slack_get_thread`, `slack_search_messages`, and `slack_users_info` behavior.
-3. Confirm token handling mode (ephemeral vs env persistence) is documented.
+2. Verify HTTP auth behavior:
+   - missing `SLACK_MCP_HTTP_AUTH_TOKEN` returns `503`
+   - bad bearer token returns `401`
+   - valid bearer token succeeds
+3. Verify CORS behavior:
+   - denied by default
+   - allowed origins work when listed in `SLACK_MCP_HTTP_ALLOWED_ORIGINS`
+4. Confirm `slack_get_thread`, `slack_search_messages`, and `slack_users_info` behavior.
+5. Confirm token handling mode (ephemeral vs env persistence) is documented.

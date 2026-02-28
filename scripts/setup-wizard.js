@@ -23,7 +23,7 @@ import {
 } from "../lib/token-store.js";
 
 const IS_MACOS = platform() === 'darwin';
-const VERSION = "2.0.0";
+const VERSION = "3.0.0";
 const MIN_NODE_MAJOR = 20;
 const AUTH_TEST_URL = process.env.SLACK_MCP_AUTH_TEST_URL || "https://slack.com/api/auth.test";
 

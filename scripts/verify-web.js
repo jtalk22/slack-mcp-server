@@ -6,7 +6,8 @@
  * 1. Server starts and prints Magic Link
  * 2. /demo.html contains "STATIC PREVIEW" banner
  * 3. /?key=... serves the dashboard (index.html)
- * 4. Server shuts down cleanly
+ * 4. /demo-video.html media assets are reachable
+ * 5. Server shuts down cleanly
  */
 
 import { spawn } from "child_process";
@@ -142,6 +143,45 @@ async function testApiWithKey(apiKey) {
   return true;
 }
 
+async function testDemoVideoAssets() {
+  const demoVideoUrl = `http://localhost:${PORT}/demo-video.html`;
+  const demoVideoRes = await fetch(demoVideoUrl);
+
+  if (!demoVideoRes.ok) {
+    throw new Error(`Failed to fetch demo-video.html: ${demoVideoRes.status}`);
+  }
+
+  const demoVideoHtml = await demoVideoRes.text();
+  const requiredAssetCandidates = [
+    [
+      "/docs/images/demo-poster.png",
+      "https://jtalk22.github.io/slack-mcp-server/docs/images/demo-poster.png",
+    ],
+    [
+      "/docs/videos/demo-claude.webm",
+      "https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude.webm",
+    ],
+  ];
+
+  for (const candidates of requiredAssetCandidates) {
+    const matched = candidates.find((candidate) => demoVideoHtml.includes(candidate));
+    if (!matched) {
+      throw new Error(`demo-video.html missing expected media reference: ${candidates.join(" OR ")}`);
+    }
+
+    const assetUrl = matched.startsWith("http")
+      ? matched
+      : `http://localhost:${PORT}${matched}`;
+
+    const assetRes = await fetch(assetUrl);
+    if (!assetRes.ok) {
+      throw new Error(`Demo media not reachable: ${assetUrl} (status ${assetRes.status})`);
+    }
+  }
+
+  return true;
+}
+
 async function main() {
   console.log("╔════════════════════════════════════════╗");
   console.log("║  Web UI Verification Tests             ║");
@@ -190,6 +230,14 @@ async function main() {
 
     await testApiWithKey(apiKey);
     log("PASS: API correctly rejects bad keys");
+    results.push(true);
+
+    // Test 5: Demo video/media paths
+    console.log("\n[TEST 5] Demo Video Media Reachability");
+    console.log("─".repeat(40));
+
+    await testDemoVideoAssets();
+    log("PASS: demo-video media assets are reachable");
     results.push(true);
 
   } catch (err) {

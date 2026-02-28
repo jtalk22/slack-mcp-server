@@ -1,6 +1,6 @@
 # Launch Copy (v2.0.0)
 
-Use this file for trust-and-infra channel distribution with consistent technical claims.
+Use this file for technical channel distribution with consistent operational claims.
 
 ## Short Release Summary (150 words)
 

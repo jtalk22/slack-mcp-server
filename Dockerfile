@@ -1,14 +1,11 @@
 # Slack MCP Server
-# Docker image for running slack-mcp-server in containers
+# Deterministic image build from repository source for release-tag parity.
 #
 # Usage:
 #   docker build -t slack-mcp-server .
-#   docker run -e SLACK_TOKEN=xoxc-... -e SLACK_COOKIE=xoxd-... slack-mcp-server
-#
-# Or mount a token file:
-#   docker run -v ~/.slack-mcp-tokens.json:/root/.slack-mcp-tokens.json slack-mcp-server
+#   docker run -e SLACK_TOKEN=xoxc-... -e SLACK_COOKIE=xoxd-... slack-mcp-server --version
 
-FROM node:20-alpine
+FROM node:22-alpine
 
 # OCI Image Labels for registry discoverability
 LABEL maintainer="jtalk22"
@@ -23,13 +20,25 @@ LABEL org.opencontainers.image.authors="jtalk22"
 
 WORKDIR /app
 
-# Install from npm (production only)
-RUN npm install -g @jtalk22/slack-mcp
+# Install production dependencies for the exact checked-out source
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Copy runtime sources
+COPY src ./src
+COPY lib ./lib
+COPY scripts ./scripts
+COPY public ./public
+COPY docs ./docs
+COPY server.json ./server.json
+COPY smithery.yaml ./smithery.yaml
+COPY README.md ./README.md
+COPY LICENSE ./LICENSE
 
 # Environment variables for Slack auth
-# Get these from your browser - see README for instructions
 ENV SLACK_TOKEN=""
 ENV SLACK_COOKIE=""
+ENV NODE_ENV="production"
 
 # MCP servers communicate via stdio
-ENTRYPOINT ["slack-mcp-server"]
+ENTRYPOINT ["node", "src/cli.js"]

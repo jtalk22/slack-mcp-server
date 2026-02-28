@@ -150,9 +150,11 @@ async function main() {
     externalMismatches.length === 0
       ? "- External parity: pass."
       : `- External parity mismatch: ${externalMismatches.map((f) => f.name).join(", ")}.`,
-    allowPropagation && externalMismatches.length > 0
-      ? "- Propagation mode enabled: external mismatch accepted temporarily."
-      : "- Propagation mode disabled: external mismatch is a release gate failure.",
+    externalMismatches.length === 0
+      ? "- Propagation mode: not needed (external parity is already aligned)."
+      : (allowPropagation
+          ? "- Propagation mode enabled: external mismatch accepted temporarily."
+          : "- Propagation mode disabled: external mismatch is a release gate failure."),
   ];
 
   const outPath = join(repoRoot, outputArg);

@@ -24,7 +24,7 @@ What actually happened.
 - OS: [e.g., macOS 14.0, Windows 11, Ubuntu 22.04]
 - Node.js version: [e.g., 20.10.0]
 - Claude client: [Claude Desktop / Claude Code / claude.ai]
-- slack-mcp-server version: [e.g., 1.2.1]
+- slack-mcp-server version: [e.g., 3.0.0]
 - Deployment mode: [stdio / web / http / worker-smithery]
 - Team size impacted: [1 / 2-5 / 6-20 / 20+]
 - Urgency: [low / medium / high]

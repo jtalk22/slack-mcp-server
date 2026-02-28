@@ -1,12 +1,12 @@
-# Launch Ops Runbook (v2.0.0 Post-Launch Polish)
+# Launch Ops Runbook (v3.0.0)
 
-This runbook defines launch-day monitoring and distribution for the trust-and-infra fanout path (no X/Reddit dependency).
+This runbook defines launch-day monitoring and distribution for technical/operator channels (no X/Reddit dependency).
 
 ## Same-Day Fanout Order (9 Channels)
 
-1. GitHub release page refresh (`v2.0.0` copy + install-proof block)
-2. npm parity confirm (`@jtalk22/slack-mcp@2.0.0`)
-3. MCP registry parity confirm (`2.0.0`)
+1. GitHub release page refresh (`v3.0.0` copy + install-proof block)
+2. npm parity confirm (`@jtalk22/slack-mcp@3.0.0`)
+3. MCP registry parity confirm (`3.0.0`)
 4. Smithery listing metadata/parity update (or timestamped propagation note)
 5. `awesome-mcp-servers` listing PR refresh
 6. Glama metadata sync and canonical link verification
@@ -24,6 +24,7 @@ Track:
 - npm/MCP parity state
 - listing propagation status (Smithery/Glama)
 - inbound issue and discussion severity
+- hosted migration questions (`SLACK_MCP_HTTP_AUTH_TOKEN`, CORS allowlist)
 
 ## Triage Rules
 
@@ -55,7 +56,7 @@ Non-blocking request:
 - patch docs for top recurring setup questions
 
 72h:
-- ship `v2.0.1` only if launch defects are confirmed
+- ship `v3.0.1` only if launch defects are confirmed
 
 ## Evidence Log
 

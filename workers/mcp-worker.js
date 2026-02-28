@@ -57,6 +57,12 @@ const TOOLS = [
     annotations: { title: "Health Check", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
   {
+    name: "slack_refresh_tokens",
+    description: "Not supported in hosted worker mode; provided for tool contract compatibility",
+    inputSchema: { type: "object", properties: {} },
+    annotations: { title: "Refresh Tokens", readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+  },
+  {
     name: "slack_list_conversations",
     description: "List all DMs and channels with user names resolved",
     inputSchema: {
@@ -75,12 +81,12 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
-        channel: { type: "string", description: "Channel or DM ID (e.g., D063M4403MW)" },
+        channel_id: { type: "string", description: "Channel or DM ID (e.g., D063M4403MW)" },
         limit: { type: "number", description: "Messages to fetch (max 100, default 50)" },
         oldest: { type: "string", description: "Unix timestamp - get messages after this time" },
         latest: { type: "string", description: "Unix timestamp - get messages before this time" }
       },
-      required: ["channel"]
+      required: ["channel_id"]
     },
     annotations: { title: "Conversation History", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
@@ -90,13 +96,13 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
-        channel: { type: "string", description: "Channel or DM ID" },
+        channel_id: { type: "string", description: "Channel or DM ID" },
         oldest: { type: "string", description: "Unix timestamp start" },
         latest: { type: "string", description: "Unix timestamp end" },
         max_messages: { type: "number", description: "Maximum messages (default 2000, max 10000)" },
         include_threads: { type: "boolean", description: "Fetch thread replies (default true)" }
       },
-      required: ["channel"]
+      required: ["channel_id"]
     },
     annotations: { title: "Full Conversation Export", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
@@ -119,11 +125,11 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
-        channel: { type: "string", description: "Channel or DM ID to send to" },
+        channel_id: { type: "string", description: "Channel or DM ID to send to" },
         text: { type: "string", description: "Message text (supports Slack markdown)" },
         thread_ts: { type: "string", description: "Thread timestamp to reply to (optional)" }
       },
-      required: ["channel", "text"]
+      required: ["channel_id", "text"]
     },
     annotations: { title: "Send Message", readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true }
   },
@@ -133,10 +139,10 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
-        channel: { type: "string", description: "Channel or DM ID" },
+        channel_id: { type: "string", description: "Channel or DM ID" },
         thread_ts: { type: "string", description: "Thread parent message timestamp" }
       },
-      required: ["channel", "thread_ts"]
+      required: ["channel_id", "thread_ts"]
     },
     annotations: { title: "Get Thread", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
@@ -146,9 +152,9 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
-        user: { type: "string", description: "Slack user ID" }
+        user_id: { type: "string", description: "Slack user ID" }
       },
-      required: ["user"]
+      required: ["user_id"]
     },
     annotations: { title: "User Info", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   },
@@ -213,7 +219,18 @@ async function handleToolCall(name, args, env, queryParams) {
   const cookie = queryParams?.slackCookie || env.SLACK_COOKIE;
 
   if (!token || !cookie) {
-    return { content: [{ type: "text", text: "Missing SLACK_TOKEN or SLACK_COOKIE" }], isError: true };
+    return {
+      content: [{
+        type: "text",
+        text: JSON.stringify({
+          status: "error",
+          code: "missing_credentials",
+          message: "Missing SLACK_TOKEN or SLACK_COOKIE for hosted worker execution.",
+          next_action: "Configure slackToken/slackCookie connector values or worker secrets."
+        }, null, 2)
+      }],
+      isError: true
+    };
   }
 
   try {
@@ -225,6 +242,20 @@ async function handleToolCall(name, args, env, queryParams) {
         const result = await slackApi('auth.test', {}, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
+      case "slack_refresh_tokens": {
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              status: "error",
+              code: "unsupported_in_hosted_worker",
+              message: "Token refresh from Chrome is only available in local runtime mode.",
+              next_action: "Provide valid SLACK_TOKEN and SLACK_COOKIE via connector configuration."
+            }, null, 2)
+          }],
+          isError: true
+        };
+      }
       case "slack_list_conversations": {
         const result = await slackApi('conversations.list', {
           types: args.types || 'public_channel,private_channel,mpim,im',
@@ -233,20 +264,22 @@ async function handleToolCall(name, args, env, queryParams) {
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       case "slack_conversations_history": {
+        const channelId = args.channel_id || args.channel;
         const result = await slackApi('conversations.history', {
-          channel: args.channel,
+          channel: channelId,
           limit: args.limit || 50
         }, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       case "slack_get_full_conversation": {
         // Fetch conversation history with pagination
+        const channelId = args.channel_id || args.channel;
         const messages = [];
         let cursor;
         const maxMessages = args.max_messages || 2000;
         do {
           const result = await slackApi('conversations.history', {
-            channel: args.channel,
+            channel: channelId,
             limit: Math.min(100, maxMessages - messages.length),
             oldest: args.oldest,
             latest: args.latest,
@@ -265,22 +298,25 @@ async function handleToolCall(name, args, env, queryParams) {
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       case "slack_send_message": {
+        const channelId = args.channel_id || args.channel;
         const result = await slackApi('chat.postMessage', {
-          channel: args.channel,
+          channel: channelId,
           text: args.text,
           thread_ts: args.thread_ts
         }, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       case "slack_get_thread": {
+        const channelId = args.channel_id || args.channel;
         const result = await slackApi('conversations.replies', {
-          channel: args.channel,
+          channel: channelId,
           ts: args.thread_ts
         }, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       case "slack_users_info": {
-        const result = await slackApi('users.info', { user: args.user }, token, cookie);
+        const userId = args.user_id || args.user;
+        const result = await slackApi('users.info', { user: userId }, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       case "slack_list_users": {
@@ -288,10 +324,32 @@ async function handleToolCall(name, args, env, queryParams) {
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       default:
-        return { content: [{ type: "text", text: `Unknown tool: ${name}` }], isError: true };
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              status: "error",
+              code: "unknown_tool",
+              message: `Unknown tool: ${name}`,
+              next_action: "Call tools/list to inspect available tool names."
+            }, null, 2)
+          }],
+          isError: true
+        };
     }
   } catch (error) {
-    return { content: [{ type: "text", text: `Error: ${error.message}` }], isError: true };
+    return {
+      content: [{
+        type: "text",
+        text: JSON.stringify({
+          status: "error",
+          code: "tool_call_failed",
+          message: String(error?.message || error),
+          next_action: "Retry with validated tool arguments."
+        }, null, 2)
+      }],
+      isError: true
+    };
   }
 }
 
@@ -324,7 +382,7 @@ async function handleMcpRequest(request, env, queryParams) {
         responses.push(jsonRpcResponse(id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {}, prompts: {}, resources: {} },
-          serverInfo: { name: "slack-mcp-server", version: "2.0.0" }
+          serverInfo: { name: "slack-mcp-server", version: "3.0.0" }
         }));
         break;
 
@@ -403,7 +461,7 @@ export default {
     // Health check
     if (url.pathname === '/health') {
       return Response.json(
-        { status: 'ok', server: 'slack-mcp-server', version: '2.0.0' },
+        { status: 'ok', server: 'slack-mcp-server', version: '3.0.0' },
         { headers: corsHeaders }
       );
     }
@@ -413,7 +471,7 @@ export default {
       return Response.json({
         serverInfo: {
           name: "Slack MCP",
-          version: "2.0.0"
+          version: "3.0.0"
         },
         authentication: {
           required: false
