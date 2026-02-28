@@ -6,7 +6,7 @@
  * 1. Server starts and prints Magic Link
  * 2. /demo.html contains "STATIC PREVIEW" banner
  * 3. /?key=... serves the dashboard (index.html)
- * 4. /demo-video.html media assets are reachable
+ * 4. /demo-video.html and /public/demo-video.html media assets are reachable
  * 5. Server shuts down cleanly
  */
 
@@ -144,14 +144,7 @@ async function testApiWithKey(apiKey) {
 }
 
 async function testDemoVideoAssets() {
-  const demoVideoUrl = `http://localhost:${PORT}/demo-video.html`;
-  const demoVideoRes = await fetch(demoVideoUrl);
-
-  if (!demoVideoRes.ok) {
-    throw new Error(`Failed to fetch demo-video.html: ${demoVideoRes.status}`);
-  }
-
-  const demoVideoHtml = await demoVideoRes.text();
+  const demoVideoPaths = ["/demo-video.html", "/public/demo-video.html"];
   const requiredAssetCandidates = [
     [
       "/docs/images/demo-poster.png",
@@ -163,19 +156,30 @@ async function testDemoVideoAssets() {
     ],
   ];
 
-  for (const candidates of requiredAssetCandidates) {
-    const matched = candidates.find((candidate) => demoVideoHtml.includes(candidate));
-    if (!matched) {
-      throw new Error(`demo-video.html missing expected media reference: ${candidates.join(" OR ")}`);
+  for (const pagePath of demoVideoPaths) {
+    const demoVideoUrl = `http://localhost:${PORT}${pagePath}`;
+    const demoVideoRes = await fetch(demoVideoUrl);
+
+    if (!demoVideoRes.ok) {
+      throw new Error(`Failed to fetch ${pagePath}: ${demoVideoRes.status}`);
     }
 
-    const assetUrl = matched.startsWith("http")
-      ? matched
-      : `http://localhost:${PORT}${matched}`;
+    const demoVideoHtml = await demoVideoRes.text();
 
-    const assetRes = await fetch(assetUrl);
-    if (!assetRes.ok) {
-      throw new Error(`Demo media not reachable: ${assetUrl} (status ${assetRes.status})`);
+    for (const candidates of requiredAssetCandidates) {
+      const matched = candidates.find((candidate) => demoVideoHtml.includes(candidate));
+      if (!matched) {
+        throw new Error(`${pagePath} missing expected media reference: ${candidates.join(" OR ")}`);
+      }
+
+      const assetUrl = matched.startsWith("http")
+        ? matched
+        : `http://localhost:${PORT}${matched}`;
+
+      const assetRes = await fetch(assetUrl);
+      if (!assetRes.ok) {
+        throw new Error(`Demo media not reachable from ${pagePath}: ${assetUrl} (status ${assetRes.status})`);
+      }
     }
   }
 

@@ -2,10 +2,6 @@
 
 Local-first Slack MCP server using your existing Slack session. Hosted HTTP is secure-default; local `stdio`/`web` workflows stay unchanged.
 
-[Live demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp)
-
-![Slack MCP v3 quick proof](https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png)
-
 ## 30-Second Verify
 
 ```bash
@@ -14,10 +10,16 @@ npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
-If this project saves you setup time, star the repo: https://github.com/jtalk22/slack-mcp-server · Support ongoing maintenance: [GitHub Sponsors](https://github.com/sponsors/jtalk22), [Ko-fi](https://ko-fi.com/jtalk22), [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
+[Live demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [npm package](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+
+[![20-second mobile demo preview](https://jtalk22.github.io/slack-mcp-server/docs/images/demo-claude-mobile-poster.png)](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4)
+
+Hosted migration note: `v3.0.0` keeps local `stdio`/`web` flows unchanged; hosted `/mcp` requires `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
 
 Maintainer/operator: `jtalk22` (`james@revasser.nyc`)  
 Release: [`v3.0.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.0.0) · Notes: [v3.0.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.0.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
+
+If this project saves you setup time, star the repo: https://github.com/jtalk22/slack-mcp-server · Support ongoing maintenance: [GitHub Sponsors](https://github.com/sponsors/jtalk22), [Ko-fi](https://ko-fi.com/jtalk22), [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
 
 ## v3.0.0 at a Glance
 

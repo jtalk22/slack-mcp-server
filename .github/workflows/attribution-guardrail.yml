@@ -22,10 +22,35 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
+          fallback_range() {
+            local head_sha="$1"
+            if git rev-parse --verify "${head_sha}^" >/dev/null 2>&1; then
+              printf '%s^..%s\n' "$head_sha" "$head_sha"
+            else
+              printf '%s\n' "$head_sha"
+            fi
+          }
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             RANGE="${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}"
           elif [[ "${{ github.event_name }}" == "push" ]]; then
-            RANGE="${{ github.event.before }}..${{ github.sha }}"
+            BEFORE="${{ github.event.before }}"
+            HEAD_SHA="${{ github.sha }}"
+            CANDIDATE="${BEFORE}..${HEAD_SHA}"
+
+            if [[ -z "$BEFORE" || "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
+              RANGE="$(fallback_range "$HEAD_SHA")"
+              echo "Push event.before is empty/zero; using fallback range: $RANGE"
+            elif ! git rev-parse --verify "${BEFORE}^{commit}" >/dev/null 2>&1; then
+              RANGE="$(fallback_range "$HEAD_SHA")"
+              echo "Push event.before commit not found; using fallback range: $RANGE"
+            elif git rev-list --count "$CANDIDATE" >/dev/null 2>&1; then
+              RANGE="$CANDIDATE"
+            else
+              RANGE="$(fallback_range "$HEAD_SHA")"
+              echo "Push candidate range invalid; using fallback range: $RANGE"
+            fi
           else
             RANGE="origin/main..HEAD"
           fi

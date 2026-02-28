@@ -37,71 +37,63 @@ const html = `<!doctype html>
   <title>Slack MCP Server v3.0.0 Social Preview</title>
   <style>
     :root {
-      --bg-a: #0f1f4d;
-      --bg-b: #0b173b;
-      --panel: rgba(17, 34, 78, 0.84);
-      --muted: #9fb0d9;
-      --text: #f4f7ff;
-      --teal: #4ed0c8;
-      --line: rgba(122, 152, 224, 0.35);
+      --bg-a: #101b43;
+      --bg-b: #0a1231;
+      --line: rgba(145, 170, 235, 0.26);
+      --text: #eef4ff;
+      --muted: #adbedf;
     }
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      font-family: "Space Grotesk", "IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
     }
     body {
       width: ${WIDTH}px;
       height: ${HEIGHT}px;
+      overflow: hidden;
       color: var(--text);
       background:
-        radial-gradient(1000px 500px at 10% 20%, #1b3279 0%, transparent 62%),
-        radial-gradient(900px 420px at 100% 100%, #143c78 0%, transparent 60%),
+        radial-gradient(840px 380px at 12% 12%, #254793 0%, transparent 58%),
+        radial-gradient(920px 420px at 100% 100%, #103a78 0%, transparent 62%),
         linear-gradient(130deg, var(--bg-a), var(--bg-b));
-      overflow: hidden;
+      padding: 28px 30px;
     }
-    .wrap {
+    .card {
       width: 100%;
       height: 100%;
-      display: grid;
-      grid-template-columns: 57% 43%;
-      gap: 20px;
-      padding: 36px 38px 28px;
-    }
-    .visual {
-      border: 1px solid var(--line);
       border-radius: 16px;
-      background: linear-gradient(160deg, rgba(17, 31, 71, 0.7), rgba(11, 22, 54, 0.8));
-      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.32);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
+      border: 1px solid var(--line);
+      background: linear-gradient(165deg, rgba(16, 31, 74, 0.78), rgba(9, 19, 49, 0.92));
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.3);
+      padding: 14px 16px 16px;
     }
-    .visual-head {
+    .top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      font-size: 15px;
-      color: #d8e2ff;
-      letter-spacing: 0.01em;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #eaf1ff;
+      margin-bottom: 10px;
     }
     .pill {
-      font-size: 13px;
-      background: rgba(78, 208, 200, 0.14);
-      border: 1px solid rgba(78, 208, 200, 0.45);
-      color: #8ff1eb;
+      font-size: 17px;
+      background: rgba(88, 122, 193, 0.24);
+      border: 1px solid rgba(137, 166, 227, 0.46);
+      color: #dce9ff;
       border-radius: 999px;
-      padding: 6px 10px;
+      padding: 4px 10px 5px;
       font-weight: 600;
     }
     .image-frame {
-      border-radius: 12px;
+      border-radius: 13px;
+      border: 1px solid rgba(147, 173, 240, 0.3);
       overflow: hidden;
-      border: 1px solid rgba(140, 165, 230, 0.32);
-      flex: 1;
-      min-height: 0;
+      background: #0a1438;
+      height: 448px;
     }
     .image-frame img {
       display: block;
@@ -109,87 +101,65 @@ const html = `<!doctype html>
       height: 100%;
       object-fit: cover;
       object-position: top center;
-      filter: saturate(1.05);
+      filter: saturate(1.03);
     }
-    .copy {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 24px 24px 18px;
-      background: var(--panel);
-      display: grid;
-      grid-template-rows: auto auto auto 1fr auto;
-      gap: 14px;
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
-    }
-    .title {
-      font-size: 36px;
-      line-height: 1.08;
-      letter-spacing: -0.02em;
-      font-weight: 760;
-    }
-    .subtitle {
-      font-size: 21px;
-      line-height: 1.35;
-      color: #d6e0fb;
-      font-weight: 540;
-    }
-    .verify-head {
-      color: var(--teal);
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-    .verify {
-      border-radius: 12px;
-      border: 1px solid rgba(135, 162, 228, 0.28);
-      background: rgba(7, 14, 37, 0.74);
-      padding: 13px 15px;
-      font-family: "SF Mono", "SFMono-Regular", ui-monospace, "Cascadia Mono", "Menlo", Consolas, monospace;
-      font-size: 13.5px;
-      line-height: 1.5;
-      color: #cde0ff;
-      white-space: pre;
-    }
-    .footer {
-      font-size: 14px;
-      color: var(--muted);
-      border-top: 1px solid rgba(130, 156, 219, 0.25);
+    .bottom {
+      border-top: 1px solid rgba(130, 156, 220, 0.22);
       padding-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 12px;
+      margin-top: 10px;
     }
-    .strong {
-      color: #eaf0ff;
-      font-weight: 650;
+    .headline {
+      font-size: 30px;
+      font-weight: 630;
+      line-height: 1.08;
+      letter-spacing: -0.018em;
+      max-width: 900px;
+    }
+    .subhead {
+      margin-top: 6px;
+      font-size: 20px;
+      color: var(--muted);
+      letter-spacing: -0.012em;
+      font-weight: 480;
+    }
+    .attribution {
+      text-align: right;
+      font-size: 18px;
+      color: #d6e2ff;
+      font-weight: 560;
+      line-height: 1.2;
+    }
+    .attribution .mail {
+      font-size: 15px;
+      color: #a9bce9;
+      font-weight: 480;
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section class="visual">
-      <div class="visual-head">
-        <span>Slack MCP Server</span>
-        <span class="pill">v3.0.0</span>
-      </div>
-      <div class="image-frame">
-        <img src="${sourceDataUri}" alt="Slack MCP demo">
-      </div>
+  <main class="card">
+    <header class="top">
+      <span>Slack MCP Server</span>
+      <span class="pill">v3.0.0</span>
+    </header>
+    <section class="image-frame">
+      <img src="${sourceDataUri}" alt="Slack MCP live demo frame">
     </section>
-    <section class="copy">
-      <h1 class="title">Secure-default hosted HTTP.<br>Local-first workflows preserved.</h1>
-      <p class="subtitle">Session-based Slack access for Claude and MCP clients with a verifiable operator path.</p>
-      <p class="verify-head">30-second verify</p>
-      <pre class="verify">npx -y @jtalk22/slack-mcp@latest --version
-npx -y @jtalk22/slack-mcp@latest --doctor
-npx -y @jtalk22/slack-mcp@latest --status</pre>
-      <div class="footer">
-        <span class="strong">jtalk22</span>
-        <span>james@revasser.nyc</span>
+    <footer class="bottom">
+      <div>
+        <div class="headline">Session-based Slack MCP server for Claude and MCP clients.</div>
+        <div class="subhead">Local-first stdio/web, secure-default hosted HTTP in v3.</div>
       </div>
-    </section>
-  </div>
+      <div class="attribution">
+        <div>jtalk22</div>
+        <div class="mail">james@revasser.nyc</div>
+      </div>
+    </footer>
+  </main>
 </body>
 </html>`;
 

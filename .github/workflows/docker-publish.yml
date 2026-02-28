@@ -39,11 +39,12 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=true
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-            type=raw,value=latest
 
       - name: Smoke test image version (single-arch)
         shell: bash
@@ -52,10 +53,11 @@ jobs:
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             TAG_VERSION="${GITHUB_REF_NAME#v}"
           else
-            TAG_VERSION="$(node -p \"require('./package.json').version\")"
+            TAG_VERSION="$(node -p 'require("./package.json").version')"
           fi
-          docker build -t slack-mcp-smoke:${TAG_VERSION} .
-          OUT="$(docker run --rm slack-mcp-smoke:${TAG_VERSION} --version | tail -n 1)"
+          IMAGE="slack-mcp-smoke:${TAG_VERSION}"
+          docker build -t "$IMAGE" .
+          OUT="$(docker run --rm "$IMAGE" --version | tail -n 1)"
           echo "$OUT"
           echo "$OUT" | grep -E "slack-mcp-server v${TAG_VERSION}$"
 

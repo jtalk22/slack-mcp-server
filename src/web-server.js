@@ -66,6 +66,8 @@ const API_KEY = getOrCreateAPIKey();
 // Middleware
 app.use(express.json());
 app.use(express.static(join(__dirname, "../public")));
+// Compatibility alias so local web mode supports GitHub Pages-style /public/* URLs.
+app.use("/public", express.static(join(__dirname, "../public")));
 // Keep /docs URL compatibility for demo media and documentation links.
 app.use("/docs", express.static(join(__dirname, "../docs")));
 
