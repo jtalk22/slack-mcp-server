@@ -17,14 +17,14 @@ npx -y @jtalk22/slack-mcp@latest --status
 
 Motion proof: [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4) · [Live demo walkthrough](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Share card](https://jtalk22.github.io/slack-mcp-server/public/share.html)
 
-Hosted migration note: `v3.0.0` keeps local `stdio`/`web` flows unchanged; hosted `/mcp` requires `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
+Hosted migration note: `v3.1.0` keeps local `stdio`/`web` flows unchanged; hosted `/mcp` requires `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
 
 Maintainer/operator: `jtalk22` (`james@revasser.nyc`)  
 Release: [`v3.1.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.1.0) · Notes: [v3.1.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.1.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
 
 If this saved you setup time, consider starring the repo. Maintenance support: [GitHub Sponsors](https://github.com/sponsors/jtalk22) · [Ko-fi](https://ko-fi.com/jtalk22) · [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
 
-## v3.0.0 at a Glance
+## v3.1.0 at a Glance
 
 - Hosted HTTP `/mcp` now requires bearer auth by default (`SLACK_MCP_HTTP_AUTH_TOKEN`).
 - Hosted HTTP CORS now uses explicit allowlisting (`SLACK_MCP_HTTP_ALLOWED_ORIGINS`).
@@ -388,7 +388,7 @@ npm run web
 
 ```
 ════════════════════════════════════════════════════════════
-  Slack Web API Server v3.0.0
+  Slack Web API Server v3.1.0
 ════════════════════════════════════════════════════════════
 
   Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
