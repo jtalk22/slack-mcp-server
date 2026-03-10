@@ -3,7 +3,7 @@
   "name": "io.github.jtalk22/slack-mcp-server",
   "title": "Slack MCP Server",
   "description": "Session-based Slack MCP for Claude and MCP clients: local-first workflows, secure-default HTTP.",
-  "websiteUrl": "https://jtalk22.github.io/slack-mcp-server/",
+  "websiteUrl": "https://mcp.revasserlabs.com",
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/jtalk22/slack-mcp-server/main/docs/assets/icon-512.png",
@@ -17,7 +17,7 @@
     "url": "https://github.com/jtalk22/slack-mcp-server",
     "source": "github"
   },
-  "version": "3.2.0",
+  "version": "3.2.1",
   "remotes": [
     {
       "type": "streamable-http",
@@ -28,7 +28,7 @@
     {
       "registryType": "npm",
       "identifier": "@jtalk22/slack-mcp",
-      "version": "3.2.0",
+      "version": "3.2.1",
       "transport": {
         "type": "stdio"
       },
