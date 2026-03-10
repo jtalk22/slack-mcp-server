@@ -10,6 +10,11 @@ Start here for setup, compatibility checks, operations, and support.
 - [Web API Reference](WEB-API.md)
 - [Troubleshooting](TROUBLESHOOTING.md)
 
+## Cloud
+
+- [Cloud Landing Page](https://jtalk22.github.io/slack-mcp-server/cloud.html) — Hosted MCP endpoint, $19/mo Solo, $49/mo Team
+- [Cloud Privacy Policy](https://jtalk22.github.io/slack-mcp-server/privacy.html)
+
 ## Operations
 
 - [Deployment Modes](DEPLOYMENT-MODES.md)
@@ -24,6 +29,7 @@ Start here for setup, compatibility checks, operations, and support.
 - [Launch Ops Runbook](LAUNCH-OPS.md)
 - [Capability Matrix](LAUNCH-MATRIX.md)
 - [Install Proof Block](INSTALL-PROOF.md)
+- [Release Notes (v3.1.0)](../.github/v3.1.0-release-notes.md)
 - [Release Notes (v3.0.0)](../.github/v3.0.0-release-notes.md)
 - [Communication Style](COMMUNICATION-STYLE.md)
 - [Changelog](../CHANGELOG.md)

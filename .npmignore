@@ -1,5 +1,0 @@
-# Exclude heavy media and operational artifacts from npm package payload.
-docs/videos/*
-docs/images/*.gif
-docs/release-health/*
-docs/LAUNCH-COPY-v2.0.0.md

@@ -381,7 +381,7 @@
       try {
         const data = await api('/conversations?types=' + types);
         list.innerHTML = data.conversations.map(c =>
-          '<li onclick="loadHistory(\'' + c.id + '\', \'' + c.name.replace(/'/g, "\\'") + '\', this)"><div>' + c.name + '</div><div class="type">' + c.type + '</div></li>'
+          '<li onclick="loadHistory(\'' + c.id + '\', \'' + escapeHtml(c.name).replace(/'/g, "&#39;") + '\', this)"><div>' + escapeHtml(c.name) + '</div><div class="type">' + escapeHtml(c.type) + '</div></li>'
         ).join('');
       } catch (e) { list.innerHTML = '<li class="error-msg">' + e.message + '</li>'; }
     }
@@ -401,7 +401,7 @@
       const container = document.getElementById('messages');
       if (!messages || messages.length === 0) { container.innerHTML = '<div class="loading">No messages</div>'; return; }
       container.innerHTML = messages.map(m =>
-        '<div class="message"><div class="header"><span class="user">' + (m.user || m.user_id || 'Unknown') + '</span><span class="time">' + new Date(m.datetime).toLocaleString() + '</span></div><div class="text">' + escapeHtml(m.text || '') + '</div></div>'
+        '<div class="message"><div class="header"><span class="user">' + escapeHtml(m.user || m.user_id || 'Unknown') + '</span><span class="time">' + new Date(m.datetime).toLocaleString() + '</span></div><div class="text">' + escapeHtml(m.text || '') + '</div></div>'
       ).join('');
       container.scrollTop = container.scrollHeight;
     }
@@ -427,7 +427,7 @@
         const data = await api('/search?q=' + encodeURIComponent(query));
         if (data.matches && data.matches.length > 0) {
           container.innerHTML = data.matches.map(m =>
-            '<div class="message"><div class="header"><span class="user">' + (m.user || 'Unknown') + ' in #' + m.channel + '</span><span class="time">' + new Date(m.datetime).toLocaleString() + '</span></div><div class="text">' + escapeHtml(m.text || '') + '</div></div>'
+            '<div class="message"><div class="header"><span class="user">' + escapeHtml(m.user || 'Unknown') + ' in #' + escapeHtml(m.channel || '') + '</span><span class="time">' + new Date(m.datetime).toLocaleString() + '</span></div><div class="text">' + escapeHtml(m.text || '') + '</div></div>'
           ).join('');
         } else { container.innerHTML = '<div class="loading">No results found</div>'; }
       } catch (e) { container.innerHTML = '<div class="error-msg">' + e.message + '</div>'; }

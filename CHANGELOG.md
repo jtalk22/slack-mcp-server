@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-03-10
+
+### Added
+- **Cloud product surface** — `cloud.html` landing page with Solo ($19/mo) and Team ($49/mo) Stripe checkout
+- **Post-checkout key delivery** — `success.html` polls for provisioned access tokens, shows config with copy-to-clipboard
+- **Homepage Cloud CTA** — `index.html` links to Cloud page
+- **README Cloud section** — pricing table and Cloud link
+- **Revenue Protection** — plan-based tool gating, D1 rate limit persistence, timing-safe admin auth
+- **OAuth 2.1 + PKCE S256** — MCP Registry remote endpoint at `mcp.revasserlabs.com/oauth/mcp`
+- **MCP Registry v3.1.0 published** with `remotes` section
+
+### Security
+- XSS fix: conversation names, user names, and channel names now escaped in web dashboard
+- Shell injection fix: Keychain functions use `execFileSync` with array args instead of string interpolation
+- Undefined param fix: `null`/`undefined` values no longer sent as literal `"undefined"` to Slack API
+- JSON parse guard: non-JSON Slack responses now throw descriptive error instead of crashing
+- `formatTimestamp` guards against NaN/undefined input
+
+### Compatibility
+- No MCP tool renames or removals. All 11 local tools unchanged.
+- Cloud adds 2 AI compound tools (team plan only): `slack_channel_summary`, `slack_extract_action_items`
+
+## [3.0.0] - 2026-02-28
+
+### Changed
+- **Hosted `/mcp` now requires auth** — `Authorization: Bearer` header mandatory for HTTP transport
+- **CORS allowlisting** — hosted endpoint requires `SLACK_MCP_HTTP_ALLOWED_ORIGINS`
+- Structured auth/CORS error responses for missing token config, invalid bearer, and denied origin
+- Publish payload reduced by curating packaged files
+
+### Added
+- Web verification checks demo media reachability
+- Worker compatibility for tool-facing contracts (`channel_id|channel`, `user_id|user`)
+
+### Breaking (Hosted Only)
+- Existing hosted deployments must set `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS` before upgrade
+- Local `stdio` and `web` paths unchanged — no migration required
+
+### Compatibility
+- No MCP tool renames or removals
+
 ## [2.0.0] - 2026-02-26
 
 ### Fixed
@@ -229,4 +270,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.0...v1.0.5
 [1.0.0]: https://github.com/jtalk22/slack-mcp-server/releases/tag/v1.0.0
+[3.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.4...v2.0.0

@@ -59,7 +59,11 @@
     "automation",
     "productivity"
   ],
-  "author": "jtalk22",
+  "author": {
+    "name": "James Lambert",
+    "email": "james@revasser.nyc",
+    "url": "https://github.com/jtalk22"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -79,12 +83,15 @@
   "files": [
     "src/",
     "lib/",
-    "public/",
-    "scripts/",
-    "docs/*.md",
-    "docs/assets/",
-    "docs/images/*.png",
-    "docs/images/*.svg",
+    "public/index.html",
+    "public/share.html",
+    "scripts/setup-wizard.js",
+    "scripts/token-cli.js",
+    "docs/SETUP.md",
+    "docs/API.md",
+    "docs/TROUBLESHOOTING.md",
+    "docs/assets/icon.svg",
+    "docs/assets/icon-512.png",
     "README.md",
     "LICENSE",
     "server.json",
