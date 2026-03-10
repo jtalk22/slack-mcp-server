@@ -392,7 +392,7 @@ async function runDoctor() {
 async function showHelp() {
   print(`${colors.bold}slack-mcp-server v${VERSION}${colors.reset}`);
   print();
-  print("Full Slack access for Claude via MCP. Session mirroring bypasses OAuth.");
+  print("Full Slack access for Claude via MCP.");
   print();
   print(`${colors.bold}Usage:${colors.reset}`);
   print("  npx -y @jtalk22/slack-mcp             Start MCP server (stdio)");

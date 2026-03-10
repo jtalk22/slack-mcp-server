@@ -157,5 +157,8 @@ docs/release-health/social-proof-*/
 # Claude Code local files
 .claude/
 
+# MCP Registry tokens
+.mcpregistry_*
+
 # Wrangler cache
 workers/.wrangler/

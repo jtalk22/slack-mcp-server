@@ -21,9 +21,9 @@ This project uses Slack browser session tokens (`xoxc-` and `xoxd-`) which provi
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.2.x   | :white_check_mark: |
-| 1.1.x   | :white_check_mark: |
-| 1.0.x   | :x:                |
+| 3.2.x   | :white_check_mark: |
+| 3.1.x   | :white_check_mark: |
+| < 3.0   | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -65,7 +65,7 @@ We follow responsible disclosure:
 
 ## Known Limitations
 
-- This project uses unofficial Slack APIs
+- This project accesses Slack's Web API using browser session credentials
 - Tokens may be invalidated by Slack at any time
-- Not officially supported by Slack
-- Use at your own risk
+- Token access scope matches the user's existing Slack access
+- Not affiliated with or endorsed by Slack Technologies
