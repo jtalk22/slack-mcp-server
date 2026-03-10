@@ -14,8 +14,8 @@ Use this guide to choose the right operating mode before rollout.
 
 | Mode | Start Command | Best For | Auth Material | Exposure | Notes |
 |------|---------------|----------|---------------|----------|-------|
-| **Cloud** | N/A — managed | Teams, non-technical users, zero-ops | API key from checkout | `mcp.revasserlabs.com` | $19/mo Solo, $49/mo Team. 13 tools incl. AI compound tools. No Docker, no token mgmt. |
-| Local MCP (`stdio`) | `npx -y @jtalk22/slack-mcp` | Individual daily usage in Claude | `SLACK_TOKEN` + `SLACK_COOKIE` via token file/env | Local process | Lowest ops burden. Free. 11 tools. |
+| **Cloud** | N/A — managed | Teams, non-technical users, zero-ops | API key from checkout | `mcp.revasserlabs.com` | $19/mo Solo, $49/mo Team. 16 standard tools + AI compound tools on Team. No Docker, no token mgmt. |
+| Local MCP (`stdio`) | `npx -y @jtalk22/slack-mcp` | Individual daily usage in Claude | `SLACK_TOKEN` + `SLACK_COOKIE` via token file/env | Local process | Lowest ops burden. Free. 16 tools. |
 | Local Web UI (`web`) | `npx -y @jtalk22/slack-mcp web` | Browser-first usage, manual search/send | Same as above + generated API key | `localhost` by default | Useful when MCP is not available |
 | Hosted MCP (`http`) | `node src/server-http.js` | Controlled hosted integration | Env-injected Slack token/cookie + HTTP bearer token | Remote endpoint | `/mcp` is bearer-protected by default; configure CORS allowlist |
 | Smithery/Worker | `wrangler deploy` + Smithery publish flow | Registry distribution for hosted consumers | Query/env token handoff | Remote endpoint | Keep worker version parity with npm release |
@@ -27,7 +27,7 @@ No local setup required:
 1. Purchase a plan at [cloud.html](https://jtalk22.github.io/slack-mcp-server/cloud.html)
 2. Receive API key and config snippets on the success page
 3. Paste config into Claude Desktop or Claude Code
-4. All 13 tools available immediately (including AI compound tools on Team plan)
+4. All 16 standard tools available immediately (plus AI compound tools on Team plan)
 
 Cloud handles token refresh, encryption (AES-256-GCM), and rate limiting automatically.
 

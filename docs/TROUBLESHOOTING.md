@@ -42,11 +42,11 @@ If `--version` fails here, the issue is install/runtime path, not Slack credenti
 
 ### Cloud Tools Not Available
 
-**Symptom:** Only seeing 10-11 tools instead of 13.
+**Symptom:** Only seeing fewer tools than expected.
 
-**Cause:** AI compound tools (`slack_channel_summary`, `slack_extract_action_items`) are Team plan only ($49/mo).
+**Cause:** AI compound tools (`slack_channel_summary`, `slack_extract_action_items`, `slack_find_decisions`) are Team plan only ($49/mo).
 
-**Solution:** Upgrade to Team plan, or use the standard 11 tools on Solo plan.
+**Solution:** Upgrade to Team plan for AI compound tools, or use the standard 16 tools available on all plans.
 
 ### Cloud Endpoint Health Check
 

@@ -6,7 +6,7 @@ If you want to skip local setup entirely, use **Slack MCP Cloud**:
 
 1. Go to [cloud.html](https://jtalk22.github.io/slack-mcp-server/cloud.html) and purchase a plan ($19/mo Solo, $49/mo Team)
 2. After checkout, you'll receive an API key and ready-to-paste config for Claude Desktop / Claude Code
-3. No Node.js, no Docker, no token management — one URL, 13 tools
+3. No Node.js, no Docker, no token management — one URL, 16 tools
 
 **Claude Desktop config (Cloud):**
 ```json
