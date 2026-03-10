@@ -664,9 +664,10 @@
             <div class="next-steps">
               <h3>What's next</h3>
               <ol>
-                <li><strong>Copy the config above</strong> and paste it into your MCP client settings file</li>
-                <li><strong>Restart Claude Desktop</strong> or run the Claude Code command in your terminal</li>
-                <li><strong>Try it:</strong> Ask Claude to "summarize my #general channel" to test AI tools</li>
+                <li><strong>Copy your API key above</strong> &mdash; store it securely, it's shown once</li>
+                <li><strong>Connect your Slack workspace</strong> &mdash; <a id="setupLink" href="setup.html" style="color:var(--accent);font-weight:600">Set up Slack credentials &rarr;</a></li>
+                <li><strong>Add to Claude</strong> &mdash; paste the config above into your MCP client settings</li>
+                <li><strong>Try it:</strong> Ask Claude to "list my Slack channels" to verify</li>
               </ol>
             </div>
           </div>
@@ -759,8 +760,14 @@
       var desktopConfig = JSON.stringify(data.config.claude_desktop, null, 2);
       document.getElementById("configDesktop").textContent = desktopConfig;
 
-      var codeCmd = 'claude mcp add slack-mcp-cloud \\\n  --transport sse \\\n  --url "' + data.endpoint + '" \\\n  --header "Authorization: Bearer ' + data.access_token + '"';
+      var codeCmd = 'claude mcp add slack-mcp-cloud \\\n  --transport http \\\n  --url "' + data.endpoint + '" \\\n  --header "Authorization: Bearer ' + data.access_token + '"';
       document.getElementById("configCode").textContent = codeCmd;
+
+      // Populate setup link with bearer token (fragment, not query — keeps token out of server logs)
+      var setupLink = document.getElementById("setupLink");
+      if (setupLink) {
+        setupLink.href = "setup.html#token=" + encodeURIComponent(data.access_token);
+      }
     }
 
     function showError(msg) {
