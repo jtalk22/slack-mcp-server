@@ -69,7 +69,7 @@
     "type": "git",
     "url": "git+https://github.com/jtalk22/slack-mcp-server.git"
   },
-  "homepage": "https://jtalk22.github.io/slack-mcp-server/",
+  "homepage": "https://mcp.revasserlabs.com",
   "bugs": {
     "url": "https://github.com/jtalk22/slack-mcp-server/issues"
   },
