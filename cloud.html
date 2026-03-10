@@ -661,7 +661,7 @@
     @media (max-width: 860px) {
       .hero-content { grid-template-columns: 1fr; gap: 36px; }
       .hero { padding-top: 48px; }
-      .problem-grid { grid-template-columns: 1fr; }
+      .problem-grid { grid-template-columns: 1fr !important; }
       .pricing-grid { grid-template-columns: 1fr; max-width: 380px; }
     }
 
@@ -685,7 +685,7 @@
         <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a>
         <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp">npm</a>
         <a href="#pricing">Pricing</a>
-        <a href="#pricing" class="nav-cta">Get Started</a>
+        <a href="#pricing" class="nav-cta">Get API Key</a>
       </div>
     </nav>
 
@@ -699,7 +699,7 @@
             Claude Code, or any MCP client. No OAuth, no admin approval, no Docker.
           </p>
           <div class="hero-ctas">
-            <a href="#pricing" class="btn btn-primary">Get Started</a>
+            <a href="#pricing" class="btn btn-primary">Get Your API Key</a>
             <a href="https://github.com/jtalk22/slack-mcp-server" class="btn btn-outline">Self-Host Free</a>
           </div>
         </div>
@@ -722,6 +722,17 @@
           <div class="hero-time">Working in <strong>under 60 seconds</strong>. Not 45 minutes.</div>
         </div>
       </div>
+    </section>
+
+    <!-- 1b. Who this is for -->
+    <section class="section fade-up" style="padding-top:48px">
+      <p style="color:var(--text-2);font-family:var(--font-heading);font-size:0.82rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Who this is for</p>
+      <p style="font-size:1.05rem;color:var(--text-2);line-height:1.7;max-width:680px">
+        Solo developers who use Claude with Slack and don't want to maintain infrastructure.
+        Engineers whose IT team won't approve the official Slack MCP app.
+        Freelancers working across multiple client workspaces.
+        Anyone who has screenshotted a Slack message to paste into Claude.
+      </p>
     </section>
 
     <!-- 2. Problem: What's broken -->
@@ -929,7 +940,7 @@
             <li>1 workspace</li>
             <li>5,000 requests/mo</li>
           </ul>
-          <a href="https://buy.stripe.com/9B6aEXd7k4qc8Jt3jXgw000" class="price-btn price-btn-fill">Get Started</a>
+          <a href="https://buy.stripe.com/9B6aEXd7k4qc8Jt3jXgw000" class="price-btn price-btn-fill">Start Solo — $19/mo</a>
         </div>
 
         <div class="price-card">
@@ -943,36 +954,93 @@
             <li>25,000 requests/mo</li>
             <li>Priority support</li>
           </ul>
-          <a href="https://buy.stripe.com/cNi5kD0ky6ykaRBdYBgw001" class="price-btn price-btn-gold">Get Started</a>
+          <a href="https://buy.stripe.com/cNi5kD0ky6ykaRBdYBgw001" class="price-btn price-btn-gold">Start Team — $49/mo</a>
         </div>
       </div>
+      <p class="enterprise-line fade-up" style="margin-bottom:6px">
+        Launch pricing — locks in for as long as you're subscribed.
+      </p>
       <p class="enterprise-line fade-up">
         Need dedicated infrastructure, SLA, or compliance? <a href="mailto:james@revasser.nyc?subject=Slack%20MCP%20Enterprise">Contact us</a>.
       </p>
+    </section>
+
+    <!-- 5b. How it works -->
+    <section class="section fade-up">
+      <div class="section-header">
+        <h2>How it works</h2>
+      </div>
+      <div class="problem-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="problem-card" style="text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:8px">1</div>
+          <h3 style="font-size:0.9rem;margin-bottom:6px">Choose a plan</h3>
+          <p style="font-size:0.82rem">Complete checkout in 30 seconds via Stripe.</p>
+        </div>
+        <div class="problem-card" style="text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:8px">2</div>
+          <h3 style="font-size:0.9rem;margin-bottom:6px">Get your API key</h3>
+          <p style="font-size:0.82rem">Receive your endpoint URL and bearer token instantly.</p>
+        </div>
+        <div class="problem-card" style="text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:8px">3</div>
+          <h3 style="font-size:0.9rem;margin-bottom:6px">Paste one config block</h3>
+          <p style="font-size:0.82rem">Add to Claude Desktop, Claude Code, or any MCP client.</p>
+        </div>
+        <div class="problem-card" style="text-align:center">
+          <div style="font-size:1.8rem;margin-bottom:8px">4</div>
+          <h3 style="font-size:0.9rem;margin-bottom:6px">Ask Claude about Slack</h3>
+          <p style="font-size:0.82rem">"What happened in #engineering today?"</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5c. Security -->
+    <section class="section fade-up">
+      <div class="section-header">
+        <h2>Security</h2>
+      </div>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <h3 style="font-size:0.95rem;margin-bottom:6px">Encrypted at rest</h3>
+          <p>Tokens encrypted with AES-256-GCM on Cloudflare's edge network. Your credentials never touch a traditional server disk.</p>
+        </div>
+        <div class="problem-card">
+          <h3 style="font-size:0.95rem;margin-bottom:6px">Messages never stored</h3>
+          <p>Slack messages pass through for processing. They are never stored, logged, or used for training. AI tools analyze in-flight only.</p>
+        </div>
+        <div class="problem-card">
+          <h3 style="font-size:0.95rem;margin-bottom:6px">Cloudflare Workers</h3>
+          <p>Runs on SOC 2 Type II infrastructure with 300+ global PoPs. No server, no disk, no persistent memory.</p>
+        </div>
+        <div class="problem-card">
+          <h3 style="font-size:0.95rem;margin-bottom:6px">Fully auditable</h3>
+          <p>All source code is MIT-licensed and <a href="https://github.com/jtalk22/slack-mcp-server" style="color:var(--teal)">open on GitHub</a>. Read every line before you buy.</p>
+        </div>
+      </div>
     </section>
 
     <!-- 6. Trust -->
     <section class="section fade-up">
       <div class="trust-row">
         <div class="trust-item">
-          <div class="trust-num">1,600+</div>
-          <div class="trust-label">npm downloads/mo</div>
+          <div class="trust-num">v3.1</div>
+          <div class="trust-label">current release</div>
         </div>
         <div class="trust-item">
-          <div class="trust-num">13</div>
-          <div class="trust-label">MCP tools</div>
+          <div class="trust-num">25+</div>
+          <div class="trust-label">releases shipped</div>
         </div>
         <div class="trust-item">
           <div class="trust-num">AES-256</div>
           <div class="trust-label">token encryption</div>
         </div>
         <div class="trust-item">
-          <div class="trust-num">v3.1</div>
-          <div class="trust-label">current release</div>
+          <div class="trust-num">300+</div>
+          <div class="trust-label">Cloudflare edge PoPs</div>
         </div>
       </div>
       <p class="trust-note">
-        Open source core. MIT licensed. <a href="https://github.com/jtalk22/slack-mcp-server">Source on GitHub</a>.
+        Open source core. MIT licensed. Powered by Cloudflare Workers. <a href="https://github.com/jtalk22/slack-mcp-server">Source on GitHub</a>.
       </p>
     </section>
 
@@ -1002,6 +1070,14 @@
           <div class="faq-q">Which MCP clients are supported?</div>
           <div class="faq-a">Claude Desktop, Claude Code, and any client that supports the MCP protocol over HTTP/SSE. The self-hosted version also supports stdio transport.</div>
         </div>
+        <div class="faq-item fade-up">
+          <div class="faq-q">How is this different from other open-source Slack MCP servers?</div>
+          <div class="faq-a">Most open-source Slack MCP servers require you to self-host, manage your own tokens, and restart when tokens expire. This Cloud service eliminates all of that: one API key, auto-refreshing tokens, encrypted storage, and three AI compound tools that no self-hosted server offers.</div>
+        </div>
+        <div class="faq-item fade-up">
+          <div class="faq-q">What happens if I exceed my request limit?</div>
+          <div class="faq-a">Requests are rate-limited per plan (5,000/mo Solo, 25,000/mo Team). If you approach your limit, upgrade your plan or contact us for a custom quota. Overage requests return a clear rate-limit response — nothing breaks silently.</div>
+        </div>
       </div>
     </section>
 
@@ -1010,8 +1086,8 @@
       <h2>One config block. Full Slack access.</h2>
       <p>Start with the free self-hosted server or get a managed Cloud endpoint in 60 seconds.</p>
       <div class="hero-ctas" style="justify-content:center">
-        <a href="#pricing" class="btn btn-primary">View Plans</a>
-        <a href="https://github.com/jtalk22/slack-mcp-server" class="btn btn-outline">Self-Host Free</a>
+        <a href="#pricing" class="btn btn-primary">Get Your API Key</a>
+        <a href="https://github.com/jtalk22/slack-mcp-server" class="btn btn-outline">Read the Docs</a>
       </div>
     </div>
 
