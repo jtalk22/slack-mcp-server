@@ -125,7 +125,9 @@ Instead of authenticating as a bot, this server leverages your existing Chrome s
 - **Full Export** - Conversations with threads and resolved usernames
 - **Search** - Query across your entire workspace
 - **Send Messages** - DMs or channels, with thread support
-- **User Directory** - List and search 500+ users with pagination
+- **Reactions** - Add or remove emoji reactions on any message
+- **Unreads** - Priority-sorted unread inbox across all conversations
+- **User Directory** - List, search, and look up 500+ users with pagination
 
 ### Stability
 - **Auto Token Refresh** - Extracts fresh tokens from Chrome automatically *(macOS only)*
@@ -150,6 +152,9 @@ Instead of authenticating as a bot, this server leverages your existing Chrome s
 | `slack_list_users` | List workspace users (paginated, 500+ supported) |
 | `slack_add_reaction` | Add an emoji reaction to a message |
 | `slack_remove_reaction` | Remove an emoji reaction from a message |
+| `slack_conversations_mark` | Mark a conversation as read up to a timestamp |
+| `slack_conversations_unreads` | Get channels/DMs with unread messages, priority-sorted |
+| `slack_users_search` | Search workspace users by name, display name, or email |
 
 ---
 

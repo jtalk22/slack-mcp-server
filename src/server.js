@@ -43,6 +43,9 @@ import {
   handleListUsers,
   handleAddReaction,
   handleRemoveReaction,
+  handleConversationsMark,
+  handleConversationsUnreads,
+  handleUsersSearch,
 } from "../lib/handlers.js";
 
 // Background refresh interval (4 hours)
@@ -262,6 +265,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "slack_remove_reaction":
         return await handleRemoveReaction(args);
+
+      case "slack_conversations_mark":
+        return await handleConversationsMark(args);
+
+      case "slack_conversations_unreads":
+        return await handleConversationsUnreads(args);
+
+      case "slack_users_search":
+        return await handleUsersSearch(args);
 
       default:
         return {
