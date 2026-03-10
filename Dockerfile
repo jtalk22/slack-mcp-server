@@ -35,9 +35,7 @@ COPY smithery.yaml ./smithery.yaml
 COPY README.md ./README.md
 COPY LICENSE ./LICENSE
 
-# Environment variables for Slack auth
-ENV SLACK_TOKEN=""
-ENV SLACK_COOKIE=""
+# Runtime env (credentials passed via docker run -e)
 ENV NODE_ENV="production"
 
 # MCP servers communicate via stdio
