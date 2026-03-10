@@ -40,7 +40,26 @@ Skip all setup. One URL, 13 tools, encrypted token storage, managed on Cloudflar
 | Solo | $19/mo | 10 standard tools, encrypted storage, 5K requests/mo |
 | Team | $49/mo | 13 tools (incl. compound intelligence), 3 workspaces, 25K requests/mo |
 
-[Get started](https://jtalk22.github.io/slack-mcp-server/cloud.html) — no Docker, no tokens, no admin approval.
+[Get started](https://jtalk22.github.io/slack-mcp-server/cloud.html) — no Docker, no tokens, no admin approval. [Privacy Policy](https://jtalk22.github.io/slack-mcp-server/privacy.html).
+
+### Cloud Usage Examples
+
+Once configured, ask Claude naturally:
+
+1. **Catch up on a channel** — *"Summarize what happened in #engineering this week"*
+   Uses `slack_list_conversations` → `slack_conversations_history` → Claude synthesis.
+
+2. **Find a decision** — *"What did the team decide about the API migration?"*
+   Uses `slack_search_messages` with query `"API migration"`, then `slack_get_thread` to pull full context.
+
+3. **Export a conversation** — *"Export my full DM history with Sarah including threads"*
+   Uses `slack_list_conversations` to resolve Sarah's DM ID → `slack_get_full_conversation` with `include_threads: true`.
+
+4. **Send a standup update** — *"Post my standup in #daily-standup: shipped auth refactor, reviewing PR #42 today"*
+   Uses `slack_send_message` to the target channel.
+
+5. **AI-powered action items** *(Team plan)* — *"What action items came out of #product-sync today?"*
+   Uses `slack_extract_action_items` to identify owners, deadlines, and commitments.
 
 ## 60-Second Hosted Migration
 

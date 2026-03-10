@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy — Slack MCP Cloud</title>
+  <meta name="description" content="Privacy policy for Slack MCP Cloud hosted service by Revasser Labs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-heading: "Instrument Sans", "Avenir Next", sans-serif;
+      --font-body: "Literata", Georgia, serif;
+      --font-mono: "JetBrains Mono", "SF Mono", monospace;
+      --bg: #0a0f1a;
+      --bg-card: rgba(16, 24, 48, 0.7);
+      --border: rgba(100, 130, 200, 0.12);
+      --text: #e8edf8;
+      --text-2: #94a3c4;
+      --teal: #43c6b9;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100vh;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      color: var(--teal);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      letter-spacing: 0.02em;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+
+    .effective-date {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      color: var(--text-2);
+      margin-bottom: 2.5rem;
+    }
+
+    h2 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--teal);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--text-2);
+      font-size: 0.95rem;
+    }
+
+    ul, ol {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      color: var(--text-2);
+      font-size: 0.95rem;
+    }
+
+    li { margin-bottom: 0.5rem; }
+
+    strong { color: var(--text); font-weight: 500; }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: rgba(67, 198, 185, 0.08);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: var(--teal);
+    }
+
+    a { color: var(--teal); }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .summary-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .summary-box p {
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .summary-box p:last-child { margin-bottom: 0; }
+
+    .footer-note {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      color: var(--text-2);
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="cloud.html" class="back-link">&larr; Back to Slack MCP Cloud</a>
+
+    <h1>Privacy Policy</h1>
+    <p class="effective-date">Effective: March 10, 2026 &middot; Last updated: March 10, 2026</p>
+
+    <div class="summary-box">
+      <p><strong>Summary:</strong> Slack MCP Cloud proxies your Slack API calls through a hosted MCP server. We store only what's needed to authenticate your requests. We never read, log, or retain your Slack messages, files, or workspace data.</p>
+    </div>
+
+    <h2>1. Who We Are</h2>
+    <p>Slack MCP Cloud is operated by <strong>Revasser Labs</strong> ("we", "us"). Contact: <a href="mailto:james@revasser.nyc">james@revasser.nyc</a>.</p>
+
+    <h2>2. What We Collect</h2>
+    <ul>
+      <li><strong>Account credentials:</strong> Your Slack session tokens (<code>xoxc-</code> and <code>xoxd-</code>) submitted during setup. These are encrypted at rest using AES-256-GCM when stored in persistent mode, or held in ephemeral memory only.</li>
+      <li><strong>API key:</strong> Your bearer token (<code>stmh_</code> prefix) used to authenticate MCP requests.</li>
+      <li><strong>Billing data:</strong> Stripe handles all payment processing. We receive your Stripe customer ID, plan type, and subscription status. We never see or store credit card numbers.</li>
+      <li><strong>Usage metrics:</strong> Request counts per billing period (month), stored for rate limiting and billing. No message content, channel names, or user data is included.</li>
+    </ul>
+
+    <h2>3. What We Do NOT Collect</h2>
+    <ul>
+      <li>Slack message content, files, or attachments</li>
+      <li>Channel names, user profiles, or workspace metadata</li>
+      <li>Search queries or search results</li>
+      <li>IP addresses or device fingerprints</li>
+      <li>Cookies or tracking identifiers</li>
+      <li>Analytics or telemetry beyond request counts</li>
+    </ul>
+
+    <h2>4. How Slack Data Flows</h2>
+    <p>When you invoke an MCP tool (e.g., <code>slack_list_conversations</code>), the hosted worker:</p>
+    <ol>
+      <li>Authenticates your bearer token against our tenant database</li>
+      <li>Retrieves your encrypted Slack credentials</li>
+      <li>Proxies the request to the Slack API on your behalf</li>
+      <li>Returns the Slack API response directly to your MCP client</li>
+    </ol>
+    <p>At no point is Slack API response data logged, stored, cached, or inspected by our servers. Data flows through the worker in a single request-response cycle and is not retained.</p>
+
+    <h2>5. Token Storage Modes</h2>
+    <ul>
+      <li><strong>Ephemeral mode:</strong> Slack credentials are held in worker memory only. They are lost on worker restart or cold start. No database write occurs.</li>
+      <li><strong>Persistent mode:</strong> Slack credentials are encrypted with AES-256-GCM using a key stored in Cloudflare environment secrets, then written to a Cloudflare D1 database. Requires explicit user consent (<code>consent_persistent_storage: true</code>).</li>
+    </ul>
+
+    <h2>6. Data Retention</h2>
+    <ul>
+      <li><strong>Slack credentials:</strong> Stored until you disconnect them (via API) or delete your account. Ephemeral credentials are lost on worker restart.</li>
+      <li><strong>Usage records:</strong> Retained for the current billing period plus one prior month for dispute resolution.</li>
+      <li><strong>Billing data:</strong> Retained by Stripe per their <a href="https://stripe.com/privacy" target="_blank">privacy policy</a>.</li>
+    </ul>
+
+    <h2>7. Data Sharing</h2>
+    <p>We do not sell, rent, or share your data with third parties except:</p>
+    <ul>
+      <li><strong>Stripe:</strong> Payment processing only.</li>
+      <li><strong>Cloudflare:</strong> Infrastructure provider (Workers, D1, AI). Subject to Cloudflare's <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">privacy policy</a>.</li>
+      <li><strong>Slack:</strong> Your credentials are used to authenticate API requests to Slack on your behalf.</li>
+      <li><strong>Law enforcement:</strong> Only if required by valid legal process.</li>
+    </ul>
+
+    <h2>8. AI-Augmented Tools</h2>
+    <p>Three tools (<code>slack_channel_summary</code>, <code>slack_extract_action_items</code>, <code>slack_find_decisions</code>) use Cloudflare Workers AI to process Slack messages. This processing happens within Cloudflare's infrastructure during the request and is not retained. Cloudflare's Workers AI does not train on customer data.</p>
+
+    <h2>9. Security</h2>
+    <ul>
+      <li>All traffic over HTTPS/TLS</li>
+      <li>Slack tokens encrypted at rest (AES-256-GCM)</li>
+      <li>Bearer tokens are cryptographically random, scoped per tenant</li>
+      <li>No plaintext credentials in logs or responses</li>
+      <li>Worker runs on Cloudflare's global edge network with DDoS protection</li>
+    </ul>
+
+    <h2>10. Your Rights</h2>
+    <p>You can at any time:</p>
+    <ul>
+      <li><strong>Disconnect credentials:</strong> Remove your Slack tokens via the setup page or API</li>
+      <li><strong>Delete your account:</strong> Contact us to permanently delete all stored data</li>
+      <li><strong>Export your data:</strong> Request a copy of all data we hold about you</li>
+      <li><strong>Revoke access:</strong> Rotate your Slack session tokens to immediately invalidate stored credentials</li>
+    </ul>
+
+    <h2>11. Children's Privacy</h2>
+    <p>Slack MCP Cloud is not directed at individuals under 18. We do not knowingly collect data from minors.</p>
+
+    <h2>12. Changes</h2>
+    <p>We may update this policy. Material changes will be posted here with an updated effective date. Continued use after changes constitutes acceptance.</p>
+
+    <h2>13. Contact</h2>
+    <p>Questions about this privacy policy: <a href="mailto:james@revasser.nyc">james@revasser.nyc</a></p>
+
+    <hr class="divider">
+
+    <p class="footer-note">Slack MCP Cloud is not affiliated with or endorsed by Slack Technologies, Inc. or Salesforce, Inc. "Slack" is a registered trademark of Slack Technologies, Inc.</p>
+  </div>
+</body>
+</html>
