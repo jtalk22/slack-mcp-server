@@ -3,6 +3,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@cloudflare/puppeteer": "^0.0.14"
+    "@cloudflare/puppeteer": "^1.0.6"
   }
 }
