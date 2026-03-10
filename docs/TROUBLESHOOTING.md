@@ -29,6 +29,34 @@ If `--version` fails here, the issue is install/runtime path, not Slack credenti
 
 ---
 
+## Cloud Issues
+
+### API Key Not Working
+
+**Symptom:** `401 Unauthorized` or `403 Forbidden` when using Cloud endpoint.
+
+**Solutions:**
+1. Verify your API key starts with `stmh_` (team) or `smsh_` (solo)
+2. Check the key hasn't been revoked — contact james@revasser.nyc for key issues
+3. Ensure you're using the correct endpoint: `https://mcp.revasserlabs.com/mcp`
+
+### Cloud Tools Not Available
+
+**Symptom:** Only seeing 10-11 tools instead of 13.
+
+**Cause:** AI compound tools (`slack_channel_summary`, `slack_extract_action_items`) are Team plan only ($49/mo).
+
+**Solution:** Upgrade to Team plan, or use the standard 11 tools on Solo plan.
+
+### Cloud Endpoint Health Check
+
+```bash
+curl -s https://mcp.revasserlabs.com/health | jq .
+# Expected: {"status":"healthy","server":"slack-mcp-hosted","version":"0.5.0"}
+```
+
+---
+
 ## DMs Not Showing Up
 
 **Symptom:** `slack_list_conversations` returns channels but no DMs.

@@ -1,29 +1,68 @@
 # Setup Guide
 
-## Prerequisites
+## Cloud (Fastest — No Local Setup)
 
-- Node.js 20+
-- Google Chrome (for token extraction)
-- macOS (for Keychain storage - other platforms use file storage only)
+If you want to skip local setup entirely, use **Slack MCP Cloud**:
 
-## Installation
+1. Go to [cloud.html](https://jtalk22.github.io/slack-mcp-server/cloud.html) and purchase a plan ($19/mo Solo, $49/mo Team)
+2. After checkout, you'll receive an API key and ready-to-paste config for Claude Desktop / Claude Code
+3. No Node.js, no Docker, no token management — one URL, 13 tools
 
-### 1. Clone or Copy the Project
-
-```bash
-cd ~
-git clone https://github.com/jtalk22/slack-mcp-server.git
-# or if already exists:
-cd ~/slack-mcp-server
+**Claude Desktop config (Cloud):**
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "url": "https://mcp.revasserlabs.com/oauth/mcp"
+    }
+  }
+}
 ```
 
-### 2. Install Dependencies
+**Claude Code config (Cloud):**
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "type": "sse",
+      "url": "https://mcp.revasserlabs.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+If you prefer self-hosting (free), continue below.
+
+---
+
+## Self-Hosted Setup
+
+### Prerequisites
+
+- Node.js 20+
+- Google Chrome (for token extraction on macOS)
+- macOS (for Keychain storage - other platforms use file storage only)
+
+### 1. Install via npm (Recommended)
 
 ```bash
+npm install -g @jtalk22/slack-mcp
+# or use npx (no install):
+npx -y @jtalk22/slack-mcp --version
+```
+
+### 1b. Or Clone the Repository
+
+```bash
+git clone https://github.com/jtalk22/slack-mcp-server.git
+cd slack-mcp-server
 npm install
 ```
 
-### 2.5 Verify Install Path in a Clean Directory
+### 2. Verify Installation
 
 ```bash
 tmpdir="$(mktemp -d)"
@@ -76,45 +115,41 @@ npm run tokens:auto
    ```
    And paste both values when prompted.
 
-### 4. Configure Claude Desktop (GUI App)
+### 4. Configure Claude Desktop
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+**macOS:** Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** Edit `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "slack": {
-      "command": "/opt/homebrew/bin/node",
-      "args": ["/Users/YOUR_USERNAME/slack-mcp-server/src/server.js"],
-      "env": {
-        "SLACK_TOKEN": "xoxc-your-token-here",
-        "SLACK_COOKIE": "xoxd-your-cookie-here",
-        "PATH": "/opt/homebrew/bin:/usr/bin:/bin"
-      }
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
     }
   }
 }
 ```
 
-**Important:**
-- Replace `YOUR_USERNAME` with your actual username
-- Copy tokens from `~/.slack-mcp-tokens.json` into the env section
-- Fully restart Claude Desktop (Cmd+Q, then reopen)
+Fully restart Claude Desktop (Cmd+Q on macOS, then reopen).
 
-**Verify it's working:** Check `~/Library/Logs/Claude/mcp-server-slack.log`
+**Verify it's working:** Check `~/Library/Logs/Claude/mcp-server-slack.log` (macOS)
 
 ### 5. Configure Claude Code (CLI)
 
-Edit `~/.claude.json` and add under `mcpServers`:
+```bash
+claude mcp add slack npx -y @jtalk22/slack-mcp
+```
+
+Or manually edit `~/.claude.json`:
 
 ```json
 {
   "mcpServers": {
     "slack": {
       "type": "stdio",
-      "command": "node",
-      "args": ["/Users/YOUR_USERNAME/slack-mcp-server/src/server.js"],
-      "env": {}
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
     }
   }
 }

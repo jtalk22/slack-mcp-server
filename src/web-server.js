@@ -30,6 +30,8 @@ import {
   handleSendMessage,
   handleGetThread,
   handleListUsers,
+  handleAddReaction,
+  handleRemoveReaction,
 } from "../lib/handlers.js";
 
 const app = express();
@@ -86,7 +88,7 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", origin);
   }
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
@@ -151,6 +153,8 @@ app.get("/", (req, res) => {
       "POST /messages",
       "GET  /users",
       "GET  /users/:id",
+      "POST /reactions",
+      "DELETE /reactions",
     ],
     docs: "Add Authorization: Bearer <api-key> header to all requests"
   });
@@ -319,6 +323,52 @@ app.get("/users/:id", authenticate, async (req, res) => {
     res.json(extractContent(result));
   } catch (e) {
     sendStructuredError(res, 500, "user_info_failed", String(e?.message || e));
+  }
+});
+
+// Add reaction
+app.post("/reactions", authenticate, async (req, res) => {
+  try {
+    if (!req.body.channel_id || !req.body.timestamp || !req.body.reaction) {
+      return sendStructuredError(
+        res,
+        400,
+        "invalid_request",
+        "channel_id, timestamp, and reaction are required",
+        "Include channel_id, timestamp, and reaction in request JSON."
+      );
+    }
+    const result = await handleAddReaction({
+      channel_id: req.body.channel_id,
+      timestamp: req.body.timestamp,
+      reaction: req.body.reaction
+    });
+    res.json(extractContent(result));
+  } catch (e) {
+    sendStructuredError(res, 500, "add_reaction_failed", String(e?.message || e));
+  }
+});
+
+// Remove reaction
+app.delete("/reactions", authenticate, async (req, res) => {
+  try {
+    if (!req.body.channel_id || !req.body.timestamp || !req.body.reaction) {
+      return sendStructuredError(
+        res,
+        400,
+        "invalid_request",
+        "channel_id, timestamp, and reaction are required",
+        "Include channel_id, timestamp, and reaction in request JSON."
+      );
+    }
+    const result = await handleRemoveReaction({
+      channel_id: req.body.channel_id,
+      timestamp: req.body.timestamp,
+      reaction: req.body.reaction
+    });
+    res.json(extractContent(result));
+  } catch (e) {
+    sendStructuredError(res, 500, "remove_reaction_failed", String(e?.message || e));
   }
 });
 

@@ -41,6 +41,8 @@ import {
   handleSendMessage,
   handleGetThread,
   handleListUsers,
+  handleAddReaction,
+  handleRemoveReaction,
 } from "../lib/handlers.js";
 
 // Background refresh interval (4 hours)
@@ -255,6 +257,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "slack_list_users":
         return await handleListUsers(args);
 
+      case "slack_add_reaction":
+        return await handleAddReaction(args);
+
+      case "slack_remove_reaction":
+        return await handleRemoveReaction(args);
+
       default:
         return {
           content: [{
@@ -306,11 +314,15 @@ async function main() {
   // Use unref() so this timer doesn't prevent the process from exiting
   // when the MCP transport closes (prevents zombie processes)
   const backgroundTimer = setInterval(async () => {
-    const health = await checkTokenHealth(console);
-    if (health.refreshed) {
-      console.error("Background: tokens refreshed successfully");
-    } else if (health.critical) {
-      console.error("Background: tokens critical - open Slack in Chrome");
+    try {
+      const health = await checkTokenHealth(console);
+      if (health.refreshed) {
+        console.error("Background: tokens refreshed successfully");
+      } else if (health.critical) {
+        console.error("Background: tokens critical - open Slack in Chrome");
+      }
+    } catch (err) {
+      console.error(`Background health check failed: ${err.message}`);
     }
   }, BACKGROUND_REFRESH_INTERVAL);
   backgroundTimer.unref();

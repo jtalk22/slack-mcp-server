@@ -148,6 +148,8 @@ Instead of authenticating as a bot, this server leverages your existing Chrome s
 | `slack_get_thread` | Get thread replies |
 | `slack_users_info` | Get user details |
 | `slack_list_users` | List workspace users (paginated, 500+ supported) |
+| `slack_add_reaction` | Add an emoji reaction to a message |
+| `slack_remove_reaction` | Remove an emoji reaction from a message |
 
 ---
 

@@ -38,6 +38,8 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 | `slack_get_thread` | Get thread replies |
 | `slack_users_info` | Get user details |
 | `slack_list_users` | List workspace users |
+| `slack_add_reaction` | Add emoji reaction to a message |
+| `slack_remove_reaction` | Remove emoji reaction from a message |
 
 ## Token Persistence Layers
 
