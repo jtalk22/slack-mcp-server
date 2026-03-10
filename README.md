@@ -20,7 +20,7 @@ Motion proof: [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server
 Hosted migration note: `v3.0.0` keeps local `stdio`/`web` flows unchanged; hosted `/mcp` requires `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
 
 Maintainer/operator: `jtalk22` (`james@revasser.nyc`)  
-Release: [`v3.0.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.0.0) · Notes: [v3.0.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.0.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
+Release: [`v3.1.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.1.0) · Notes: [v3.1.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.1.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
 
 If this saved you setup time, consider starring the repo. Maintenance support: [GitHub Sponsors](https://github.com/sponsors/jtalk22) · [Ko-fi](https://ko-fi.com/jtalk22) · [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
 
@@ -30,6 +30,17 @@ If this saved you setup time, consider starring the repo. Maintenance support: [
 - Hosted HTTP CORS now uses explicit allowlisting (`SLACK_MCP_HTTP_ALLOWED_ORIGINS`).
 - Local-first paths (`stdio`, `web`) stay compatible.
 - MCP tool names stay stable (no renames/removals).
+
+## Slack MCP Cloud
+
+Skip all setup. One URL, 13 tools, encrypted token storage, managed on Cloudflare edge.
+
+| Plan | Price | Includes |
+|------|-------|----------|
+| Solo | $19/mo | 10 standard tools, encrypted storage, 5K requests/mo |
+| Team | $49/mo | 13 tools (incl. compound intelligence), 3 workspaces, 25K requests/mo |
+
+[Get started](https://jtalk22.github.io/slack-mcp-server/cloud.html) — no Docker, no tokens, no admin approval.
 
 ## 60-Second Hosted Migration
 

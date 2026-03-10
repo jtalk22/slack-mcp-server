@@ -929,7 +929,7 @@
             <li>1 workspace</li>
             <li>5,000 requests/mo</li>
           </ul>
-          <a href="#checkout-solo" class="price-btn price-btn-fill" data-plan="solo">Get Started</a>
+          <a href="https://buy.stripe.com/9B6aEXd7k4qc8Jt3jXgw000" class="price-btn price-btn-fill">Get Started</a>
         </div>
 
         <div class="price-card">
@@ -943,7 +943,7 @@
             <li>25,000 requests/mo</li>
             <li>Priority support</li>
           </ul>
-          <a href="#checkout-team" class="price-btn price-btn-gold" data-plan="team">Get Started</a>
+          <a href="https://buy.stripe.com/cNi5kD0ky6ykaRBdYBgw001" class="price-btn price-btn-gold">Get Started</a>
         </div>
       </div>
       <p class="enterprise-line fade-up">
@@ -1034,22 +1034,6 @@
       document.querySelectorAll(".fade-up").forEach(function(el) { el.classList.add("visible"); });
     }
 
-    document.querySelectorAll("[data-plan]").forEach(function(btn) {
-      btn.addEventListener("click", function(e) {
-        var href = btn.getAttribute("href");
-        if (href.startsWith("#checkout")) {
-          e.preventDefault();
-          var plan = btn.getAttribute("data-plan");
-          var price = plan === "team" ? "$49/mo" : "$19/mo";
-          window.location.href = "mailto:james@revasser.nyc?subject=Slack%20MCP%20Cloud%20-%20" +
-            encodeURIComponent(plan.charAt(0).toUpperCase() + plan.slice(1)) +
-            "%20Plan&body=" + encodeURIComponent(
-              "I'd like to subscribe to the " + plan.charAt(0).toUpperCase() + plan.slice(1) +
-              " plan (" + price + ").\n\nWorkspace domain: \nEmail: "
-            );
-        }
-      });
-    });
   </script>
 </body>
 </html>
