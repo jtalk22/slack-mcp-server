@@ -32,6 +32,9 @@ import {
   handleListUsers,
   handleAddReaction,
   handleRemoveReaction,
+  handleConversationsMark,
+  handleConversationsUnreads,
+  handleUsersSearch,
 } from "../lib/handlers.js";
 
 const app = express();
@@ -155,6 +158,9 @@ app.get("/", (req, res) => {
       "GET  /users/:id",
       "POST /reactions",
       "DELETE /reactions",
+      "POST /conversations/:id/mark",
+      "GET  /conversations/unreads",
+      "GET  /users/search",
     ],
     docs: "Add Authorization: Bearer <api-key> header to all requests"
   });
@@ -211,6 +217,19 @@ app.get("/conversations", authenticate, async (req, res) => {
   }
 });
 
+// Get unread conversations
+app.get("/conversations/unreads", authenticate, async (req, res) => {
+  try {
+    const result = await handleConversationsUnreads({
+      types: req.query.types || "im,mpim,public_channel,private_channel",
+      limit: parseInt(req.query.limit) || 50
+    });
+    res.json(extractContent(result));
+  } catch (e) {
+    sendStructuredError(res, 500, "unreads_failed", String(e?.message || e));
+  }
+});
+
 // Get conversation history
 app.get("/conversations/:id/history", authenticate, async (req, res) => {
   try {
@@ -254,6 +273,28 @@ app.get("/conversations/:id/thread/:ts", authenticate, async (req, res) => {
     res.json(extractContent(result));
   } catch (e) {
     sendStructuredError(res, 500, "thread_fetch_failed", String(e?.message || e));
+  }
+});
+
+// Mark conversation as read
+app.post("/conversations/:id/mark", authenticate, async (req, res) => {
+  try {
+    if (!req.body.timestamp) {
+      return sendStructuredError(
+        res,
+        400,
+        "invalid_request",
+        "timestamp is required",
+        "Include timestamp in request JSON."
+      );
+    }
+    const result = await handleConversationsMark({
+      channel_id: req.params.id,
+      timestamp: req.body.timestamp
+    });
+    res.json(extractContent(result));
+  } catch (e) {
+    sendStructuredError(res, 500, "mark_failed", String(e?.message || e));
   }
 });
 
@@ -311,6 +352,28 @@ app.get("/users", authenticate, async (req, res) => {
     res.json(extractContent(result));
   } catch (e) {
     sendStructuredError(res, 500, "list_users_failed", String(e?.message || e));
+  }
+});
+
+// Search users (must be registered before /users/:id to avoid Express matching "search" as an ID)
+app.get("/users/search", authenticate, async (req, res) => {
+  try {
+    if (!req.query.q) {
+      return sendStructuredError(
+        res,
+        400,
+        "invalid_request",
+        "Query parameter 'q' is required",
+        "Set the q query string and retry."
+      );
+    }
+    const result = await handleUsersSearch({
+      query: req.query.q,
+      limit: parseInt(req.query.limit) || 20
+    });
+    res.json(extractContent(result));
+  } catch (e) {
+    sendStructuredError(res, 500, "user_search_failed", String(e?.message || e));
   }
 });
 

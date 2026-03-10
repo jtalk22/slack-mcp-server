@@ -40,6 +40,9 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 | `slack_list_users` | List workspace users |
 | `slack_add_reaction` | Add emoji reaction to a message |
 | `slack_remove_reaction` | Remove emoji reaction from a message |
+| `slack_conversations_mark` | Mark conversation as read |
+| `slack_conversations_unreads` | Get channels/DMs with unread messages |
+| `slack_users_search` | Search users by name/email |
 
 ## Token Persistence Layers
 
