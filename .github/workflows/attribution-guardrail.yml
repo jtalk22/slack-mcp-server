@@ -10,6 +10,7 @@ on:
 jobs:
   attribution:
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
 
     steps:
       - name: Checkout
