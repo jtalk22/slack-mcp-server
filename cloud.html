@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Slack MCP Cloud — Zero-Config Hosted Slack for Claude</title>
+  <meta name="description" content="Skip token management. Get a hosted Slack MCP endpoint in 30 seconds. Auto-refresh, team access, audit logs.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Slack MCP Cloud">
+  <meta property="og:description" content="Skip token management. Get a hosted Slack MCP endpoint in 30 seconds.">
+  <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/cloud.html">
+  <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Slack MCP Cloud">
+  <meta name="twitter:description" content="Skip token management. Get a hosted Slack MCP endpoint in 30 seconds.">
+  <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-heading: "Space Grotesk", "Avenir Next", sans-serif;
+      --font-body: "DM Sans", "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", monospace;
+      --bg-deep: #060e24;
+      --bg-mid: #0b1737;
+      --bg-card: rgba(14, 28, 68, 0.65);
+      --border: rgba(120, 155, 225, 0.18);
+      --border-bright: rgba(120, 155, 225, 0.35);
+      --text: #eaf0ff;
+      --text-dim: #8ea4cc;
+      --accent: #53d2cb;
+      --accent-glow: rgba(83, 210, 203, 0.12);
+      --gold: #f0c246;
+      --gold-dim: rgba(240, 194, 70, 0.08);
+      --gold-border: rgba(240, 194, 70, 0.35);
+      --red-soft: #ff6b6b;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--text);
+      background: var(--bg-deep);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Ambient background ─── */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 900px 600px at 15% 0%, rgba(40, 70, 140, 0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 700px 500px at 85% 100%, rgba(83, 210, 203, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 500px 400px at 50% 50%, rgba(20, 40, 100, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; }
+
+    /* ─── Navigation ─── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 24px 14px;
+    }
+
+    .nav-brand {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-brand span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-links .nav-cta {
+      color: var(--bg-deep);
+      background: var(--accent);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links .nav-cta:hover { opacity: 0.88; color: var(--bg-deep); }
+
+    /* ─── Hero ─── */
+    .hero {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid rgba(83, 210, 203, 0.25);
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      letter-spacing: 0.03em;
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), #7be0db);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+      color: var(--text-dim);
+      max-width: 620px;
+      margin: 0 auto 36px;
+      line-height: 1.55;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: var(--bg-deep);
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 20px rgba(83, 210, 203, 0.15);
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 28px rgba(83, 210, 203, 0.25);
+    }
+
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    /* ─── Pain points ─── */
+    .pain {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+    }
+
+    .pain-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 22px;
+      transition: border-color 0.25s;
+    }
+
+    .pain-card:hover { border-color: var(--border-bright); }
+
+    .pain-icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .pain-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .pain-card p {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .pain-card .solved {
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 10px;
+      font-size: 0.88rem;
+    }
+
+    /* ─── Pricing ─── */
+    .pricing {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .pricing-header h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .pricing-header p {
+      color: var(--text-dim);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .price-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 22px 24px;
+      position: relative;
+      transition: border-color 0.25s, transform 0.2s;
+    }
+
+    .price-card:hover {
+      border-color: var(--border-bright);
+      transform: translateY(-2px);
+    }
+
+    .price-card.recommended {
+      border-color: var(--gold-border);
+      background: linear-gradient(165deg, var(--bg-card), var(--gold-dim));
+      box-shadow: 0 0 30px rgba(240, 194, 70, 0.06);
+    }
+
+    .price-card.recommended::before {
+      content: "Most Popular";
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--bg-deep);
+      background: var(--gold);
+      padding: 3px 12px;
+      border-radius: 999px;
+    }
+
+    .price-tier {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .price-amount {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+
+    .price-amount .period {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-dim);
+    }
+
+    .price-desc {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      margin-bottom: 18px;
+      line-height: 1.45;
+    }
+
+    .price-features {
+      list-style: none;
+      margin-bottom: 22px;
+    }
+
+    .price-features li {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      padding: 5px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .price-features li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .price-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: opacity 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .price-btn:hover { opacity: 0.85; }
+
+    .price-btn-outline {
+      color: var(--text);
+      background: transparent;
+      border: 1px solid var(--border-bright);
+    }
+
+    .price-btn-solid {
+      color: var(--bg-deep);
+      background: var(--accent);
+    }
+
+    .price-btn-gold {
+      color: var(--bg-deep);
+      background: var(--gold);
+    }
+
+    /* ─── Waitlist form ─── */
+    .waitlist {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      text-align: center;
+    }
+
+    .waitlist h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+    }
+
+    .waitlist > p {
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .waitlist-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .form-group label .req {
+      color: var(--red-soft);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(6, 14, 36, 0.7);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238ea4cc' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+
+    .form-submit {
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: var(--bg-deep);
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-top: 4px;
+    }
+
+    .form-submit:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .form-note {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* ─── Trust ─── */
+    .trust {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+      text-align: center;
+    }
+
+    .trust-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .trust-stat {
+      text-align: center;
+    }
+
+    .trust-stat .num {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .trust-stat .label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .trust-note {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+    }
+
+    .trust-note a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ─── Footer ─── */
+    .foot {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 20px 24px 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .foot a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ─── Animations ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 680px) {
+      .hero { padding: 50px 16px 40px; }
+      .pain, .pricing, .waitlist, .trust { padding-left: 16px; padding-right: 16px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .trust-stats { gap: 28px; }
+      .nav-links { gap: 12px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .foot { flex-direction: column; text-align: center; }
+    }
+
+    /* ─── Thank-you state ─── */
+    .thanks-banner {
+      display: none;
+      background: var(--accent-glow);
+      border: 1px solid rgba(83, 210, 203, 0.3);
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .thanks-banner.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Nav -->
+    <nav class="nav">
+      <a href="index.html" class="nav-brand">slack<span>/</span>mcp</a>
+      <div class="nav-links">
+        <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a>
+        <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp">npm</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#waitlist" class="nav-cta">Get Early Access</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero fade-up">
+      <div class="hero-badge">Coming Soon</div>
+      <h1>Slack MCP,<br><em>without the tokens.</em></h1>
+      <p class="hero-sub">
+        You built workflows with the self-hosted MCP server. Now get a hosted endpoint — auto-refreshing tokens, team access, zero config. Same 11 tools. No session management.
+      </p>
+      <a href="#waitlist" class="hero-cta">
+        Join the Waitlist
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
+      </a>
+    </section>
+
+    <!-- Pain / Solution -->
+    <section class="pain">
+      <div class="pain-grid">
+        <div class="pain-card fade-up">
+          <span class="pain-icon">&#x1F511;</span>
+          <h3>Tokens expire constantly</h3>
+          <p>Session tokens (<code>xoxc</code>/<code>xoxd</code>) are time-bounded. When they expire, your Claude workflow breaks mid-conversation.</p>
+          <div class="solved">Cloud: Auto-refreshed. Never think about tokens again.</div>
+        </div>
+        <div class="pain-card fade-up">
+          <span class="pain-icon">&#x1F6E0;</span>
+          <h3>Setup is a project</h3>
+          <p>Extract cookies from Chrome DevTools, configure environment variables, manage a local process. Every team member repeats this.</p>
+          <div class="solved">Cloud: One endpoint URL. Add it to Claude. Done.</div>
+        </div>
+        <div class="pain-card fade-up">
+          <span class="pain-icon">&#x1F465;</span>
+          <h3>No team access</h3>
+          <p>Self-hosted runs on your machine with your tokens. Sharing with teammates means sharing your credentials or duplicating setup.</p>
+          <div class="solved">Cloud: Invite team members. Separate credentials. Audit log.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+      <div class="pricing-header fade-up">
+        <h2>Simple pricing</h2>
+        <p>Self-hosted stays free forever. Cloud adds convenience and team features.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card fade-up">
+          <div class="price-tier">Self-Hosted</div>
+          <div class="price-amount">Free <span class="period">forever</span></div>
+          <div class="price-desc">Full MCP server on your machine. You manage tokens.</div>
+          <ul class="price-features">
+            <li>All 11 MCP tools</li>
+            <li>stdio + web transport</li>
+            <li>Chrome token extraction</li>
+            <li>Local-first privacy</li>
+            <li>MIT licensed</li>
+          </ul>
+          <a href="https://github.com/jtalk22/slack-mcp-server" class="price-btn price-btn-outline">Install Now</a>
+        </div>
+
+        <div class="price-card recommended fade-up">
+          <div class="price-tier">Cloud Solo</div>
+          <div class="price-amount">$12 <span class="period">/mo</span></div>
+          <div class="price-desc">Hosted endpoint with automatic token refresh. Zero maintenance.</div>
+          <ul class="price-features">
+            <li>All 11 MCP tools</li>
+            <li>Auto token refresh</li>
+            <li>1 workspace</li>
+            <li>HTTPS endpoint</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="#waitlist" class="price-btn price-btn-gold">Join Waitlist</a>
+        </div>
+
+        <div class="price-card fade-up">
+          <div class="price-tier">Cloud Team</div>
+          <div class="price-amount">$39 <span class="period">/mo</span></div>
+          <div class="price-desc">Multi-workspace with team access control and audit logging.</div>
+          <ul class="price-features">
+            <li>Everything in Solo</li>
+            <li>Up to 5 workspaces</li>
+            <li>Team member seats</li>
+            <li>Audit log</li>
+            <li>SSO-ready</li>
+          </ul>
+          <a href="#waitlist" class="price-btn price-btn-solid">Join Waitlist</a>
+        </div>
+
+        <div class="price-card fade-up">
+          <div class="price-tier">Enterprise</div>
+          <div class="price-amount">Custom</div>
+          <div class="price-desc">Dedicated infrastructure, SLA, compliance, volume pricing.</div>
+          <ul class="price-features">
+            <li>Everything in Team</li>
+            <li>Unlimited workspaces</li>
+            <li>Dedicated infra</li>
+            <li>SLA guarantee</li>
+            <li>SOC 2 ready</li>
+          </ul>
+          <a href="mailto:james@revasser.nyc?subject=Slack%20MCP%20Enterprise%20Inquiry" class="price-btn price-btn-outline">Contact Us</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Waitlist -->
+    <section class="waitlist" id="waitlist">
+      <h2 class="fade-up">Get early access</h2>
+      <p class="fade-up">Be first to try Slack MCP Cloud. We'll notify you when it's ready — no spam, just the launch email.</p>
+
+      <div class="thanks-banner" id="thanksBanner">
+        You're on the list. We'll email you when Cloud launches.
+      </div>
+
+      <form class="waitlist-form fade-up" id="waitlistForm" action="https://formsubmit.co/james@revasser.nyc" method="POST">
+        <!-- FormSubmit config -->
+        <input type="hidden" name="_subject" value="Slack MCP Cloud — New Waitlist Signup">
+        <input type="hidden" name="_next" value="https://jtalk22.github.io/slack-mcp-server/cloud.html?thanks=1">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <!-- Honeypot -->
+        <input type="text" name="_honey" style="display:none">
+
+        <div class="form-group">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" required placeholder="you@company.com">
+        </div>
+
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name">
+        </div>
+
+        <div class="form-group">
+          <label for="team_size">Team size</label>
+          <select id="team_size" name="team_size">
+            <option value="">Select...</option>
+            <option value="1">Just me</option>
+            <option value="2-5">2–5 people</option>
+            <option value="6-20">6–20 people</option>
+            <option value="20+">20+ people</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tier">Which tier interests you?</label>
+          <select id="tier" name="tier_interest">
+            <option value="">Select...</option>
+            <option value="solo">Cloud Solo ($12/mo)</option>
+            <option value="team">Cloud Team ($39/mo)</option>
+            <option value="enterprise">Enterprise (Custom)</option>
+            <option value="exploring">Just exploring</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="pain">Biggest pain with self-hosted?</label>
+          <textarea id="pain" name="biggest_pain" placeholder="Token expiry, team setup, etc. (optional)"></textarea>
+        </div>
+
+        <button type="submit" class="form-submit">Join Waitlist</button>
+        <div class="form-note">No spam. Just the launch email + early-access invite.</div>
+      </form>
+    </section>
+
+    <!-- Trust -->
+    <section class="trust fade-up">
+      <div class="trust-stats">
+        <div class="trust-stat">
+          <div class="num">1,600+</div>
+          <div class="label">npm downloads/month</div>
+        </div>
+        <div class="trust-stat">
+          <div class="num">21</div>
+          <div class="label">npm releases</div>
+        </div>
+        <div class="trust-stat">
+          <div class="num">11</div>
+          <div class="label">MCP tools</div>
+        </div>
+        <div class="trust-stat">
+          <div class="num">3</div>
+          <div class="label">transport modes</div>
+        </div>
+      </div>
+      <p class="trust-note">
+        Open source and MIT licensed. <a href="https://github.com/jtalk22/slack-mcp-server">View on GitHub</a>
+      </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="foot">
+      <span>Built by <a href="https://github.com/jtalk22">jtalk22</a> &middot; <a href="mailto:james@revasser.nyc">james@revasser.nyc</a></span>
+      <span><a href="index.html">Self-Hosted Docs</a> &middot; <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a> &middot; <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp">npm</a></span>
+    </footer>
+  </div>
+
+  <script>
+    // Scroll-triggered fade-in
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+    // Thank-you state
+    if (new URLSearchParams(window.location.search).get('thanks') === '1') {
+      document.getElementById('thanksBanner').classList.add('show');
+      document.getElementById('waitlistForm').style.display = 'none';
+      window.scrollTo({ top: document.getElementById('waitlist').offsetTop - 80, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
