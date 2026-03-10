@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
 [![npm downloads](https://img.shields.io/npm/dm/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v3.1.0-blue)](https://registry.modelcontextprotocol.io)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v3.2.0-blue)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 Session-based Slack MCP for Claude and MCP clients. Local-first `stdio`/`web` with secure-default hosted HTTP in v3.
@@ -25,27 +25,26 @@ Motion proof: [20-second mobile clip](https://jtalk22.github.io/slack-mcp-server
 Hosted migration note: `v3.1.0` keeps local `stdio`/`web` flows unchanged; hosted `/mcp` requires `SLACK_MCP_HTTP_AUTH_TOKEN` and `SLACK_MCP_HTTP_ALLOWED_ORIGINS`.
 
 Maintainer/operator: `jtalk22` (`james@revasser.nyc`)  
-Release: [`v3.1.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.1.0) · Notes: [v3.1.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.1.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
+Release: [`v3.2.0`](https://github.com/jtalk22/slack-mcp-server/releases/tag/v3.2.0) · Notes: [v3.2.0 notes](https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.2.0-release-notes.md) · Support: [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md)
 
 If this saved you setup time, consider starring the repo. Maintenance support: [GitHub Sponsors](https://github.com/sponsors/jtalk22) · [Ko-fi](https://ko-fi.com/jtalk22) · [Buy Me a Coffee](https://buymeacoffee.com/jtalk22)
 
-## v3.1.0 at a Glance
+## v3.2.0 at a Glance
 
-- Hosted HTTP `/mcp` now requires bearer auth by default (`SLACK_MCP_HTTP_AUTH_TOKEN`).
-- Hosted HTTP CORS now uses explicit allowlisting (`SLACK_MCP_HTTP_ALLOWED_ORIGINS`).
-- Local-first paths (`stdio`, `web`) stay compatible.
-- MCP tool names stay stable (no renames/removals).
+- **16 tools** — added reactions, mark-as-read, unread inbox, and user search
+- All three transports (stdio, web, hosted HTTP) have full tool parity
+- No MCP tool renames or removals — fully backwards compatible
 
 ## Slack MCP Cloud
 
 **No token management. No Docker. No Chrome extensions. One URL and you're connected.**
 
-Skip all local setup — paste one URL into Claude and get 13 Slack tools running in under 60 seconds. Encrypted token storage on Cloudflare's global edge (300+ PoPs). The only cloud-hosted session-based Slack MCP on the market.
+Skip all local setup — paste one URL into Claude and get 16 Slack tools running in under 60 seconds. Encrypted token storage on Cloudflare's global edge (300+ PoPs). The only cloud-hosted session-based Slack MCP on the market.
 
 | Plan | Price | Includes |
 |------|-------|----------|
-| Solo | $19/mo | 10 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |
-| Team | $49/mo | 13 tools (incl. AI summaries, action items, decisions), 3 workspaces, 25K requests/mo |
+| Solo | $19/mo | 16 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |
+| Team | $49/mo | 16 standard + 3 AI compound tools, 3 workspaces, 25K requests/mo |
 
 [Get Your API Key](https://jtalk22.github.io/slack-mcp-server/cloud.html) — live in 60 seconds. [Privacy Policy](https://jtalk22.github.io/slack-mcp-server/privacy.html).
 
@@ -402,7 +401,7 @@ npm run web
 
 ```
 ════════════════════════════════════════════════════════════
-  Slack Web API Server v3.1.0
+  Slack Web API Server v3.2.0
 ════════════════════════════════════════════════════════════
 
   Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx

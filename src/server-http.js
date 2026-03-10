@@ -27,10 +27,15 @@ import {
   handleSendMessage,
   handleGetThread,
   handleListUsers,
+  handleAddReaction,
+  handleRemoveReaction,
+  handleConversationsMark,
+  handleConversationsUnreads,
+  handleUsersSearch,
 } from "../lib/handlers.js";
 
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "3.1.0";
+const SERVER_VERSION = "3.2.0";
 const PORT = process.env.PORT || 3000;
 const HTTP_INSECURE = process.env.SLACK_MCP_HTTP_INSECURE === "1";
 const HTTP_AUTH_TOKEN = process.env.SLACK_MCP_HTTP_AUTH_TOKEN || process.env.SLACK_API_KEY || null;
@@ -115,6 +120,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return await handleGetThread(args);
       case "slack_list_users":
         return await handleListUsers(args);
+      case "slack_add_reaction":
+        return await handleAddReaction(args);
+      case "slack_remove_reaction":
+        return await handleRemoveReaction(args);
+      case "slack_conversations_mark":
+        return await handleConversationsMark(args);
+      case "slack_conversations_unreads":
+        return await handleConversationsUnreads(args);
+      case "slack_users_search":
+        return await handleUsersSearch(args);
       default:
         return {
           content: [{

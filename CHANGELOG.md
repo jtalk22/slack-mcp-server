@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-03-10
+
+### Added
+- **`slack_add_reaction`** — Add emoji reactions to messages
+- **`slack_remove_reaction`** — Remove emoji reactions from messages
+- **`slack_conversations_mark`** — Mark a conversation as read up to a timestamp
+- **`slack_conversations_unreads`** — Priority-sorted unread inbox across all channels and DMs
+- **`slack_users_search`** — Search workspace users by name, display name, or email
+- REST endpoints: `POST /reactions`, `DELETE /reactions`, `POST /conversations/:id/mark`, `GET /conversations/unreads`, `GET /users/search`
+
+### Fixed
+- **server-http.js tool parity** — Hosted HTTP transport now dispatches all 16 tools (was missing reactions, mark, unreads, search)
+- **Background timer crash** — `setInterval` callback in server.js wrapped in try/catch to prevent unhandled rejection
+- **Express route ordering** — `/users/search` registered before `/users/:id` to prevent "search" matching as user ID
+
+### Changed
+- Tool count: 11 → 16 across all three transports (stdio, web, hosted HTTP)
+- Cloud docs added to SETUP.md, DEPLOYMENT-MODES.md, and TROUBLESHOOTING.md
+
+### Compatibility
+- No MCP tool renames or removals. Fully backwards compatible.
+
 ## [3.1.0] - 2026-03-10
 
 ### Added
@@ -270,6 +292,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.0...v1.0.5
 [1.0.0]: https://github.com/jtalk22/slack-mcp-server/releases/tag/v1.0.0
+[3.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.4...v2.0.0

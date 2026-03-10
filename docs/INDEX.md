@@ -29,6 +29,7 @@ Start here for setup, compatibility checks, operations, and support.
 - [Launch Ops Runbook](LAUNCH-OPS.md)
 - [Capability Matrix](LAUNCH-MATRIX.md)
 - [Install Proof Block](INSTALL-PROOF.md)
+- [Release Notes (v3.2.0)](../.github/v3.2.0-release-notes.md)
 - [Release Notes (v3.1.0)](../.github/v3.1.0-release-notes.md)
 - [Release Notes (v3.0.0)](../.github/v3.0.0-release-notes.md)
 - [Communication Style](COMMUNICATION-STYLE.md)

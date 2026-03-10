@@ -1,16 +1,16 @@
 # Public Health Snapshot
 
 - Generated: 2026-03-10T14:00:00Z
-- Cycle: `v3.1.0`
+- Cycle: `v3.2.0`
 
 ## Distribution Parity
 
 | Surface | State |
 |---|---|
-| npm `latest` | `3.1.0` |
-| GitHub latest release | `v3.1.0` |
-| Docker `latest` | `v3.1.0` |
-| MCP registry latest | `3.1.0` (pending publish) |
+| npm `latest` | `3.2.0` |
+| GitHub latest release | `v3.2.0` |
+| Docker `latest` | `v3.2.0` |
+| MCP registry latest | `3.2.0` (pending publish) |
 
 ## Public Reach (14-day GitHub window)
 
