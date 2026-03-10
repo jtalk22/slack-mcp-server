@@ -321,3 +321,137 @@ List all workspace users.
   ]
 }
 ```
+
+---
+
+### slack_add_reaction
+
+Add an emoji reaction to a message.
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| channel_id | string | *required* | Channel or DM ID |
+| timestamp | string | *required* | Message timestamp to react to |
+| reaction | string | *required* | Emoji name without colons (e.g. `thumbsup`, `heart`, `eyes`) |
+
+**Returns:**
+```json
+{
+  "status": "added",
+  "channel": "D063M4403MW",
+  "timestamp": "1767368030.607599",
+  "reaction": "thumbsup"
+}
+```
+
+---
+
+### slack_remove_reaction
+
+Remove an emoji reaction from a message.
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| channel_id | string | *required* | Channel or DM ID |
+| timestamp | string | *required* | Message timestamp |
+| reaction | string | *required* | Emoji name without colons |
+
+**Returns:**
+```json
+{
+  "status": "removed",
+  "channel": "D063M4403MW",
+  "timestamp": "1767368030.607599",
+  "reaction": "thumbsup"
+}
+```
+
+---
+
+### slack_conversations_mark
+
+Mark a conversation as read up to a specific message timestamp.
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| channel_id | string | *required* | Channel or DM ID to mark as read |
+| timestamp | string | *required* | Message timestamp to mark as read up to |
+
+**Returns:**
+```json
+{
+  "status": "marked",
+  "channel": "D063M4403MW",
+  "read_up_to": "1767368030.607599"
+}
+```
+
+---
+
+### slack_conversations_unreads
+
+Get channels and DMs with unread messages, sorted by unread count (highest first).
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| types | string | "im,mpim,public_channel,private_channel" | Comma-separated conversation types |
+| limit | number | 50 | Maximum conversations to return |
+
+**Returns:**
+```json
+{
+  "total_unread_conversations": 3,
+  "conversations": [
+    {
+      "id": "C05GPEVH7J9",
+      "name": "engineering",
+      "type": "public_channel",
+      "unread_count": 12,
+      "latest_ts": "1767368030.607599"
+    },
+    {
+      "id": "D063M4403MW",
+      "name": "Gwen Santos",
+      "type": "dm",
+      "unread_count": 5,
+      "latest_ts": "1767368025.123456"
+    }
+  ]
+}
+```
+
+---
+
+### slack_users_search
+
+Search workspace users by name, display name, or email. Case-insensitive partial match.
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| query | string | *required* | Search term to match against name, display name, real name, or email |
+| limit | number | 20 | Maximum results to return |
+
+**Returns:**
+```json
+{
+  "query": "gwen",
+  "count": 1,
+  "total_matches": 1,
+  "users": [
+    {
+      "id": "U05GPEVH7J9",
+      "name": "gwen",
+      "real_name": "Gwen Santos",
+      "display_name": "Gwen",
+      "email": "gwen@example.com",
+      "title": "Assistant",
+      "is_admin": false
+    }
+  ]
+}
+```
