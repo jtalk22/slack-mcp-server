@@ -1,5 +1,10 @@
 # Slack MCP Server
 
+[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v3.1.0-blue)](https://registry.modelcontextprotocol.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 Session-based Slack MCP for Claude and MCP clients. Local-first `stdio`/`web` with secure-default hosted HTTP in v3.
 
 ## Install + Verify
@@ -33,14 +38,16 @@ If this saved you setup time, consider starring the repo. Maintenance support: [
 
 ## Slack MCP Cloud
 
-Skip all setup. One URL, 13 tools, encrypted token storage, managed on Cloudflare edge.
+**No token management. No Docker. No Chrome extensions. One URL and you're connected.**
+
+Skip all local setup — paste one URL into Claude and get 13 Slack tools running in under 60 seconds. Encrypted token storage on Cloudflare's global edge (300+ PoPs). The only cloud-hosted session-based Slack MCP on the market.
 
 | Plan | Price | Includes |
 |------|-------|----------|
-| Solo | $19/mo | 10 standard tools, encrypted storage, 5K requests/mo |
-| Team | $49/mo | 13 tools (incl. compound intelligence), 3 workspaces, 25K requests/mo |
+| Solo | $19/mo | 10 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |
+| Team | $49/mo | 13 tools (incl. AI summaries, action items, decisions), 3 workspaces, 25K requests/mo |
 
-[Get started](https://jtalk22.github.io/slack-mcp-server/cloud.html) — no Docker, no tokens, no admin approval. [Privacy Policy](https://jtalk22.github.io/slack-mcp-server/privacy.html).
+[Get Your API Key](https://jtalk22.github.io/slack-mcp-server/cloud.html) — live in 60 seconds. [Privacy Policy](https://jtalk22.github.io/slack-mcp-server/privacy.html).
 
 ### Cloud Usage Examples
 

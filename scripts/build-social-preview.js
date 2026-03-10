@@ -34,7 +34,7 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Slack MCP Server v3.0.0 Social Preview</title>
+  <title>Slack MCP Server v3.1.0 Social Preview</title>
   <style>
     :root {
       --bg-a: #0f1f4c;
@@ -145,7 +145,7 @@ const html = `<!doctype html>
   <main class="card">
     <header class="top">
       <span>Slack MCP Server</span>
-      <span class="pill">v3.0.0</span>
+      <span class="pill">v3.1.0</span>
     </header>
     <section class="image-frame">
       <img src="${sourceDataUri}" alt="Slack MCP live demo frame">

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slack Web API</title>
+  <title>Slack MCP Server — Web Dashboard</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
 
@@ -253,7 +253,11 @@
   </div>
 
   <div class="container">
-    <h1>Slack Web API <span id="status" class="status"></span></h1>
+    <h1>Slack Web API <span style="font-size:0.55em;opacity:0.5;font-weight:400;vertical-align:middle">v3.1.0</span> <span id="status" class="status"></span></h1>
+    <div style="background:rgba(240,194,70,0.08);border:1px solid rgba(240,194,70,0.2);border-radius:8px;padding:8px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px;color:#d4c48a">
+      <span>Skip local setup? <strong style="color:#f0c246">Slack MCP Cloud</strong> gives you 13 tools with one URL — no tokens to manage.</span>
+      <a href="https://jtalk22.github.io/slack-mcp-server/cloud.html" style="color:#f0c246;font-weight:600;text-decoration:none;white-space:nowrap" target="_blank">Learn more &rarr;</a>
+    </div>
     <div class="grid">
       <div class="sidebar">
         <h3>CONVERSATIONS</h3>
@@ -267,7 +271,7 @@
       </div>
       <div class="main-panel">
         <div class="search-section">
-          <input type="text" id="searchQuery" placeholder="Search messages...">
+          <input type="text" id="searchQuery" placeholder="Search messages..." onkeypress="if(event.key==='Enter')searchMessages()">
           <button onclick="searchMessages()">Search</button>
         </div>
         <h2 id="channelName">Select a conversation</h2>
