@@ -4,7 +4,7 @@
   "description": "Session-based Slack MCP for Claude and MCP clients. 16 tools: read channels, search messages, send replies, reactions, unreads, user search, AI summaries. Cloud hosted option with encrypted storage — no Docker, no admin approval.",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "license": "MIT",
   "maintainers": ["jtalk22"],
   "categories": ["communication", "productivity"],
