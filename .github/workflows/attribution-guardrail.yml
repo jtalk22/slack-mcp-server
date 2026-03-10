@@ -10,7 +10,9 @@ on:
 jobs:
   attribution:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: >-
+      github.actor != 'dependabot[bot]' &&
+      (github.event_name != 'pull_request' || github.event.pull_request.user.login != 'dependabot[bot]')
 
     steps:
       - name: Checkout
