@@ -13,8 +13,8 @@ Start here for setup, compatibility checks, operations, and support.
 
 ## Cloud
 
-- [Cloud Landing Page](https://jtalk22.github.io/slack-mcp-server/cloud.html) — Hosted MCP endpoint, $19/mo Solo, $49/mo Team
-- [Cloud Privacy Policy](https://jtalk22.github.io/slack-mcp-server/privacy.html)
+- [Cloud Landing Page](https://mcp.revasserlabs.com) — Hosted MCP endpoint, $19/mo Solo, $49/mo Team
+- [Cloud Privacy Policy](https://mcp.revasserlabs.com/privacy)
 
 ## Operations
 

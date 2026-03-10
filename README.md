@@ -38,10 +38,10 @@ Skip all local setup. Paste one URL into Claude and get 16 Slack tools in 60 sec
 
 | Plan | Price | Includes |
 |------|-------|----------|
-| Solo | $19/mo | 16 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |
-| Team | $49/mo | 16 standard + 3 AI compound tools, 3 workspaces, 25K requests/mo |
+| Solo | $19/mo | 15 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |
+| Team | $49/mo | 15 standard + 3 AI compound tools, 3 workspaces, 25K requests/mo |
 
-[Get Started](https://jtalk22.github.io/slack-mcp-server/cloud.html) · [Privacy Policy](https://jtalk22.github.io/slack-mcp-server/privacy.html)
+[Get Started](https://mcp.revasserlabs.com) · [Privacy Policy](https://mcp.revasserlabs.com/privacy)
 
 ## Install (Self-Hosted)
 

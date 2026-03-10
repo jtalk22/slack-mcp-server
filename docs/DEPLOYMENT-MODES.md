@@ -24,7 +24,7 @@ Use this guide to choose the right operating mode before rollout.
 
 No local setup required:
 
-1. Purchase a plan at [cloud.html](https://jtalk22.github.io/slack-mcp-server/cloud.html)
+1. Purchase a plan at [cloud.html](https://mcp.revasserlabs.com)
 2. Receive API key and config snippets on the success page
 3. Paste config into Claude Desktop or Claude Code
 4. All 16 standard tools available immediately (plus AI compound tools on Team plan)
