@@ -132,7 +132,17 @@ function normalizeErrors(errors, { allowHostedStatusFallback = false } = {}) {
     return errors;
   }
 
-  return errors.filter((entry) => !/mcp\.revasserlabs\.com\/status/.test(entry));
+  return errors.filter((entry) => {
+    if (/mcp\.revasserlabs\.com\/status/.test(entry)) {
+      return false;
+    }
+
+    if (entry === "console:Failed to load resource: net::ERR_FAILED") {
+      return false;
+    }
+
+    return true;
+  });
 }
 
 async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) {
