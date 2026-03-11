@@ -4,7 +4,7 @@ Canonical text blocks for GitHub release surfaces, listings, and operator update
 
 ## Short Summary (Public)
 
-`@jtalk22/slack-mcp v3.0.0` is live. `v3.0.0` flips hosted `/mcp` from permissive to secure-default without breaking local workflows. Local-first operation stays unchanged (`stdio`, `web`) while hosted HTTP now requires bearer authentication (`SLACK_MCP_HTTP_AUTH_TOKEN`) and explicit origin allowlisting (`SLACK_MCP_HTTP_ALLOWED_ORIGINS`). The major version reflects this hosted behavior shift; MCP tool names remain stable. Diagnostics remain deterministic (`--doctor` returns `0|1|2|3`), and `--status` remains read-only. Public demo/media checks are now included in web verification so broken assets are caught before publish. Maintainer/operator: `jtalk22` (`james@revasser.nyc`).
+`@jtalk22/slack-mcp v3.0.0` is live. `v3.0.0` flips hosted `/mcp` from permissive to secure-default without breaking local workflows. Local-first operation stays unchanged (`stdio`, `web`) while hosted HTTP now requires bearer authentication (`SLACK_MCP_HTTP_AUTH_TOKEN`) and explicit origin allowlisting (`SLACK_MCP_HTTP_ALLOWED_ORIGINS`). The major version reflects this hosted behavior shift; MCP tool names remain stable. Diagnostics remain deterministic (`--doctor` returns `0|1|2|3`), and `--status` remains read-only. Public demo/media checks are now included in web verification so broken assets are caught before publish. Maintainer/operator: `jtalk22` (`support@revasserlabs.com`).
 
 ## GitHub Release Block
 

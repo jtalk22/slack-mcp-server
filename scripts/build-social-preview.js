@@ -157,7 +157,7 @@ const html = `<!doctype html>
       </div>
       <div class="attribution">
         <div>jtalk22</div>
-        <div class="mail">james@revasser.nyc</div>
+        <div class="mail">mcp.revasserlabs.com</div>
       </div>
     </footer>
   </main>
