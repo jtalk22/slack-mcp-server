@@ -132,12 +132,16 @@ function normalizeErrors(errors, { allowHostedStatusFallback = false } = {}) {
     return errors;
   }
 
+  const hostedStatusFailurePattern = /requestfailed:https:\/\/mcp\.revasserlabs\.com\/status\b/;
+  let hostedStatusConsoleBudget = errors.some((entry) => hostedStatusFailurePattern.test(entry)) ? 1 : 0;
+
   return errors.filter((entry) => {
-    if (/mcp\.revasserlabs\.com\/status/.test(entry)) {
+    if (hostedStatusFailurePattern.test(entry)) {
       return false;
     }
 
-    if (entry === "console:Failed to load resource: net::ERR_FAILED") {
+    if (entry === "console:Failed to load resource: net::ERR_FAILED" && hostedStatusConsoleBudget > 0) {
+      hostedStatusConsoleBudget -= 1;
       return false;
     }
 
