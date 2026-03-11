@@ -37,7 +37,7 @@ If `--version` fails here, the issue is install/runtime path, not Slack credenti
 
 **Solutions:**
 1. Verify your API key starts with `stmh_` (team) or `smsh_` (solo)
-2. Check the key hasn't been revoked — contact james@revasser.nyc for key issues
+2. Check the key hasn't been revoked — contact support@revasserlabs.com for key issues
 3. Ensure you're using the correct endpoint: `https://mcp.revasserlabs.com/mcp`
 
 ### Cloud Tools Not Available

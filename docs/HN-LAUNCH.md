@@ -28,7 +28,7 @@ Verify in 30 seconds:
 Repo: https://github.com/jtalk22/slack-mcp-server
 npm: https://www.npmjs.com/package/@jtalk22/slack-mcp
 Release notes: https://github.com/jtalk22/slack-mcp-server/blob/main/.github/v3.0.0-release-notes.md
-Maintainer/operator: `jtalk22` (`james@revasser.nyc`)
+Maintainer/operator: `jtalk22` (`support@revasserlabs.com`)
 ```
 
 ## First Comment Draft
