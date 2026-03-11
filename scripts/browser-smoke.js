@@ -20,6 +20,8 @@ function argValue(flag, fallback = null) {
 
 const mode = argValue("--mode", "local");
 const liveBaseUrl = argValue("--base-url", "https://jtalk22.github.io/slack-mcp-server");
+const hostedStatusUrl = argValue("--status-url", "https://mcp.revasserlabs.com/status");
+const pagesOrigin = argValue("--pages-origin", "https://jtalk22.github.io");
 const retries = Number(argValue("--retries", mode === "live" ? "8" : "1"));
 const retryDelayMs = Number(argValue("--retry-delay-ms", "10000"));
 
@@ -127,7 +129,50 @@ function assertText(text, pattern, label) {
   }
 }
 
-async function checkRoot(page, url) {
+function normalizeErrors(errors, { allowHostedStatusFallback = false } = {}) {
+  if (!allowHostedStatusFallback) {
+    return errors;
+  }
+
+  return errors.filter((entry) => !/mcp\.revasserlabs\.com\/status/.test(entry));
+}
+
+async function verifyHostedStatusContract() {
+  const response = await fetch(hostedStatusUrl, {
+    headers: {
+      accept: "application/json",
+      origin: pagesOrigin,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Hosted /status returned ${response.status}`);
+  }
+
+  const allowedOrigin = response.headers.get("access-control-allow-origin") || "";
+  if (allowedOrigin !== pagesOrigin && allowedOrigin !== "*") {
+    throw new Error(`Hosted /status CORS mismatch: expected ${pagesOrigin}, got ${allowedOrigin || "missing"}`);
+  }
+
+  const data = await response.json();
+  assertText(String(data.status || ""), /^ok$/i, "hosted /status status");
+  assertText(String(data.version || ""), /^\d+\.\d+\.\d+$/, "hosted /status version");
+
+  if (data.tools?.standard !== 15) {
+    throw new Error(`hosted /status standard tool count mismatch: ${data.tools?.standard}`);
+  }
+
+  if (data.tools?.ai_compound !== 3) {
+    throw new Error(`hosted /status AI workflow count mismatch: ${data.tools?.ai_compound}`);
+  }
+
+  const docsUrl = data.docs?.docs_url || "";
+  if (docsUrl !== "https://mcp.revasserlabs.com/docs") {
+    throw new Error(`hosted /status docs URL mismatch: ${docsUrl || "missing"}`);
+  }
+}
+
+async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) {
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForFunction(() => {
     const npm = document.querySelector("#npmLatest")?.textContent?.trim();
@@ -146,10 +191,21 @@ async function checkRoot(page, url) {
 
   assertText(snapshot.npm, /^v3\.2\.4$/, "#npmLatest");
   assertText(snapshot.release, /^v3\.2\.4$/, "#releaseTag");
-  assertText(snapshot.cloud, /^ok$/i, "#cloudHealth");
-  assertText(snapshot.cloudNote, /15 managed tools/i, "#cloudHealthNote");
-  assertText(snapshot.cloudNote, /3 Team AI workflows/i, "#cloudHealthNote");
   assertText(snapshot.decision, /16 tools and full operator control/i, "decision guide");
+
+  if (/^ok$/i.test(snapshot.cloud)) {
+    assertText(snapshot.cloudNote, /15 managed tools/i, "#cloudHealthNote");
+    assertText(snapshot.cloudNote, /3 Team AI workflows/i, "#cloudHealthNote");
+    return { cloudState: "ok" };
+  }
+
+  if (allowHostedStatusFallback && /^Open \/status$/i.test(snapshot.cloud)) {
+    assertText(snapshot.cloudNote, /raw status JSON/i, "#cloudHealthNote");
+    assertText(snapshot.cloudNote, /Cross-origin status lookup unavailable/i, "#cloudHealthNote");
+    return { cloudState: "fallback" };
+  }
+
+  throw new Error(`#cloudHealth did not match /^ok$/i${allowHostedStatusFallback ? " or documented fallback" : ""}: ${snapshot.cloud}`);
 }
 
 async function checkStaticPage(page, url, selector, pattern, label) {
@@ -192,6 +248,7 @@ async function runLocal() {
 }
 
 async function runLive() {
+  await verifyHostedStatusContract();
   const browser = await chromium.launch({ headless: true });
 
   try {
@@ -200,10 +257,11 @@ async function runLive() {
       const errors = await collectErrors(page);
 
       try {
-        await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`);
+        const snapshot = await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { allowHostedStatusFallback: true });
         await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Cloud starts at \$19\/mo/i, "live share note");
-        if (errors.length > 0) {
-          throw new Error(errors.join("\n"));
+        const normalizedErrors = normalizeErrors(errors, { allowHostedStatusFallback: snapshot.cloudState === "fallback" });
+        if (normalizedErrors.length > 0) {
+          throw new Error(normalizedErrors.join("\n"));
         }
         return;
       } catch (error) {
