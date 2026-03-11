@@ -243,7 +243,8 @@
         <a href="https://mcp.revasserlabs.com" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45)"><strong style="color:#f0c246">Cloud</strong></a>
         <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md"><strong>Self-Host</strong> (free)</a>
         <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest"><strong>Latest Release</strong></a>
-        <a href="https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md"><strong>Deployment Intake</strong></a>
+        <a href="https://mcp.revasserlabs.com/deployment"><strong>Deployment</strong></a>
+        <a href="https://mcp.revasserlabs.com/support"><strong>Support</strong></a>
         <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><strong>npm</strong></a>
       </div>
       <div class="verify">npx -y @jtalk22/slack-mcp --setup
@@ -266,9 +267,9 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
           <span class="snapshot-note" id="releaseTagNote">Latest tagged release from GitHub.</span>
         </div>
         <div class="snapshot-card">
-          <span class="snapshot-label">Cloud health</span>
+          <span class="snapshot-label">Cloud status</span>
           <strong class="snapshot-value" id="cloudHealth">Checking...</strong>
-          <span class="snapshot-note" id="cloudHealthNote">Reads the hosted <code>/health</code> endpoint when cross-origin access is available.</span>
+          <span class="snapshot-note" id="cloudHealthNote">Reads the hosted <code>/status</code> endpoint and degrades to a raw status link only if cross-origin access is unavailable.</span>
         </div>
         <div class="snapshot-card">
           <span class="snapshot-label">Operator links</span>
@@ -294,7 +295,7 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
     </section>
 
     <footer class="footer">
-      <span><a href="https://mcp.revasserlabs.com">Cloud Pricing</a> · <a href="https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md">Deployment Intake</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SUPPORT-BOUNDARIES.md">Support</a> · <a href="privacy.html">Privacy</a> · <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a> · <a href="mailto:support@revasserlabs.com">support@revasserlabs.com</a></span>
+      <span><a href="https://mcp.revasserlabs.com">Cloud Pricing</a> · <a href="https://mcp.revasserlabs.com/docs">Cloud Docs</a> · <a href="https://mcp.revasserlabs.com/deployment">Deployment</a> · <a href="https://mcp.revasserlabs.com/support">Support</a> · <a href="privacy.html">Privacy</a> · <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a> · <a href="mailto:support@revasserlabs.com">support@revasserlabs.com</a></span>
       <span>25+ releases · 300+ edge PoPs · <a href="https://github.com/sponsors/jtalk22">Sponsor</a></span>
     </footer>
   </main>
@@ -366,11 +367,11 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
           releaseTagNoteEl.textContent = `GitHub release lookup failed: ${error.message}`;
         });
 
-      const cloudPromise = fetch('https://mcp.revasserlabs.com/health', {
+      const cloudPromise = fetch('https://mcp.revasserlabs.com/status', {
         headers: { accept: 'application/json' }
       })
         .then((res) => {
-          if (!res.ok) throw new Error(`Cloud health returned ${res.status}`);
+          if (!res.ok) throw new Error(`Cloud status returned ${res.status}`);
           return res.json();
         })
         .then((data) => {
@@ -378,11 +379,12 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
           const hostedVersion = data.version ? `v${data.version}` : 'version unavailable';
           const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'n/a';
           const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'n/a';
-          cloudHealthNoteEl.textContent = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} Team AI workflows`;
+          const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : 'https://mcp.revasserlabs.com/docs';
+          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} Team AI workflows · <a href="${docsUrl}">Cloud docs</a>`;
         })
         .catch((error) => {
-          cloudHealthEl.textContent = 'Open /health';
-          cloudHealthNoteEl.innerHTML = `Cross-origin health lookup unavailable: ${error.message}. Use <a href="https://mcp.revasserlabs.com/health">raw health JSON</a>.`;
+          cloudHealthEl.textContent = 'Open /status';
+          cloudHealthNoteEl.innerHTML = `Cross-origin status lookup unavailable: ${error.message}. Use <a href="https://mcp.revasserlabs.com/status">raw status JSON</a>.`;
         });
 
       await Promise.allSettled([npmPromise, releasePromise, cloudPromise]);

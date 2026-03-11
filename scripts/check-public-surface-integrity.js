@@ -141,8 +141,11 @@ function main() {
   check(
     results,
     "README operator links",
-    readme.includes("Release health snapshot") && readme.includes("Version parity report"),
-    "README should link current release-health and version-parity reports"
+    readme.includes("Release health snapshot") &&
+      readme.includes("Version parity report") &&
+      readme.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
+      readme.includes(PUBLIC_METADATA.cloudSupportUrl),
+    "README should link current release-health, version-parity, deployment, and support surfaces"
   );
 
   const marketingIndex = read("index.html");
@@ -152,9 +155,19 @@ function main() {
     marketingIndex.includes("Current distribution snapshot") &&
       marketingIndex.includes("npm latest") &&
       marketingIndex.includes("GitHub release") &&
-      marketingIndex.includes("Cloud health") &&
+      marketingIndex.includes("Cloud status") &&
+      marketingIndex.includes(PUBLIC_METADATA.cloudStatusUrl) &&
+      !marketingIndex.includes("https://mcp.revasserlabs.com/health") &&
       marketingIndex.includes("Release health"),
-    "index.html should expose the live distribution snapshot cards and operator links"
+    "index.html should expose the live distribution snapshot cards, /status contract, and operator links"
+  );
+  check(
+    results,
+    "GitHub Pages cloud routing",
+    marketingIndex.includes(PUBLIC_METADATA.cloudDocsUrl) &&
+      marketingIndex.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
+      marketingIndex.includes(PUBLIC_METADATA.cloudSupportUrl),
+    "index.html should point Cloud routing at hosted docs, deployment, and support"
   );
 
   const setupGuide = read("docs/SETUP.md");

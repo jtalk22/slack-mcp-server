@@ -48,6 +48,8 @@ node scripts/check-version-parity.js --public --allow-propagation
 node scripts/collect-release-health.js --public
 bash scripts/check-npm-publish-auth.sh
 bash scripts/publish-mcp-registry.sh server.json --validate-only
+curl -s https://mcp.revasserlabs.com/status
+curl -I -H 'Origin: https://jtalk22.github.io' https://mcp.revasserlabs.com/status
 ```
 
 ## External Discovery Checklist
@@ -55,10 +57,12 @@ bash scripts/publish-mcp-registry.sh server.json --validate-only
 - GitHub Release page reflects `v3.2.4` verify commands, support path, and self-hosted vs Cloud split.
 - npm page shows `3.2.4` and `npx` resolves to `slack-mcp-server v3.2.4`.
 - GHCR `3.2.4` image exists and container `--version` matches.
+- Hosted `/status` returns the deployed hosted version, tool counts, token modes, and docs/support/self-host URLs.
+- Hosted `/docs` resolves to the hosted-native documentation surface, not a GitHub redirect.
 - MCP Registry latest is `3.2.4` and `websiteUrl` is `https://mcp.revasserlabs.com`.
 - Glama shows `3.2.4` and the canonical homepage.
 - Smithery listing remains reachable; if metadata lags, record a propagation note.
-- GitHub Pages landing/demo/share surfaces load with current proof and support links.
+- GitHub Pages landing/demo/share surfaces load with current proof and a working Cloud `/status` snapshot.
 - Deployment-intake routing is visible on the current repo trust surfaces.
 
 ## Monitoring Cadence
@@ -96,7 +100,8 @@ Rollout/support request:
 
 3. If Docker is green but npm/registry parity is still stale after expected propagation windows:
 - record the lag in release-health
-- run `bash scripts/publish-mcp-registry.sh` after `mcp-publisher login`
+- run `bash scripts/publish-mcp-registry.sh server.json` using existing local publisher auth artifacts first
+- if auth fails, run `mcp-publisher login github` once and retry `bash scripts/publish-mcp-registry.sh server.json`
 - avoid claiming convergence until `check-version-parity` is clean
 
 ## Registry Sync Path
@@ -104,9 +109,16 @@ Rollout/support request:
 Use this when npm and GHCR are already correct but MCP Registry still reports an old version or `websiteUrl`:
 
 ```bash
+bash scripts/publish-mcp-registry.sh server.json
+node scripts/check-version-parity.js
+```
+
+If publish fails due to auth, run:
+
+```bash
 mcp-publisher login github
-bash scripts/publish-mcp-registry.sh
-node scripts/check-version-parity.js --allow-propagation
+bash scripts/publish-mcp-registry.sh server.json
+node scripts/check-version-parity.js
 ```
 
 ## 24h / 48h / 72h Follow-Up

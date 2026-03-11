@@ -16,7 +16,7 @@ npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
-[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Release health snapshot](docs/release-health/latest.md) · [Version parity report](docs/release-health/version-parity.md) · [Deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md) · [Support boundaries](docs/SUPPORT-BOUNDARIES.md)
+[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Release health snapshot](docs/release-health/latest.md) · [Version parity report](docs/release-health/version-parity.md) · [Cloud deployment](https://mcp.revasserlabs.com/deployment) · [Cloud support](https://mcp.revasserlabs.com/support)
 
 [![Slack MCP proof surface](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
@@ -54,9 +54,9 @@ Slack MCP Cloud provides 15 managed tools with hosted credential handling. Team 
 | Solo | $19/mo | 15 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |
 | Team | $49/mo | 15 standard + 3 AI compound tools, 3 workspaces, 25K requests/mo |
 
-[Get Started](https://mcp.revasserlabs.com) · [Privacy Policy](https://mcp.revasserlabs.com/privacy) · [Support Boundaries](docs/SUPPORT-BOUNDARIES.md)
+[Get Started](https://mcp.revasserlabs.com) · [Cloud Docs](https://mcp.revasserlabs.com/docs) · [Deployment Review](https://mcp.revasserlabs.com/deployment) · [Cloud Support](https://mcp.revasserlabs.com/support) · [Privacy Policy](https://mcp.revasserlabs.com/privacy)
 
-For rollout help or managed deployment review, open a [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md). Reproducible bugs stay in standard issues; rollout requests belong in deployment intake.
+For rollout help or managed deployment review, use [Cloud deployment review](https://mcp.revasserlabs.com/deployment). Reproducible self-host bugs stay in standard issues; hosted operational questions belong on [Cloud support](https://mcp.revasserlabs.com/support).
 
 ## Install & Verify (Self-Hosted)
 
