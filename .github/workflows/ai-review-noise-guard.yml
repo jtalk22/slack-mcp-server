@@ -35,7 +35,6 @@ jobs:
               "gemini-code-assist",
               "coderabbitai",
               "chatgpt-codex-connector",
-              "chatgpt-codex-connector[bot]",
           }
 
           with open(os.environ["GITHUB_EVENT_PATH"], "r", encoding="utf-8") as handle:
@@ -62,9 +61,10 @@ jobs:
               sys.exit(0)
 
           author = subject["user"]["login"]
+          normalized_author = author[:-5] if author.endswith("[bot]") else author
           node_id = subject.get("node_id")
 
-          if author not in BOT_AUTHORS:
+          if normalized_author not in BOT_AUTHORS:
               print(f"Author {author} is not managed by this guard.")
               sys.exit(0)
 
