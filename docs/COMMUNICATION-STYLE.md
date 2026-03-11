@@ -12,6 +12,7 @@ Use this guide for release notes, issue replies, and changelog entries.
 6. Release titles use `vX.Y.Z — <concrete operational outcome>`.
 7. Public artifacts are maintainer-reviewed and maintainer-authored.
 8. GitHub is for self-host bugs, docs fixes, and releases; managed support belongs on hosted surfaces.
+9. If a PR needs AI review, add the `manual-ai-review` label before invoking the bot explicitly.
 
 ## Public Authorship Policy
 
