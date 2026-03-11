@@ -133,10 +133,16 @@ function normalizeErrors(errors, { allowHostedStatusFallback = false } = {}) {
   }
 
   const hostedStatusFailurePattern = /requestfailed:https:\/\/mcp\.revasserlabs\.com\/status\b/;
+  const hostedStatusCorsConsolePattern =
+    /^console:Access to fetch at 'https:\/\/mcp\.revasserlabs\.com\/status'.*blocked by CORS policy/i;
   let hostedStatusConsoleBudget = errors.some((entry) => hostedStatusFailurePattern.test(entry)) ? 1 : 0;
 
   return errors.filter((entry) => {
     if (hostedStatusFailurePattern.test(entry)) {
+      return false;
+    }
+
+    if (hostedStatusCorsConsolePattern.test(entry)) {
       return false;
     }
 
