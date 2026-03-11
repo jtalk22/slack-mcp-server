@@ -17,7 +17,7 @@
     "url": "https://github.com/jtalk22/slack-mcp-server",
     "source": "github"
   },
-  "version": "3.2.2",
+  "version": "3.2.3",
   "remotes": [
     {
       "type": "streamable-http",
@@ -28,7 +28,7 @@
     {
       "registryType": "npm",
       "identifier": "@jtalk22/slack-mcp",
-      "version": "3.2.2",
+      "version": "3.2.3",
       "transport": {
         "type": "stdio"
       },

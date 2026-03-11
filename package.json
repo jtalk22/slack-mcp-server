@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "Session-based Slack MCP for Claude and MCP clients: local-first workflows, secure-default HTTP.",
   "type": "module",
   "main": "src/server.js",
