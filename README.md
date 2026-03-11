@@ -16,7 +16,7 @@ npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
-[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md) · [Support boundaries](docs/SUPPORT-BOUNDARIES.md)
+[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Release health snapshot](docs/release-health/latest.md) · [Version parity report](docs/release-health/version-parity.md) · [Deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md) · [Support boundaries](docs/SUPPORT-BOUNDARIES.md)
 
 [![Slack MCP proof surface](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 

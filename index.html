@@ -110,6 +110,53 @@
       white-space: pre;
     }
 
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .snapshot-card {
+      border: 1px solid rgba(133, 160, 222, 0.32);
+      border-radius: 14px;
+      background: rgba(8, 20, 55, 0.82);
+      padding: 14px 15px;
+      min-height: 120px;
+    }
+
+    .snapshot-label {
+      display: block;
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8fa9da;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .snapshot-value {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #edf3ff;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .snapshot-note {
+      display: block;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .snapshot-note a,
+    .snapshot-value a {
+      color: #9ac3ff;
+    }
+
     .stage {
       padding: 16px 24px 20px;
     }
@@ -176,10 +223,14 @@
     @media (max-width: 760px) {
       body { padding: 10px; }
       .hero, .stage, .footer { padding-left: 12px; padding-right: 12px; }
+      .snapshot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .video-shell { min-height: 200px; }
       .video-controls { left: 8px; bottom: 8px; }
       .video-controls button,
       .video-controls a { padding: 6px 9px; font-size: 0.8rem; }
+    }
+    @media (max-width: 560px) {
+      .snapshot-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -200,6 +251,31 @@ npx -y @jtalk22/slack-mcp@latest --version
 npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status</div>
       <p class="verify" style="margin-top:12px">For rollout support, use deployment intake. Reproducible bugs and install blockers still go through standard issue triage.</p>
+    </section>
+
+    <section class="stage" style="padding-top:0">
+      <div class="snapshot-grid" aria-label="Current distribution snapshot">
+        <div class="snapshot-card">
+          <span class="snapshot-label">npm latest</span>
+          <strong class="snapshot-value" id="npmLatest">Loading...</strong>
+          <span class="snapshot-note" id="npmLatestNote">Registry dist-tag for <code>@jtalk22/slack-mcp</code>.</span>
+        </div>
+        <div class="snapshot-card">
+          <span class="snapshot-label">GitHub release</span>
+          <strong class="snapshot-value" id="releaseTag">Loading...</strong>
+          <span class="snapshot-note" id="releaseTagNote">Latest tagged release from GitHub.</span>
+        </div>
+        <div class="snapshot-card">
+          <span class="snapshot-label">Cloud health</span>
+          <strong class="snapshot-value" id="cloudHealth">Checking...</strong>
+          <span class="snapshot-note" id="cloudHealthNote">Reads the hosted <code>/health</code> endpoint when cross-origin access is available.</span>
+        </div>
+        <div class="snapshot-card">
+          <span class="snapshot-label">Operator links</span>
+          <strong class="snapshot-value"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/latest.md">Release health</a></strong>
+          <span class="snapshot-note"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/version-parity.md">Version parity</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/LAUNCH-OPS.md">Runbook</a></span>
+        </div>
+      </div>
     </section>
 
     <section class="stage">
@@ -228,6 +304,12 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
     const statusEl = document.getElementById('videoStatus');
     const playBtn = document.getElementById('playBtn');
     const pauseBtn = document.getElementById('pauseBtn');
+    const npmLatestEl = document.getElementById('npmLatest');
+    const npmLatestNoteEl = document.getElementById('npmLatestNote');
+    const releaseTagEl = document.getElementById('releaseTag');
+    const releaseTagNoteEl = document.getElementById('releaseTagNote');
+    const cloudHealthEl = document.getElementById('cloudHealth');
+    const cloudHealthNoteEl = document.getElementById('cloudHealthNote');
 
     async function ensureAutoplay() {
       try {
@@ -252,7 +334,62 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
       statusEl.textContent = 'Playback paused.';
     });
 
+    async function loadDistributionSnapshot() {
+      const npmPromise = fetch('https://registry.npmjs.org/@jtalk22/slack-mcp/latest')
+        .then((res) => {
+          if (!res.ok) throw new Error(`npm registry returned ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          npmLatestEl.textContent = `v${data.version}`;
+          npmLatestNoteEl.textContent = `Published package: ${data.name}`;
+        })
+        .catch((error) => {
+          npmLatestEl.textContent = 'Unavailable';
+          npmLatestNoteEl.textContent = `Registry lookup failed: ${error.message}`;
+        });
+
+      const releasePromise = fetch('https://api.github.com/repos/jtalk22/slack-mcp-server/releases/latest')
+        .then((res) => {
+          if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          releaseTagEl.textContent = data.tag_name || 'Unknown';
+          const publishedAt = data.published_at
+            ? new Date(data.published_at).toLocaleDateString()
+            : 'date unavailable';
+          releaseTagNoteEl.textContent = `GitHub Release published ${publishedAt}.`;
+        })
+        .catch((error) => {
+          releaseTagEl.textContent = 'Unavailable';
+          releaseTagNoteEl.textContent = `GitHub release lookup failed: ${error.message}`;
+        });
+
+      const cloudPromise = fetch('https://mcp.revasserlabs.com/health', {
+        headers: { accept: 'application/json' }
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error(`Cloud health returned ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          cloudHealthEl.textContent = data.status || 'ok';
+          const hostedVersion = data.version ? `v${data.version}` : 'version unavailable';
+          const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'n/a';
+          const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'n/a';
+          cloudHealthNoteEl.textContent = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} Team AI workflows`;
+        })
+        .catch((error) => {
+          cloudHealthEl.textContent = 'Open /health';
+          cloudHealthNoteEl.innerHTML = `Cross-origin health lookup unavailable: ${error.message}. Use <a href="https://mcp.revasserlabs.com/health">raw health JSON</a>.`;
+        });
+
+      await Promise.allSettled([npmPromise, releasePromise, cloudPromise]);
+    }
+
     ensureAutoplay();
+    loadDistributionSnapshot();
   </script>
 </body>
 </html>

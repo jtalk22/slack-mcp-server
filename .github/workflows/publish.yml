@@ -11,10 +11,10 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
@@ -48,6 +48,12 @@ jobs:
             echo "already_published=false" >> "$GITHUB_OUTPUT"
             echo "Version $VERSION not found on npm. Proceeding with publish."
           fi
+
+      - name: Verify npm publish auth
+        if: steps.npm_check.outputs.already_published != 'true'
+        run: bash scripts/check-npm-publish-auth.sh
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET_TOKEN }}
 
       - name: Publish to npm
         if: steps.npm_check.outputs.already_published != 'true'
