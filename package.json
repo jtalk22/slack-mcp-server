@@ -2,7 +2,7 @@
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
   "version": "3.2.4",
-  "description": "Claude-first Slack MCP for self-hosted workflows or managed Cloud rollout, with Gemini CLI support, buyer-facing security review, and secure-default HTTP.",
+  "description": "Claude-first Slack MCP for self-host or managed Cloud, with Gemini CLI and secure-default HTTP.",
   "type": "module",
   "main": "src/server.js",
   "bin": {

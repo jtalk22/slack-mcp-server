@@ -109,6 +109,8 @@ async function main() {
     "MCP registry websiteUrl",
     "MCP registry description prefix",
   ]);
+  const registryDescriptionDrift =
+    !(typeof mcpRegistryDescription === "string" && mcpRegistryDescription.startsWith(expectedDescriptionPrefix));
   const externalMismatches = parityChecks
     .filter((check) => !check.ok && externalMismatchNames.has(check.name));
   const hardFailures = parityChecks
@@ -191,7 +193,9 @@ async function main() {
       : "- MCP registry `websiteUrl` drift detected. Re-publish metadata-bearing release info with `bash scripts/publish-mcp-registry.sh` after `mcp-publisher login`.",
     typeof mcpRegistryDescription === "string" && mcpRegistryDescription.startsWith(expectedDescriptionPrefix)
       ? "- MCP registry description prefix matches local metadata."
-      : "- MCP registry description drift detected. Align registry listing description with local `server.json` wording.",
+      : (mcpRegistryVersion === localVersion && registryDescriptionDrift
+          ? "- MCP registry description drift detected. Registry metadata for the same version cannot be republished; carry the new description on the next publishable version."
+          : "- MCP registry description drift detected. Align registry listing description with local `server.json` wording."),
     externalMismatches.length === 0
       ? "- Propagation mode: not needed (external parity is already aligned)."
       : (allowPropagation
