@@ -21,9 +21,10 @@ import {
   getFromFile,
   getFromKeychain,
 } from "../lib/token-store.js";
+import { RELEASE_VERSION } from "../lib/public-metadata.js";
 
 const IS_MACOS = platform() === 'darwin';
-const VERSION = "3.2.0";
+const VERSION = RELEASE_VERSION;
 const MIN_NODE_MAJOR = 20;
 const AUTH_TEST_URL = process.env.SLACK_MCP_AUTH_TEST_URL || "https://slack.com/api/auth.test";
 

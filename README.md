@@ -2,10 +2,23 @@
 
 [![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
 [![npm downloads](https://img.shields.io/npm/dm/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-v3.2.0-blue)](https://registry.modelcontextprotocol.io)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-blue)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Give Claude your Slack. 16 tools — read channels, search messages, send replies, react, manage unreads. Self-host free or Cloud from $19/mo.
+Give Claude your Slack. 16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Self-host free or use Slack MCP Cloud for managed transport, credential handling, and support.
+
+## Verify & Proof
+
+```bash
+npx -y @jtalk22/slack-mcp --setup
+npx -y @jtalk22/slack-mcp@latest --version
+npx -y @jtalk22/slack-mcp@latest --doctor
+npx -y @jtalk22/slack-mcp@latest --status
+```
+
+[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md) · [Support boundaries](docs/SUPPORT-BOUNDARIES.md)
+
+[![Slack MCP proof surface](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
 ## Tools
 
@@ -32,23 +45,28 @@ All tools carry [MCP safety annotations](https://modelcontextprotocol.io/specifi
 
 \* `slack_refresh_tokens` modifies local token file only — no external Slack state.
 
-## Cloud (Recommended)
+## Cloud
 
-Skip all local setup. Paste one URL into Claude and get 16 Slack tools in 60 seconds. Encrypted token storage on Cloudflare's edge (300+ PoPs). OAuth 2.1 with PKCE S256.
+Slack MCP Cloud provides 15 managed tools with hosted credential handling. Team adds 3 AI compound workflows for summaries, action items, and decisions.
 
 | Plan | Price | Includes |
 |------|-------|----------|
 | Solo | $19/mo | 15 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |
 | Team | $49/mo | 15 standard + 3 AI compound tools, 3 workspaces, 25K requests/mo |
 
-[Get Started](https://mcp.revasserlabs.com) · [Privacy Policy](https://mcp.revasserlabs.com/privacy)
+[Get Started](https://mcp.revasserlabs.com) · [Privacy Policy](https://mcp.revasserlabs.com/privacy) · [Support Boundaries](docs/SUPPORT-BOUNDARIES.md)
 
-## Install (Self-Hosted)
+For rollout help or managed deployment review, open a [deployment intake](https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md). Reproducible bugs stay in standard issues; rollout requests belong in deployment intake.
+
+## Install & Verify (Self-Hosted)
 
 **Runtime:** Node.js 20+
 
 ```bash
 npx -y @jtalk22/slack-mcp --setup
+npx -y @jtalk22/slack-mcp@latest --version
+npx -y @jtalk22/slack-mcp@latest --doctor
+npx -y @jtalk22/slack-mcp@latest --status
 ```
 
 The setup wizard handles token extraction and validation automatically.

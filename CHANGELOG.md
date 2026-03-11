@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.4] - 2026-03-11
+
+### Fixed
+- **Release integrity** — Runtime version emitters now resolve from `package.json`, restoring parity for CLI output, Docker smoke tests, and hosted runtime metadata.
+- **Public surface drift** — Current README, marketing pages, setup docs, and Cloud plan claims were aligned so self-hosted and managed offerings no longer contradict each other.
+
+### Added
+- **Public surface integrity gate** — CI and release preflight now validate current-version surfaces, managed Cloud tool-count claims, and core metadata parity before release.
+- **Attribution guardrail regression check** — CI and release preflight now verify the Dependabot skip conditions and main-branch owner enforcement remain intact.
+- **Current release docs** — Added a `v3.2.4` release-note block and a same-day release runbook covering the Docker tag push vs GitHub Release sequencing.
+- **Support routing visibility** — Deployment intake and support-boundary guidance are now elevated across the current repo trust surfaces.
+
 ## [3.2.1] - 2026-03-10
 
 ### Fixed

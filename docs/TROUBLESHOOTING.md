@@ -46,7 +46,7 @@ If `--version` fails here, the issue is install/runtime path, not Slack credenti
 
 **Cause:** AI compound tools (`slack_channel_summary`, `slack_extract_action_items`, `slack_find_decisions`) are Team plan only ($49/mo).
 
-**Solution:** Upgrade to Team plan for AI compound tools, or use the standard 16 tools available on all plans.
+**Solution:** Upgrade to Team plan for AI compound tools, or use the 15 standard managed tools available on all Cloud plans.
 
 ### Cloud Endpoint Health Check
 

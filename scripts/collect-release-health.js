@@ -76,16 +76,29 @@ function buildMarkdown(data) {
   lines.push(`- deployment-intake submissions (all-time): ${data.github.deploymentIntakeCount ?? "n/a"}`);
   lines.push("");
 
-  lines.push("## 14-Day Reliability Targets (v3.2.0 Cycle)");
+  lines.push("## 14-Day Reliability Targets");
   lines.push("");
   lines.push("- weekly downloads: >= 180");
   lines.push("- qualified deployment-intake submissions: >= 2");
   lines.push("- maintainer support load: <= 2 hours/week");
   lines.push("");
 
+  lines.push("## Same-Day Operator Checks");
+  lines.push("");
+  lines.push(`- deployment-intake submissions (current all-time count): ${data.github.deploymentIntakeCount ?? "n/a"}`);
+  lines.push("- GitHub Release page: verify current release notes, verify commands, support path, and Cloud vs self-hosted split.");
+  lines.push("- npm / npx / GHCR parity: verify after release using `npm view`, `npx --version`, and Docker `--version`.");
+  lines.push("- MCP Registry / Glama / Smithery: confirm latest version and canonical homepage, or record propagation lag.");
+  lines.push("- Cloudflare sessions since release: manual.");
+  lines.push("- Checkout starts and provisioned keys since release: manual.");
+  lines.push("- Support load for the release window: manual.");
+  lines.push("");
+
   lines.push("## Notes");
   lines.push("");
   lines.push("- Update this snapshot daily during active release windows, then weekly.");
+  lines.push("- GitHub traffic is an awareness signal, not the sole demand KPI, now that canonical onboarding lives at mcp.revasserlabs.com.");
+  lines.push("- Track off-GitHub funnel metrics manually: Cloudflare sessions, checkout starts, provisioned keys, and support load.");
   lines.push("- Track deployment-intake quality and support load manually in issue notes.");
 
   return `${lines.join("\n")}\n`;

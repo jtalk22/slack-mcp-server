@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "description": "Session-based Slack MCP for Claude and MCP clients: local-first workflows, secure-default HTTP.",
   "type": "module",
   "main": "src/server.js",
@@ -34,7 +34,9 @@
     "metrics:release-health:delta": "node scripts/build-release-health-delta.js",
     "impact:push:v3": "node scripts/impact-push-v3.js --dry-run",
     "impact:push:v3:apply": "node scripts/impact-push-v3.js --apply",
+    "verify:attribution-guardrail": "node scripts/verify-attribution-guardrail.js",
     "verify:version-parity": "node scripts/check-version-parity.js",
+    "verify:public-surface": "node scripts/check-public-surface-integrity.js",
     "verify:release-dry-run": "node scripts/release-preflight.js"
   },
   "keywords": [

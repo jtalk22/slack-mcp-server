@@ -1,10 +1,10 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "slack-mcp-server",
-  "description": "Session-based Slack MCP for Claude and MCP clients. 16 tools: read channels, search messages, send replies, reactions, unreads, user search, AI summaries. Cloud hosted option with encrypted storage — no Docker, no admin approval.",
+  "description": "Session-based Slack MCP for Claude and MCP clients. 16 local-first tools for channels, search, replies, reactions, unreads, and user search. Managed Cloud option available at mcp.revasserlabs.com.",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
-  "version": "3.2.2",
+  "version": "3.2.4",
   "license": "MIT",
   "maintainers": ["jtalk22"],
   "categories": ["communication", "productivity"],

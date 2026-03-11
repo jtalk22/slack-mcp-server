@@ -1,12 +1,12 @@
 # Setup Guide
 
-## Cloud (Fastest — No Local Setup)
+## Cloud
 
-If you want to skip local setup entirely, use **Slack MCP Cloud**:
+Use **Slack MCP Cloud** when you want a managed endpoint rather than local token handling:
 
-1. Go to [cloud.html](https://mcp.revasserlabs.com) and purchase a plan ($19/mo Solo, $49/mo Team)
+1. Go to [Slack MCP Cloud](https://mcp.revasserlabs.com) and purchase a plan ($19/mo Solo, $49/mo Team)
 2. After checkout, you'll receive an API key and ready-to-paste config for Claude Desktop / Claude Code
-3. No Node.js, no Docker, no token management — one URL, 16 tools
+3. Use the hosted endpoint and API key — one URL, 15 managed tools. Team adds 3 AI workflows.
 
 **Claude Desktop config (Cloud):**
 ```json
@@ -34,7 +34,7 @@ If you want to skip local setup entirely, use **Slack MCP Cloud**:
 }
 ```
 
-If you prefer self-hosting (free), continue below.
+If you prefer self-hosting, continue below.
 
 ---
 
@@ -46,7 +46,7 @@ If you prefer self-hosting (free), continue below.
 - Google Chrome (for token extraction on macOS)
 - macOS (for Keychain storage - other platforms use file storage only)
 
-### 1. Install via npm (Recommended)
+### 1. Install via npm
 
 ```bash
 npm install -g @jtalk22/slack-mcp
@@ -83,7 +83,7 @@ Expected:
 
 ### 3. Get Slack Tokens
 
-**Option A: Setup Wizard (recommended)**
+**Option A: Setup Wizard**
 
 1. Open Chrome
 2. Navigate to https://app.slack.com and log in

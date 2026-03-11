@@ -64,3 +64,9 @@ jobs:
 
       - name: Check public wording discipline
         run: bash scripts/check-public-language.sh
+
+      - name: Check attribution guardrail regression
+        run: node scripts/verify-attribution-guardrail.js
+
+      - name: Check public surface integrity
+        run: node scripts/check-public-surface-integrity.js

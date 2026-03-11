@@ -4,7 +4,7 @@
  *
  * Tests:
  * 1. Server starts and prints Magic Link
- * 2. /demo.html contains "STATIC PREVIEW" banner
+ * 2. /demo.html contains the current interactive demo trust banner
  * 3. /?key=... serves the dashboard (index.html)
  * 4. /demo-video.html and /public/demo-video.html media assets are reachable
  * 5. Server shuts down cleanly
@@ -97,8 +97,12 @@ async function testDemoPage() {
 
   const html = await res.text();
 
-  if (!html.includes("STATIC PREVIEW")) {
-    throw new Error("demo.html missing 'STATIC PREVIEW' banner");
+  if (!html.includes("INTERACTIVE DEMO")) {
+    throw new Error("demo.html missing 'INTERACTIVE DEMO' banner");
+  }
+
+  if (!html.includes("simulated data")) {
+    throw new Error("demo.html missing simulated-data disclosure");
   }
 
   if (!html.includes("Who is Alex?")) {
@@ -217,7 +221,7 @@ async function main() {
     console.log("─".repeat(40));
 
     await testDemoPage();
-    log("PASS: Demo page serves correctly with STATIC PREVIEW banner");
+    log("PASS: Demo page serves correctly with the interactive demo disclosure");
     results.push(true);
 
     // Test 3: Dashboard
