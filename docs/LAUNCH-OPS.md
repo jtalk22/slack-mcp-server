@@ -26,12 +26,14 @@ docker build -t slack-mcp-smoke:3.2.4 . && docker run --rm slack-mcp-smoke:3.2.4
 5. Create the GitHub Release immediately after Docker is green, using `.github/v3.2.4-release-notes.md`.
 6. Wait for `Publish to npm` to complete from the GitHub Release event.
 7. Verify npm, `npx`, and GHCR parity.
-8. Monitor MCP Registry, Glama, and Smithery/listing propagation until convergence.
+8. If MCP Registry is still stale after npm and GHCR are green, run the manual registry publish helper after `mcp-publisher login`.
+9. Monitor MCP Registry, Glama, and Smithery/listing propagation until convergence.
 
 ## Release Invariant
 
 - `docker-publish.yml` runs on tag push.
 - `publish.yml` runs on GitHub Release creation.
+- `publish.yml` now checks that the npm token belongs to a listed package owner before attempting publish.
 - Do not create the GitHub Release before Docker passes, and do not treat the tag alone as a complete release.
 
 ## Same-Day Verification Commands
@@ -44,6 +46,8 @@ docker run --rm ghcr.io/jtalk22/slack-mcp-server:3.2.4 --version
 node scripts/check-version-parity.js --allow-propagation
 node scripts/check-version-parity.js --public --allow-propagation
 node scripts/collect-release-health.js --public
+bash scripts/check-npm-publish-auth.sh
+bash scripts/publish-mcp-registry.sh server.json --validate-only
 ```
 
 ## External Discovery Checklist
@@ -92,7 +96,18 @@ Rollout/support request:
 
 3. If Docker is green but npm/registry parity is still stale after expected propagation windows:
 - record the lag in release-health
+- run `bash scripts/publish-mcp-registry.sh` after `mcp-publisher login`
 - avoid claiming convergence until `check-version-parity` is clean
+
+## Registry Sync Path
+
+Use this when npm and GHCR are already correct but MCP Registry still reports an old version or `websiteUrl`:
+
+```bash
+mcp-publisher login github
+bash scripts/publish-mcp-registry.sh
+node scripts/check-version-parity.js --allow-propagation
+```
 
 ## 24h / 48h / 72h Follow-Up
 

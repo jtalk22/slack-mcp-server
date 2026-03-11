@@ -188,7 +188,7 @@ async function main() {
     "",
     mcpRegistryWebsiteUrl === expectedWebsiteUrl
       ? "- MCP registry `websiteUrl` matches local metadata."
-      : "- MCP registry `websiteUrl` drift detected. Update registry metadata or re-publish metadata-bearing release to align canonical install landing URL.",
+      : "- MCP registry `websiteUrl` drift detected. Re-publish metadata-bearing release info with `bash scripts/publish-mcp-registry.sh` after `mcp-publisher login`.",
     typeof mcpRegistryDescription === "string" && mcpRegistryDescription.startsWith(expectedDescriptionPrefix)
       ? "- MCP registry description prefix matches local metadata."
       : "- MCP registry description drift detected. Align registry listing description with local `server.json` wording.",

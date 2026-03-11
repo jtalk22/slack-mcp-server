@@ -138,6 +138,24 @@ function main() {
       !readme.includes("16 standard tools"),
     "README must describe Cloud as 15 standard tools plus 3 AI compound tools on Team"
   );
+  check(
+    results,
+    "README operator links",
+    readme.includes("Release health snapshot") && readme.includes("Version parity report"),
+    "README should link current release-health and version-parity reports"
+  );
+
+  const marketingIndex = read("index.html");
+  check(
+    results,
+    "GitHub Pages distribution snapshot",
+    marketingIndex.includes("Current distribution snapshot") &&
+      marketingIndex.includes("npm latest") &&
+      marketingIndex.includes("GitHub release") &&
+      marketingIndex.includes("Cloud health") &&
+      marketingIndex.includes("Release health"),
+    "index.html should expose the live distribution snapshot cards and operator links"
+  );
 
   const setupGuide = read("docs/SETUP.md");
   check(
