@@ -23,9 +23,6 @@ jobs:
       - name: Minimize unsolicited AI review artifacts
         env:
           GH_TOKEN: ${{ github.token }}
-          EVENT_NAME: ${{ github.event_name }}
-          EVENT_PATH: ${{ github.event_path }}
-          REPOSITORY: ${{ github.repository }}
           OPT_IN_LABEL: manual-ai-review
         run: |
           python3 - <<'PY'
@@ -41,11 +38,11 @@ jobs:
               "chatgpt-codex-connector[bot]",
           }
 
-          with open(os.environ["EVENT_PATH"], "r", encoding="utf-8") as handle:
+          with open(os.environ["GITHUB_EVENT_PATH"], "r", encoding="utf-8") as handle:
               event = json.load(handle)
 
-          event_name = os.environ["EVENT_NAME"]
-          repository = os.environ["REPOSITORY"]
+          event_name = os.environ["GITHUB_EVENT_NAME"]
+          repository = os.environ["GITHUB_REPOSITORY"]
           opt_in_label = os.environ["OPT_IN_LABEL"]
 
           if event_name == "issue_comment":
