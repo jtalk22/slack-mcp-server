@@ -143,17 +143,22 @@ function main() {
     "README cloud claims",
     readme.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard tools`) &&
       readme.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard + ${PUBLIC_METADATA.teamAiWorkflowCount} AI compound tools`) &&
+      readme.includes(PUBLIC_METADATA.secondaryClient) &&
+      readme.includes(PUBLIC_METADATA.cloudTurnkeyLaunchPrice) &&
+      readme.includes(PUBLIC_METADATA.cloudManagedReliabilityPrice) &&
       !readme.includes("16 standard tools"),
-    "README must describe Cloud as 15 standard tools plus 3 AI compound tools on Team"
+    "README must describe Cloud as 15 standard tools plus 3 AI compound tools on Team, with Gemini CLI and premium offers"
   );
   check(
     results,
     "README operator links",
     readme.includes("Release health snapshot") &&
       readme.includes("Version parity report") &&
+      readme.includes(PUBLIC_METADATA.cloudPricingUrl) &&
+      readme.includes(PUBLIC_METADATA.cloudAccountUrl) &&
       readme.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       readme.includes(PUBLIC_METADATA.cloudSupportUrl),
-    "README should link current release-health, version-parity, deployment, and support surfaces"
+    "README should link current release-health, version-parity, pricing, account, deployment, and support surfaces"
   );
 
   const marketingIndex = read("index.html");
@@ -174,22 +179,38 @@ function main() {
     results,
     "GitHub Pages cloud routing",
     marketingIndex.includes(PUBLIC_METADATA.cloudDocsUrl) &&
+      marketingIndex.includes(PUBLIC_METADATA.cloudPricingUrl) &&
       marketingIndex.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       marketingIndex.includes(PUBLIC_METADATA.cloudSupportUrl) &&
       marketingIndex.includes(`${PUBLIC_METADATA.canonicalSiteUrl}/privacy`),
-    "index.html should point Cloud routing at hosted docs, deployment, support, and privacy"
+    "index.html should point Cloud routing at hosted pricing, docs, deployment, support, and privacy"
+  );
+  check(
+    results,
+    "GitHub Pages revenue path",
+    marketingIndex.includes(PUBLIC_METADATA.cloudTurnkeyLaunchPrice) &&
+      marketingIndex.includes(PUBLIC_METADATA.cloudManagedReliabilityPrice) &&
+      marketingIndex.includes(PUBLIC_METADATA.secondaryClient),
+    "index.html should describe the premium offer anchors and Gemini CLI support"
   );
 
   const sharePage = read("public/share.html");
   check(
     results,
     "Share surface cloud routing",
-    sharePage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
+    sharePage.includes(PUBLIC_METADATA.cloudPricingUrl) &&
+      sharePage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
       sharePage.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       sharePage.includes(PUBLIC_METADATA.cloudSupportUrl) &&
       !sharePage.includes("deployment-intake.md") &&
       !sharePage.includes("SUPPORT-BOUNDARIES.md"),
-    "share surface should send Cloud buyers to hosted docs, deployment review, and support"
+    "share surface should send Cloud buyers to hosted pricing, docs, deployment review, and support"
+  );
+  check(
+    results,
+    "Share surface client support",
+    sharePage.includes(PUBLIC_METADATA.secondaryClient),
+    "share surface should mention Gemini CLI support"
   );
 
   for (const demoPath of ["public/demo.html", "public/demo-video.html", "public/demo-claude.html"]) {

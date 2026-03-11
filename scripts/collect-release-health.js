@@ -12,6 +12,10 @@ const NPM_PACKAGE =
   process.env.RELEASE_HEALTH_NPM_PACKAGE ||
   process.env.GROWTH_NPM_PACKAGE ||
   "@jtalk22/slack-mcp";
+const HOSTED_FUNNEL_SUMMARY_URL =
+  process.env.HOSTED_FUNNEL_SUMMARY_URL ||
+  "https://mcp.revasserlabs.com/api/v1/funnel/summary";
+const HOSTED_ADMIN_TOKEN = process.env.HOSTED_ADMIN_TOKEN || "";
 const argv = process.argv.slice(2);
 
 function argValue(flag) {
@@ -41,6 +45,17 @@ function toDateSlug(date) {
   const m = String(date.getMonth() + 1).padStart(2, "0");
   const d = String(date.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
+}
+
+function formatTopEvents(events = []) {
+  if (!Array.isArray(events) || events.length === 0) {
+    return "unavailable";
+  }
+
+  return events
+    .slice(0, 6)
+    .map((event) => `${event.event_name}: ${event.total}`)
+    .join(", ");
 }
 
 function buildMarkdown(data) {
@@ -84,16 +99,33 @@ function buildMarkdown(data) {
   lines.push("- GitHub Release page: verify current release notes, verify commands, support path, and Cloud vs self-hosted split.");
   lines.push("- npm / npx / GHCR parity: verify after release using `npm view`, `npx --version`, and Docker `--version`.");
   lines.push("- MCP Registry / Glama / Smithery: confirm latest version and canonical homepage, or record propagation lag.");
-  lines.push("- Cloudflare sessions since release: manual.");
-  lines.push("- Checkout starts and provisioned keys since release: manual.");
-  lines.push("- Support load for the release window: manual.");
+  lines.push(`- Cloudflare sessions since release: ${data.hosted?.available ? "see hosted funnel summary" : "manual."}`);
+  lines.push(`- Checkout starts and provisioned keys since release: ${data.hosted?.available ? formatTopEvents(data.hosted.events) : "manual."}`);
+  lines.push(`- Support load for the release window: ${data.hosted?.available ? "review hosted funnel plus support inbox manually." : "manual."}`);
+  lines.push("");
+
+  lines.push("## Hosted Funnel");
+  lines.push("");
+  if (data.hosted?.available) {
+    lines.push(`- window days: ${data.hosted.windowDays ?? "n/a"}`);
+    lines.push(`- top events: ${formatTopEvents(data.hosted.events)}`);
+    lines.push(
+      `- top pages: ${
+        Array.isArray(data.hosted.pages) && data.hosted.pages.length > 0
+          ? data.hosted.pages.slice(0, 6).map((page) => `${page.page_path}: ${page.total}`).join(", ")
+          : "unavailable"
+      }`
+    );
+  } else {
+    lines.push(`- unavailable: ${data.hosted?.note || "set HOSTED_ADMIN_TOKEN to query the hosted funnel summary."}`);
+  }
   lines.push("");
 
   lines.push("## Notes");
   lines.push("");
   lines.push("- Update this snapshot daily during active release windows, then weekly.");
   lines.push("- GitHub traffic is an awareness signal, not the sole demand KPI, now that canonical onboarding lives at mcp.revasserlabs.com.");
-  lines.push("- Track off-GitHub funnel metrics manually: Cloudflare sessions, checkout starts, provisioned keys, and support load.");
+  lines.push("- Track off-GitHub funnel metrics with the hosted summary when admin auth is available, then reconcile against Cloudflare sessions and support load.");
   lines.push("- Track hosted deployment review volume and support load manually.");
 
   return `${lines.join("\n")}\n`;
@@ -107,6 +139,7 @@ async function main() {
   let npmWeek = null;
   let npmMonth = null;
   let npmMeta = null;
+  let hostedSummary = null;
 
   try {
     npmWeek = await fetchJson(`https://api.npmjs.org/downloads/point/last-week/${encodeURIComponent(NPM_PACKAGE)}`);
@@ -119,6 +152,34 @@ async function main() {
   try {
     npmMeta = await fetchJson(`https://registry.npmjs.org/${encodeURIComponent(NPM_PACKAGE)}`);
   } catch {}
+
+  if (HOSTED_ADMIN_TOKEN) {
+    try {
+      const response = await fetch(`${HOSTED_FUNNEL_SUMMARY_URL}?days=30`, {
+        headers: {
+          authorization: `Bearer ${HOSTED_ADMIN_TOKEN}`,
+        },
+      });
+      if (response.ok) {
+        hostedSummary = await response.json();
+      } else {
+        hostedSummary = {
+          available: false,
+          note: `hosted summary returned ${response.status}`,
+        };
+      }
+    } catch (error) {
+      hostedSummary = {
+        available: false,
+        note: String(error?.message || error),
+      };
+    }
+  } else {
+    hostedSummary = {
+      available: false,
+      note: "HOSTED_ADMIN_TOKEN not set",
+    };
+  }
 
   const repoInfo = safeGhApi(`repos/${REPO}`) || {};
   const views = safeGhApi(`repos/${REPO}/traffic/views`) || {};
@@ -139,6 +200,14 @@ async function main() {
       clonesCount: clones.count ?? null,
       clonesUniques: clones.uniques ?? null,
     },
+    hosted: hostedSummary?.window_days
+      ? {
+          available: true,
+          windowDays: hostedSummary.window_days,
+          events: hostedSummary.events || [],
+          pages: hostedSummary.pages || [],
+        }
+      : hostedSummary,
   };
 
   const markdown = buildMarkdown(data);

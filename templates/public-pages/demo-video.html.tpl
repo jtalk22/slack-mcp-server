@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slack MCP Server — Video Demo</title>
-  <meta name="description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Managed Cloud deployment is also available.">
+  <meta name="description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools plus a managed Cloud path with Gemini CLI support, deployment review, and hosted credentials.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server — Video Demo">
-  <meta property="og:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
+  <meta property="og:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools plus a managed Cloud path with Gemini CLI support, deployment review, and hosted credentials.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server — Video Demo">
-  <meta name="twitter:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
+  <meta name="twitter:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools plus a managed Cloud path with Gemini CLI support, deployment review, and hosted credentials.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -173,7 +173,7 @@
 <body>
   <div class="container">
     <h1>Slack MCP Server</h1>
-    <p class="subtitle">Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for search, replies, reactions, unread triage, and user lookup. Cloud provides {{CLOUD_MANAGED_TOOL_COUNT}} managed tools.</p>
+    <p class="subtitle">Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for search, replies, reactions, unread triage, and user lookup. Cloud provides {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, {{TEAM_AI_WORKFLOW_COUNT}} Team AI workflows, and Gemini CLI support.</p>
     <div class="cta-strip">
       <div class="links">
 {{DEMO_LINKS}}

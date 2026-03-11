@@ -16,7 +16,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SERVER_PATH = join(__dirname, "../src/web-server.js");
-const PORT = 3456; // Use non-standard port to avoid conflicts
+const TEST_PORT = process.env.TEST_WEB_PORT || "3456";
 const TIMEOUT = 15000;
 
 let serverProc = null;
@@ -40,10 +40,11 @@ async function startServer() {
   return new Promise((resolve, reject) => {
     let magicLink = null;
     let apiKey = null;
+    let baseUrl = null;
     let output = "";
 
     serverProc = spawn("node", [SERVER_PATH], {
-      env: { ...process.env, PORT: String(PORT) },
+      env: { ...process.env, PORT: TEST_PORT },
       stdio: ["pipe", "pipe", "pipe"]
     });
 
@@ -59,6 +60,7 @@ async function startServer() {
       const match = text.match(/Dashboard:\s*(http:\/\/[^\s]+)/);
       if (match) {
         magicLink = match[1];
+        baseUrl = new URL(magicLink).origin;
         // Extract key from URL
         const keyMatch = magicLink.match(/[?&]key=([^&\s]+)/);
         if (keyMatch) {
@@ -69,7 +71,7 @@ async function startServer() {
       // Server is ready when we see the full banner
       if (output.includes("Dashboard:") && output.includes("API Key:")) {
         clearTimeout(timeout);
-        resolve({ magicLink, apiKey });
+        resolve({ magicLink, apiKey, baseUrl });
       }
     });
 
@@ -87,8 +89,8 @@ async function startServer() {
   });
 }
 
-async function testDemoPage() {
-  const url = `http://localhost:${PORT}/demo.html`;
+async function testDemoPage(baseUrl) {
+  const url = `${baseUrl}/demo.html`;
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -112,8 +114,8 @@ async function testDemoPage() {
   return true;
 }
 
-async function testDashboard(apiKey) {
-  const url = `http://localhost:${PORT}/?key=${apiKey}`;
+async function testDashboard(baseUrl, apiKey) {
+  const url = `${baseUrl}/?key=${apiKey}`;
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -134,9 +136,9 @@ async function testDashboard(apiKey) {
   return true;
 }
 
-async function testApiWithKey(apiKey) {
+async function testApiWithKey(baseUrl, apiKey) {
   // Test that API rejects bad key
-  const badRes = await fetch(`http://localhost:${PORT}/health`, {
+  const badRes = await fetch(`${baseUrl}/health`, {
     headers: { "Authorization": "Bearer bad-key" }
   });
 
@@ -147,7 +149,7 @@ async function testApiWithKey(apiKey) {
   return true;
 }
 
-async function testDemoVideoAssets() {
+async function testDemoVideoAssets(baseUrl) {
   const demoVideoPaths = ["/demo-video.html", "/public/demo-video.html"];
   const requiredAssetCandidates = [
     [
@@ -161,7 +163,7 @@ async function testDemoVideoAssets() {
   ];
 
   for (const pagePath of demoVideoPaths) {
-    const demoVideoUrl = `http://localhost:${PORT}${pagePath}`;
+    const demoVideoUrl = `${baseUrl}${pagePath}`;
     const demoVideoRes = await fetch(demoVideoUrl);
 
     if (!demoVideoRes.ok) {
@@ -178,7 +180,7 @@ async function testDemoVideoAssets() {
 
       const assetUrl = matched.startsWith("http")
         ? matched
-        : `http://localhost:${PORT}${matched}`;
+        : `${baseUrl}${matched}`;
 
       const assetRes = await fetch(assetUrl);
       if (!assetRes.ok) {
@@ -202,7 +204,7 @@ async function main() {
     console.log("\n[TEST 1] Server Startup & Magic Link");
     console.log("─".repeat(40));
 
-    const { magicLink, apiKey } = await startServer();
+    const { magicLink, apiKey, baseUrl } = await startServer();
 
     if (!magicLink) {
       throw new Error("No magic link found");
@@ -210,9 +212,13 @@ async function main() {
     if (!apiKey) {
       throw new Error("No API key found in magic link");
     }
+    if (!baseUrl) {
+      throw new Error("No base URL found in magic link");
+    }
 
     log(`Magic Link: ${magicLink}`);
     log(`API Key: ${apiKey.substring(0, 20)}...`);
+    log(`Base URL: ${baseUrl}`);
     log("PASS: Server started with magic link");
     results.push(true);
 
@@ -220,7 +226,7 @@ async function main() {
     console.log("\n[TEST 2] Demo Page (/demo.html)");
     console.log("─".repeat(40));
 
-    await testDemoPage();
+    await testDemoPage(baseUrl);
     log("PASS: Demo page serves correctly with the interactive demo disclosure");
     results.push(true);
 
@@ -228,7 +234,7 @@ async function main() {
     console.log("\n[TEST 3] Dashboard (/?key=...)");
     console.log("─".repeat(40));
 
-    await testDashboard(apiKey);
+    await testDashboard(baseUrl, apiKey);
     log("PASS: Dashboard serves with auth modal");
     results.push(true);
 
@@ -236,7 +242,7 @@ async function main() {
     console.log("\n[TEST 4] API Authentication");
     console.log("─".repeat(40));
 
-    await testApiWithKey(apiKey);
+    await testApiWithKey(baseUrl, apiKey);
     log("PASS: API correctly rejects bad keys");
     results.push(true);
 
@@ -244,7 +250,7 @@ async function main() {
     console.log("\n[TEST 5] Demo Video Media Reachability");
     console.log("─".repeat(40));
 
-    await testDemoVideoAssets();
+    await testDemoVideoAssets(baseUrl);
     log("PASS: demo-video media assets are reachable");
     results.push(true);
 

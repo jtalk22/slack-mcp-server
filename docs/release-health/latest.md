@@ -1,6 +1,6 @@
 # Release Health Snapshot
 
-- Generated: 2026-03-11T13:45:02.323Z
+- Generated: 2026-03-11T16:07:16.139Z
 - Repo: `jtalk22/slack-mcp-server`
 - Package: `@jtalk22/slack-mcp`
 
@@ -37,9 +37,13 @@
 - Checkout starts and provisioned keys since release: manual.
 - Support load for the release window: manual.
 
+## Hosted Funnel
+
+- unavailable: HOSTED_ADMIN_TOKEN not set
+
 ## Notes
 
 - Update this snapshot daily during active release windows, then weekly.
 - GitHub traffic is an awareness signal, not the sole demand KPI, now that canonical onboarding lives at mcp.revasserlabs.com.
-- Track off-GitHub funnel metrics manually: Cloudflare sessions, checkout starts, provisioned keys, and support load.
+- Track off-GitHub funnel metrics with the hosted summary when admin auth is available, then reconcile against Cloudflare sessions and support load.
 - Track hosted deployment review volume and support load manually.

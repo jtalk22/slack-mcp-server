@@ -2,6 +2,18 @@
 
 This runbook defines the same-day ship order for `v3.2.4`, with reliability first and distribution/monitoring checks folded into the same release motion.
 
+## Current Surface Map
+
+```mermaid
+flowchart LR
+    A["Public repo"] --> B["README / docs / release health"]
+    A --> C["GitHub Pages proof"]
+    A --> D["npm / GHCR / MCP Registry"]
+    B --> E["Hosted pricing / docs / deployment / support / account"]
+    C --> E
+    D --> F["Self-host users + remote discovery"]
+```
+
 ## Pre-Merge Gate
 
 Run these from the release branch before merging:
@@ -52,6 +64,9 @@ node scripts/collect-release-health.js --public
 bash scripts/check-npm-publish-auth.sh
 bash scripts/publish-mcp-registry.sh server.json --validate-only
 curl -s https://mcp.revasserlabs.com/status
+curl -s https://mcp.revasserlabs.com/api
+curl -s https://mcp.revasserlabs.com/pricing
+curl -s https://mcp.revasserlabs.com/account
 curl -I -H 'Origin: https://jtalk22.github.io' https://mcp.revasserlabs.com/status
 node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/slack-mcp-server
 ```
@@ -62,7 +77,10 @@ node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/s
 - npm page shows `3.2.4` and `npx` resolves to `slack-mcp-server v3.2.4`.
 - GHCR `3.2.4` image exists and container `--version` matches.
 - Hosted `/status` returns the deployed hosted version, tool counts, token modes, and docs/support/self-host URLs.
+- Hosted `/pricing` reflects Solo, Team, Turnkey Team Launch, and Managed Reliability.
 - Hosted `/docs` resolves to the hosted-native documentation surface, not a GitHub redirect.
+- Hosted `/account` renders the authenticated usage, billing, token, and client-config surface.
+- Hosted `/use-cases/support-triage` resolves and routes to pricing or deployment review.
 - Hosted live browser smoke workflow passes against `https://mcp.revasserlabs.com/`.
 - MCP Registry latest is `3.2.4` and `websiteUrl` is `https://mcp.revasserlabs.com`.
 - Glama shows `3.2.4` and the canonical homepage.
@@ -80,7 +98,7 @@ Track:
 - install blockers and unique reporter count
 - npm / GHCR / MCP Registry / Glama parity state
 - GitHub Release page accuracy
-- Cloudflare sessions, checkout starts, provisioned keys, hosted deployment review requests, and support load
+- Cloudflare sessions, hosted funnel summary, checkout starts, provisioned keys, hosted deployment review requests, and support load
 - inbound issue/discussion severity
 
 ## Triage Rules

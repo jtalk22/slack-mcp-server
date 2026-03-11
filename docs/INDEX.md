@@ -9,6 +9,7 @@ Start here for setup, compatibility checks, current release operations, and supp
 - [Install Proof Block](INSTALL-PROOF.md)
 - [Latest Public Health Snapshot](release-health/latest.md)
 - [Version Parity](release-health/version-parity.md)
+- [Commercial Surface Map](COMMERCIAL-SURFACE.md) — How the public repo, hosted site, registry, and buyer routing fit together now
 
 ## Core
 
@@ -21,10 +22,13 @@ Start here for setup, compatibility checks, current release operations, and supp
 
 ## Cloud
 
-- [Cloud Landing Page](https://mcp.revasserlabs.com) — Hosted MCP endpoint, $19/mo Solo, $49/mo Team
+- [Cloud Landing Page](https://mcp.revasserlabs.com) — Hosted MCP endpoint, pricing, live status, and account surface
+- [Cloud Pricing](https://mcp.revasserlabs.com/pricing) — Solo, Team, Turnkey Team Launch, Managed Reliability
+- [Cloud Account](https://mcp.revasserlabs.com/account) — Usage, billing portal, reconnect state, client configs
 - [Cloud Deployment Review](https://mcp.revasserlabs.com/deployment)
 - [Cloud Support](https://mcp.revasserlabs.com/support)
 - [Cloud Privacy Policy](https://mcp.revasserlabs.com/privacy)
+- [Cloud Use Case: Support Triage](https://mcp.revasserlabs.com/use-cases/support-triage)
 
 ## Operations
 

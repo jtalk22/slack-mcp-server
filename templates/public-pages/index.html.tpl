@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server - Install in 30 Seconds</title>
-  <meta name="description" content="{{SELF_HOSTED_TOOL_COUNT}} self-hosted Slack MCP tools for Claude. Read channels, search messages, send replies, react, and manage unreads. Managed Cloud deployment is also available.">
+  <meta name="description" content="{{SELF_HOSTED_TOOL_COUNT}} self-hosted Slack MCP tools for Claude. Managed Cloud is Claude-first with Gemini CLI support, pricing, deployment review, and higher-touch rollout offers.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Slack MCP Server — 16 Self-Hosted Tools for Claude">
-  <meta property="og:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools with support and hosted credentials.">
+  <meta property="og:title" content="Slack MCP Server — Claude-first Slack MCP, self-hosted or managed">
+  <meta property="og:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, deployment review, and hosted credentials.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server — 16 Self-Hosted Tools for Claude">
-  <meta name="twitter:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools with support and hosted credentials.">
+  <meta name="twitter:title" content="Slack MCP Server — Claude-first Slack MCP, self-hosted or managed">
+  <meta name="twitter:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, deployment review, and hosted credentials.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -296,11 +296,12 @@
   <main class="shell">
     <section class="hero">
       <h1>Give Claude your Slack</h1>
-      <p>{{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Cloud provides {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, with {{TEAM_AI_WORKFLOW_COUNT}} AI workflows on Team.</p>
+      <p>{{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Cloud provides {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, with {{TEAM_AI_WORKFLOW_COUNT}} AI workflows on Team, Claude-first onboarding, and Gemini CLI support.</p>
       <div class="cta-row">
-        <a href="{{CANONICAL_SITE_URL}}" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45)"><strong style="color:#f0c246">Cloud</strong></a>
+        <a href="{{CLOUD_PRICING_URL}}" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45)"><strong style="color:#f0c246">Cloud</strong></a>
         <a href="{{SETUP_URL}}"><strong>Self-Host</strong> (free)</a>
         <a href="{{RELEASES_URL}}"><strong>Latest Release</strong></a>
+        <a href="{{CLOUD_PRICING_URL}}"><strong>Pricing</strong></a>
         <a href="{{CLOUD_DOCS_URL}}"><strong>Cloud Docs</strong></a>
         <a href="{{CLOUD_DEPLOYMENT_URL}}"><strong>Deployment</strong></a>
         <a href="{{CLOUD_SUPPORT_URL}}"><strong>Support</strong></a>
@@ -310,7 +311,7 @@
 npx -y @jtalk22/slack-mcp@latest --version
 npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status</div>
-      <p class="verify" style="margin-top:12px">For rollout support, use deployment review. Reproducible bugs and install blockers still go through standard issue triage.</p>
+      <p class="verify" style="margin-top:12px">For rollout support, use deployment review. Solo starts at {{CLOUD_SOLO_PRICE}}, Team at {{CLOUD_TEAM_PRICE}}, Turnkey Team Launch at {{CLOUD_TURNKEY_LAUNCH_PRICE}}, and Managed Reliability at {{CLOUD_MANAGED_RELIABILITY_PRICE}}. Reproducible bugs and install blockers still go through standard issue triage.</p>
     </section>
 
     <section class="stage" style="padding-top:0">
@@ -356,7 +357,7 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
     </section>
 
     <footer class="footer">
-      <span><a href="{{CANONICAL_SITE_URL}}">Cloud Plans</a> · <a href="{{CLOUD_DOCS_URL}}">Cloud Docs</a> · <a href="{{CLOUD_DEPLOYMENT_URL}}">Deployment</a> · <a href="{{CLOUD_SUPPORT_URL}}">Support</a> · <a href="{{CANONICAL_SITE_URL}}/privacy">Privacy</a> · <a href="{{GITHUB_REPO_URL}}">GitHub</a> · <a href="mailto:{{SUPPORT_EMAIL}}">{{SUPPORT_EMAIL}}</a></span>
+      <span><a href="{{CLOUD_PRICING_URL}}">Cloud Plans</a> · <a href="{{CLOUD_DOCS_URL}}">Cloud Docs</a> · <a href="{{CLOUD_DEPLOYMENT_URL}}">Deployment</a> · <a href="{{CLOUD_SUPPORT_URL}}">Support</a> · <a href="{{CANONICAL_SITE_URL}}/privacy">Privacy</a> · <a href="{{GITHUB_REPO_URL}}">GitHub</a> · <a href="mailto:{{SUPPORT_EMAIL}}">{{SUPPORT_EMAIL}}</a></span>
       <span>25+ releases · 300+ edge PoPs · <a href="https://github.com/sponsors/jtalk22">Sponsor</a></span>
     </footer>
   </main>
