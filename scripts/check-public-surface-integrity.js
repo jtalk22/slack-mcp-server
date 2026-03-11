@@ -155,10 +155,11 @@ function main() {
     readme.includes("Release health snapshot") &&
       readme.includes("Version parity report") &&
       readme.includes(PUBLIC_METADATA.cloudPricingUrl) &&
+      readme.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
       readme.includes(PUBLIC_METADATA.cloudAccountUrl) &&
       readme.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       readme.includes(PUBLIC_METADATA.cloudSupportUrl),
-    "README should link current release-health, version-parity, pricing, account, deployment, and support surfaces"
+    "README should link current release-health, version-parity, pricing, security, account, deployment, and support surfaces"
   );
 
   const marketingIndex = read("index.html");
@@ -180,10 +181,11 @@ function main() {
     "GitHub Pages cloud routing",
     marketingIndex.includes(PUBLIC_METADATA.cloudDocsUrl) &&
       marketingIndex.includes(PUBLIC_METADATA.cloudPricingUrl) &&
+      marketingIndex.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
       marketingIndex.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       marketingIndex.includes(PUBLIC_METADATA.cloudSupportUrl) &&
       marketingIndex.includes(`${PUBLIC_METADATA.canonicalSiteUrl}/privacy`),
-    "index.html should point Cloud routing at hosted pricing, docs, deployment, support, and privacy"
+    "index.html should point Cloud routing at hosted pricing, docs, security, deployment, support, and privacy"
   );
   check(
     results,
@@ -200,11 +202,12 @@ function main() {
     "Share surface cloud routing",
     sharePage.includes(PUBLIC_METADATA.cloudPricingUrl) &&
       sharePage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
+      sharePage.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
       sharePage.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       sharePage.includes(PUBLIC_METADATA.cloudSupportUrl) &&
       !sharePage.includes("deployment-intake.md") &&
       !sharePage.includes("SUPPORT-BOUNDARIES.md"),
-    "share surface should send Cloud buyers to hosted pricing, docs, deployment review, and support"
+    "share surface should send Cloud buyers to hosted pricing, docs, security, deployment review, and support"
   );
   check(
     results,
@@ -219,10 +222,11 @@ function main() {
       results,
       `${demoPath} cloud routing`,
       demoPage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
+        demoPage.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
         demoPage.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
         demoPage.includes(PUBLIC_METADATA.cloudSupportUrl) &&
         !demoPage.includes("deployment-intake.md"),
-      `${demoPath} should keep Cloud routing on hosted docs, deployment review, and support`
+      `${demoPath} should keep Cloud routing on hosted docs, security, deployment review, and support`
     );
   }
 

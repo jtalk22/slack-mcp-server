@@ -10,7 +10,7 @@ flowchart LR
     A --> C["GitHub Pages proof surface"]
     A --> D["npm package / GHCR image"]
     A --> E["MCP Registry metadata"]
-    B --> F["Hosted pricing/docs/support/deployment"]
+    B --> F["Hosted pricing/docs/security/support/deployment"]
     C --> F
     D --> G["Self-host users"]
     E --> H["Remote MCP discovery"]
@@ -66,6 +66,7 @@ That is intentional, but it means the handoff to hosted pricing/docs/deployment 
 - release-preflight is strong again
 - public Pages are generated from shared metadata
 - live Cloud status is read from hosted `/status`
+- hosted security/procurement now has a dedicated route instead of being implied across other pages
 - README now carries the self-host versus Cloud split credibly
 - MCP Registry and homepage metadata are aligned with the hosted surface
 
@@ -85,6 +86,7 @@ flowchart TD
 ```
 
 - Add more named workflow proof to the public Pages surface.
+- Keep public buyer-trust links routed to hosted `/security`, `/deployment`, and `/support`.
 - Pull hosted funnel summary into release-health whenever admin auth is available.
 - Keep README and Pages focused on trust, not feature bloat.
 - Continue reducing GitHub-side noise so public history looks operator-led.

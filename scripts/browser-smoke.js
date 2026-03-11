@@ -219,7 +219,7 @@ async function runLocal() {
     await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Cloud starts at \$19\/mo/i, "share note");
     await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Solo starts at \$19\/mo/i, "demo video note");
     await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", /Team at \$49\/mo adds 3 AI workflows/i, "demo note");
-    await checkStaticPage(page, `${server.url}/public/demo-claude.html`, ".note", /deployment review, and support/i, "demo claude note");
+    await checkStaticPage(page, `${server.url}/public/demo-claude.html`, ".note", /deployment review, security\/procurement review, and support/i, "demo claude note");
 
     if (errors.length > 0) {
       throw new Error(errors.join("\n"));

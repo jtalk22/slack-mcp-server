@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server</title>
-  <meta name="description" content="Session-based Slack MCP for Claude. Self-host locally or use the managed Cloud path with Gemini CLI support, pricing, deployment review, and hosted credentials.">
+  <meta name="description" content="Session-based Slack MCP for Claude. Self-host locally or use the managed Cloud path with Gemini CLI support, pricing, security/procurement review, deployment review, and hosted credentials.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server">
-  <meta property="og:description" content="Session-based Slack MCP for Claude. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, deployment review, and support.">
+  <meta property="og:description" content="Session-based Slack MCP for Claude. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, security/procurement review, deployment review, and support.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server">
-  <meta name="twitter:description" content="Session-based Slack MCP for Claude. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, deployment review, and support.">
+  <meta name="twitter:description" content="Session-based Slack MCP for Claude. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, security/procurement review, deployment review, and support.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <style>
@@ -107,7 +107,7 @@
 <body>
   <main class="wrap">
     <h1>Slack MCP Server</h1>
-    <p class="sub">Give Claude full access to your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, hosted credentials, and rollout support.</p>
+    <p class="sub">Give Claude full access to your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, hosted credentials, rollout support, and buyer-facing security review.</p>
 
     <a class="preview" href="{{GITHUB_REPO_URL}}" rel="noopener">
       <img src="{{SOCIAL_IMAGE_URL}}" alt="Slack MCP Server social preview card">

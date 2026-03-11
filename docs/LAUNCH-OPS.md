@@ -9,7 +9,7 @@ flowchart LR
     A["Public repo"] --> B["README / docs / release health"]
     A --> C["GitHub Pages proof"]
     A --> D["npm / GHCR / MCP Registry"]
-    B --> E["Hosted pricing / docs / deployment / support / account"]
+    B --> E["Hosted pricing / docs / security / deployment / support / account"]
     C --> E
     D --> F["Self-host users + remote discovery"]
 ```
@@ -66,6 +66,7 @@ bash scripts/publish-mcp-registry.sh server.json --validate-only
 curl -s https://mcp.revasserlabs.com/status
 curl -s https://mcp.revasserlabs.com/api
 curl -s https://mcp.revasserlabs.com/pricing
+curl -s https://mcp.revasserlabs.com/security
 curl -s https://mcp.revasserlabs.com/account
 curl -I -H 'Origin: https://jtalk22.github.io' https://mcp.revasserlabs.com/status
 node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/slack-mcp-server
@@ -79,6 +80,7 @@ node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/s
 - Hosted `/status` returns the deployed hosted version, tool counts, token modes, and docs/support/self-host URLs.
 - Hosted `/pricing` reflects Solo, Team, Turnkey Team Launch, and Managed Reliability.
 - Hosted `/docs` resolves to the hosted-native documentation surface, not a GitHub redirect.
+- Hosted `/security` resolves to the buyer-facing controls and procurement surface.
 - Hosted `/account` renders the authenticated usage, billing, token, and client-config surface.
 - Hosted `/use-cases/support-triage` resolves and routes to pricing or deployment review.
 - Hosted live browser smoke workflow passes against `https://mcp.revasserlabs.com/`.

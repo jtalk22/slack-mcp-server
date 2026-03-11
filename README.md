@@ -5,7 +5,7 @@
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-blue)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Give Claude your Slack. 16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Self-host free or use Slack MCP Cloud for Claude-first managed transport, Gemini CLI support, hosted credential handling, and deployment review.
+Give Claude your Slack. 16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Self-host free or use Slack MCP Cloud for Claude-first managed transport, Gemini CLI support, hosted credential handling, deployment review, and buyer-facing security review.
 
 ## Verify & Proof
 
@@ -16,7 +16,7 @@ npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
-[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Start here discussion](https://github.com/jtalk22/slack-mcp-server/discussions/12) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Commercial surface map](docs/COMMERCIAL-SURFACE.md) · [Release health snapshot](docs/release-health/latest.md) · [Version parity report](docs/release-health/version-parity.md) · [Cloud deployment](https://mcp.revasserlabs.com/deployment) · [Cloud support](https://mcp.revasserlabs.com/support)
+[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Start here discussion](https://github.com/jtalk22/slack-mcp-server/discussions/12) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Commercial surface map](docs/COMMERCIAL-SURFACE.md) · [Release health snapshot](docs/release-health/latest.md) · [Version parity report](docs/release-health/version-parity.md) · [Cloud deployment](https://mcp.revasserlabs.com/deployment) · [Cloud security](https://mcp.revasserlabs.com/security) · [Cloud support](https://mcp.revasserlabs.com/support)
 
 [![Slack MCP proof surface](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
@@ -50,7 +50,7 @@ All tools carry [MCP safety annotations](https://modelcontextprotocol.io/specifi
 Slack MCP Cloud provides 15 managed tools with hosted credential handling. Team adds 3 AI compound workflows for summaries, action items, and decisions. Claude is the primary path; Gemini CLI is the second supported client path on the hosted endpoint.
 
 - Self-host if you want 16 tools, npm or Docker, and full operator control over runtime and tokens.
-- Use Cloud if you want one remote endpoint, hosted credential handling, deployment review, support, and a hosted account surface.
+- Use Cloud if you want one remote endpoint, hosted credential handling, deployment review, buyer-facing security review, support, and a hosted account surface.
 - Solo starts at `$19/mo`; Team is `$49/mo` and adds 3 AI workflows plus higher request capacity.
 - Turnkey Team Launch starts at `$2.5k+`; Managed Reliability starts at `$800/mo+` for teams where rollout and operational continuity matter more than raw seat count.
 
@@ -61,9 +61,9 @@ Slack MCP Cloud provides 15 managed tools with hosted credential handling. Team 
 | Turnkey Team Launch | $2.5k+ | Deployment review, rollout sequencing, client setup guidance, first-production-use path |
 | Managed Reliability | $800/mo+ | Ongoing operating review, token-health follow-up, workflow continuity support |
 
-[Pricing](https://mcp.revasserlabs.com/pricing) · [Cloud Docs](https://mcp.revasserlabs.com/docs) · [Account](https://mcp.revasserlabs.com/account) · [Deployment Review](https://mcp.revasserlabs.com/deployment) · [Cloud Support](https://mcp.revasserlabs.com/support) · [Privacy Policy](https://mcp.revasserlabs.com/privacy)
+[Pricing](https://mcp.revasserlabs.com/pricing) · [Cloud Docs](https://mcp.revasserlabs.com/docs) · [Security & Procurement](https://mcp.revasserlabs.com/security) · [Account](https://mcp.revasserlabs.com/account) · [Deployment Review](https://mcp.revasserlabs.com/deployment) · [Cloud Support](https://mcp.revasserlabs.com/support) · [Privacy Policy](https://mcp.revasserlabs.com/privacy)
 
-For rollout help or managed deployment review, use [Cloud deployment review](https://mcp.revasserlabs.com/deployment). Reproducible self-host bugs stay in standard issues; hosted operational questions belong on [Cloud support](https://mcp.revasserlabs.com/support).
+For rollout help or managed deployment review, use [Cloud deployment review](https://mcp.revasserlabs.com/deployment). For buyer-facing controls, storage, analytics, and procurement questions, use [Cloud security](https://mcp.revasserlabs.com/security). Reproducible self-host bugs stay in standard issues; hosted operational questions belong on [Cloud support](https://mcp.revasserlabs.com/support).
 
 Maintained by James Lambert (`jtalk22`) under Revasser. Self-host support is best-effort; managed rollout and Cloud support stay on [mcp.revasserlabs.com](https://mcp.revasserlabs.com).
 

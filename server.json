@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jtalk22/slack-mcp-server",
   "title": "Slack MCP Server",
-  "description": "Claude-first Slack MCP for self-hosted local workflows or managed Cloud rollout, with Gemini CLI support and secure-default HTTP.",
+  "description": "Claude-first Slack MCP for self-hosted workflows or managed Cloud rollout, with Gemini CLI support, buyer-facing security review, and secure-default HTTP.",
   "websiteUrl": "https://mcp.revasserlabs.com",
   "icons": [
     {

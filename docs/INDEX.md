@@ -24,6 +24,7 @@ Start here for setup, compatibility checks, current release operations, and supp
 
 - [Cloud Landing Page](https://mcp.revasserlabs.com) — Hosted MCP endpoint, pricing, live status, and account surface
 - [Cloud Pricing](https://mcp.revasserlabs.com/pricing) — Solo, Team, Turnkey Team Launch, Managed Reliability
+- [Cloud Security](https://mcp.revasserlabs.com/security) — Buyer-facing controls, storage, analytics, and procurement summary
 - [Cloud Account](https://mcp.revasserlabs.com/account) — Usage, billing portal, reconnect state, client configs
 - [Cloud Deployment Review](https://mcp.revasserlabs.com/deployment)
 - [Cloud Support](https://mcp.revasserlabs.com/support)

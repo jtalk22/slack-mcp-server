@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server - Install in 30 Seconds</title>
-  <meta name="description" content="{{SELF_HOSTED_TOOL_COUNT}} self-hosted Slack MCP tools for Claude. Managed Cloud is Claude-first with Gemini CLI support, pricing, deployment review, and higher-touch rollout offers.">
+  <meta name="description" content="{{SELF_HOSTED_TOOL_COUNT}} self-hosted Slack MCP tools for Claude. Managed Cloud is Claude-first with Gemini CLI support, pricing, security/procurement review, deployment review, and higher-touch rollout offers.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server — Claude-first Slack MCP, self-hosted or managed">
-  <meta property="og:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, deployment review, and hosted credentials.">
+  <meta property="og:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, security/procurement review, deployment review, and hosted credentials.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server — Claude-first Slack MCP, self-hosted or managed">
-  <meta name="twitter:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, deployment review, and hosted credentials.">
+  <meta name="twitter:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, security/procurement review, deployment review, and hosted credentials.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -311,7 +311,7 @@
 npx -y @jtalk22/slack-mcp@latest --version
 npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status</div>
-      <p class="verify" style="margin-top:12px">For rollout support, use deployment review. Solo starts at {{CLOUD_SOLO_PRICE}}, Team at {{CLOUD_TEAM_PRICE}}, Turnkey Team Launch at {{CLOUD_TURNKEY_LAUNCH_PRICE}}, and Managed Reliability at {{CLOUD_MANAGED_RELIABILITY_PRICE}}. Reproducible bugs and install blockers still go through standard issue triage.</p>
+      <p class="verify" style="margin-top:12px">For rollout support, use deployment review. For buyer-facing controls and procurement review, use the hosted security surface. Solo starts at {{CLOUD_SOLO_PRICE}}, Team at {{CLOUD_TEAM_PRICE}}, Turnkey Team Launch at {{CLOUD_TURNKEY_LAUNCH_PRICE}}, and Managed Reliability at {{CLOUD_MANAGED_RELIABILITY_PRICE}}. Reproducible bugs and install blockers still go through standard issue triage.</p>
     </section>
 
     <section class="stage" style="padding-top:0">
