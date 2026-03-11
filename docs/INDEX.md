@@ -22,6 +22,8 @@ Start here for setup, compatibility checks, current release operations, and supp
 ## Cloud
 
 - [Cloud Landing Page](https://mcp.revasserlabs.com) — Hosted MCP endpoint, $19/mo Solo, $49/mo Team
+- [Cloud Deployment Review](https://mcp.revasserlabs.com/deployment)
+- [Cloud Support](https://mcp.revasserlabs.com/support)
 - [Cloud Privacy Policy](https://mcp.revasserlabs.com/privacy)
 
 ## Operations
@@ -30,7 +32,6 @@ Start here for setup, compatibility checks, current release operations, and supp
 - [Cloudflare Browser Toolkit](CLOUDFLARE-BROWSER-TOOLKIT.md)
 - [Use Case Recipes](USE_CASE_RECIPES.md)
 - [Support Boundaries](SUPPORT-BOUNDARIES.md)
-- [Deployment Intake Template](../.github/ISSUE_TEMPLATE/deployment-intake.md)
 
 ## Launch and Communication Archive
 
@@ -47,7 +48,6 @@ Start here for setup, compatibility checks, current release operations, and supp
 
 - [Bug Report Template](../.github/ISSUE_TEMPLATE/bug_report.md)
 - [Feature Request Template](../.github/ISSUE_TEMPLATE/feature_request.md)
-- [Deployment Intake Template](../.github/ISSUE_TEMPLATE/deployment-intake.md)
 
 ## Historical Snapshots
 

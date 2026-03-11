@@ -10,6 +10,14 @@ Use this guide for release notes, issue replies, and changelog entries.
 4. State exact versions and commands when relevant.
 5. Avoid speculative claims.
 6. Release titles use `vX.Y.Z — <concrete operational outcome>`.
+7. Public artifacts are maintainer-reviewed and maintainer-authored.
+8. GitHub is for self-host bugs, docs fixes, and releases; managed support belongs on hosted surfaces.
+
+## Public Authorship Policy
+
+- AI tooling may assist locally with drafting, checks, and implementation.
+- Public releases, issue replies, discussions, and changelog entries ship only after maintainer review.
+- Do not include tool attribution, generated-with lines, or bot-style self-reference in public copy.
 
 ## Issue Reply Template
 

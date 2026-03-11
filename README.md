@@ -16,7 +16,7 @@ npx -y @jtalk22/slack-mcp@latest --doctor
 npx -y @jtalk22/slack-mcp@latest --status
 ```
 
-[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Release health snapshot](docs/release-health/latest.md) · [Version parity report](docs/release-health/version-parity.md) · [Cloud deployment](https://mcp.revasserlabs.com/deployment) · [Cloud support](https://mcp.revasserlabs.com/support)
+[20-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html) · [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Start here discussion](https://github.com/jtalk22/slack-mcp-server/discussions/12) · [Latest release notes](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Release-day runbook](docs/LAUNCH-OPS.md) · [Release health snapshot](docs/release-health/latest.md) · [Version parity report](docs/release-health/version-parity.md) · [Cloud deployment](https://mcp.revasserlabs.com/deployment) · [Cloud support](https://mcp.revasserlabs.com/support)
 
 [![Slack MCP proof surface](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
@@ -61,6 +61,8 @@ Slack MCP Cloud provides 15 managed tools with hosted credential handling. Team 
 [Get Started](https://mcp.revasserlabs.com) · [Cloud Docs](https://mcp.revasserlabs.com/docs) · [Deployment Review](https://mcp.revasserlabs.com/deployment) · [Cloud Support](https://mcp.revasserlabs.com/support) · [Privacy Policy](https://mcp.revasserlabs.com/privacy)
 
 For rollout help or managed deployment review, use [Cloud deployment review](https://mcp.revasserlabs.com/deployment). Reproducible self-host bugs stay in standard issues; hosted operational questions belong on [Cloud support](https://mcp.revasserlabs.com/support).
+
+Maintained by James Lambert (`jtalk22`) under Revasser. Self-host support is best-effort; managed rollout and Cloud support stay on [mcp.revasserlabs.com](https://mcp.revasserlabs.com).
 
 ## Install & Verify (Self-Hosted)
 

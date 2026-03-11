@@ -5,7 +5,7 @@ This document sets expectations for issue triage, support scope, and rollout saf
 ## Start With The Right Channel
 
 - Reproducible product bugs: open a standard bug issue with version, runtime mode, and exact error text.
-- Team rollout help or managed evaluation: open a [deployment intake](../.github/ISSUE_TEMPLATE/deployment-intake.md) before broad rollout.
+- Team rollout help or managed evaluation: use [Cloud deployment review](https://mcp.revasserlabs.com/deployment).
 - Privacy or credential-sensitive concerns: use `support@revasserlabs.com` and redact all tokens/cookies.
 
 ## In Scope
@@ -37,7 +37,7 @@ Include the following in every issue:
 - Installation/blocker bugs: initial response target within 2 business days.
 - Non-blocking bugs: initial response target within 5 business days.
 - Feature requests: triaged in backlog batches.
-- Deployment-intake reviews: best-effort prioritization based on rollout urgency and maintainer capacity.
+- Managed rollout questions: route to hosted deployment review and hosted support instead of GitHub issue threads.
 
 ## Solo Maintainer Capacity Guardrail
 
@@ -53,10 +53,12 @@ Include the following in every issue:
 
 ## Deployment Escalation Rule
 
-For team/hosted usage, open a deployment intake issue before broad rollout.
+For team/hosted usage, use [Cloud deployment review](https://mcp.revasserlabs.com/deployment) before broad rollout.
 
 ## Managed vs Self-Hosted Support Posture
 
 - Self-hosted support is best-effort and focused on reproducible product behavior, install blockers, and docs clarity.
-- Guided rollout support is routed through deployment intake so requirements, runtime target, and validation criteria are captured in one place.
+- Guided rollout support is routed through hosted deployment review so requirements, runtime target, and validation criteria stay on the product surface.
 - Public issue threads are not the place for open-ended environment consulting or workspace-specific Slack policy interpretation.
+
+Maintained by James Lambert (`jtalk22`) under Revasser.

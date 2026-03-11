@@ -43,11 +43,6 @@ function toDateSlug(date) {
   return `${y}-${m}-${d}`;
 }
 
-function countNonPrIssues(items) {
-  if (!Array.isArray(items)) return 0;
-  return items.filter((item) => item && !item.pull_request).length;
-}
-
 function buildMarkdown(data) {
   const lines = [];
   lines.push("# Release Health Snapshot");
@@ -73,19 +68,19 @@ function buildMarkdown(data) {
   lines.push(`- 14d unique visitors: ${data.github.viewsUniques ?? "n/a"}`);
   lines.push(`- 14d clones: ${data.github.clonesCount ?? "n/a"}`);
   lines.push(`- 14d unique cloners: ${data.github.clonesUniques ?? "n/a"}`);
-  lines.push(`- deployment-intake submissions (all-time): ${data.github.deploymentIntakeCount ?? "n/a"}`);
+  lines.push("- hosted deployment review requests: manual tracking");
   lines.push("");
 
   lines.push("## 14-Day Reliability Targets");
   lines.push("");
   lines.push("- weekly downloads: >= 180");
-  lines.push("- qualified deployment-intake submissions: >= 2");
+  lines.push("- qualified hosted deployment review requests: manual");
   lines.push("- maintainer support load: <= 2 hours/week");
   lines.push("");
 
   lines.push("## Same-Day Operator Checks");
   lines.push("");
-  lines.push(`- deployment-intake submissions (current all-time count): ${data.github.deploymentIntakeCount ?? "n/a"}`);
+  lines.push("- hosted deployment review requests: manual");
   lines.push("- GitHub Release page: verify current release notes, verify commands, support path, and Cloud vs self-hosted split.");
   lines.push("- npm / npx / GHCR parity: verify after release using `npm view`, `npx --version`, and Docker `--version`.");
   lines.push("- MCP Registry / Glama / Smithery: confirm latest version and canonical homepage, or record propagation lag.");
@@ -99,7 +94,7 @@ function buildMarkdown(data) {
   lines.push("- Update this snapshot daily during active release windows, then weekly.");
   lines.push("- GitHub traffic is an awareness signal, not the sole demand KPI, now that canonical onboarding lives at mcp.revasserlabs.com.");
   lines.push("- Track off-GitHub funnel metrics manually: Cloudflare sessions, checkout starts, provisioned keys, and support load.");
-  lines.push("- Track deployment-intake quality and support load manually in issue notes.");
+  lines.push("- Track hosted deployment review volume and support load manually.");
 
   return `${lines.join("\n")}\n`;
 }
@@ -128,8 +123,6 @@ async function main() {
   const repoInfo = safeGhApi(`repos/${REPO}`) || {};
   const views = safeGhApi(`repos/${REPO}/traffic/views`) || {};
   const clones = safeGhApi(`repos/${REPO}/traffic/clones`) || {};
-  const intakeIssues = safeGhApi(`repos/${REPO}/issues?state=all&labels=deployment-intake&per_page=100`) || [];
-
   const data = {
     generatedAt,
     npm: {
@@ -145,7 +138,6 @@ async function main() {
       viewsUniques: views.uniques ?? null,
       clonesCount: clones.count ?? null,
       clonesUniques: clones.uniques ?? null,
-      deploymentIntakeCount: countNonPrIssues(intakeIssues),
     },
   };
 

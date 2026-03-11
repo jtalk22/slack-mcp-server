@@ -69,7 +69,7 @@ node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/s
 - Smithery listing remains reachable; if metadata lags, record a propagation note.
 - GitHub Pages landing/demo/share surfaces load with current proof and a working Cloud `/status` snapshot.
 - GitHub Pages live browser smoke workflow passes against `https://jtalk22.github.io/slack-mcp-server/`.
-- Deployment-intake routing is visible on the current repo trust surfaces.
+- Hosted deployment review routing is visible on the current repo trust surfaces.
 
 ## Monitoring Cadence
 
@@ -80,7 +80,7 @@ Track:
 - install blockers and unique reporter count
 - npm / GHCR / MCP Registry / Glama parity state
 - GitHub Release page accuracy
-- Cloudflare sessions, checkout starts, provisioned keys, deployment-intake submissions, and support load
+- Cloudflare sessions, checkout starts, provisioned keys, hosted deployment review requests, and support load
 - inbound issue/discussion severity
 
 ## Triage Rules
@@ -91,7 +91,7 @@ P1 install blocker:
 - pause promotion if multiple unique reports land
 
 Rollout/support request:
-- route teams to deployment intake
+- route teams to hosted deployment review
 - keep public issue threads for reproducible product bugs and docs corrections
 
 ## Escalation Triggers
