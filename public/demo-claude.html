@@ -11,20 +11,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="@jtalk22">
-  <title>Slack MCP Server v3.2.0 — Claude Desktop Demo</title>
-  <meta name="description" content="Give Claude your Slack. 16 MCP tools — read channels, search messages, send replies, get AI summaries. Self-host free or Cloud from $19/mo.">
+  <title>Slack MCP Server — Claude Desktop Demo</title>
+  <meta name="description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Slack MCP Server v3.2.0 — Claude Desktop Demo">
-  <meta property="og:description" content="Give Claude your Slack. 16 MCP tools — read channels, search messages, send replies, get AI summaries. Self-host free or Cloud from $19/mo.">
+  <meta property="og:title" content="Slack MCP Server — Claude Desktop Demo">
+  <meta property="og:description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html">
   <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server v3.2.0 — Claude Desktop Demo">
-  <meta name="twitter:description" content="Give Claude your Slack. 16 MCP tools — read channels, search messages, send replies, get AI summaries. Self-host free or Cloud from $19/mo.">
+  <meta name="twitter:title" content="Slack MCP Server — Claude Desktop Demo">
+  <meta name="twitter:description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
   <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
 
   <!-- Theme -->
@@ -1239,18 +1239,19 @@
 <body>
   <div class="cta-strip">
     <div class="links">
-      <a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45);color:#f0c246">Cloud ($19/mo)</a>
+      <a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45);color:#f0c246">Cloud</a>
       <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" target="_blank" rel="noopener noreferrer">npm Install</a>
       <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md" target="_blank" rel="noopener noreferrer">Setup Guide</a>
+      <a href="https://github.com/jtalk22/slack-mcp-server/issues/new?template=deployment-intake.md" target="_blank" rel="noopener noreferrer">Deployment Intake</a>
     </div>
     <div class="note">
-      Self-host free or <a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer">skip setup with Cloud</a> — one URL, no Docker.
+      Self-host free or use <a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer">Cloud</a> for the managed deployment path. Deployment intake handles rollout requests.
     </div>
   </div>
   <header class="page-header">
     <h1>
       <span>Slack MCP Server</span>
-      <span class="badge">🔧 MCP Demo v3.2.0</span>
+      <span class="badge">🔧 MCP Demo</span>
     </h1>
     <p>See how Claude uses MCP tools to access your Slack workspace</p>
   </header>
@@ -1293,7 +1294,7 @@
         <option value="0.5">0.5x (Slow - Video)</option>
         <option value="1" selected>1x (Normal)</option>
         <option value="1.5">1.5x (Fast)</option>
-        <option value="2">2x (Fastest)</option>
+        <option value="2">2x</option>
       </select>
     </div>
     <div class="progress-indicator" id="progressIndicator" style="display: none;">
@@ -1322,7 +1323,7 @@
       <div class="title-logo">💬</div>
       <h1>Slack MCP Server</h1>
       <p class="title-tagline">Full Slack access for Claude Desktop</p>
-      <p class="title-version">v3.2.0 • @jtalk22</p>
+      <p class="title-version">Live demo • @jtalk22</p>
     </div>
 
     <!-- Scenario Caption Overlay -->
@@ -1501,7 +1502,7 @@
           name: "slack_send_message",
           params: {
             channel_id: "C04GENERAL1",
-            text: "✅ Deploy complete! All services are healthy and running on v2.4.1."
+            text: "✅ Deploy complete! All services are healthy and running on the latest release."
           },
           result: {
             success: true,
@@ -1510,7 +1511,7 @@
             permalink: "https://acme-corp.slack.com/archives/C04GENERAL1/p1705612847293847"
           }
         },
-        claudeSummary: "Done! I've posted your update to <strong>#general</strong>:\n\n<em>\"✅ Deploy complete! All services are healthy and running on v2.4.1.\"</em>\n\nThe message was sent at <strong>2:34 PM</strong>. Would you like me to add any follow-up or tag specific people?"
+        claudeSummary: "Done! I've posted your update to <strong>#general</strong>:\n\n<em>\"✅ Deploy complete! All services are healthy and running on the latest release.\"</em>\n\nThe message was sent at <strong>2:34 PM</strong>. Would you like me to add any follow-up or tag specific people?"
       },
 
       multi: {
@@ -1525,7 +1526,7 @@
               count: 5
             },
             result: [
-              { channel: "#engineering", user: "DevOps Bot", time: "Today, 11:42 AM", text: "🚀 Deploy v2.4.1 starting..." },
+              { channel: "#engineering", user: "DevOps Bot", time: "Today, 11:42 AM", text: "🚀 Deploy rollout starting..." },
               { channel: "#engineering", user: "Sarah Chen", time: "Today, 11:45 AM", text: "All tests passing, proceeding with rollout" }
             ]
           },
@@ -1533,7 +1534,7 @@
             name: "slack_send_message",
             params: {
               channel_id: "C04UPDATES2K",
-              text: "📋 Deploy Summary (v2.4.1):\n• Started: 11:42 AM\n• Status: Complete\n• Tests: All passing"
+              text: "📋 Deploy Summary:\n• Started: 11:42 AM\n• Status: Complete\n• Tests: All passing"
             },
             result: {
               success: true,
@@ -1542,7 +1543,7 @@
             }
           }
         ],
-        claudeSummary: "Done! I found the deploy thread from this morning and posted a summary to <strong>#updates</strong>:\n\n<em>\"📋 Deploy Summary (v2.4.1): Started 11:42 AM, Status: Complete, Tests: All passing\"</em>\n\nThe deploy was led by <strong>Sarah Chen</strong> and completed successfully."
+        claudeSummary: "Done! I found the deploy thread from this morning and posted a summary to <strong>#updates</strong>:\n\n<em>\"📋 Deploy Summary: Started 11:42 AM, Status: Complete, Tests: All passing\"</em>\n\nThe deploy was led by <strong>Sarah Chen</strong> and completed successfully."
       }
     };
 

@@ -223,8 +223,10 @@ function main() {
   const steps = [
     gitIdentityStep(),
     ownerAttributionStep(),
+    runNodeStep("Attribution guardrail regression", "scripts/verify-attribution-guardrail.js"),
     publicLanguageStep(),
     markerScanStep(),
+    runNodeStep("Public surface integrity", "scripts/check-public-surface-integrity.js"),
     runNodeStep("Core verification", "scripts/verify-core.js"),
     runNodeStep("Web verification", "scripts/verify-web.js"),
     runNodeStep("Install-flow verification", "scripts/verify-install-flow.js"),

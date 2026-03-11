@@ -5,7 +5,6 @@
  * Exposes Slack MCP tools as REST endpoints for browser access.
  * Run alongside or instead of the MCP server for web-based access.
  *
- * @version 3.2.0
  */
 
 import express from "express";
@@ -16,6 +15,7 @@ import { existsSync, readFileSync, writeFileSync } from "fs";
 import { execSync } from "child_process";
 import { homedir } from "os";
 import { loadTokensReadOnly } from "../lib/token-store.js";
+import { PUBLIC_METADATA, RELEASE_VERSION } from "../lib/public-metadata.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import {
@@ -141,7 +141,7 @@ function extractContent(result) {
 app.get("/", (req, res) => {
   res.json({
     name: "Slack Web API Server",
-    version: "3.2.0",
+    version: RELEASE_VERSION,
     status: "ok",
     code: "ok",
     message: "Web API server is running.",
@@ -450,7 +450,7 @@ async function main() {
   app.listen(PORT, '127.0.0.1', () => {
     // Print to stderr to keep logs clean (stdout reserved for JSON in some setups)
     console.error(`\n${"═".repeat(60)}`);
-    console.error(`  Slack Web API Server v3.2.0`);
+    console.error(`  Slack Web API Server v${RELEASE_VERSION}`);
     console.error(`${"═".repeat(60)}`);
     console.error(`\n  Dashboard: http://localhost:${PORT}/?key=${API_KEY}`);
     console.error(`\n  API Key:   ${API_KEY}`);

@@ -34,7 +34,7 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Slack MCP Server v3.2.0 Social Preview</title>
+  <title>Slack MCP Server Social Preview</title>
   <style>
     :root {
       --bg-a: #0f1f4c;
@@ -145,7 +145,7 @@ const html = `<!doctype html>
   <main class="card">
     <header class="top">
       <span>Slack MCP Server</span>
-      <span class="pill">v3.2.0</span>
+      <span class="pill">Self-Hosted + Cloud</span>
     </header>
     <section class="image-frame">
       <img src="${sourceDataUri}" alt="Slack MCP live demo frame">
@@ -153,7 +153,7 @@ const html = `<!doctype html>
     <footer class="bottom">
       <div>
         <div class="subhead">Session-based Slack MCP for Claude and MCP clients.</div>
-        <div class="detail">Local-first stdio/web. Secure-default hosted HTTP in v3.</div>
+        <div class="detail">16 self-hosted tools. Cloud offers 15 managed tools, plus 3 AI workflows on Team.</div>
       </div>
       <div class="attribution">
         <div>jtalk22</div>

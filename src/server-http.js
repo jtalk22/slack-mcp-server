@@ -33,9 +33,10 @@ import {
   handleConversationsUnreads,
   handleUsersSearch,
 } from "../lib/handlers.js";
+import { RELEASE_VERSION } from "../lib/public-metadata.js";
 
 const SERVER_NAME = "slack-mcp-server";
-const SERVER_VERSION = "3.2.0";
+const SERVER_VERSION = RELEASE_VERSION;
 const PORT = process.env.PORT || 3000;
 const HTTP_INSECURE = process.env.SLACK_MCP_HTTP_INSECURE === "1";
 const HTTP_AUTH_TOKEN = process.env.SLACK_MCP_HTTP_AUTH_TOKEN || process.env.SLACK_API_KEY || null;

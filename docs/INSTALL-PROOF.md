@@ -1,4 +1,4 @@
-# Install Proof Block (v3.2.0)
+# Install Proof Block
 
 Use this command block in release notes, HN/X/Reddit follow-ups, and issue replies.
 
@@ -9,7 +9,7 @@ npx -y @jtalk22/slack-mcp@latest --status
 ```
 
 Expected:
-- `--version` prints `slack-mcp-server v3.2.0`
+- `--version` prints `slack-mcp-server v<current release>`
 - `--doctor` exits with:
   - `0` ready
   - `1` missing credentials

@@ -25,7 +25,7 @@ The server will:
 2. Serve the web UI at http://localhost:3000
 3. Generate a secure API key (saved to `~/.slack-mcp-api-key`)
 
-## Auto-Start on Login (Recommended)
+## Auto-Start on Login
 
 Create a LaunchAgent to auto-start the web server on login:
 
