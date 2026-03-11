@@ -226,9 +226,11 @@ function main() {
     runNodeStep("Attribution guardrail regression", "scripts/verify-attribution-guardrail.js"),
     publicLanguageStep(),
     markerScanStep(),
+    runNodeStep("Generated public pages", "scripts/verify-generated-public-pages.js"),
     runNodeStep("Public surface integrity", "scripts/check-public-surface-integrity.js"),
     runNodeStep("Core verification", "scripts/verify-core.js"),
     runNodeStep("Web verification", "scripts/verify-web.js"),
+    runNodeStep("Browser smoke", "scripts/browser-smoke.js"),
     runNodeStep("Install-flow verification", "scripts/verify-install-flow.js"),
     runNodeStep("Version parity", "scripts/check-version-parity.js", ["--allow-propagation"])
   ];

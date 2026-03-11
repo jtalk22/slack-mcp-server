@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server - Install in 30 Seconds</title>
-  <meta name="description" content="16 self-hosted Slack MCP tools for Claude. Read channels, search messages, send replies, react, and manage unreads. Managed Cloud deployment is also available.">
+  <meta name="description" content="{{SELF_HOSTED_TOOL_COUNT}} self-hosted Slack MCP tools for Claude. Read channels, search messages, send replies, react, and manage unreads. Managed Cloud deployment is also available.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server — 16 Self-Hosted Tools for Claude">
-  <meta property="og:description" content="Give Claude your Slack. Self-host 16 tools for free, or use Cloud for 15 managed tools with support and hosted credentials.">
-  <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/">
-  <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <meta property="og:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools with support and hosted credentials.">
+  <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/">
+  <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server — 16 Self-Hosted Tools for Claude">
-  <meta name="twitter:description" content="Give Claude your Slack. Self-host 16 tools for free, or use Cloud for 15 managed tools with support and hosted credentials.">
-  <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
-  <link rel="icon" href="https://jtalk22.github.io/slack-mcp-server/docs/assets/icon-512.png" type="image/png">
+  <meta name="twitter:description" content="Give Claude your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools with support and hosted credentials.">
+  <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
+  <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -296,15 +296,15 @@
   <main class="shell">
     <section class="hero">
       <h1>Give Claude your Slack</h1>
-      <p>16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Cloud provides 15 managed tools, with 3 AI workflows on Team.</p>
+      <p>{{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Cloud provides {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, with {{TEAM_AI_WORKFLOW_COUNT}} AI workflows on Team.</p>
       <div class="cta-row">
-        <a href="https://mcp.revasserlabs.com" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45)"><strong style="color:#f0c246">Cloud</strong></a>
-        <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md"><strong>Self-Host</strong> (free)</a>
-        <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest"><strong>Latest Release</strong></a>
-        <a href="https://mcp.revasserlabs.com/docs"><strong>Cloud Docs</strong></a>
-        <a href="https://mcp.revasserlabs.com/deployment"><strong>Deployment</strong></a>
-        <a href="https://mcp.revasserlabs.com/support"><strong>Support</strong></a>
-        <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><strong>npm</strong></a>
+        <a href="{{CANONICAL_SITE_URL}}" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45)"><strong style="color:#f0c246">Cloud</strong></a>
+        <a href="{{SETUP_URL}}"><strong>Self-Host</strong> (free)</a>
+        <a href="{{RELEASES_URL}}"><strong>Latest Release</strong></a>
+        <a href="{{CLOUD_DOCS_URL}}"><strong>Cloud Docs</strong></a>
+        <a href="{{CLOUD_DEPLOYMENT_URL}}"><strong>Deployment</strong></a>
+        <a href="{{CLOUD_SUPPORT_URL}}"><strong>Support</strong></a>
+        <a href="{{NPM_URL}}"><strong>npm</strong></a>
       </div>
       <div class="verify">npx -y @jtalk22/slack-mcp --setup
 npx -y @jtalk22/slack-mcp@latest --version
@@ -332,49 +332,13 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
         </div>
         <div class="snapshot-card">
           <span class="snapshot-label">Operator links</span>
-          <strong class="snapshot-value"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/latest.md">Release health</a></strong>
-          <span class="snapshot-note"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/version-parity.md">Version parity</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/LAUNCH-OPS.md">Runbook</a></span>
+          <strong class="snapshot-value"><a href="{{RELEASE_HEALTH_URL}}">Release health</a></strong>
+          <span class="snapshot-note"><a href="{{VERSION_PARITY_URL}}">Version parity</a> · <a href="{{RUNBOOK_URL}}">Runbook</a></span>
         </div>
       </div>
     </section>
 
-<section class="stage" style="padding-top:0">
-      <div class="decision-grid" aria-label="Cloud versus self-host decision guide">
-        <article class="decision-card">
-          <span class="decision-label">Self-host</span>
-          <h2>16 tools and full operator control.</h2>
-          <p>Choose the open-source path if you want npm or Docker, local-first transport control, and direct ownership of token extraction, storage, and process management.</p>
-          <ul>
-            <li>stdio, web, and Docker paths stay fully under your control</li>
-            <li>Best fit for local development, custom transport, or internal operator ownership</li>
-            <li>Proof surfaces: install guide, release health, and version parity remain public</li>
-          </ul>
-          <p class="decision-links"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md">Setup guide</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/version-parity.md">Version parity</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/latest.md">Release health</a></p>
-        </article>
-        <article class="decision-card accent">
-          <span class="decision-label">Cloud</span>
-          <h2>15 managed tools, 3 Team AI workflows.</h2>
-          <p>Choose Cloud if you want one remote endpoint, hosted credential handling, deployment review, and an operational support path instead of running the transport yourself.</p>
-          <ul>
-            <li>Solo: $19/mo for the managed endpoint and hosted credential handling</li>
-            <li>Team: $49/mo and adds 3 AI workflows</li>
-            <li>Best fit for rollout support, buyer review, and faster production use</li>
-          </ul>
-          <p class="decision-links"><a href="https://mcp.revasserlabs.com/docs">Cloud docs</a> · <a href="https://mcp.revasserlabs.com/deployment">Deployment review</a> · <a href="https://mcp.revasserlabs.com/support">Cloud support</a></p>
-        </article>
-        <article class="decision-card">
-          <span class="decision-label">Buyer proof</span>
-          <h2>Technical trust surfaces stay public.</h2>
-          <p>The static Pages root shows npm, GitHub release, and hosted status together. The hosted site publishes <code>/status</code>, <code>/docs</code>, <code>/deployment</code>, <code>/support</code>, and <code>/privacy</code> as the operator-facing Cloud surface.</p>
-          <ul>
-            <li>GitHub Pages reads the hosted <code>/status</code> contract live</li>
-            <li>Registry, npm, and runtime parity are tracked in the public reports</li>
-            <li>Rollout questions route to deployment review instead of ad hoc GitHub issues</li>
-          </ul>
-          <p class="decision-links"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/LAUNCH-OPS.md">Runbook</a> · <a href="https://mcp.revasserlabs.com/status">Raw status JSON</a> · <a href="https://mcp.revasserlabs.com/docs">Buyer FAQ</a></p>
-        </article>
-      </div>
-    </section>
+{{ROOT_DECISION_PANEL}}
 
     <section class="stage">
       <div class="video-shell">
@@ -392,7 +356,7 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
     </section>
 
     <footer class="footer">
-      <span><a href="https://mcp.revasserlabs.com">Cloud Plans</a> · <a href="https://mcp.revasserlabs.com/docs">Cloud Docs</a> · <a href="https://mcp.revasserlabs.com/deployment">Deployment</a> · <a href="https://mcp.revasserlabs.com/support">Support</a> · <a href="https://mcp.revasserlabs.com/privacy">Privacy</a> · <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a> · <a href="mailto:support@revasserlabs.com">support@revasserlabs.com</a></span>
+      <span><a href="{{CANONICAL_SITE_URL}}">Cloud Plans</a> · <a href="{{CLOUD_DOCS_URL}}">Cloud Docs</a> · <a href="{{CLOUD_DEPLOYMENT_URL}}">Deployment</a> · <a href="{{CLOUD_SUPPORT_URL}}">Support</a> · <a href="{{CANONICAL_SITE_URL}}/privacy">Privacy</a> · <a href="{{GITHUB_REPO_URL}}">GitHub</a> · <a href="mailto:{{SUPPORT_EMAIL}}">{{SUPPORT_EMAIL}}</a></span>
       <span>25+ releases · 300+ edge PoPs · <a href="https://github.com/sponsors/jtalk22">Sponsor</a></span>
     </footer>
   </main>
@@ -464,7 +428,7 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
           releaseTagNoteEl.textContent = `GitHub release lookup failed: ${error.message}`;
         });
 
-      const cloudPromise = fetch('https://mcp.revasserlabs.com/status', {
+      const cloudPromise = fetch('{{CLOUD_STATUS_URL}}', {
         headers: { accept: 'application/json' }
       })
         .then((res) => {
@@ -476,12 +440,12 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
           const hostedVersion = data.version ? `v${data.version}` : 'version unavailable';
           const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'n/a';
           const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'n/a';
-          const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : 'https://mcp.revasserlabs.com/docs';
+          const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : '{{CLOUD_DOCS_URL}}';
           cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} Team AI workflows · <a href="${docsUrl}">Cloud docs</a>`;
         })
         .catch((error) => {
           cloudHealthEl.textContent = 'Open /status';
-          cloudHealthNoteEl.innerHTML = `Cross-origin status lookup unavailable: ${error.message}. Use <a href="https://mcp.revasserlabs.com/status">raw status JSON</a>.`;
+          cloudHealthNoteEl.innerHTML = `Cross-origin status lookup unavailable: ${error.message}. Use <a href="{{CLOUD_STATUS_URL}}">raw status JSON</a>.`;
         });
 
       await Promise.allSettled([npmPromise, releasePromise, cloudPromise]);

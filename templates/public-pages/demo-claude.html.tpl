@@ -12,20 +12,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="@jtalk22">
   <title>Slack MCP Server — Claude Desktop Demo</title>
-  <meta name="description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
+  <meta name="description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Slack MCP Server — Claude Desktop Demo">
-  <meta property="og:description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
+  <meta property="og:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html">
-  <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/demo-claude.html">
+  <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server — Claude Desktop Demo">
-  <meta name="twitter:description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
-  <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <meta name="twitter:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
+  <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
 
   <!-- Theme -->
   <meta name="theme-color" content="#1a1a1a">
@@ -1239,15 +1239,10 @@
 <body>
   <div class="cta-strip">
     <div class="links">
-<a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45);color:#f0c246">Cloud</a>
-      <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" target="_blank" rel="noopener noreferrer">npm Install</a>
-      <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md" target="_blank" rel="noopener noreferrer">Setup Guide</a>
-      <a href="https://mcp.revasserlabs.com/docs" target="_blank" rel="noopener noreferrer">Cloud Docs</a>
-      <a href="https://mcp.revasserlabs.com/deployment" target="_blank" rel="noopener noreferrer">Deployment Review</a>
-      <a href="https://mcp.revasserlabs.com/support" target="_blank" rel="noopener noreferrer">Cloud Support</a>
+{{DEMO_LINKS}}
     </div>
     <div class="note">
-      Self-host free for 16 tools and full transport control, or use <a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer">Cloud</a> for 15 managed tools, deployment review, and support. Solo starts at $19/mo; Team at $49/mo adds 3 AI workflows.
+      {{DEMO_NOTE}}
     </div>
   </div>
   <header class="page-header">

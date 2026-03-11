@@ -7,12 +7,15 @@ This runbook defines the same-day ship order for `v3.2.4`, with reliability firs
 Run these from the release branch before merging:
 
 ```bash
+node scripts/generate-public-pages.js
+node scripts/verify-generated-public-pages.js
 node scripts/check-public-surface-integrity.js
 node scripts/verify-attribution-guardrail.js
 node scripts/verify-core.js
 node scripts/verify-web.js
 node scripts/verify-install-flow.js
 node scripts/release-preflight.js
+node scripts/browser-smoke.js
 npm pack --dry-run
 docker build -t slack-mcp-smoke:3.2.4 . && docker run --rm slack-mcp-smoke:3.2.4 --version
 ```
@@ -50,6 +53,7 @@ bash scripts/check-npm-publish-auth.sh
 bash scripts/publish-mcp-registry.sh server.json --validate-only
 curl -s https://mcp.revasserlabs.com/status
 curl -I -H 'Origin: https://jtalk22.github.io' https://mcp.revasserlabs.com/status
+node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/slack-mcp-server
 ```
 
 ## External Discovery Checklist
@@ -59,10 +63,12 @@ curl -I -H 'Origin: https://jtalk22.github.io' https://mcp.revasserlabs.com/stat
 - GHCR `3.2.4` image exists and container `--version` matches.
 - Hosted `/status` returns the deployed hosted version, tool counts, token modes, and docs/support/self-host URLs.
 - Hosted `/docs` resolves to the hosted-native documentation surface, not a GitHub redirect.
+- Hosted live browser smoke workflow passes against `https://mcp.revasserlabs.com/`.
 - MCP Registry latest is `3.2.4` and `websiteUrl` is `https://mcp.revasserlabs.com`.
 - Glama shows `3.2.4` and the canonical homepage.
 - Smithery listing remains reachable; if metadata lags, record a propagation note.
 - GitHub Pages landing/demo/share surfaces load with current proof and a working Cloud `/status` snapshot.
+- GitHub Pages live browser smoke workflow passes against `https://jtalk22.github.io/slack-mcp-server/`.
 - Deployment-intake routing is visible on the current repo trust surfaces.
 
 ## Monitoring Cadence

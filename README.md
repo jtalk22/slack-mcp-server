@@ -49,6 +49,10 @@ All tools carry [MCP safety annotations](https://modelcontextprotocol.io/specifi
 
 Slack MCP Cloud provides 15 managed tools with hosted credential handling. Team adds 3 AI compound workflows for summaries, action items, and decisions.
 
+- Self-host if you want 16 tools, npm or Docker, and full operator control over runtime and tokens.
+- Use Cloud if you want one remote endpoint, hosted credential handling, deployment review, and support.
+- Solo starts at `$19/mo`; Team is `$49/mo` and adds 3 AI workflows plus higher request capacity.
+
 | Plan | Price | Includes |
 |------|-------|----------|
 | Solo | $19/mo | 15 standard tools, AES-256-GCM encrypted storage, 5K requests/mo |

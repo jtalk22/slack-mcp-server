@@ -102,6 +102,14 @@ function main() {
     cliVersionResult.stdout || cliVersionResult.stderr || "no output"
   );
 
+  const generatedPagesResult = runNode(["scripts/verify-generated-public-pages.js"]);
+  check(
+    results,
+    "Generated public pages",
+    generatedPagesResult.status === 0,
+    generatedPagesResult.stdout || generatedPagesResult.stderr || "no output"
+  );
+
   for (const runtimePath of ["src/server.js", "src/server-http.js", "src/web-server.js", "scripts/setup-wizard.js"]) {
     const source = read(runtimePath);
     check(
@@ -156,19 +164,46 @@ function main() {
       marketingIndex.includes("npm latest") &&
       marketingIndex.includes("GitHub release") &&
       marketingIndex.includes("Cloud status") &&
+      marketingIndex.includes("Cloud versus self-host decision guide") &&
       marketingIndex.includes(PUBLIC_METADATA.cloudStatusUrl) &&
       !marketingIndex.includes("https://mcp.revasserlabs.com/health") &&
       marketingIndex.includes("Release health"),
-    "index.html should expose the live distribution snapshot cards, /status contract, and operator links"
+    "index.html should expose the live distribution snapshot cards, decision guide, /status contract, and operator links"
   );
   check(
     results,
     "GitHub Pages cloud routing",
     marketingIndex.includes(PUBLIC_METADATA.cloudDocsUrl) &&
       marketingIndex.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudSupportUrl),
-    "index.html should point Cloud routing at hosted docs, deployment, and support"
+      marketingIndex.includes(PUBLIC_METADATA.cloudSupportUrl) &&
+      marketingIndex.includes(`${PUBLIC_METADATA.canonicalSiteUrl}/privacy`),
+    "index.html should point Cloud routing at hosted docs, deployment, support, and privacy"
   );
+
+  const sharePage = read("public/share.html");
+  check(
+    results,
+    "Share surface cloud routing",
+    sharePage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
+      sharePage.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
+      sharePage.includes(PUBLIC_METADATA.cloudSupportUrl) &&
+      !sharePage.includes("deployment-intake.md") &&
+      !sharePage.includes("SUPPORT-BOUNDARIES.md"),
+    "share surface should send Cloud buyers to hosted docs, deployment review, and support"
+  );
+
+  for (const demoPath of ["public/demo.html", "public/demo-video.html", "public/demo-claude.html"]) {
+    const demoPage = read(demoPath);
+    check(
+      results,
+      `${demoPath} cloud routing`,
+      demoPage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
+        demoPage.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
+        demoPage.includes(PUBLIC_METADATA.cloudSupportUrl) &&
+        !demoPage.includes("deployment-intake.md"),
+      `${demoPath} should keep Cloud routing on hosted docs, deployment review, and support`
+    );
+  }
 
   const setupGuide = read("docs/SETUP.md");
   check(

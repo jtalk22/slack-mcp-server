@@ -7,16 +7,16 @@
   <meta name="description" content="Session-based Slack MCP for Claude. Local-first stdio/web with secure-default hosted HTTP in v3.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server">
-  <meta property="og:description" content="Session-based Slack MCP for Claude. Self-host 16 tools for free or use Cloud for 15 managed tools and support.">
-  <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/share.html">
-  <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <meta property="og:description" content="Session-based Slack MCP for Claude. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools and support.">
+  <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/share.html">
+  <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server">
-  <meta name="twitter:description" content="Session-based Slack MCP for Claude. Self-host 16 tools for free or use Cloud for 15 managed tools and support.">
-  <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
-  <link rel="icon" href="https://jtalk22.github.io/slack-mcp-server/docs/assets/icon-512.png" type="image/png">
+  <meta name="twitter:description" content="Session-based Slack MCP for Claude. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools and support.">
+  <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
+  <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <style>
     :root {
       --bg-1: #0b1436;
@@ -107,26 +107,17 @@
 <body>
   <main class="wrap">
     <h1>Slack MCP Server</h1>
-    <p class="sub">Give Claude full access to your Slack. Self-host 16 tools for free, or use Cloud for 15 managed tools with support and hosted credentials.</p>
+    <p class="sub">Give Claude full access to your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools with support and hosted credentials.</p>
 
-    <a class="preview" href="https://github.com/jtalk22/slack-mcp-server" rel="noopener">
-      <img src="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png" alt="Slack MCP Server social preview card">
+    <a class="preview" href="{{GITHUB_REPO_URL}}" rel="noopener">
+      <img src="{{SOCIAL_IMAGE_URL}}" alt="Slack MCP Server social preview card">
     </a>
 
     <div class="links">
-<a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md" rel="noopener">Install (`--setup`)</a>
-      <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md" rel="noopener">Verify (`--version/--doctor/--status`)</a>
-      <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest" rel="noopener">Latest Release</a>
-      <a href="https://mcp.revasserlabs.com/docs" rel="noopener">Cloud Docs</a>
-      <a href="https://mcp.revasserlabs.com/deployment" rel="noopener">Deployment Review</a>
-      <a href="https://mcp.revasserlabs.com/support" rel="noopener">Cloud Support</a>
-      <a href="https://jtalk22.github.io/slack-mcp-server/" rel="noopener">Autoplay Demo Landing</a>
-      <a href="https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude-mobile-20s.mp4" rel="noopener">20s Mobile Clip</a>
-      <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" rel="noopener">npm Package</a>
-      <a href="https://mcp.revasserlabs.com" rel="noopener" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45);color:#f0c246">Cloud</a>
+{{SHARE_LINKS}}
     </div>
 
-    <p class="note"><strong>Verify in 30 seconds:</strong> <code>--version</code>, <code>--doctor</code>, <code>--status</code>. Self-host gives 16 tools and full operator control. Cloud starts at $19/mo for 15 managed tools, deployment review, and support. Team at $49/mo adds 3 AI workflows.</p>
+    <p class="note">{{SHARE_NOTE}}</p>
   </main>
 </body>
 </html>

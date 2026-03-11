@@ -7,20 +7,20 @@
 
   <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/demo.html">
+  <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/demo.html">
   <meta property="og:title" content="Slack MCP Server — Interactive Demo">
-  <meta property="og:description" content="Give Claude your Slack. 16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
-  <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <meta property="og:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
+  <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server — Interactive Demo">
-  <meta name="twitter:description" content="Give Claude your Slack. 16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
-  <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
-  <link rel="icon" href="https://jtalk22.github.io/slack-mcp-server/docs/assets/icon-512.png" type="image/png">
+  <meta name="twitter:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
+  <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
+  <link rel="icon" href="{{ICON_URL}}" type="image/png">
 
   <!-- SEO -->
-  <meta name="description" content="Give Claude your Slack. 16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Interactive demo.">
+  <meta name="description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Interactive demo.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -743,19 +743,14 @@
 <body>
   <!-- Preview Banner -->
   <div class="preview-banner">
-    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or use <a href="https://mcp.revasserlabs.com" style="color:#f0c246;font-weight:600">Cloud</a> for the managed deployment path.
+    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or use <a href="{{CANONICAL_SITE_URL}}" style="color:#f0c246;font-weight:600">Cloud</a> for the managed deployment path.
   </div>
   <div class="cta-strip">
     <div class="cta-links">
-<a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45);color:#f0c246">Cloud</a>
-      <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" target="_blank" rel="noopener noreferrer">npm Install</a>
-      <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md" target="_blank" rel="noopener noreferrer">Setup Guide</a>
-      <a href="https://mcp.revasserlabs.com/docs" target="_blank" rel="noopener noreferrer">Cloud Docs</a>
-      <a href="https://mcp.revasserlabs.com/deployment" target="_blank" rel="noopener noreferrer">Deployment Review</a>
-      <a href="https://mcp.revasserlabs.com/support" target="_blank" rel="noopener noreferrer">Cloud Support</a>
+{{DEMO_LINKS}}
     </div>
     <div class="cta-note">
-      Self-host free for 16 tools and full transport control, or use <a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer">Cloud</a> for 15 managed tools, deployment review, and support. Solo starts at $19/mo; Team at $49/mo adds 3 AI workflows.
+      {{DEMO_NOTE}}
     </div>
   </div>
 

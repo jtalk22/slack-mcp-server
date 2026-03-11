@@ -25,6 +25,7 @@
     "tokens:clear": "node scripts/token-cli.js clear",
     "screenshot": "node scripts/capture-screenshots.js",
     "build:social-preview": "node scripts/build-social-preview.js",
+    "build:public-pages": "node scripts/generate-public-pages.js",
     "build:demo-mobile": "node scripts/build-mobile-demo.js",
     "build:demo-mobile:gif": "node scripts/build-mobile-demo.js --gif",
     "record-demo": "node scripts/record-demo.js",
@@ -35,9 +36,12 @@
     "impact:push:v3": "node scripts/impact-push-v3.js --dry-run",
     "impact:push:v3:apply": "node scripts/impact-push-v3.js --apply",
     "verify:attribution-guardrail": "node scripts/verify-attribution-guardrail.js",
+    "verify:public-pages": "node scripts/verify-generated-public-pages.js",
     "verify:version-parity": "node scripts/check-version-parity.js",
     "verify:public-surface": "node scripts/check-public-surface-integrity.js",
-    "verify:release-dry-run": "node scripts/release-preflight.js"
+    "verify:release-dry-run": "node scripts/release-preflight.js",
+    "smoke:browser": "node scripts/browser-smoke.js",
+    "smoke:browser:live": "node scripts/browser-smoke.js --mode live"
   },
   "keywords": [
     "claude",
