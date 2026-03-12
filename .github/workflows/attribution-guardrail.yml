@@ -17,8 +17,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        with:
-          fetch-depth: 0
+
+      - name: Fetch attribution refs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          fetch_if_missing() {
+            local sha="$1"
+            [[ -n "$sha" ]] || return 0
+            if git rev-parse --verify "${sha}^{commit}" >/dev/null 2>&1; then
+              return 0
+            fi
+            git fetch --no-tags origin "$sha"
+          }
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            fetch_if_missing "${{ github.event.pull_request.base.sha }}"
+            fetch_if_missing "${{ github.event.pull_request.head.sha }}"
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            BEFORE="${{ github.event.before }}"
+            if [[ -n "$BEFORE" && "$BEFORE" != "0000000000000000000000000000000000000000" ]]; then
+              fetch_if_missing "$BEFORE"
+            fi
+            fetch_if_missing "${{ github.sha }}"
+          fi
 
       - name: Determine commit range
         id: commit_range
