@@ -1,6 +1,6 @@
 # Release Health Snapshot
 
-- Generated: 2026-03-12T00:09:37.669Z
+- Generated: 2026-03-12T00:32:45.999Z
 - Repo: `jtalk22/slack-mcp-server`
 - Package: `@jtalk22/slack-mcp`
 
@@ -8,7 +8,7 @@
 
 - npm downloads (last week): 195
 - npm downloads (last month): 1611
-- npm latest version: 3.2.4
+- npm latest version: 3.2.5
 
 ## GitHub Reach
 

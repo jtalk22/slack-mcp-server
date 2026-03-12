@@ -90,6 +90,6 @@ flowchart TD
 - Add more named workflow proof to the public Pages surface.
 - Keep public buyer-trust links routed to hosted `/security`, `/deployment`, and `/support`.
 - Pull hosted funnel summary into release-health whenever admin auth is available.
-- Ship `3.2.5` specifically to close MCP Registry description drift and refresh downstream crawlers.
+- Keep `3.2.5` as the metadata baseline that closed MCP Registry description drift, then monitor secondary crawlers for lag.
 - Keep README and Pages focused on trust, not feature bloat.
 - Continue reducing GitHub-side noise so public history looks operator-led.

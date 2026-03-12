@@ -1,7 +1,7 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "slack-mcp-server",
-  "description": "Claude-first Slack MCP for self-host or managed Cloud, with Gemini CLI, deployment review, and secure-default HTTP.",
+  "description": "Slack MCP for self-host or managed Cloud, with Gemini CLI and secure-default HTTP.",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
   "version": "3.2.5",
