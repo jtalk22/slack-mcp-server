@@ -1,6 +1,6 @@
-# Release-Day Runbook (`v3.2.4`)
+# Release-Day Runbook (`v3.2.5`)
 
-This runbook defines the same-day ship order for `v3.2.4`, with reliability first and distribution/monitoring checks folded into the same release motion.
+This runbook defines the same-day ship order for `v3.2.5`, with reliability first and distribution, search, and monitoring checks folded into the same release motion.
 
 ## Current Surface Map
 
@@ -29,16 +29,16 @@ node scripts/verify-install-flow.js
 node scripts/release-preflight.js
 node scripts/browser-smoke.js
 npm pack --dry-run
-docker build -t slack-mcp-smoke:3.2.4 . && docker run --rm slack-mcp-smoke:3.2.4 --version
+docker build -t slack-mcp-smoke:3.2.5 . && docker run --rm slack-mcp-smoke:3.2.5 --version
 ```
 
 ## Release Sequence
 
-1. Merge `v3.2.4` to `main`.
+1. Merge `v3.2.5` to `main`.
 2. Confirm `CI` and `Attribution Guardrail` pass on `main`.
-3. Push tag `v3.2.4`.
+3. Push tag `v3.2.5`.
 4. Wait for the `Docker` workflow on the tag to pass.
-5. Create the GitHub Release immediately after Docker is green, using `.github/v3.2.4-release-notes.md`.
+5. Create the GitHub Release immediately after Docker is green, using `.github/v3.2.5-release-notes.md`.
 6. Wait for `Publish to npm` to complete from the GitHub Release event.
 7. Verify npm, `npx`, and GHCR parity.
 8. If MCP Registry is still stale after npm and GHCR are green, run the manual registry publish helper after `mcp-publisher login`.
@@ -57,7 +57,7 @@ docker build -t slack-mcp-smoke:3.2.4 . && docker run --rm slack-mcp-smoke:3.2.4
 gh run list --repo jtalk22/slack-mcp-server --limit 10
 npm view @jtalk22/slack-mcp version
 npx -y @jtalk22/slack-mcp@latest --version
-docker run --rm ghcr.io/jtalk22/slack-mcp-server:3.2.4 --version
+docker run --rm ghcr.io/jtalk22/slack-mcp-server:3.2.5 --version
 node scripts/check-version-parity.js --allow-propagation
 node scripts/check-version-parity.js --public --allow-propagation
 node scripts/collect-release-health.js --public
@@ -74,9 +74,9 @@ node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/s
 
 ## External Discovery Checklist
 
-- GitHub Release page reflects `v3.2.4` verify commands, support path, and self-hosted vs Cloud split.
-- npm page shows `3.2.4` and `npx` resolves to `slack-mcp-server v3.2.4`.
-- GHCR `3.2.4` image exists and container `--version` matches.
+- GitHub Release page reflects `v3.2.5` verify commands, support path, and self-hosted vs Cloud split.
+- npm page shows `3.2.5` and `npx` resolves to `slack-mcp-server v3.2.5`.
+- GHCR `3.2.5` image exists and container `--version` matches.
 - Hosted `/status` returns the deployed hosted version, tool counts, token modes, and docs/support/self-host URLs.
 - Hosted `/pricing` reflects Solo, Team, Turnkey Team Launch, and Managed Reliability.
 - Hosted `/docs` resolves to the hosted-native documentation surface, not a GitHub redirect.
@@ -84,8 +84,8 @@ node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/s
 - Hosted `/account` renders the authenticated usage, billing, token, and client-config surface.
 - Hosted `/use-cases/support-triage` resolves and routes to pricing or deployment review.
 - Hosted live browser smoke workflow passes against `https://mcp.revasserlabs.com/`.
-- MCP Registry latest is `3.2.4` and `websiteUrl` is `https://mcp.revasserlabs.com`.
-- Glama shows `3.2.4` and the canonical homepage.
+- MCP Registry latest is `3.2.5` and `websiteUrl` is `https://mcp.revasserlabs.com`.
+- Glama shows `3.2.5` and the canonical homepage, or the drift is recorded in `docs/DISTRIBUTION-LEDGER.md`.
 - Smithery listing remains reachable; if metadata lags, record a propagation note.
 - GitHub Pages landing/demo/share surfaces load with current proof and a working Cloud `/status` snapshot.
 - GitHub Pages live browser smoke workflow passes against `https://jtalk22.github.io/slack-mcp-server/`.
@@ -130,6 +130,20 @@ Rollout/support request:
 - if auth fails, run `mcp-publisher login github` once and retry `bash scripts/publish-mcp-registry.sh server.json`
 - avoid claiming convergence until `check-version-parity` is clean
 
+## Weekly Search and Listing Ops
+
+1. Submit or refresh `https://mcp.revasserlabs.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
+2. Inspect:
+   - `/`
+   - `/pricing`
+   - `/security`
+   - `/gemini-cli`
+   - `/workflows`
+   - `/use-cases/support-triage`
+3. Record indexed page count and any canonical or indexing warnings.
+4. Compare Search Console clicks against hosted first-touch source mix in the hosted funnel summary.
+5. Re-check `docs/DISTRIBUTION-LEDGER.md` and update any directory that still carries stale description or removed links.
+
 ## Registry Sync Path
 
 Use this when npm and GHCR are already correct but MCP Registry still reports an old version or `websiteUrl`:
@@ -156,4 +170,4 @@ node scripts/check-version-parity.js
 - patch docs for top recurring setup or rollout questions
 
 72h:
-- ship `v3.2.5` only if defects are confirmed
+- ship `v3.2.6` only if defects are confirmed

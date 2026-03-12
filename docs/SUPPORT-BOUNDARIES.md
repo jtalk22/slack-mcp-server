@@ -61,4 +61,4 @@ For team/hosted usage, use [Cloud deployment review](https://mcp.revasserlabs.co
 - Guided rollout support is routed through hosted deployment review so requirements, runtime target, and validation criteria stay on the product surface.
 - Public issue threads are not the place for open-ended environment consulting or workspace-specific Slack policy interpretation.
 
-Maintained by James Lambert (`jtalk22`) under Revasser.
+Operated by Revasser. Self-host support stays on GitHub; managed rollout, billing, and Cloud support stay on `https://mcp.revasserlabs.com`.

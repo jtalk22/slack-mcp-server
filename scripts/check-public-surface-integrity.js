@@ -89,6 +89,14 @@ function main() {
   );
   check(
     results,
+    "description parity",
+    packageJson.description === PUBLIC_METADATA.canonicalShortDescription &&
+      serverMeta.description === PUBLIC_METADATA.canonicalShortDescription &&
+      glamaMeta.description === PUBLIC_METADATA.canonicalShortDescription,
+    `package=${packageJson.description}; server=${serverMeta.description}; glama=${glamaMeta.description}`
+  );
+  check(
+    results,
     "glama tool count",
     glamaMeta.features?.tools === PUBLIC_METADATA.selfHostedToolCount,
     `expected ${PUBLIC_METADATA.selfHostedToolCount}, found ${glamaMeta.features?.tools ?? "n/a"}`
@@ -154,12 +162,13 @@ function main() {
     "README operator links",
     readme.includes("Release health snapshot") &&
       readme.includes("Version parity report") &&
+      readme.includes("Distribution ledger") &&
       readme.includes(PUBLIC_METADATA.cloudPricingUrl) &&
       readme.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
-      readme.includes(PUBLIC_METADATA.cloudAccountUrl) &&
+      readme.includes(PUBLIC_METADATA.tracked.readme.account) &&
       readme.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       readme.includes(PUBLIC_METADATA.cloudSupportUrl),
-    "README should link current release-health, version-parity, pricing, security, account, deployment, and support surfaces"
+    "README should link current release-health, version-parity, distribution ledger, pricing, security, account, deployment, and support surfaces"
   );
 
   const marketingIndex = read("index.html");
@@ -256,6 +265,59 @@ function main() {
     deploymentModes.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard managed tools + ${PUBLIC_METADATA.teamAiWorkflowCount} AI workflows on Team`) &&
       !deploymentModes.includes("16 standard tools + AI compound tools on Team"),
     "docs/DEPLOYMENT-MODES.md must describe the managed Cloud counts"
+  );
+
+  const distributionLedger = read("docs/DISTRIBUTION-LEDGER.md");
+  check(
+    results,
+    "Distribution ledger coverage",
+    distributionLedger.includes("MCP Registry") &&
+      distributionLedger.includes("Glama") &&
+      distributionLedger.includes("mcp.so") &&
+      distributionLedger.includes("PulseMCP") &&
+      distributionLedger.includes("Smithery") &&
+      distributionLedger.includes("3.2.5"),
+    "docs/DISTRIBUTION-LEDGER.md must track the current external directory surfaces and next metadata-bearing release"
+  );
+
+  const docsIndex = read("docs/INDEX.md");
+  check(
+    results,
+    "Docs index current release",
+    docsIndex.includes("v3.2.5") &&
+      docsIndex.includes("Distribution Ledger") &&
+      docsIndex.includes("Cloud Gemini CLI") &&
+      docsIndex.includes("Cloud Readiness"),
+    "docs/INDEX.md must point to the current release, ledger, Gemini CLI, and readiness surfaces"
+  );
+
+  const runbook = read("docs/LAUNCH-OPS.md");
+  check(
+    results,
+    "Runbook search ops",
+    runbook.includes("v3.2.5") &&
+      runbook.includes("Google Search Console") &&
+      runbook.includes("Bing Webmaster Tools") &&
+      runbook.includes("docs/DISTRIBUTION-LEDGER.md"),
+    "docs/LAUNCH-OPS.md must reflect v3.2.5 and the weekly search/listing ops checklist"
+  );
+
+  const supportBoundaries = read("docs/SUPPORT-BOUNDARIES.md");
+  check(
+    results,
+    "Support boundaries company-led",
+    supportBoundaries.includes("Operated by Revasser") &&
+      !supportBoundaries.includes("Maintained by James Lambert"),
+    "docs/SUPPORT-BOUNDARIES.md must use company-led support wording"
+  );
+
+  const releaseTemplate = read(".github/RELEASE_NOTES_TEMPLATE.md");
+  check(
+    results,
+    "Release template company-led",
+    releaseTemplate.includes("Operated by Revasser") &&
+      !releaseTemplate.includes("Maintained by James Lambert"),
+    ".github/RELEASE_NOTES_TEMPLATE.md must use company-led support wording"
   );
 
   const localWebUi = read("public/index.html");

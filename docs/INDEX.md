@@ -4,12 +4,13 @@ Start here for setup, compatibility checks, current release operations, and supp
 
 ## Current Release
 
-- [Release-Day Runbook](LAUNCH-OPS.md) — Exact `v3.2.4` ship order, verification commands, and propagation checklist
-- [Release Notes (v3.2.4)](../.github/v3.2.4-release-notes.md)
+- [Release-Day Runbook](LAUNCH-OPS.md) — Exact `v3.2.5` ship order, verification commands, propagation checklist, and search/listing checklist
+- [Release Notes (v3.2.5)](../.github/v3.2.5-release-notes.md)
 - [Install Proof Block](INSTALL-PROOF.md)
 - [Latest Public Health Snapshot](release-health/latest.md)
 - [Version Parity](release-health/version-parity.md)
 - [Commercial Surface Map](COMMERCIAL-SURFACE.md) — How the public repo, hosted site, registry, and buyer routing fit together now
+- [Distribution Ledger](DISTRIBUTION-LEDGER.md) — Current external listing state and next corrective action
 
 ## Core
 
@@ -23,13 +24,17 @@ Start here for setup, compatibility checks, current release operations, and supp
 ## Cloud
 
 - [Cloud Landing Page](https://mcp.revasserlabs.com) — Hosted MCP endpoint, pricing, live status, and account surface
-- [Cloud Pricing](https://mcp.revasserlabs.com/pricing) — Solo, Team, Turnkey Team Launch, Managed Reliability
-- [Cloud Security](https://mcp.revasserlabs.com/security) — Buyer-facing controls, storage, analytics, and procurement summary
-- [Cloud Account](https://mcp.revasserlabs.com/account) — Usage, billing portal, reconnect state, client configs
-- [Cloud Deployment Review](https://mcp.revasserlabs.com/deployment)
-- [Cloud Support](https://mcp.revasserlabs.com/support)
-- [Cloud Privacy Policy](https://mcp.revasserlabs.com/privacy)
-- [Cloud Use Case: Support Triage](https://mcp.revasserlabs.com/use-cases/support-triage)
+- [Cloud Pricing](https://mcp.revasserlabs.com/pricing?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Solo, Team, Turnkey Team Launch, Managed Reliability
+- [Cloud Workflows](https://mcp.revasserlabs.com/workflows?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Named workflow outcomes and anonymized proof
+- [Cloud Gemini CLI](https://mcp.revasserlabs.com/gemini-cli?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Secondary client setup path
+- [Cloud Readiness](https://mcp.revasserlabs.com/readiness?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Fit assessment for self-host, Solo, Team, or premium rollout
+- [Cloud Security](https://mcp.revasserlabs.com/security?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Buyer-facing controls, storage, analytics, and procurement summary
+- [Cloud Procurement Brief](https://mcp.revasserlabs.com/procurement?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
+- [Cloud Account](https://mcp.revasserlabs.com/account?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Usage, billing portal, reconnect state, client configs
+- [Cloud Deployment Review](https://mcp.revasserlabs.com/deployment?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
+- [Cloud Support](https://mcp.revasserlabs.com/support?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
+- [Cloud Privacy Policy](https://mcp.revasserlabs.com/privacy?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
+- [Cloud Use Case: Support Triage](https://mcp.revasserlabs.com/use-cases/support-triage?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
 
 ## Operations
 

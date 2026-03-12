@@ -30,6 +30,27 @@ function runNpx(args, options = {}) {
   };
 }
 
+function isTransientNpmNetworkFailure(result) {
+  const text = `${result.stderr || ""}\n${result.stdout || ""}`;
+  return /\b(ETIMEDOUT|ECONNRESET|EAI_AGAIN|ENOTFOUND)\b/i.test(text) ||
+    /npm error network/i.test(text) ||
+    /request to .* failed/i.test(text);
+}
+
+function runNpxWithRetry(args, options = {}, attempts = 3) {
+  let lastResult = null;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    lastResult = runNpx(args, options);
+    if (!isTransientNpmNetworkFailure(lastResult) || attempt === attempts) {
+      return lastResult;
+    }
+    console.log(
+      `warning: transient npm network failure while running npx ${lastResult.args}; retrying (${attempt}/${attempts - 1})`
+    );
+  }
+  return lastResult;
+}
+
 function assert(condition, message, details = "") {
   if (!condition) {
     const suffix = details ? `\n${details}` : "";
@@ -93,7 +114,7 @@ function main() {
   delete env.SLACK_COOKIE;
 
   try {
-    const versionResult = runNpx(["--version"], { cwd: testHome, env });
+    const versionResult = runNpxWithRetry(["--version"], { cwd: testHome, env });
     printResult("version", versionResult);
     assert(
       versionResult.status === 0,
@@ -113,7 +134,7 @@ function main() {
       );
     }
 
-    const helpResult = runNpx(["--help"], { cwd: testHome, env });
+    const helpResult = runNpxWithRetry(["--help"], { cwd: testHome, env });
     printResult("help", helpResult);
     assert(
       helpResult.status === 0,
@@ -121,7 +142,7 @@ function main() {
       helpResult.stderr || helpResult.stdout,
     );
 
-    const statusResult = runNpx(["--status"], { cwd: testHome, env });
+    const statusResult = runNpxWithRetry(["--status"], { cwd: testHome, env });
     printResult("status", statusResult);
     assert(
       statusResult.status !== 0,

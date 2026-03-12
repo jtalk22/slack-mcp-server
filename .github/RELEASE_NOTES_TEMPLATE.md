@@ -21,4 +21,4 @@ npx -y @jtalk22/slack-mcp --status
 - Self-host bugs and docs fixes: GitHub issues with exact version, runtime mode, and error output.
 - Managed rollout or Cloud support: `https://mcp.revasserlabs.com/deployment` and `https://mcp.revasserlabs.com/support`
 
-Maintained by James Lambert (`jtalk22`) under Revasser.
+Operated by Revasser. Self-host issues stay on GitHub; managed rollout and Cloud support stay on `https://mcp.revasserlabs.com`.

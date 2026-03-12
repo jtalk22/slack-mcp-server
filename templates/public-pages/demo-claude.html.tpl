@@ -1424,7 +1424,7 @@
       Keyboard: <kbd>1-5</kbd> scenarios · <kbd>R</kbd> replay · <kbd>A</kbd> auto-play · <kbd>F</kbd> fullscreen · <kbd>Esc</kbd> exit
     </p>
     <p style="margin-top: 12px; font-size: 11px; color: var(--text-muted);">
-      © 2026 James Lambert · MIT License
+      © 2026 Revasser · MIT License
     </p>
   </footer>
 

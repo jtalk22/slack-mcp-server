@@ -1,10 +1,10 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "slack-mcp-server",
-  "description": "Session-based Slack MCP for Claude and MCP clients. 16 local-first tools. Managed Cloud lives at mcp.revasserlabs.com.",
+  "description": "Claude-first Slack MCP for self-host or managed Cloud, with Gemini CLI, deployment review, and secure-default HTTP.",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "license": "MIT",
   "maintainers": ["jtalk22"],
   "categories": ["communication", "productivity"],

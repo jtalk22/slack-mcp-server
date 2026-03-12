@@ -1,6 +1,6 @@
 # Commercial Surface Map
 
-This repo is the public self-host and release-trust surface for Slack MCP. It is not the entire product. The hosted commercial surface lives at [mcp.revasserlabs.com](https://mcp.revasserlabs.com).
+This repo is the public self-host and release-trust surface for Slack MCP. It is not the entire product. The hosted commercial surface lives at [mcp.revasserlabs.com](https://mcp.revasserlabs.com), and the current external directory state is tracked in [Distribution Ledger](DISTRIBUTION-LEDGER.md).
 
 ## Current System
 
@@ -34,6 +34,7 @@ The repo is no longer just a launch artifact for an OSS tool. It now acts as:
 - the public proof surface for self-host
 - the distribution root for npm / Docker / MCP Registry
 - the trust bridge into the hosted paid product
+- the metadata bridge into secondary directories that often lag behind the real product surface
 
 ## Current Cloud Positioning
 
@@ -69,6 +70,7 @@ That is intentional, but it means the handoff to hosted pricing/docs/deployment 
 - hosted security/procurement now has a dedicated route instead of being implied across other pages
 - README now carries the self-host versus Cloud split credibly
 - MCP Registry and homepage metadata are aligned with the hosted surface
+- a checked distribution ledger now records the real state of MCP Registry, Glama, mcp.so, PulseMCP, and Smithery
 
 ## Next Opportunities
 
@@ -88,5 +90,6 @@ flowchart TD
 - Add more named workflow proof to the public Pages surface.
 - Keep public buyer-trust links routed to hosted `/security`, `/deployment`, and `/support`.
 - Pull hosted funnel summary into release-health whenever admin auth is available.
+- Ship `3.2.5` specifically to close MCP Registry description drift and refresh downstream crawlers.
 - Keep README and Pages focused on trust, not feature bloat.
 - Continue reducing GitHub-side noise so public history looks operator-led.

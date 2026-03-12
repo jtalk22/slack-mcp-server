@@ -11,10 +11,6 @@ const REPORT_PATH = process.env.PREPUBLISH_REPORT_PATH
   ? resolve(ROOT, process.env.PREPUBLISH_REPORT_PATH)
   : resolve(ROOT, "output", "release-health", "prepublish-dry-run.md");
 
-const EXPECTED_NAME = process.env.EXPECTED_GIT_NAME || "jtalk22";
-const EXPECTED_EMAIL = process.env.EXPECTED_GIT_EMAIL || "james@revasser.nyc";
-const OWNER_RANGE = process.env.OWNER_CHECK_RANGE || "origin/main..HEAD";
-
 function run(command, args = [], options = {}) {
   return spawnSync(command, args, {
     cwd: ROOT,
@@ -24,6 +20,19 @@ function run(command, args = [], options = {}) {
     ...options
   });
 }
+
+function gitConfig(key) {
+  const result = run("git", ["config", "--get", key]);
+  if (result.status !== 0) {
+    return "";
+  }
+
+  return result.stdout.trim();
+}
+
+const EXPECTED_NAME = process.env.EXPECTED_GIT_NAME || gitConfig("user.name") || "jtalk22";
+const EXPECTED_EMAIL = process.env.EXPECTED_GIT_EMAIL || gitConfig("user.email");
+const OWNER_RANGE = process.env.OWNER_CHECK_RANGE || "origin/main..HEAD";
 
 function trimOutput(text = "", maxChars = 1200) {
   const normalized = String(text || "").trim();

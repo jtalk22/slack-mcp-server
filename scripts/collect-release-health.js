@@ -58,6 +58,17 @@ function formatTopEvents(events = []) {
     .join(", ");
 }
 
+function formatRows(rows = [], formatter, limit = 6) {
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return "unavailable";
+  }
+
+  return rows
+    .slice(0, limit)
+    .map(formatter)
+    .join(", ");
+}
+
 function buildMarkdown(data) {
   const lines = [];
   lines.push("# Release Health Snapshot");
@@ -83,25 +94,25 @@ function buildMarkdown(data) {
   lines.push(`- 14d unique visitors: ${data.github.viewsUniques ?? "n/a"}`);
   lines.push(`- 14d clones: ${data.github.clonesCount ?? "n/a"}`);
   lines.push(`- 14d unique cloners: ${data.github.clonesUniques ?? "n/a"}`);
-  lines.push("- hosted deployment review requests: manual tracking");
+  lines.push(`- hosted deployment review submits: ${data.hosted?.available ? data.hosted.deploymentReviewSubmits ?? 0 : "unavailable"}`);
   lines.push("");
 
   lines.push("## 14-Day Reliability Targets");
   lines.push("");
   lines.push("- weekly downloads: >= 180");
-  lines.push("- qualified hosted deployment review requests: manual");
+  lines.push(`- qualified hosted deployment review requests: ${data.hosted?.available ? formatRows(data.hosted.leads, (lead) => `${lead.qualification_state}/${lead.source}: ${lead.total}`, 4) : "unavailable"}`);
   lines.push("- maintainer support load: <= 2 hours/week");
   lines.push("");
 
   lines.push("## Same-Day Operator Checks");
   lines.push("");
-  lines.push("- hosted deployment review requests: manual");
+  lines.push(`- hosted deployment review requests: ${data.hosted?.available ? data.hosted.deploymentReviewSubmits ?? 0 : "unavailable"}`);
   lines.push("- GitHub Release page: verify current release notes, verify commands, support path, and Cloud vs self-hosted split.");
   lines.push("- npm / npx / GHCR parity: verify after release using `npm view`, `npx --version`, and Docker `--version`.");
   lines.push("- MCP Registry / Glama / Smithery: confirm latest version and canonical homepage, or record propagation lag.");
-  lines.push(`- Cloudflare sessions since release: ${data.hosted?.available ? "see hosted funnel summary" : "manual."}`);
-  lines.push(`- Checkout starts and provisioned keys since release: ${data.hosted?.available ? formatTopEvents(data.hosted.events) : "manual."}`);
-  lines.push(`- Support load for the release window: ${data.hosted?.available ? "review hosted funnel plus support inbox manually." : "manual."}`);
+  lines.push(`- Cloudflare sessions since release: ${data.hosted?.available ? "reconcile with hosted source mix and Search Console/Bing weekly." : "unavailable."}`);
+  lines.push(`- Checkout starts and provisioned keys since release: ${data.hosted?.available ? formatTopEvents(data.hosted.events) : "unavailable."}`);
+  lines.push(`- Support load for the release window: ${data.hosted?.available ? "review hosted funnel summary plus support inbox manually." : "unavailable."}`);
   lines.push("");
 
   lines.push("## Hosted Funnel");
@@ -109,24 +120,30 @@ function buildMarkdown(data) {
   if (data.hosted?.available) {
     lines.push(`- window days: ${data.hosted.windowDays ?? "n/a"}`);
     lines.push(`- top events: ${formatTopEvents(data.hosted.events)}`);
-    lines.push(
-      `- top pages: ${
-        Array.isArray(data.hosted.pages) && data.hosted.pages.length > 0
-          ? data.hosted.pages.slice(0, 6).map((page) => `${page.page_path}: ${page.total}`).join(", ")
-          : "unavailable"
-      }`
-    );
+    lines.push(`- top pages: ${formatRows(data.hosted.pages, (page) => `${page.page_path}: ${page.total}`)}`);
+    lines.push(`- source mix: ${formatRows(data.hosted.sources, (source) => `${source.source}: ${source.total}`)}`);
+    lines.push(`- lead states: ${formatRows(data.hosted.leads, (lead) => `${lead.qualification_state}/${lead.source}: ${lead.total}`)}`);
+    lines.push(`- readiness outcomes: ${formatRows(data.hosted.readiness, (row) => `${row.plan}: ${row.total}`)}`);
+    lines.push(`- deployment review submits: ${data.hosted.deploymentReviewSubmits ?? 0}`);
   } else {
     lines.push(`- unavailable: ${data.hosted?.note || "set HOSTED_ADMIN_TOKEN to query the hosted funnel summary."}`);
   }
+  lines.push("");
+
+  lines.push("## Search Ops");
+  lines.push("");
+  lines.push("- Submit or refresh `https://mcp.revasserlabs.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools.");
+  lines.push("- Inspect `/`, `/pricing`, `/security`, `/gemini-cli`, `/workflows`, and `/use-cases/support-triage`.");
+  lines.push("- Compare Search Console clicks with hosted first-touch source mix weekly.");
+  lines.push("- Use `docs/DISTRIBUTION-LEDGER.md` as the manual follow-up ledger for MCP Registry, Glama, mcp.so, PulseMCP, and Smithery.");
   lines.push("");
 
   lines.push("## Notes");
   lines.push("");
   lines.push("- Update this snapshot daily during active release windows, then weekly.");
   lines.push("- GitHub traffic is an awareness signal, not the sole demand KPI, now that canonical onboarding lives at mcp.revasserlabs.com.");
-  lines.push("- Track off-GitHub funnel metrics with the hosted summary when admin auth is available, then reconcile against Cloudflare sessions and support load.");
-  lines.push("- Track hosted deployment review volume and support load manually.");
+  lines.push("- Track off-GitHub funnel metrics with the hosted summary when admin auth is available, then reconcile against Cloudflare sessions, Search Console/Bing, and support load.");
+  lines.push("- Use the distribution ledger to record directory drift that cannot be read from GitHub traffic alone.");
 
   return `${lines.join("\n")}\n`;
 }
@@ -206,6 +223,12 @@ async function main() {
           windowDays: hostedSummary.window_days,
           events: hostedSummary.events || [],
           pages: hostedSummary.pages || [],
+          sources: hostedSummary.sources || [],
+          leads: hostedSummary.leads || [],
+          readiness: hostedSummary.readiness || [],
+          deploymentReviewSubmits: Array.isArray(hostedSummary.events)
+            ? Number((hostedSummary.events.find((event) => event.event_name === "deployment_review_submit") || {}).total || 0)
+            : 0,
         }
       : hostedSummary,
   };

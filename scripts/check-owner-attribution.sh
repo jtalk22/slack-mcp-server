@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXPECTED_NAME="${EXPECTED_GIT_NAME:-jtalk22}"
-EXPECTED_EMAIL="${EXPECTED_GIT_EMAIL:-james@revasser.nyc}"
+EXPECTED_NAME="${EXPECTED_GIT_NAME:-}"
+EXPECTED_EMAIL="${EXPECTED_GIT_EMAIL:-}"
 ALLOW_GITHUB_WEB_COMMITTER="${ALLOW_GITHUB_WEB_COMMITTER:-0}"
 BANNED_REGEX='(?i)(co-authored-by|generated with|\bclaude\b|\bgpt\b|\bcopilot\b|\bgemini\b|\bai\b)'
 
@@ -10,6 +10,20 @@ die() {
   echo "ERROR: $*" >&2
   exit 1
 }
+
+if [[ -z "$EXPECTED_NAME" ]]; then
+  EXPECTED_NAME="$(git config --get user.name || true)"
+fi
+
+if [[ -z "$EXPECTED_NAME" ]]; then
+  EXPECTED_NAME="jtalk22"
+fi
+
+if [[ -z "$EXPECTED_EMAIL" ]]; then
+  EXPECTED_EMAIL="$(git config --get user.email || true)"
+fi
+
+[[ -n "$EXPECTED_EMAIL" ]] || die "Missing EXPECTED_GIT_EMAIL or repo-local git user.email"
 
 contains_banned_markers() {
   local text="$1"

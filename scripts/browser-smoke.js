@@ -7,6 +7,7 @@ import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import playwright from "playwright";
+import { RELEASE_VERSION } from "../lib/public-metadata.js";
 
 const { chromium } = playwright;
 
@@ -54,7 +55,7 @@ function statusFixture() {
 
 function releaseFixture() {
   return {
-    tag_name: "v3.2.4",
+    tag_name: `v${RELEASE_VERSION}`,
     published_at: "2026-03-11T00:00:00.000Z",
   };
 }
@@ -62,7 +63,7 @@ function releaseFixture() {
 function npmFixture() {
   return {
     name: "@jtalk22/slack-mcp",
-    version: "3.2.4",
+    version: RELEASE_VERSION,
   };
 }
 
@@ -172,8 +173,8 @@ async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) 
     decision: document.querySelector(".decision-grid")?.textContent?.trim() || "",
   }));
 
-  assertText(snapshot.npm, /^v3\.2\.4$/, "#npmLatest");
-  assertText(snapshot.release, /^v3\.2\.4$/, "#releaseTag");
+  assertText(snapshot.npm, new RegExp(`^v${RELEASE_VERSION.replace(/\./g, "\\.")}$`), "#npmLatest");
+  assertText(snapshot.release, new RegExp(`^v${RELEASE_VERSION.replace(/\./g, "\\.")}$`), "#releaseTag");
   assertText(snapshot.decision, /16 tools and full operator control/i, "decision guide");
 
   if (/^ok$/i.test(snapshot.cloud)) {
@@ -219,7 +220,7 @@ async function runLocal() {
     await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Cloud starts at \$19\/mo/i, "share note");
     await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Solo starts at \$19\/mo/i, "demo video note");
     await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", /Team at \$49\/mo adds 3 AI workflows/i, "demo note");
-    await checkStaticPage(page, `${server.url}/public/demo-claude.html`, ".note", /deployment review, security\/procurement review, and support/i, "demo claude note");
+    await checkStaticPage(page, `${server.url}/public/demo-claude.html`, ".note", /deployment review, procurement-ready security, and support/i, "demo claude note");
 
     if (errors.length > 0) {
       throw new Error(errors.join("\n"));

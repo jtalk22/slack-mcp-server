@@ -64,7 +64,7 @@ jobs:
       - name: Verify owner-only attribution
         env:
           EXPECTED_GIT_NAME: jtalk22
-          EXPECTED_GIT_EMAIL: james@revasser.nyc
+          EXPECTED_GIT_EMAIL: ${{ vars.OWNER_GIT_EMAIL }}
           SKIP_LOCAL_CONFIG_CHECK: "1"
           ALLOW_GITHUB_WEB_COMMITTER: "1"
         run: |

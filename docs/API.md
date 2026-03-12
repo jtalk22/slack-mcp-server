@@ -259,7 +259,7 @@ Get all replies in a thread.
   "messages": [
     {
       "ts": "1767368030.607599",
-      "user": "James Lambert",
+      "user": "Example User",
       "text": "Original message",
       "datetime": "2026-01-02T15:33:50.000Z",
       "is_parent": true

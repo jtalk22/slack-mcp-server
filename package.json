@@ -1,8 +1,8 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "3.2.4",
-  "description": "Claude-first Slack MCP for self-host or managed Cloud, with Gemini CLI and secure-default HTTP.",
+  "version": "3.2.5",
+  "description": "Claude-first Slack MCP for self-host or managed Cloud, with Gemini CLI, deployment review, and secure-default HTTP.",
   "type": "module",
   "main": "src/server.js",
   "bin": {
@@ -68,9 +68,9 @@
     "productivity"
   ],
   "author": {
-    "name": "James Lambert",
+    "name": "Revasser",
     "email": "support@revasserlabs.com",
-    "url": "https://github.com/jtalk22"
+    "url": "https://mcp.revasserlabs.com"
   },
   "license": "MIT",
   "repository": {
