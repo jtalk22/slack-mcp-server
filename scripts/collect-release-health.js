@@ -132,6 +132,7 @@ function buildMarkdown(data) {
     lines.push(`- lead states: ${formatRows(data.hosted.leads, (lead) => `${lead.qualification_state}/${lead.source}: ${lead.total}`)}`);
     lines.push(`- readiness outcomes: ${formatRows(data.hosted.readiness, (row) => `${row.plan}: ${row.total}`)}`);
     lines.push(`- deployment review submits: ${data.hosted.deploymentReviewSubmits ?? 0}`);
+    lines.push(`- deployment review verification and delivery: ${formatRows(data.hosted.leadAudit, (row) => `${row.turnstile_verified ? "verified" : "unverified"}/${row.operator_email_status}/${row.submitter_email_status}: ${row.total}`)}`);
     lines.push(`- checkout starts: ${data.hosted.checkoutStarts ?? 0}`);
     lines.push(`- checkout completes: ${data.hosted.checkoutCompletes ?? 0}`);
     lines.push(`- checkout attribution: ${formatRows(data.hosted.checkouts, (row) => `${row.status}/${row.source}/${row.plan}: ${row.total}`)}`);
@@ -236,6 +237,7 @@ async function main() {
           pages: hostedSummary.pages || [],
           sources: hostedSummary.sources || [],
           leads: hostedSummary.leads || [],
+          leadAudit: hostedSummary.lead_audit || [],
           readiness: hostedSummary.readiness || [],
           entryPages: hostedSummary.entry_pages || [],
           conversions: hostedSummary.conversions || [],

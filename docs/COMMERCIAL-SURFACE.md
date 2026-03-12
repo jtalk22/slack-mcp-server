@@ -47,6 +47,7 @@ The repo is no longer just a launch artifact for an OSS tool. It now acts as:
 - Team is the shared product plan
 - Turnkey Team Launch and Managed Reliability are the premium motions
 - Hosted `/checkout` is now the first-party revenue entry so source attribution survives the move into Stripe and back to `/success`, `/setup`, and `/account`
+- Hosted deployment review is now a verified intake path: Turnstile is bound to `deployment_review`, lead audit evidence is stored in D1, and operator plus submitter delivery state can be read from hosted funnel summaries
 
 ## Current Pain Points
 
@@ -60,7 +61,7 @@ npm, GHCR, MCP Registry, secondary directories, and hosted surfaces can drift if
 
 ### 3. Hosted funnel visibility is only partly wired into public reporting
 
-The public release-health script can read hosted funnel summaries, but only when hosted admin auth is provided. That means checkout starts/completes, entry pages, and conversion detail will lag in public docs unless the summary token is available during report generation.
+The public release-health script can read hosted funnel summaries, but only when hosted admin auth is provided. That means checkout starts/completes, entry pages, deployment-review verification state, and conversion detail will lag in public docs unless the summary token is available during report generation.
 
 ### 4. The public repo still cannot carry the full buyer conversation
 
@@ -75,6 +76,7 @@ That is intentional, but it means the handoff to hosted pricing/docs/deployment 
 - README now carries the self-host versus Cloud split credibly
 - MCP Registry and homepage metadata are aligned with the hosted surface
 - a checked distribution ledger now records the real state of MCP Registry, Glama, mcp.so, PulseMCP, and Smithery
+- release-health can now surface hosted lead-verification and email-delivery evidence when hosted admin auth is available
 
 ## Next Opportunities
 
