@@ -183,7 +183,7 @@ async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) 
     return { cloudState: "ok" };
   }
 
-  if (allowHostedStatusFallback && /^Open \/status$/i.test(snapshot.cloud)) {
+  if (allowHostedStatusFallback && /^(Open \/status|Status available)$/i.test(snapshot.cloud)) {
     assertText(snapshot.cloudNote, /raw status JSON/i, "#cloudHealthNote");
     assertText(snapshot.cloudNote, /Cross-origin status lookup unavailable/i, "#cloudHealthNote");
     return { cloudState: "fallback" };
