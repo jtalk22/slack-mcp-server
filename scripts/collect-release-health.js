@@ -58,6 +58,11 @@ function formatTopEvents(events = []) {
     .join(", ");
 }
 
+function findEventTotal(events = [], eventName) {
+  if (!Array.isArray(events)) return 0;
+  return Number((events.find((event) => event.event_name === eventName) || {}).total || 0);
+}
+
 function formatRows(rows = [], formatter, limit = 6) {
   if (!Array.isArray(rows) || rows.length === 0) {
     return "unavailable";
@@ -111,7 +116,8 @@ function buildMarkdown(data) {
   lines.push("- npm / npx / GHCR parity: verify after release using `npm view`, `npx --version`, and Docker `--version`.");
   lines.push("- MCP Registry / Glama / Smithery: confirm latest version and canonical homepage, or record propagation lag.");
   lines.push(`- Cloudflare sessions since release: ${data.hosted?.available ? "reconcile with hosted source mix and Search Console/Bing weekly." : "unavailable."}`);
-  lines.push(`- Checkout starts and provisioned keys since release: ${data.hosted?.available ? formatTopEvents(data.hosted.events) : "unavailable."}`);
+  lines.push(`- Checkout starts/completes since release: ${data.hosted?.available ? formatRows(data.hosted.checkouts, (row) => `${row.status}/${row.source}/${row.plan}: ${row.total}`) : "unavailable."}`);
+  lines.push(`- First-call conversion since release: ${data.hosted?.available ? formatRows(data.hosted.conversions, (row) => `${row.event_name}/${row.source}/${row.plan}: ${row.total}`) : "unavailable."}`);
   lines.push(`- Support load for the release window: ${data.hosted?.available ? "review hosted funnel summary plus support inbox manually." : "unavailable."}`);
   lines.push("");
 
@@ -121,10 +127,15 @@ function buildMarkdown(data) {
     lines.push(`- window days: ${data.hosted.windowDays ?? "n/a"}`);
     lines.push(`- top events: ${formatTopEvents(data.hosted.events)}`);
     lines.push(`- top pages: ${formatRows(data.hosted.pages, (page) => `${page.page_path}: ${page.total}`)}`);
+    lines.push(`- top entry pages: ${formatRows(data.hosted.entryPages, (page) => `${page.entry_page}: ${page.total}`)}`);
     lines.push(`- source mix: ${formatRows(data.hosted.sources, (source) => `${source.source}: ${source.total}`)}`);
     lines.push(`- lead states: ${formatRows(data.hosted.leads, (lead) => `${lead.qualification_state}/${lead.source}: ${lead.total}`)}`);
     lines.push(`- readiness outcomes: ${formatRows(data.hosted.readiness, (row) => `${row.plan}: ${row.total}`)}`);
     lines.push(`- deployment review submits: ${data.hosted.deploymentReviewSubmits ?? 0}`);
+    lines.push(`- checkout starts: ${data.hosted.checkoutStarts ?? 0}`);
+    lines.push(`- checkout completes: ${data.hosted.checkoutCompletes ?? 0}`);
+    lines.push(`- checkout attribution: ${formatRows(data.hosted.checkouts, (row) => `${row.status}/${row.source}/${row.plan}: ${row.total}`)}`);
+    lines.push(`- conversion detail: ${formatRows(data.hosted.conversions, (row) => `${row.event_name}/${row.source}/${row.plan}: ${row.total}`)}`);
   } else {
     lines.push(`- unavailable: ${data.hosted?.note || "set HOSTED_ADMIN_TOKEN to query the hosted funnel summary."}`);
   }
@@ -226,9 +237,12 @@ async function main() {
           sources: hostedSummary.sources || [],
           leads: hostedSummary.leads || [],
           readiness: hostedSummary.readiness || [],
-          deploymentReviewSubmits: Array.isArray(hostedSummary.events)
-            ? Number((hostedSummary.events.find((event) => event.event_name === "deployment_review_submit") || {}).total || 0)
-            : 0,
+          entryPages: hostedSummary.entry_pages || [],
+          conversions: hostedSummary.conversions || [],
+          checkouts: hostedSummary.checkouts || [],
+          deploymentReviewSubmits: findEventTotal(hostedSummary.events, "deployment_review_submit"),
+          checkoutStarts: findEventTotal(hostedSummary.events, "checkout_start"),
+          checkoutCompletes: findEventTotal(hostedSummary.events, "checkout_complete"),
         }
       : hostedSummary,
   };

@@ -66,6 +66,8 @@ bash scripts/publish-mcp-registry.sh server.json --validate-only
 curl -s https://mcp.revasserlabs.com/status
 curl -s https://mcp.revasserlabs.com/api
 curl -s https://mcp.revasserlabs.com/pricing
+curl -I "https://mcp.revasserlabs.com/checkout?plan=solo"
+curl -I "https://mcp.revasserlabs.com/checkout?plan=team"
 curl -s https://mcp.revasserlabs.com/security
 curl -s https://mcp.revasserlabs.com/account
 curl -I -H 'Origin: https://jtalk22.github.io' https://mcp.revasserlabs.com/status
@@ -84,6 +86,7 @@ node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/s
 - Hosted `/account` renders the authenticated usage, billing, token, and client-config surface.
 - Hosted `/use-cases/support-triage` resolves and routes to pricing or deployment review.
 - Hosted live browser smoke workflow passes against `https://mcp.revasserlabs.com/`.
+- Hosted `/checkout?plan=solo|team` creates Stripe Checkout Sessions and preserves source attribution before redirect.
 - MCP Registry latest is `3.2.5` and `websiteUrl` is `https://mcp.revasserlabs.com`.
 - Glama shows `3.2.5` and the canonical homepage, or the drift is recorded in `docs/DISTRIBUTION-LEDGER.md`.
 - Smithery listing remains reachable; if metadata lags, record a propagation note.

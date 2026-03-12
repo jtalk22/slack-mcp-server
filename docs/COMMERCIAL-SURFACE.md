@@ -11,10 +11,13 @@ flowchart LR
     A --> D["npm package / GHCR image"]
     A --> E["MCP Registry metadata"]
     B --> F["Hosted pricing/docs/security/support/deployment"]
+    B --> J["Hosted checkout and account flow"]
     C --> F
+    C --> J
     D --> G["Self-host users"]
     E --> H["Remote MCP discovery"]
     F --> I["Cloud buyers / rollout review"]
+    J --> I
 ```
 
 ## Repo Job Definition
@@ -43,6 +46,7 @@ The repo is no longer just a launch artifact for an OSS tool. It now acts as:
 - Solo is the feeder plan
 - Team is the shared product plan
 - Turnkey Team Launch and Managed Reliability are the premium motions
+- Hosted `/checkout` is now the first-party revenue entry so source attribution survives the move into Stripe and back to `/success`, `/setup`, and `/account`
 
 ## Current Pain Points
 
@@ -56,7 +60,7 @@ npm, GHCR, MCP Registry, secondary directories, and hosted surfaces can drift if
 
 ### 3. Hosted funnel visibility is only partly wired into public reporting
 
-The public release-health script can read hosted funnel summaries, but only when hosted admin auth is provided.
+The public release-health script can read hosted funnel summaries, but only when hosted admin auth is provided. That means checkout starts/completes, entry pages, and conversion detail will lag in public docs unless the summary token is available during report generation.
 
 ### 4. The public repo still cannot carry the full buyer conversation
 
@@ -90,6 +94,7 @@ flowchart TD
 - Add more named workflow proof to the public Pages surface.
 - Keep public buyer-trust links routed to hosted `/security`, `/deployment`, and `/support`.
 - Pull hosted funnel summary into release-health whenever admin auth is available.
+- Keep owned links pointed at hosted `/checkout`, `/pricing`, `/deployment`, `/security`, and `/support` so first-touch and last-touch attribution stay on the hosted surface.
 - Keep `3.2.5` as the metadata baseline that closed MCP Registry description drift, then monitor secondary crawlers for lag.
 - Keep README and Pages focused on trust, not feature bloat.
 - Continue reducing GitHub-side noise so public history looks operator-led.

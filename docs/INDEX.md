@@ -25,6 +25,8 @@ Start here for setup, compatibility checks, current release operations, and supp
 
 - [Cloud Landing Page](https://mcp.revasserlabs.com) — Hosted MCP endpoint, pricing, live status, and account surface
 - [Cloud Pricing](https://mcp.revasserlabs.com/pricing?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Solo, Team, Turnkey Team Launch, Managed Reliability
+- [Start Solo](https://mcp.revasserlabs.com/checkout?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud&plan=solo) — First-party hosted checkout with source attribution
+- [Start Team](https://mcp.revasserlabs.com/checkout?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud&plan=team) — First-party hosted checkout for the shared plan
 - [Cloud Workflows](https://mcp.revasserlabs.com/workflows?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Named workflow outcomes and anonymized proof
 - [Cloud Gemini CLI](https://mcp.revasserlabs.com/gemini-cli?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Secondary client setup path
 - [Cloud Readiness](https://mcp.revasserlabs.com/readiness?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Fit assessment for self-host, Solo, Team, or premium rollout

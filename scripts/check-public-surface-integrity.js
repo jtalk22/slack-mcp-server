@@ -164,11 +164,12 @@ function main() {
       readme.includes("Version parity report") &&
       readme.includes("Distribution ledger") &&
       readme.includes(PUBLIC_METADATA.cloudPricingUrl) &&
+      readme.includes(PUBLIC_METADATA.cloudCheckoutUrl) &&
       readme.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
       readme.includes(PUBLIC_METADATA.tracked.readme.account) &&
       readme.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
       readme.includes(PUBLIC_METADATA.cloudSupportUrl),
-    "README should link current release-health, version-parity, distribution ledger, pricing, security, account, deployment, and support surfaces"
+    "README should link current release-health, version-parity, distribution ledger, pricing, checkout, security, account, deployment, and support surfaces"
   );
 
   const marketingIndex = read("index.html");
@@ -179,11 +180,12 @@ function main() {
       marketingIndex.includes("npm latest") &&
       marketingIndex.includes("GitHub release") &&
       marketingIndex.includes("Cloud status") &&
-      marketingIndex.includes("Cloud versus self-host decision guide") &&
+    marketingIndex.includes("Cloud versus self-host decision guide") &&
       marketingIndex.includes(PUBLIC_METADATA.cloudStatusUrl) &&
+      marketingIndex.includes(PUBLIC_METADATA.cloudCheckoutUrl) &&
       !marketingIndex.includes("https://mcp.revasserlabs.com/health") &&
       marketingIndex.includes("Release health"),
-    "index.html should expose the live distribution snapshot cards, decision guide, /status contract, and operator links"
+    "index.html should expose the live distribution snapshot cards, decision guide, /status contract, hosted checkout, and operator links"
   );
   check(
     results,
