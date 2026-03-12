@@ -10,6 +10,7 @@ Start here for setup, compatibility checks, current release operations, and supp
 - [Latest Public Health Snapshot](release-health/latest.md)
 - [Version Parity](release-health/version-parity.md)
 - [Commercial Surface Map](COMMERCIAL-SURFACE.md) — How the public repo, hosted site, registry, and buyer routing fit together now
+- [Demand & Visibility Ops](DEMAND-VISIBILITY-OPS.md) — Owned search, community lanes, directory corrections, and proof tasks
 - [Distribution Ledger](DISTRIBUTION-LEDGER.md) — Current external listing state and next corrective action
 
 ## Core
@@ -28,10 +29,12 @@ Start here for setup, compatibility checks, current release operations, and supp
 - [Start Solo](https://mcp.revasserlabs.com/checkout?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud&plan=solo) — First-party hosted checkout with source attribution
 - [Start Team](https://mcp.revasserlabs.com/checkout?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud&plan=team) — First-party hosted checkout for the shared plan
 - [Cloud Workflows](https://mcp.revasserlabs.com/workflows?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Named workflow outcomes and anonymized proof
+- [Official vs Managed](https://mcp.revasserlabs.com/official-slack-mcp-vs-managed?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Operator-decision page for Slack’s official path versus managed rollout
 - [Cloud Gemini CLI](https://mcp.revasserlabs.com/gemini-cli?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Secondary client setup path
 - [Cloud Readiness](https://mcp.revasserlabs.com/readiness?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Fit assessment for self-host, Solo, Team, or premium rollout
 - [Cloud Security](https://mcp.revasserlabs.com/security?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Buyer-facing controls, storage, analytics, and procurement summary
 - [Cloud Procurement Brief](https://mcp.revasserlabs.com/procurement?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
+- [Marketplace Readiness](https://mcp.revasserlabs.com/marketplace-readiness?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Current distribution posture and Slack Marketplace readiness checklist
 - [Cloud Account](https://mcp.revasserlabs.com/account?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud) — Usage, billing portal, reconnect state, client configs
 - [Cloud Deployment Review](https://mcp.revasserlabs.com/deployment?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
 - [Cloud Support](https://mcp.revasserlabs.com/support?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)

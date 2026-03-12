@@ -43,11 +43,15 @@ The repo is no longer just a launch artifact for an OSS tool. It now acts as:
 
 - Cloud is Claude-first
 - Gemini CLI is supported as the second client path
+- Slack now has an official MCP path, so the commercial wedge is managed rollout and continuity rather than generic protocol access
 - Solo is the feeder plan
 - Team is the shared product plan
 - Turnkey Team Launch and Managed Reliability are the premium motions
 - Hosted `/checkout` is now the first-party revenue entry so source attribution survives the move into Stripe and back to `/success`, `/setup`, and `/account`
 - Hosted deployment review is now a verified intake path: Turnstile is bound to `deployment_review`, lead audit evidence is stored in D1, and operator plus submitter delivery state can be read from hosted funnel summaries
+- Hosted comparison and distribution-posture pages now exist to answer the operator and buyer question directly:
+  - [Official vs Managed](https://mcp.revasserlabs.com/official-slack-mcp-vs-managed?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
+  - [Marketplace readiness](https://mcp.revasserlabs.com/marketplace-readiness?utm_source=github&utm_medium=docs&utm_campaign=slack_mcp_cloud)
 
 ## Current Pain Points
 
@@ -66,6 +70,14 @@ The public release-health script can read hosted funnel summaries, but only when
 ### 4. The public repo still cannot carry the full buyer conversation
 
 That is intentional, but it means the handoff to hosted pricing/docs/deployment must remain obvious and current.
+
+### 5. Slack’s official launch changes the reading of this repo
+
+The repo should not position itself as “the Slack MCP server.” It now needs to route visitors into one of three clear answers:
+
+- self-host / official-style operator ownership
+- managed Cloud Solo or Team
+- deployment review for rollout, buyer review, or reliability fit
 
 ## Current Strengths
 
@@ -97,6 +109,7 @@ flowchart TD
 - Keep public buyer-trust links routed to hosted `/security`, `/deployment`, and `/support`.
 - Pull hosted funnel summary into release-health whenever admin auth is available.
 - Keep owned links pointed at hosted `/checkout`, `/pricing`, `/deployment`, `/security`, and `/support` so first-touch and last-touch attribution stay on the hosted surface.
+- Keep owned links pointed at hosted `/official-slack-mcp-vs-managed` and `/marketplace-readiness` whenever the conversation is about fit or distribution posture rather than immediate purchase.
 - Keep `3.2.5` as the metadata baseline that closed MCP Registry description drift, then monitor secondary crawlers for lag.
 - Keep README and Pages focused on trust, not feature bloat.
 - Continue reducing GitHub-side noise so public history looks operator-led.
