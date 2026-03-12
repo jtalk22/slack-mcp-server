@@ -67,7 +67,7 @@ Use pain-led posts, not generic launch copy.
 
 - MCP Registry: parity-only; keep version, homepage, and short description aligned.
 - Glama: ticket already open; current public search still does not confirm the corrected listing.
-- mcp.so: stale title/description/homepage still needs manual correction.
+- mcp.so: correction issue is open and refreshed with the canonical `3.2.5` metadata, but the public page is still stale until their listing updates.
 - PulseMCP: currently stale or removed; do not treat it as an active acquisition lane.
 - Smithery: monitor, but do not optimize around it unless measurable traffic appears.
 

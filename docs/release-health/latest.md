@@ -1,6 +1,6 @@
 # Release Health Snapshot
 
-- Generated: 2026-03-12T05:16:28.615Z
+- Generated: 2026-03-12T06:09:10.711Z
 - Repo: `jtalk22/slack-mcp-server`
 - Package: `@jtalk22/slack-mcp`
 
@@ -15,10 +15,10 @@
 - stars: 14
 - forks: 10
 - open issues: 0
-- 14d views: 475
-- 14d unique visitors: 192
-- 14d clones: 2161
-- 14d unique cloners: 404
+- 14d views: 446
+- 14d unique visitors: 178
+- 14d clones: 2704
+- 14d unique cloners: 460
 - hosted deployment review submits: unavailable
 
 ## 14-Day Reliability Targets
