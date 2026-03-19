@@ -1,96 +1,24 @@
-name: AI Review Noise Guard
+name: AI Review Noise Guard (parked)
 
 on:
-  issue_comment:
-    types: [created]
-  pull_request_review:
-    types: [submitted]
-  pull_request_review_comment:
-    types: [created]
+  workflow_dispatch:
 
 permissions:
   issues: write
   pull-requests: write
 
 jobs:
-  minimize-unsolicited-ai-review:
-    if: >
-      (github.event_name == 'issue_comment' && github.event.issue.pull_request) ||
-      github.event_name == 'pull_request_review' ||
-      github.event_name == 'pull_request_review_comment'
+  parked:
     runs-on: ubuntu-latest
     steps:
-      - name: Minimize unsolicited AI review artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
-          OPT_IN_LABEL: manual-ai-review
+      - name: Explain parked status
         run: |
-          python3 - <<'PY'
-          import json
-          import os
-          import subprocess
-          import sys
+          cat <<'MSG'
+          This workflow is parked during GitHub sprawl recovery.
 
-          BOT_AUTHORS = {
-              "gemini-code-assist",
-              "coderabbitai",
-              "chatgpt-codex-connector",
-          }
+          Why:
+          - It manages AI review artifact noise rather than core OSS product health.
+          - It can be restored later if manual-ai-review becomes a real maintainer burden.
 
-          with open(os.environ["GITHUB_EVENT_PATH"], "r", encoding="utf-8") as handle:
-              event = json.load(handle)
-
-          event_name = os.environ["GITHUB_EVENT_NAME"]
-          repository = os.environ["GITHUB_REPOSITORY"]
-          opt_in_label = os.environ["OPT_IN_LABEL"]
-
-          if event_name == "issue_comment":
-              if not event.get("issue", {}).get("pull_request"):
-                  print("Issue comment is not on a pull request.")
-                  sys.exit(0)
-              subject = event["comment"]
-              pr_number = event["issue"]["number"]
-          elif event_name == "pull_request_review":
-              subject = event["review"]
-              pr_number = event["pull_request"]["number"]
-          elif event_name == "pull_request_review_comment":
-              subject = event["comment"]
-              pr_number = event["pull_request"]["number"]
-          else:
-              print(f"Unsupported event: {event_name}")
-              sys.exit(0)
-
-          author = subject["user"]["login"]
-          normalized_author = author[:-5] if author.endswith("[bot]") else author
-          node_id = subject.get("node_id")
-
-          if normalized_author not in BOT_AUTHORS:
-              print(f"Author {author} is not managed by this guard.")
-              sys.exit(0)
-
-          if not node_id:
-              print("Event payload did not include a node_id.")
-              sys.exit(1)
-
-          labels_raw = subprocess.check_output(
-              ["gh", "api", f"repos/{repository}/issues/{pr_number}/labels"],
-              text=True,
-          )
-          labels = {label["name"] for label in json.loads(labels_raw)}
-
-          if opt_in_label in labels:
-              print(f"Label {opt_in_label} present; leaving AI review artifact visible.")
-              sys.exit(0)
-
-          mutation = (
-              "mutation($id:ID!) { "
-              "minimizeComment(input:{subjectId:$id,classifier:OUTDATED}) { "
-              "minimizedComment { isMinimized minimizedReason } "
-              "} }"
-          )
-
-          subprocess.check_call(
-              ["gh", "api", "graphql", "-f", f"query={mutation}", "-f", f"id={node_id}"]
-          )
-          print(f"Minimized unsolicited AI review artifact from {author} on PR #{pr_number}.")
-          PY
+          Restore the event-driven triggers from git history if you need this guard again.
+          MSG

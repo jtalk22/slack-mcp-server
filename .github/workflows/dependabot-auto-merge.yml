@@ -1,0 +1,61 @@
+name: Dependabot Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: Auto-Merge Safe Updates
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7  # pin:v2.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-merge patch updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
+          gh pr review --approve "$PR_URL" --body "Auto-approved: patch dependency update" || echo "::notice::Approval skipped"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Auto-merge GitHub Actions updates
+        if: steps.metadata.outputs.package-ecosystem == 'github-actions'
+        run: |
+          gh pr review --approve "$PR_URL" --body "Auto-approved: GitHub Actions update" || echo "::notice::Approval skipped"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Auto-merge minor development updates
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-minor' &&
+          steps.metadata.outputs.dependency-type == 'direct:development'
+        run: |
+          gh pr review --approve "$PR_URL" --body "Auto-approved: minor development dependency update" || echo "::notice::Approval skipped"
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Summary
+        run: |
+          echo "## Dependabot Auto-Merge" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Field | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Package | ${{ steps.metadata.outputs.dependency-names }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Update type | ${{ steps.metadata.outputs.update-type }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Ecosystem | ${{ steps.metadata.outputs.package-ecosystem }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Dependency type | ${{ steps.metadata.outputs.dependency-type }} |" >> "$GITHUB_STEP_SUMMARY"
