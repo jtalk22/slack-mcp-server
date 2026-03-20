@@ -94,6 +94,8 @@ node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/s
 - GitHub Pages live browser smoke workflow passes against `https://jtalk22.github.io/slack-mcp-server/`.
 - Hosted deployment review routing is visible on the current repo trust surfaces.
 
+Use [`docs/release-health/launch-log-template.md`](release-health/launch-log-template.md) to record each public distribution action and observed outcome while the release fanout is in flight.
+
 ## Monitoring Cadence
 
 - First 4 hours: every 30 minutes
