@@ -33,7 +33,25 @@
   <meta name="theme-color" content="#1a1a1a">
   <link rel="icon" href="../docs/assets/icon-512.png" type="image/png">
   <style>
-    /* Self-hosted fonts — eliminates CDN latency and sandboxed-env fallback */
+    /* ═══════════════════════════════════════════════════════════════
+       Self-hosted fonts
+       Priority: Geist (modern, Vercel) → fallback to IBM Plex / Space Grotesk
+       Install Geist: see public/fonts/README.md
+       ═══════════════════════════════════════════════════════════════ */
+    @font-face {
+      font-family: "Geist";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("../public/fonts/geist-sans-variable.woff2") format("woff2-variations");
+    }
+    @font-face {
+      font-family: "Geist Mono";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("../public/fonts/geist-mono-variable.woff2") format("woff2-variations");
+    }
     @font-face {
       font-family: "Space Grotesk";
       font-style: normal;
@@ -67,8 +85,9 @@
        Claude Desktop Color Palette (Dark Mode)
        ═══════════════════════════════════════════════════════════════ */
     :root {
-      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
-      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+      --font-heading: "Space Grotesk", "Geist", "Avenir Next", "Segoe UI", sans-serif;
+      --font-body: "Geist", "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+      --font-mono: "Geist Mono", "SF Mono", "Menlo", "Monaco", monospace;
 
       /* Window chrome */
       --window-bg: #1a1a1a;
@@ -134,7 +153,7 @@
     }
 
     .mono {
-      font-family: "SF Mono", "Menlo", "Monaco", monospace;
+      font-family: var(--font-mono);
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -607,7 +626,7 @@
     }
 
     .tool-name {
-      font-family: "SF Mono", monospace;
+      font-family: var(--font-mono);
       font-size: 13px;
       color: var(--link-color);
       font-weight: 500;
@@ -666,6 +685,10 @@
       max-height: 400px;
     }
 
+    .tool-call.expanded {
+      border-left: 3px solid var(--claude-orange);
+    }
+
     .tool-section {
       padding: 12px 16px;
       border-top: 1px solid var(--tool-box-border);
@@ -680,7 +703,7 @@
     }
 
     .tool-params {
-      font-family: "SF Mono", monospace;
+      font-family: var(--font-mono);
       font-size: 13px;
       color: var(--code-text);
       background: var(--code-bg);
@@ -879,7 +902,7 @@
     }
 
     .dropdown-item-name {
-      font-family: "SF Mono", monospace;
+      font-family: var(--font-mono);
       font-size: 13px;
       color: var(--link-color);
       margin-bottom: 2px;
@@ -894,7 +917,7 @@
        Code Inline
        ═══════════════════════════════════════════════════════════════ */
     code {
-      font-family: "SF Mono", monospace;
+      font-family: var(--font-mono);
       background: var(--code-bg);
       padding: 2px 6px;
       border-radius: 4px;
@@ -932,7 +955,7 @@
     kbd {
       display: inline-block;
       padding: 2px 6px;
-      font-family: "SF Mono", monospace;
+      font-family: var(--font-mono);
       font-size: 10px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1161,18 +1184,37 @@
     .title-card .title-tagline { color: var(--text-secondary); font-size: 16px; }
     .title-card .title-version { color: var(--text-muted); font-size: 13px; margin-top: 24px; }
 
+    /* Staggered reveal — each line fades in with a beat */
+    .title-card .title-line {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    .title-card.visible .title-line {
+      animation: titleReveal 0.5s ease forwards;
+    }
+    .title-card.visible .title-line:nth-child(1) { animation-delay: 0.2s; }  /* logo */
+    .title-card.visible .title-line:nth-child(2) { animation-delay: 0.5s; }  /* Monday 9:07 */
+    .title-card.visible .title-line:nth-child(3) { animation-delay: 1.1s; }  /* 47 unreads... */
+    .title-card.visible .title-line:nth-child(4) { animation-delay: 2.0s; }  /* What if... */
+    .title-card.visible .title-line:nth-child(5) { animation-delay: 2.8s; }  /* Slack MCP Server */
+
+    @keyframes titleReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Scenario Caption Overlay */
     .scenario-caption {
       position: absolute;
       top: 60px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.8);
       color: var(--text-primary);
-      padding: 8px 20px;
+      padding: 10px 24px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 500;
+      letter-spacing: 0.01em;
       opacity: 0;
       transition: opacity 0.3s ease;
       z-index: 50;
@@ -1362,13 +1404,15 @@
       <div class="window-controls"></div>
     </div>
 
-    <!-- Title Card (auto-play only) -->
+    <!-- Title Card (auto-play only) — staggered reveal -->
     <div class="title-card" id="titleCard">
-      <img class="title-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="Slack MCP Server" style="width: 48px; height: 48px; border-radius: 10px; margin-bottom: 16px;">
-      <h1 style="font-size: 32px; margin-bottom: 4px; letter-spacing: -0.01em;">It's Monday, 9:07 AM.</h1>
-      <p class="title-tagline" style="font-size: 20px; color: var(--text-secondary);">47 unreads. A database outage. A jammed printer.</p>
-      <p style="margin-top: 16px; font-size: 15px; color: var(--text-muted);">What if your AI could read your Slack?</p>
-      <p class="title-version" style="margin-top: 20px; font-size: 12px;">Slack MCP Server · No OAuth · One command</p>
+      <div class="title-line" style="margin-bottom: 20px;">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="" style="width: 44px; height: 44px; border-radius: 10px;">
+      </div>
+      <h1 class="title-line" style="font-size: 30px; margin-bottom: 12px; letter-spacing: -0.01em;">It's Monday, 9:07 AM.</h1>
+      <p class="title-line" style="font-size: 18px; color: var(--text-secondary); line-height: 1.6;">47 unreads. A database outage.<br>A jammed printer. Nobody knows the PIN.</p>
+      <p class="title-line" style="margin-top: 24px; font-size: 16px; color: var(--claude-orange); font-weight: 500;">What if your AI could read your Slack?</p>
+      <p class="title-line title-version" style="margin-top: 16px; font-size: 12px; color: var(--text-muted);">Slack MCP Server · No OAuth · One command</p>
     </div>
 
     <!-- Scenario Caption Overlay -->
@@ -1376,13 +1420,13 @@
 
     <!-- Closing Card (auto-play only) -->
     <div class="closing-card" id="closingCard">
-      <div class="closing-check" style="font-size: 36px; margin-bottom: 8px;">0 unreads.</div>
-      <h2>You never opened Slack.</h2>
-      <p class="closing-cta" style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">The printer PIN is 4729.</p>
+      <div class="closing-check" style="font-size: 56px; font-weight: 700; font-family: var(--font-heading); letter-spacing: -0.03em; margin-bottom: 4px; color: var(--text-warm);">0 unreads.</div>
+      <h2 style="font-size: 22px; font-weight: 400; margin-bottom: 16px;">You never opened Slack.</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 28px;">The printer PIN is 4729.</p>
       <div class="closing-links">
         <code>npx -y @jtalk22/slack-mcp --setup</code>
       </div>
-      <p style="color: var(--text-secondary); font-size: 14px; margin-top: 16px;">Works with Claude, Cursor, Copilot, Gemini, and Windsurf.</p>
+      <p style="color: var(--text-muted); font-size: 13px; margin-top: 14px;">Claude · Cursor · Copilot · Gemini · Windsurf</p>
       <p class="closing-github">github.com/jtalk22/slack-mcp-server</p>
       <span class="easter-egg">ê</span>
     </div>
