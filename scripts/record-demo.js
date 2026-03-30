@@ -26,18 +26,20 @@ const argValue = (flag) => {
 const CONFIG = {
   viewport: { width: 1280, height: 800 },
   speed: '0.5', // Slow speed for video recording
-  scenarioCount: 5,
+  scenarioCount: 7,
   initialHold: 500,
   // Title and closing card durations (ms)
-  introDuration: 4000,   // Title card (3s visible + fade)
+  introDuration: 5000,   // Title card (narrative title card needs more time)
   outroDuration: 5500,   // Closing card (4s visible + fades)
   // Approximate duration per scenario at 0.5x speed (in ms)
   scenarioDurations: {
-    search: 26000,   // +1s for transition fade
-    thread: 26000,
-    list: 21000,
-    send: 19000,
-    multi: 36000
+    triage: 32000,   // ~32s (multi-tool, rich data)
+    search: 24000,   // ~24s
+    thread: 26000,   // ~26s
+    respond: 30000,  // ~30s (multi-tool: read + write)
+    people: 26000,   // ~26s (multi-tool: search + info)
+    react: 20000,    // ~20s (multi-tool but quick results)
+    export: 22000    // ~22s
   }
 };
 
@@ -107,7 +109,7 @@ async function recordDemo() {
   await page.waitForTimeout(CONFIG.introDuration);
 
   // Wait for each scenario
-  const scenarios = ['search', 'thread', 'list', 'send', 'multi'];
+  const scenarios = ['triage', 'search', 'thread', 'respond', 'people', 'react', 'export'];
   let totalWait = 0;
 
   for (let i = 0; i < scenarios.length; i++) {

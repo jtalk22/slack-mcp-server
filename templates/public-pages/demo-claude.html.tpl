@@ -1280,29 +1280,37 @@
       <span>Slack MCP Server</span>
       <span class="badge">🔧 MCP Demo</span>
     </h1>
-    <p>See how Claude uses MCP tools to access your Slack workspace</p>
+    <p>Watch an AI handle your Monday morning Slack without ever opening it</p>
   </header>
 
   <div class="scenario-bar" role="tablist" aria-label="Demo scenarios">
-    <button class="scenario-btn active" data-scenario="search" onclick="runScenario('search')" role="tab" aria-selected="true" aria-label="Search DMs scenario">
+    <button class="scenario-btn active" data-scenario="triage" onclick="runScenario('triage')" role="tab" aria-selected="true" aria-label="Morning triage scenario">
+      <span class="icon" aria-hidden="true">🔔</span>
+      <span class="label">Catch Up</span>
+    </button>
+    <button class="scenario-btn" data-scenario="search" onclick="runScenario('search')" role="tab" aria-selected="false" aria-label="Search messages scenario">
       <span class="icon" aria-hidden="true">🔍</span>
-      <span class="label">Search DMs</span>
+      <span class="label">Find</span>
     </button>
-    <button class="scenario-btn" data-scenario="thread" onclick="runScenario('thread')" role="tab" aria-selected="false" aria-label="Get Thread scenario">
-      <span class="icon" aria-hidden="true">📜</span>
-      <span class="label">Get Thread</span>
+    <button class="scenario-btn" data-scenario="thread" onclick="runScenario('thread')" role="tab" aria-selected="false" aria-label="Thread decisions scenario">
+      <span class="icon" aria-hidden="true">🧵</span>
+      <span class="label">Decisions</span>
     </button>
-    <button class="scenario-btn" data-scenario="list" onclick="runScenario('list')" role="tab" aria-selected="false" aria-label="List DMs scenario">
-      <span class="icon" aria-hidden="true">💬</span>
-      <span class="label">List DMs</span>
+    <button class="scenario-btn" data-scenario="respond" onclick="runScenario('respond')" role="tab" aria-selected="false" aria-label="Read and respond scenario">
+      <span class="icon" aria-hidden="true">↩️</span>
+      <span class="label">Respond</span>
     </button>
-    <button class="scenario-btn" data-scenario="send" onclick="runScenario('send')" role="tab" aria-selected="false" aria-label="Send Message scenario">
-      <span class="icon" aria-hidden="true">✉️</span>
-      <span class="label">Send Message</span>
+    <button class="scenario-btn" data-scenario="people" onclick="runScenario('people')" role="tab" aria-selected="false" aria-label="People lookup scenario">
+      <span class="icon" aria-hidden="true">👤</span>
+      <span class="label">Who?</span>
     </button>
-    <button class="scenario-btn" data-scenario="multi" onclick="runScenario('multi')" role="tab" aria-selected="false" aria-label="Multi-Tool scenario">
+    <button class="scenario-btn" data-scenario="react" onclick="runScenario('react')" role="tab" aria-selected="false" aria-label="Quick actions scenario">
       <span class="icon" aria-hidden="true">⚡</span>
-      <span class="label">Multi-Tool</span>
+      <span class="label">Quick Act</span>
+    </button>
+    <button class="scenario-btn" data-scenario="export" onclick="runScenario('export')" role="tab" aria-selected="false" aria-label="Export conversation scenario">
+      <span class="icon" aria-hidden="true">📦</span>
+      <span class="label">Export</span>
     </button>
   </div>
 
@@ -1347,10 +1355,9 @@
 
     <!-- Title Card (auto-play only) -->
     <div class="title-card" id="titleCard">
-      <img class="title-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="Slack MCP Server">
-      <h1>Slack MCP Server</h1>
-      <p class="title-tagline">No OAuth. No admin. Just your browser session.</p>
-      <p class="title-version">@jtalk22</p>
+      <h1 style="font-size: 32px; margin-bottom: 4px;">It's Monday, 9:07 AM.</h1>
+      <p class="title-tagline" style="font-size: 20px; color: var(--text-secondary);">You have 47 unread Slack messages.</p>
+      <p class="title-version" style="margin-top: 32px; font-size: 13px;">Slack MCP Server v4.0.0 · @jtalk22</p>
     </div>
 
     <!-- Scenario Caption Overlay -->
@@ -1358,12 +1365,13 @@
 
     <!-- Closing Card (auto-play only) -->
     <div class="closing-card" id="closingCard">
-      <div class="closing-check">✅</div>
-      <h2>Works with Claude, Cursor, Copilot, and Gemini.</h2>
-      <p class="closing-cta">16 tools. One command. No OAuth, no admin approval.</p>
+      <div class="closing-check" style="font-size: 36px; margin-bottom: 8px;">0 unreads.</div>
+      <h2>You never opened Slack.</h2>
+      <p class="closing-cta" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">(The coffee machine is still broken though.)</p>
       <div class="closing-links">
         <code>npx -y @jtalk22/slack-mcp --setup</code>
       </div>
+      <p style="color: var(--text-secondary); font-size: 14px; margin-top: 16px;">Works with Claude, Cursor, Copilot, Gemini, and Windsurf.</p>
       <p class="closing-github">github.com/jtalk22/slack-mcp-server</p>
       <span class="easter-egg">ê</span>
     </div>
@@ -1424,16 +1432,28 @@
               <div class="dropdown-item-desc">List workspace users</div>
             </div>
             <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_conversations_unreads</div>
+              <div class="dropdown-item-desc">Get channels with unread messages</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_add_reaction</div>
+              <div class="dropdown-item-desc">Add emoji reaction to a message</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_conversations_mark</div>
+              <div class="dropdown-item-desc">Mark conversation as read</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_users_search</div>
+              <div class="dropdown-item-desc">Search users by name or email</div>
+            </div>
+            <div class="dropdown-item">
               <div class="dropdown-item-name">slack_health_check</div>
               <div class="dropdown-item-desc">Verify token validity</div>
             </div>
             <div class="dropdown-item">
               <div class="dropdown-item-name">slack_token_status</div>
               <div class="dropdown-item-desc">Check token health</div>
-            </div>
-            <div class="dropdown-item">
-              <div class="dropdown-item-name">slack_refresh_tokens</div>
-              <div class="dropdown-item-desc">Auto-extract fresh tokens</div>
             </div>
           </div>
         </div>
@@ -1451,7 +1471,7 @@
       <a href="demo.html">Web UI Demo</a>
     </p>
     <p style="margin-top: 8px; font-size: 11px; color: var(--text-muted);">
-      Keyboard: <kbd>1-5</kbd> scenarios · <kbd>R</kbd> replay · <kbd>A</kbd> auto-play · <kbd>F</kbd> fullscreen · <kbd>Esc</kbd> exit
+      Keyboard: <kbd>1-7</kbd> scenarios · <kbd>R</kbd> replay · <kbd>A</kbd> auto-play · <kbd>F</kbd> fullscreen · <kbd>Esc</kbd> exit
     </p>
     <p style="margin-top: 12px; font-size: 11px; color: var(--text-muted);">
       © 2026 Revasser · MIT License
@@ -1462,115 +1482,214 @@
     // ═══════════════════════════════════════════════════════════════
     // Scenario Data
     // ═══════════════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════
+    // "Monday, 9:07 AM" — A connected narrative
+    // Each scenario builds on the last. The incident from #1 comes
+    // back in #4. The person from #5 reacted in #2. By the end,
+    // 47 unreads → 0, and you never opened Slack.
+    // ═══════════════════════════════════════════════════════════════
     const scenarios = {
-      search: {
-        userMessage: "Find all messages about the API key from last week",
-        claudeIntro: "I'll search your Slack workspace for messages about API keys from the past week.",
-        toolCall: {
-          name: "slack_search_messages",
-          params: {
-            query: "API key",
-            count: 20
-          },
-          result: [
-            { channel: "#engineering", user: "Sarah Chen", time: "Jan 15, 2:34 PM", text: "Here's the staging API key: <code>sk-abc123-staging-xyz</code>" },
-            { channel: "DM with Mike", user: "Mike Johnson", time: "Jan 12, 10:15 AM", text: "Don't forget to rotate the API key before the deploy" },
-            { channel: "#alerts", user: "DevOps Bot", time: "Jan 10, 9:00 AM", text: "API key rotation reminder: 3 days until expiry" }
-          ]
-        },
-        claudeSummary: "I found <strong>3 messages</strong> mentioning API keys from last week:\n\n1. <strong>Sarah Chen</strong> shared the staging API key in #engineering on Jan 15th\n2. <strong>Mike Johnson</strong> reminded you about key rotation in a DM on Jan 12th\n3. <strong>DevOps Bot</strong> posted an expiry reminder in #alerts on Jan 10th\n\nWould you like me to get more details on any of these?"
-      },
-
-      thread: {
-        userMessage: "What was decided in the Q4 launch thread?",
-        claudeIntro: "Let me find that thread and get the full context of the discussion.",
-        toolCall: {
-          name: "slack_get_thread",
-          params: {
-            channel: "C04N8JXKZ7M",
-            thread_ts: "1704729600.847293"
-          },
-          result: [
-            { user: "Alex Kim", time: "Jan 8, 3:00 PM", text: "Kicking off Q4 launch planning. Key dates?" },
-            { user: "Sarah Chen", time: "Jan 8, 3:15 PM", text: "Marketing wants the 15th for press embargo lift" },
-            { user: "Mike Johnson", time: "Jan 8, 3:22 PM", text: "Engineering can hit the 12th for feature freeze" },
-            { user: "Jordan Lee", time: "Jan 8, 4:00 PM", text: "Let's lock in: Feature freeze Jan 12, Launch Jan 18" },
-            { user: "Alex Kim", time: "Jan 8, 4:05 PM", text: "✅ Approved. I'll update the roadmap" }
-          ]
-        },
-        claudeSummary: "The Q4 launch thread concluded with these <strong>key decisions</strong>:\n\n• <strong>Feature freeze:</strong> January 12th\n• <strong>Press embargo lift:</strong> January 15th  \n• <strong>Launch date:</strong> January 18th\n\n<strong>Jordan Lee</strong> proposed the final timeline and <strong>Alex Kim</strong> approved it. Would you like me to pull any related threads or documents?"
-      },
-
-      list: {
-        userMessage: "Who has messaged me recently?",
-        claudeIntro: "I'll check your recent direct messages to see who's reached out.",
-        toolCall: {
-          name: "slack_list_conversations",
-          params: {
-            types: "im",
-            limit: 10,
-            discover_dms: true
-          },
-          result: [
-            { name: "Sarah Chen", id: "D04AXQK8N2P", lastMessage: "2 hours ago", preview: "Thanks for the review!" },
-            { name: "Mike Johnson", id: "D04BYR7M3Q1", lastMessage: "Yesterday", preview: "Can we sync on the API changes?" },
-            { name: "Alex Kim", id: "D04CZS6L4R2", lastMessage: "2 days ago", preview: "Q4 roadmap is updated" },
-            { name: "Jordan Lee", id: "D04DWT5K5S3", lastMessage: "3 days ago", preview: "Meeting notes attached" },
-            { name: "DevOps Bot", id: "D04EXU4J6T4", lastMessage: "4 days ago", preview: "Deploy completed successfully" }
-          ]
-        },
-        claudeSummary: "You have recent DMs from <strong>5 people</strong>:\n\n• <strong>Sarah Chen</strong> — 2 hours ago: \"Thanks for the review!\"\n• <strong>Mike Johnson</strong> — Yesterday: Asking about API changes sync\n• <strong>Alex Kim</strong> — 2 days ago: Q4 roadmap update\n• <strong>Jordan Lee</strong> — 3 days ago: Meeting notes\n• <strong>DevOps Bot</strong> — 4 days ago: Deploy notification\n\nWant me to pull the full conversation with any of them?"
-      },
-
-      send: {
-        userMessage: "Send a quick update to #general that the deploy is complete",
-        claudeIntro: "I'll post that update to #general for you.",
-        toolCall: {
-          name: "slack_send_message",
-          params: {
-            channel_id: "C04GENERAL1",
-            text: "✅ Deploy complete! All services are healthy and running on the latest release."
-          },
-          result: {
-            success: true,
-            channel: "#general",
-            timestamp: "1705612847.293847",
-            permalink: "https://acme-corp.slack.com/archives/C04GENERAL1/p1705612847293847"
-          }
-        },
-        claudeSummary: "Done! I've posted your update to <strong>#general</strong>:\n\n<em>\"✅ Deploy complete! All services are healthy and running on the latest release.\"</em>\n\nThe message was sent at <strong>2:34 PM</strong>. Would you like me to add any follow-up or tag specific people?"
-      },
-
-      multi: {
-        userMessage: "Find the latest deploy thread and summarize it to #updates",
-        claudeIntro: "I'll search for the deploy thread, then post a summary to #updates.",
+      triage: {
+        userMessage: "I just opened my laptop — what blew up overnight?",
+        claudeIntro: "Let me check your unread channels and DMs to see what happened while you were offline.",
         isMultiTool: true,
         toolCalls: [
           {
-            name: "slack_search_messages",
+            name: "slack_conversations_unreads",
             params: {
-              query: "deploy thread",
-              count: 5
+              types: "im,public_channel,private_channel",
+              limit: 20
+            },
+            result: {
+              total_unread_conversations: 4,
+              conversations: [
+                { id: "C04INCIDENTS", name: "#incidents", type: "public_channel", unread_count: 12 },
+                { id: "C04ENGINEER9", name: "#engineering", type: "public_channel", unread_count: 8 },
+                { id: "D04LENAPARK", name: "DM from Lena Park", type: "dm", unread_count: 1 },
+                { id: "C04PRODUCTZ", name: "#product", type: "public_channel", unread_count: 3 }
+              ]
+            }
+          },
+          {
+            name: "slack_conversations_history",
+            params: {
+              channel_id: "C04INCIDENTS",
+              limit: 6
             },
             result: [
-              { channel: "#engineering", user: "DevOps Bot", time: "Today, 11:42 AM", text: "🚀 Deploy rollout starting..." },
-              { channel: "#engineering", user: "Sarah Chen", time: "Today, 11:45 AM", text: "All tests passing, proceeding with rollout" }
+              { channel: "#incidents", user: "PagerDuty Bot", time: "2:14 AM", text: "🔴 P1 ALERT: RDS connection pool exhausted — primary database unreachable" },
+              { channel: "#incidents", user: "Kai Nakamura", time: "2:22 AM", text: "I'm on it. Pulling up the runbook now" },
+              { channel: "#incidents", user: "Kai Nakamura", time: "2:31 AM", text: "Following the runbook... ok step 4 is lying to me. Doing manual failover." },
+              { channel: "#incidents", user: "Kai Nakamura", time: "3:47 AM", text: "✅ Resolved. Manually promoted the read replica. All services recovering." },
+              { channel: "#incidents", user: "Lena Park", time: "7:12 AM", text: "Nice work Kai. Let's do a post-mortem this afternoon." }
+            ]
+          }
+        ],
+        claudeSummary: "Here's your overnight summary:\n\n🔴 <strong>P1 database outage at 2:14 AM</strong> — RDS connection pool exhausted. Kai Nakamura resolved it at 3:47 AM with a manual failover (the runbook's step 4 apparently needs updating).\n\n<strong>4 channels with unreads:</strong>\n• #incidents (12) — the P1 incident above\n• #engineering (8) — Postgres 17 migration discussion\n• DM from Lena Park (1) — your CTO wants you to review the RDS logs\n• #product (3) — sprint planning updates\n\nI'd recommend starting with Lena's DM. Also, the 3rd floor coffee machine is apparently still broken — Lena mentioned that's the <em>real</em> P1."
+      },
+
+      search: {
+        userMessage: "Find the RDS failover runbook that Kai linked during the incident",
+        claudeIntro: "I'll search for the runbook link from last night's incident.",
+        toolCall: {
+          name: "slack_search_messages",
+          params: {
+            query: "runbook RDS failover from:kai",
+            count: 10
+          },
+          result: [
+            { channel: "#incidents", user: "Kai Nakamura", time: "2:31 AM", text: "Following the runbook: <code>https://notion.so/eng/rds-failover-playbook</code>" },
+            { channel: "#incidents", user: "Kai Nakamura", time: "3:12 AM", text: "Update: runbook step 4 says 'wait for automatic failover' — that never happened. Had to manually promote the read replica instead." },
+            { channel: "#engineering", user: "Kai Nakamura", time: "Last Thursday", text: "Updated the RDS failover runbook with the new connection pool settings. Old limit was 50, bumped to 100." }
+          ]
+        },
+        claudeSummary: "Found it. Here's the runbook trail:\n\n1. <strong>Runbook link:</strong> <code>notion.so/eng/rds-failover-playbook</code> — Kai referenced it at 2:31 AM\n2. <strong>Known issue:</strong> Step 4 (\"wait for automatic failover\") didn't work — Kai had to promote the read replica manually\n3. <strong>Backstory:</strong> Kai updated the runbook last Thursday to bump the connection pool from 50 → 100\n\n⚠️ Looks like 100 still wasn't enough. The pool probably needs to be higher — worth checking the batch job concurrency that caused the spike."
+      },
+
+      thread: {
+        userMessage: "What was decided about the Postgres 17 migration in #engineering?",
+        claudeIntro: "Let me pull that thread and summarize the discussion.",
+        toolCall: {
+          name: "slack_get_thread",
+          params: {
+            channel_id: "C04ENGINEER9",
+            thread_ts: "1711728000.294817"
+          },
+          result: [
+            { user: "Priya Sharma", time: "Yesterday, 2:15 PM", text: "OK — Postgres 17 benchmarks are in. 23% faster on our query patterns. I may have audibly gasped." },
+            { user: "Kai Nakamura", time: "Yesterday, 2:28 PM", text: "The jsonb changes break our audit logger though. Maybe 2 days to fix. I can take it." },
+            { user: "Lena Park", time: "Yesterday, 3:00 PM", text: "What's the rollback story if something breaks in prod?" },
+            { user: "Priya Sharma", time: "Yesterday, 3:15 PM", text: "pg_upgrade supports rollback to 16 within 24hrs. After that we'd need dump/restore. So we'd know fast." },
+            { user: "Alex Torres", time: "Yesterday, 3:45 PM", text: "New here but — should we run it in staging for a sprint first? Asking because I don't want my first week to be a post-mortem 😅" },
+            { user: "Priya Sharma", time: "Yesterday, 4:30 PM", text: "Ha, fair point Alex. Revised plan: Kai fixes audit logger this sprint, staging + QA next sprint, cutover in April. Objections speak now. 🔇" }
+          ]
+        },
+        claudeSummary: "The team decided to <strong>migrate to Postgres 17 in April</strong>. Key decisions:\n\n1. <strong>Kai Nakamura</strong> will fix the audit logger compatibility issue this sprint (~2 days)\n2. <strong>Full sprint of staging + QA</strong> before production cutover (Alex Torres' suggestion — good instinct for a new hire)\n3. <strong>Rollback plan:</strong> pg_upgrade supports rollback to PG 16 within 24 hours\n4. <strong>Performance:</strong> 23% faster on current query patterns\n\nNo objections to Priya's timeline. The migration is green-lit."
+      },
+
+      respond: {
+        userMessage: "Reply to the incidents thread — I reviewed the RDS logs and the pool needs bumping from 100 to 250. Tag Kai.",
+        claudeIntro: "I'll read the thread for context, then post your update.",
+        isMultiTool: true,
+        toolCalls: [
+          {
+            name: "slack_get_thread",
+            params: {
+              channel_id: "C04INCIDENTS",
+              thread_ts: "1711843200.183746"
+            },
+            result: [
+              { user: "PagerDuty Bot", time: "2:14 AM", text: "🔴 P1 ALERT: RDS connection pool exhausted" },
+              { user: "Kai Nakamura", time: "2:22 AM", text: "I'm on it." },
+              { user: "Kai Nakamura", time: "3:47 AM", text: "✅ Resolved. Manually promoted the read replica." },
+              { user: "Lena Park", time: "7:12 AM", text: "Nice work Kai. Post-mortem this afternoon." }
             ]
           },
           {
             name: "slack_send_message",
             params: {
-              channel_id: "C04UPDATES2K",
-              text: "📋 Deploy Summary:\n• Started: 11:42 AM\n• Status: Complete\n• Tests: All passing"
+              channel_id: "C04INCIDENTS",
+              thread_ts: "1711843200.183746",
+              text: "Reviewed the RDS logs. Root cause: connection pool was at 100, but the 2 AM batch job spikes to ~180 connections. Bumping to 250 with a hard cap at 300 — PR incoming.\n\n@Kai — great catch on the manual failover. The runbook step 4 needs updating, I'll add that to the post-mortem agenda."
             },
             result: {
               success: true,
-              channel: "#updates",
-              timestamp: "1705614000.123456"
+              channel: "#incidents",
+              timestamp: "1711872000.293847"
             }
           }
         ],
-        claudeSummary: "Done! I found the deploy thread from this morning and posted a summary to <strong>#updates</strong>:\n\n<em>\"📋 Deploy Summary: Started 11:42 AM, Status: Complete, Tests: All passing\"</em>\n\nThe deploy was led by <strong>Sarah Chen</strong> and completed successfully."
+        claudeSummary: "Posted your update to the <strong>#incidents</strong> thread. Here's what I sent:\n\n<em>\"Reviewed the RDS logs. Root cause: connection pool was at 100, but the 2 AM batch job spikes to ~180 connections. Bumping to 250 with a hard cap at 300 — PR incoming. @Kai — great catch on the manual failover. The runbook step 4 needs updating, I'll add that to the post-mortem agenda.\"</em>\n\nThe reply is threaded under the original P1 alert so Kai and Lena will see it in context."
+      },
+
+      people: {
+        userMessage: "Someone named Alex Torres reacted to my message in #engineering — who is that?",
+        claudeIntro: "Let me look them up for you.",
+        isMultiTool: true,
+        toolCalls: [
+          {
+            name: "slack_users_search",
+            params: {
+              query: "Alex Torres",
+              limit: 5
+            },
+            result: [
+              { name: "atorres", id: "U04XTORRES", lastMessage: "", preview: "Alex Torres — Backend Engineer" }
+            ]
+          },
+          {
+            name: "slack_users_info",
+            params: {
+              user_id: "U04XTORRES"
+            },
+            result: {
+              id: "U04XTORRES",
+              real_name: "Alex Torres",
+              title: "Backend Engineer (started 2 weeks ago)",
+              email: "alex.torres@acme-corp.com",
+              status_text: "Onboarding — learning the codebase (send help)"
+            }
+          }
+        ],
+        claudeSummary: "That's <strong>Alex Torres</strong> — a new backend engineer who started <strong>2 weeks ago</strong>.\n\n• <strong>Title:</strong> Backend Engineer\n• <strong>Status:</strong> \"Onboarding — learning the codebase (send help)\"\n• <strong>Email:</strong> alex.torres@acme-corp.com\n\nThey were the one in the Postgres 17 thread who suggested running staging for a full sprint first — seems like they're already contributing. Might be worth a welcome DM."
+      },
+
+      react: {
+        userMessage: "Add a checkmark to Kai's incident resolution message and mark #incidents as read",
+        claudeIntro: "I'll react to Kai's message and clear the channel.",
+        isMultiTool: true,
+        toolCalls: [
+          {
+            name: "slack_add_reaction",
+            params: {
+              channel_id: "C04INCIDENTS",
+              timestamp: "1711847220.847293",
+              reaction: "white_check_mark"
+            },
+            result: {
+              status: "added",
+              channel: "#incidents",
+              timestamp: "1711847220.847293",
+              reaction: "white_check_mark"
+            }
+          },
+          {
+            name: "slack_conversations_mark",
+            params: {
+              channel_id: "C04INCIDENTS",
+              timestamp: "1711872000.293847"
+            },
+            result: {
+              status: "marked",
+              channel: "#incidents",
+              read_up_to: "1711872000.293847"
+            }
+          }
+        ],
+        claudeSummary: "Done — ✅ added to Kai's 3:47 AM resolution message and <strong>#incidents is marked as read</strong>.\n\nThat's one channel down. You've still got #engineering (8), Lena's DM (1), and #product (3) to go."
+      },
+
+      export: {
+        userMessage: "Export the last 24 hours of #incidents with all threads — I need it for the post-mortem doc",
+        claudeIntro: "I'll pull the full conversation history with threads and save it to a file.",
+        toolCall: {
+          name: "slack_get_full_conversation",
+          params: {
+            channel_id: "C04INCIDENTS",
+            oldest: "1711756800",
+            latest: "1711872000",
+            include_threads: true,
+            output_file: "incidents-postmortem-2026-03-30.json"
+          },
+          result: {
+            total_messages: 47,
+            threads_included: 3,
+            thread_replies: 14,
+            date_range: "Mar 29, 8:00 PM → Mar 30, 9:07 AM",
+            saved_to: "~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json"
+          }
+        },
+        claudeSummary: "Exported <strong>47 messages</strong> and <strong>3 threads</strong> (14 replies) from #incidents covering the full incident timeline.\n\n📁 Saved to: <code>~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json</code>\n\nThe export includes the P1 alert, Kai's troubleshooting thread, your RDS analysis, and Lena's post-mortem scheduling message. Ready to paste into the post-mortem doc.\n\n<em>47 unreads when you woke up. Zero now. You never opened Slack.</em>"
       }
     };
 
@@ -1578,7 +1697,7 @@
     // Animation Helpers
     // ═══════════════════════════════════════════════════════════════
     let speedMultiplier = 1;
-    let currentScenario = 'search';
+    let currentScenario = 'triage';
 
     const sleep = ms => new Promise(r => setTimeout(r, ms / speedMultiplier));
 
@@ -1697,6 +1816,34 @@
         resultHtml = `<div class="result-item">
           ✅ Message sent to <span class="result-channel">${tool.result.channel}</span>
         </div>`;
+      } else if (tool.result.status === 'added') {
+        resultHtml = `<div class="result-item">
+          ✅ Reaction :${tool.result.reaction}: added to message in <span class="result-channel">${tool.result.channel}</span>
+        </div>`;
+      } else if (tool.result.status === 'marked') {
+        resultHtml = `<div class="result-item">
+          ✅ <span class="result-channel">${tool.result.channel}</span> marked as read
+        </div>`;
+      } else if (tool.result.total_messages !== undefined) {
+        resultHtml = `<div class="result-item">
+          📦 <strong>${tool.result.total_messages} messages</strong> exported (${tool.result.threads_included} threads, ${tool.result.thread_replies} replies)<br>
+          <span class="result-time">${tool.result.date_range}</span><br>
+          <em>Saved to: <code>${tool.result.saved_to}</code></em>
+        </div>`;
+      } else if (tool.result.real_name) {
+        resultHtml = `<div class="result-item">
+          <span class="result-user">${tool.result.real_name}</span> · <span class="result-time">${tool.result.title}</span><br>
+          ${tool.result.email}<br>
+          <em>"${tool.result.status_text}"</em>
+        </div>`;
+      } else if (tool.result.total_unread_conversations !== undefined) {
+        resultHtml = tool.result.conversations.map(c =>
+          `<div class="result-item">
+            <span class="result-channel">${c.name}</span> ·
+            <span class="result-user">${c.type}</span> ·
+            <strong>${c.unread_count} unread</strong>
+          </div>`
+        ).join('');
       }
 
       const statusClass = isRunning ? 'running' : 'success';
@@ -1754,11 +1901,13 @@
 
       // Show scenario caption
       const captions = {
-        search: "🔍 Search across your workspace",
-        thread: "📜 Read full thread context",
-        list: "💬 Triage your DM inbox",
-        send: "✉️ Send without opening Slack",
-        multi: "🔗 Chain tools: search → summarize → send"
+        triage: "🔔 What blew up overnight?",
+        search: "🔍 Find the runbook",
+        thread: "🧵 What was decided?",
+        respond: "↩️ Post the fix",
+        people: "👤 Who's the new person?",
+        react: "⚡ Close the loops",
+        export: "📦 Save for the post-mortem"
       };
       const caption = document.getElementById('scenarioCaption');
       caption.textContent = captions[scenarioId] || scenarioId;
@@ -1878,7 +2027,7 @@
       await sleep(500); // Fade transition
       chatContainer.style.display = '';
 
-      const scenarioOrder = ['search', 'thread', 'list', 'send', 'multi'];
+      const scenarioOrder = ['triage', 'search', 'thread', 'respond', 'people', 'react', 'export'];
 
       for (let i = 0; i < scenarioOrder.length; i++) {
         if (!isAutoPlaying) break;
@@ -1981,11 +2130,13 @@
       if (isRunning) return;
 
       switch(e.key) {
-        case '1': runScenario('search'); break;
-        case '2': runScenario('thread'); break;
-        case '3': runScenario('list'); break;
-        case '4': runScenario('send'); break;
-        case '5': runScenario('multi'); break;
+        case '1': runScenario('triage'); break;
+        case '2': runScenario('search'); break;
+        case '3': runScenario('thread'); break;
+        case '4': runScenario('respond'); break;
+        case '5': runScenario('people'); break;
+        case '6': runScenario('react'); break;
+        case '7': runScenario('export'); break;
         case 'r': case 'R': replayScenario(); break;
         case 'a': case 'A': autoPlayAll(); break;
       }
@@ -1995,7 +2146,7 @@
     // Initialize
     // ═══════════════════════════════════════════════════════════════
     document.addEventListener('DOMContentLoaded', () => {
-      runScenario('search');
+      runScenario('triage');
     });
   </script>
 </body>
