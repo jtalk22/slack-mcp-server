@@ -107,6 +107,11 @@
 
       /* Shadows */
       --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+      /* Z-index scale */
+      --z-caption: 50;
+      --z-dropdown: 100;
+      --z-modal: 200;
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -650,7 +655,7 @@
     .tool-chevron {
       color: var(--text-muted);
       transition: transform 0.3s ease;
-      font-size: 10px;
+      font-size: 12px;
     }
 
     .tool-call.expanded .tool-chevron {
@@ -844,7 +849,7 @@
       visibility: hidden;
       transform: translateY(10px);
       transition: all 0.2s ease;
-      z-index: 100;
+      z-index: var(--z-dropdown);
     }
 
     .tools-button:hover .tools-dropdown,
@@ -938,7 +943,7 @@
       display: inline-block;
       padding: 2px 6px;
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 12px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 4px;
@@ -1140,11 +1145,12 @@
       align-items: center;
       justify-content: center;
       background: var(--window-bg);
-      z-index: 100;
+      z-index: var(--z-modal);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+      will-change: opacity;
     }
 
     .title-card.visible {
@@ -1199,7 +1205,7 @@
       letter-spacing: 0.01em;
       opacity: 0;
       transition: opacity 0.3s ease;
-      z-index: 50;
+      z-index: var(--z-caption);
       pointer-events: none;
       max-width: calc(100% - 24px);
       white-space: nowrap;
@@ -1230,11 +1236,12 @@
       align-items: center;
       justify-content: center;
       background: var(--window-bg);
-      z-index: 100;
+      z-index: var(--z-modal);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+      will-change: opacity;
     }
 
     .closing-card.visible {

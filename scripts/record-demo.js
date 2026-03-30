@@ -10,7 +10,8 @@
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { mkdirSync, existsSync, copyFileSync } from 'fs';
+import { mkdirSync, existsSync, copyFileSync, statSync } from 'fs';
+import { spawnSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -150,21 +151,41 @@ async function recordDemo() {
   const videoPath = await video.path();
   copyFileSync(videoPath, canonicalOutput);
 
+  // ── Encode H.264 MP4 from WebM ──────────────────────────────
+  // Playwright records VP8 WebM (~9MB). Re-encode to H.264 MP4
+  // for universal browser support and ~85% smaller file size.
+  const mp4Output = canonicalOutput.replace(/\.webm$/, '.mp4');
+  const ffprobe = spawnSync('ffmpeg', ['-version'], { stdio: 'ignore' });
+  if (ffprobe.status === 0) {
+    console.log('🎞️  Encoding H.264 MP4...');
+    const enc = spawnSync('ffmpeg', [
+      '-y', '-i', canonicalOutput,
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
+      '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+      mp4Output,
+    ], { stdio: 'inherit' });
+    if (enc.status === 0) {
+      const webmSize = (statSync(canonicalOutput).size / 1048576).toFixed(1);
+      const mp4Size = (statSync(mp4Output).size / 1048576).toFixed(1);
+      console.log(`   WebM: ${webmSize} MB → MP4: ${mp4Size} MB`);
+    } else {
+      console.warn('   ⚠️  H.264 encode failed — WebM still available');
+    }
+  } else {
+    console.log('ℹ️  FFmpeg not found — skipping H.264 encode (WebM only)');
+  }
+
   console.log();
   console.log('╔════════════════════════════════════════════════════════════╗');
   console.log('║  ✅ Recording Complete                                     ║');
   console.log('╚════════════════════════════════════════════════════════════╝');
   console.log();
   console.log(`📹 Video: ${canonicalOutput}`);
+  if (existsSync(mp4Output)) console.log(`📹 MP4:   ${mp4Output}`);
   if (archiveOutput) {
     copyFileSync(videoPath, timestampedOutput);
     console.log(`🗂️  Archive: ${timestampedOutput}`);
   }
-  console.log();
-  console.log('Next steps:');
-  console.log('  1. Review in a media player');
-  console.log('  2. Optional GIF:');
-  console.log(`     ffmpeg -y -i "${canonicalOutput}" -vf "fps=12,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" docs/images/demo-claude.gif`);
 }
 
 recordDemo().catch(err => {

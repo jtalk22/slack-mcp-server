@@ -7,6 +7,7 @@
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { readFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -108,6 +109,27 @@ async function captureScreenshots() {
       clip: { x: 0, y: 0, width: 1280, height: 800 }
     });
     await context.close();
+  }
+
+  // Composite a play-button overlay onto the poster so README viewers
+  // know it's a clickable video link, not just a static screenshot.
+  {
+    const posterPath = join(imagesDir, 'demo-poster.png');
+    const posterB64 = readFileSync(posterPath).toString('base64');
+    const overlayHTML = `
+      <html><body style="margin:0;padding:0;width:1280px;height:800px;position:relative">
+        <img src="data:image/png;base64,${posterB64}" style="width:1280px;height:800px;display:block">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+          <div style="width:88px;height:88px;background:rgba(218,119,86,0.82);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.5)">
+            <div style="width:0;height:0;border-style:solid;border-width:18px 0 18px 30px;border-color:transparent transparent transparent #fff;margin-left:4px"></div>
+          </div>
+        </div>
+      </body></html>`;
+    const ctx2 = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const pg2 = await ctx2.newPage();
+    await pg2.setContent(overlayHTML, { waitUntil: 'load' });
+    await pg2.screenshot({ path: posterPath, clip: { x: 0, y: 0, width: 1280, height: 800 } });
+    await ctx2.close();
   }
 
   // Mobile captures for web, demo, and claude demo pages
