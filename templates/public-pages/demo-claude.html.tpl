@@ -1376,7 +1376,7 @@
     <div class="closing-card" id="closingCard">
       <div class="closing-check" style="font-size: 36px; margin-bottom: 8px;">0 unreads.</div>
       <h2>You never opened Slack.</h2>
-      <p class="closing-cta" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">(The coffee machine is still broken though.)</p>
+      <p class="closing-cta" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">(The coffee machine is still unplugged though.)</p>
       <div class="closing-links">
         <code>npx -y @jtalk22/slack-mcp --setup</code>
       </div>
@@ -1504,7 +1504,7 @@
     const scenarios = {
       triage: {
         userMessage: "I just opened my laptop — what blew up overnight?",
-        claudeIntro: "Let me check your unread channels and DMs to see what happened while you were offline.",
+        claudeIntro: "Let me check your unread channels and DMs.",
         isMultiTool: true,
         toolCalls: [
           {
@@ -1516,10 +1516,10 @@
             result: {
               total_unread_conversations: 4,
               conversations: [
-                { id: "C04INCIDENTS", name: "#incidents", type: "public_channel", unread_count: 12 },
-                { id: "C04ENGINEER9", name: "#engineering", type: "public_channel", unread_count: 8 },
-                { id: "D04LENAPARK", name: "DM from Lena Park", type: "dm", unread_count: 1 },
-                { id: "C04PRODUCTZ", name: "#product", type: "public_channel", unread_count: 3 }
+                { id: "C04INCIDENTS", name: "#incidents", type: "public_channel", unread_count: 23 },
+                { id: "C04ENGINEER9", name: "#engineering", type: "public_channel", unread_count: 14 },
+                { id: "C04PRODUCTZ", name: "#product", type: "public_channel", unread_count: 8 },
+                { id: "D04LENAPARK", name: "DM from Lena Park", type: "dm", unread_count: 2 }
               ]
             }
           },
@@ -1532,18 +1532,18 @@
             result: [
               { channel: "#incidents", user: "PagerDuty Bot", time: "2:14 AM", text: "🔴 P1 ALERT: RDS connection pool exhausted — primary database unreachable" },
               { channel: "#incidents", user: "Kai Nakamura", time: "2:22 AM", text: "I'm on it. Pulling up the runbook now" },
-              { channel: "#incidents", user: "Kai Nakamura", time: "2:31 AM", text: "Following the runbook... ok step 4 is lying to me. Doing manual failover." },
+              { channel: "#incidents", user: "Kai Nakamura", time: "2:31 AM", text: "Following the runbook... ok step 4 is straight up lying to me. The automatic failover is a myth. Going manual." },
               { channel: "#incidents", user: "Kai Nakamura", time: "3:47 AM", text: "✅ Resolved. Manually promoted the read replica. All services recovering." },
-              { channel: "#incidents", user: "Lena Park", time: "7:12 AM", text: "Nice work Kai. Let's do a post-mortem this afternoon." }
+              { channel: "#incidents", user: "Lena Park", time: "7:12 AM", text: "Nice work Kai. Post-mortem this afternoon. Also whoever keeps unplugging the 3rd floor coffee machine to charge their laptop — I will find you." }
             ]
           }
         ],
-        claudeSummary: "Here's your overnight summary:\n\n🔴 <strong>P1 database outage at 2:14 AM</strong> — RDS connection pool exhausted. Kai Nakamura resolved it at 3:47 AM with a manual failover (the runbook's step 4 apparently needs updating).\n\n<strong>4 channels with unreads:</strong>\n• #incidents (12) — the P1 incident above\n• #engineering (8) — Postgres 17 migration discussion\n• DM from Lena Park (1) — your CTO wants you to review the RDS logs\n• #product (3) — sprint planning updates\n\nI'd recommend starting with Lena's DM. Also, the 3rd floor coffee machine is apparently still broken — Lena mentioned that's the <em>real</em> P1."
+        claudeSummary: "Here's your Monday morning:\n\n🔴 <strong>P1 database outage at 2:14 AM</strong> — RDS connection pool exhausted. Kai resolved it at 3:47 AM with a manual failover. He described the runbook's automatic failover step as \"a myth.\" At 3am. Love that energy.\n\n<strong>4 channels, 47 unreads:</strong>\n• #incidents (23) — the P1 above\n• #engineering (14) — Postgres 17 migration thread\n• #product (8) — sprint planning\n• DM from Lena Park (2) — your CTO, probably about the incident\n\nYour CTO is waiting — I'd start there. She's also issued a threat about whoever keeps unplugging the coffee machine to charge their laptop. I'm choosing not to get involved in that one."
       },
 
       search: {
-        userMessage: "Find the RDS failover runbook that Kai linked during the incident",
-        claudeIntro: "I'll search for the runbook link from last night's incident.",
+        userMessage: "Find the runbook Kai linked during the incident",
+        claudeIntro: "I'll search for the runbook link from last night.",
         toolCall: {
           name: "slack_search_messages",
           params: {
@@ -1556,12 +1556,12 @@
             { channel: "#engineering", user: "Kai Nakamura", time: "Last Thursday", text: "Updated the RDS failover runbook with the new connection pool settings. Old limit was 50, bumped to 100." }
           ]
         },
-        claudeSummary: "Found it. Here's the runbook trail:\n\n1. <strong>Runbook link:</strong> <code>notion.so/eng/rds-failover-playbook</code> — Kai referenced it at 2:31 AM\n2. <strong>Known issue:</strong> Step 4 (\"wait for automatic failover\") didn't work — Kai had to promote the read replica manually\n3. <strong>Backstory:</strong> Kai updated the runbook last Thursday to bump the connection pool from 50 → 100\n\n⚠️ Looks like 100 still wasn't enough. The pool probably needs to be higher — worth checking the batch job concurrency that caused the spike."
+        claudeSummary: "Found it. Here's the trail:\n\n1. <strong>Runbook link:</strong> <code>notion.so/eng/rds-failover-playbook</code> — Kai shared it at 2:31 AM\n2. <strong>Known issue:</strong> Step 4 (\"wait for automatic failover\") is broken — Kai called it \"a myth\"\n3. <strong>Context:</strong> Kai bumped the pool from 50 → 100 last Thursday\n\n⚠️ So the pool went 50 → 100 → still broke at ~180. At this rate the connection pool is just a suggestion."
       },
 
       thread: {
         userMessage: "What was decided about the Postgres 17 migration in #engineering?",
-        claudeIntro: "Let me pull that thread and summarize the discussion.",
+        claudeIntro: "Let me pull that thread and summarize it.",
         toolCall: {
           name: "slack_get_thread",
           params: {
@@ -1577,11 +1577,11 @@
             { user: "Priya Sharma", time: "Yesterday, 4:30 PM", text: "Ha, fair point Alex. Revised plan: Kai fixes audit logger this sprint, staging + QA next sprint, cutover in April. Objections speak now. 🔇" }
           ]
         },
-        claudeSummary: "The team decided to <strong>migrate to Postgres 17 in April</strong>. Key decisions:\n\n1. <strong>Kai Nakamura</strong> will fix the audit logger compatibility issue this sprint (~2 days)\n2. <strong>Full sprint of staging + QA</strong> before production cutover (Alex Torres' suggestion — good instinct for a new hire)\n3. <strong>Rollback plan:</strong> pg_upgrade supports rollback to PG 16 within 24 hours\n4. <strong>Performance:</strong> 23% faster on current query patterns\n\nNo objections to Priya's timeline. The migration is green-lit."
+        claudeSummary: "The team decided to <strong>migrate to Postgres 17 in April</strong>. Here's the plan:\n\n1. <strong>Kai</strong> fixes the audit logger compatibility (~2 days, this sprint)\n2. <strong>Full sprint of staging + QA</strong> before cutover — Alex Torres suggested this, two weeks into the job and already saving the team from themselves\n3. <strong>Rollback:</strong> pg_upgrade supports rollback to PG 16 within 24 hours\n4. <strong>Why bother:</strong> 23% faster on current query patterns (Priya \"audibly gasped\")\n\nNo objections. Migration is green-lit."
       },
 
       respond: {
-        userMessage: "Reply to the incidents thread — I reviewed the RDS logs and the pool needs bumping from 100 to 250. Tag Kai.",
+        userMessage: "Reply to the incidents thread — pool needs bumping to 250, tag Kai",
         claudeIntro: "I'll read the thread for context, then post your update.",
         isMultiTool: true,
         toolCalls: [
@@ -1603,7 +1603,7 @@
             params: {
               channel_id: "C04INCIDENTS",
               thread_ts: "1711843200.183746",
-              text: "Reviewed the RDS logs. Root cause: connection pool was at 100, but the 2 AM batch job spikes to ~180 connections. Bumping to 250 with a hard cap at 300 — PR incoming.\n\n@Kai — great catch on the manual failover. The runbook step 4 needs updating, I'll add that to the post-mortem agenda."
+              text: "Reviewed the RDS logs. Root cause: pool was at 100, but the 2 AM batch job spikes to ~180 connections. Bumping to 250 with a hard cap at 300 — PR incoming.\n\n@Kai great catch on the manual failover. Runbook step 4 needs a rewrite, adding it to the post-mortem agenda."
             },
             result: {
               success: true,
@@ -1612,12 +1612,12 @@
             }
           }
         ],
-        claudeSummary: "Posted your update to the <strong>#incidents</strong> thread. Here's what I sent:\n\n<em>\"Reviewed the RDS logs. Root cause: connection pool was at 100, but the 2 AM batch job spikes to ~180 connections. Bumping to 250 with a hard cap at 300 — PR incoming. @Kai — great catch on the manual failover. The runbook step 4 needs updating, I'll add that to the post-mortem agenda.\"</em>\n\nThe reply is threaded under the original P1 alert so Kai and Lena will see it in context."
+        claudeSummary: "Posted to the <strong>#incidents</strong> thread:\n\n<em>\"Reviewed the RDS logs. Root cause: pool was at 100, but the 2 AM batch job spikes to ~180 connections. Bumping to 250 with a hard cap at 300 — PR incoming. @Kai great catch on the manual failover. Runbook step 4 needs a rewrite, adding it to the post-mortem agenda.\"</em>\n\nKai and Lena will see it in the thread."
       },
 
       people: {
         userMessage: "Someone named Alex Torres reacted to my message in #engineering — who is that?",
-        claudeIntro: "Let me look them up for you.",
+        claudeIntro: "Let me look them up.",
         isMultiTool: true,
         toolCalls: [
           {
@@ -1644,12 +1644,12 @@
             }
           }
         ],
-        claudeSummary: "That's <strong>Alex Torres</strong> — a new backend engineer who started <strong>2 weeks ago</strong>.\n\n• <strong>Title:</strong> Backend Engineer\n• <strong>Status:</strong> \"Onboarding — learning the codebase (send help)\"\n• <strong>Email:</strong> alex.torres@acme-corp.com\n\nThey were the one in the Postgres 17 thread who suggested running staging for a full sprint first — seems like they're already contributing. Might be worth a welcome DM."
+        claudeSummary: "That's <strong>Alex Torres</strong> — backend engineer, started <strong>2 weeks ago</strong>.\n\n• <strong>Status:</strong> \"Onboarding — learning the codebase (send help)\"\n• <strong>Timezone:</strong> PST (probably still asleep — unlike Kai, who was debugging at 3am while the rest of you dreamed of well-indexed queries)\n• <strong>Email:</strong> alex.torres@acme-corp.com\n\nThis is who suggested staging first in the Postgres 17 thread. Two weeks in and already the voice of reason. Worth a welcome DM."
       },
 
       react: {
-        userMessage: "Add a checkmark to Kai's incident resolution message and mark #incidents as read",
-        claudeIntro: "I'll react to Kai's message and clear the channel.",
+        userMessage: "Checkmark Kai's resolution message and mark #incidents as read",
+        claudeIntro: "On it.",
         isMultiTool: true,
         toolCalls: [
           {
@@ -1679,12 +1679,12 @@
             }
           }
         ],
-        claudeSummary: "Done — ✅ added to Kai's 3:47 AM resolution message and <strong>#incidents is marked as read</strong>.\n\nThat's one channel down. You've still got #engineering (8), Lena's DM (1), and #product (3) to go."
+        claudeSummary: "Done — ✅ on Kai's 3:47 AM resolution message, and <strong>#incidents marked as read</strong>.\n\nThat's 1 of 4 channels cleared. Still have #engineering (14), #product (8), and Lena's DM (2)."
       },
 
       export: {
-        userMessage: "Export the last 24 hours of #incidents with all threads — I need it for the post-mortem doc",
-        claudeIntro: "I'll pull the full conversation history with threads and save it to a file.",
+        userMessage: "Export the last 24 hours of #incidents with all threads — need it for the post-mortem",
+        claudeIntro: "I'll pull the full history with threads and save it.",
         toolCall: {
           name: "slack_get_full_conversation",
           params: {
@@ -1702,7 +1702,7 @@
             saved_to: "~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json"
           }
         },
-        claudeSummary: "Exported <strong>47 messages</strong> and <strong>3 threads</strong> (14 replies) from #incidents covering the full incident timeline.\n\n📁 Saved to: <code>~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json</code>\n\nThe export includes the P1 alert, Kai's troubleshooting thread, your RDS analysis, and Lena's post-mortem scheduling message. Ready to paste into the post-mortem doc.\n\n<em>47 unreads when you woke up. Zero now. You never opened Slack.</em>"
+        claudeSummary: "Exported <strong>47 messages</strong> and <strong>3 threads</strong> (14 replies) from #incidents.\n\n📁 Saved to: <code>~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json</code>\n\nCovers the full incident: PagerDuty alert, Kai's 3am heroics, your RDS fix, and Lena's coffee machine vendetta. Ready for the post-mortem.\n\n<em>47 unreads when you woke up. Zero now. You never opened Slack.</em>"
       }
     };
 
