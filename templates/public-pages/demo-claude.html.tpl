@@ -1376,7 +1376,7 @@
     <div class="closing-card" id="closingCard">
       <div class="closing-check" style="font-size: 36px; margin-bottom: 8px;">0 unreads.</div>
       <h2>You never opened Slack.</h2>
-      <p class="closing-cta" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">(The coffee machine is still unplugged though.)</p>
+      <p class="closing-cta" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">(The printer PIN is 4729, by the way.)</p>
       <div class="closing-links">
         <code>npx -y @jtalk22/slack-mcp --setup</code>
       </div>
@@ -1534,29 +1534,29 @@
               { channel: "#incidents", user: "Kai Nakamura", time: "2:22 AM", text: "I'm on it. Pulling up the runbook now" },
               { channel: "#incidents", user: "Kai Nakamura", time: "2:31 AM", text: "Following the runbook... ok step 4 is straight up lying to me. The automatic failover is a myth. Going manual." },
               { channel: "#incidents", user: "Kai Nakamura", time: "3:47 AM", text: "✅ Resolved. Manually promoted the read replica. All services recovering." },
-              { channel: "#incidents", user: "Lena Park", time: "7:12 AM", text: "Nice work Kai. Post-mortem this afternoon. Also whoever keeps unplugging the 3rd floor coffee machine to charge their laptop — I will find you." }
+              { channel: "#incidents", user: "Lena Park", time: "7:12 AM", text: "Nice work Kai. Post-mortem this afternoon. Also the 3rd floor printer is jammed again and nobody knows the admin PIN — IT shared it in #facilities like 5 months ago but who reads that channel. Someone please find it and tape it to the printer." }
             ]
           }
         ],
-        claudeSummary: "Here's your Monday morning:\n\n🔴 <strong>P1 database outage at 2:14 AM</strong> — RDS connection pool exhausted. Kai resolved it at 3:47 AM with a manual failover. He described the runbook's automatic failover step as \"a myth.\" At 3am. Love that energy.\n\n<strong>4 channels, 47 unreads:</strong>\n• #incidents (23) — the P1 above\n• #engineering (14) — Postgres 17 migration thread\n• #product (8) — sprint planning\n• DM from Lena Park (2) — your CTO, probably about the incident\n\nYour CTO is waiting — I'd start there. She's also issued a threat about whoever keeps unplugging the coffee machine to charge their laptop. I'm choosing not to get involved in that one."
+        claudeSummary: "Here's your Monday morning:\n\n🔴 <strong>P1 database outage at 2:14 AM</strong> — RDS connection pool exhausted. Kai resolved it at 3:47 AM with a manual failover. He described the runbook's automatic failover step as \"a myth.\" At 3am. Love that energy.\n\n<strong>4 channels, 47 unreads:</strong>\n• #incidents (23) — the P1 above\n• #engineering (14) — Postgres 17 migration thread\n• #product (8) — sprint planning\n• DM from Lena Park (2) — your CTO, probably about the incident\n\nYour CTO is waiting — I'd start there. She's also asking someone to find the 3rd floor printer admin PIN. IT shared it in #facilities months ago but, quote, \"who reads that channel.\" Want me to find it?"
       },
 
       search: {
-        userMessage: "Find the runbook Kai linked during the incident",
-        claudeIntro: "I'll search for the runbook link from last night.",
+        userMessage: "Yeah find that printer PIN. Nobody knows it.",
+        claudeIntro: "Searching #facilities and related channels for the printer admin PIN.",
         toolCall: {
           name: "slack_search_messages",
           params: {
-            query: "runbook RDS failover from:kai",
+            query: "printer admin PIN 3rd floor",
             count: 10
           },
           result: [
-            { channel: "#incidents", user: "Kai Nakamura", time: "2:31 AM", text: "Following the runbook: <code>https://notion.so/eng/rds-failover-playbook</code>" },
-            { channel: "#incidents", user: "Kai Nakamura", time: "3:12 AM", text: "Update: runbook step 4 says 'wait for automatic failover' — that never happened. Had to manually promote the read replica instead." },
-            { channel: "#engineering", user: "Kai Nakamura", time: "Last Thursday", text: "Updated the RDS failover runbook with the new connection pool settings. Old limit was 50, bumped to 100." }
+            { channel: "#facilities", user: "Dave Chen (IT)", time: "Oct 12", text: "For anyone who needs it — the admin PIN for the 3rd floor printer is 4729. Go to Menu → Admin Settings → enter PIN to clear jams." },
+            { channel: "#random", user: "Marcus Webb", time: "2 weeks ago", text: "does anyone know the admin PIN for the printer on 3? it's jammed again and I'm just staring at it" },
+            { channel: "#general", user: "Priya Sharma", time: "3 months ago", text: "the 3rd floor printer is jammed. I tried turning it off and on. I am not proud." }
           ]
         },
-        claudeSummary: "Found it. Here's the trail:\n\n1. <strong>Runbook link:</strong> <code>notion.so/eng/rds-failover-playbook</code> — Kai shared it at 2:31 AM\n2. <strong>Known issue:</strong> Step 4 (\"wait for automatic failover\") is broken — Kai called it \"a myth\"\n3. <strong>Context:</strong> Kai bumped the pool from 50 → 100 last Thursday\n\n⚠️ So the pool went 50 → 100 → still broke at ~180. At this rate the connection pool is just a suggestion."
+        claudeSummary: "The PIN is <strong>4729</strong>.\n\nDave from IT shared it in #facilities on October 12th: Menu → Admin Settings → enter PIN. That message had <strong>zero reactions</strong>. Nobody read it.\n\nMarcus asked the exact same question in #random two weeks ago. No one answered him either. Priya tried turning it off and on three months ago. She is not proud.\n\nI'd suggest taping the PIN to the printer like Lena asked."
       },
 
       thread: {
@@ -1702,7 +1702,7 @@
             saved_to: "~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json"
           }
         },
-        claudeSummary: "Exported <strong>47 messages</strong> and <strong>3 threads</strong> (14 replies) from #incidents.\n\n📁 Saved to: <code>~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json</code>\n\nCovers the full incident: PagerDuty alert, Kai's 3am heroics, your RDS fix, and Lena's coffee machine vendetta. Ready for the post-mortem.\n\n<em>47 unreads when you woke up. Zero now. You never opened Slack.</em>"
+        claudeSummary: "Exported <strong>47 messages</strong> and <strong>3 threads</strong> (14 replies) from #incidents.\n\n📁 Saved to: <code>~/.slack-mcp-exports/incidents-postmortem-2026-03-30.json</code>\n\nCovers the full incident: PagerDuty alert, Kai's 3am heroics, your RDS fix, and Lena asking someone to tape the printer PIN to the printer. All there.\n\n<em>47 unreads when you woke up. Zero now. You never opened Slack.</em>"
       }
     };
 
@@ -1926,7 +1926,7 @@
       // Show scenario caption
       const captions = {
         triage: "🔔 What blew up overnight?",
-        search: "🔍 Find the runbook",
+        search: "🔍 Find the printer PIN",
         thread: "🧵 What was decided?",
         respond: "↩️ Post the fix",
         people: "👤 Who's the new person?",
