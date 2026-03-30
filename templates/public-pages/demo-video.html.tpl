@@ -4,16 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slack MCP Server — Video Demo</title>
-  <meta name="description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools plus a managed Cloud path with Gemini CLI support, security/procurement review, deployment review, and hosted credentials.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Slack MCP Server — Video Demo">
-  <meta property="og:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools plus a managed Cloud path with Gemini CLI support, security/procurement review, deployment review, and hosted credentials.">
+  <meta name="description" content="Slack's official MCP needs OAuth + admin approval and doesn't work with Claude Code or Copilot. This one uses your browser session. {{SELF_HOSTED_TOOL_COUNT}} tools, one command.">
+  <meta property="og:type" content="video.other">
+  <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
+  <meta property="og:description" content="{{SELF_HOSTED_TOOL_COUNT}} tools for search, threads, DMs, reactions, and more. Works with Claude, Cursor, Copilot, Gemini. One command: npx -y @jtalk22/slack-mcp --setup">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server — Video Demo">
-  <meta name="twitter:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools plus a managed Cloud path with Gemini CLI support, security/procurement review, deployment review, and hosted credentials.">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:video" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude-mobile-20s.mp4">
+  <meta property="og:video:secure_url" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude-mobile-20s.mp4">
+  <meta property="og:video:type" content="video/mp4">
+  <meta property="og:video:width" content="1080">
+  <meta property="og:video:height" content="1920">
+  <meta name="twitter:card" content="player">
+  <meta name="twitter:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
+  <meta name="twitter:description" content="{{SELF_HOSTED_TOOL_COUNT}} tools. Works with Claude, Cursor, Copilot, Gemini. One command setup.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
+  <meta name="twitter:player" content="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
+  <meta name="twitter:player:width" content="1280">
+  <meta name="twitter:player:height" content="800">
+  <meta name="twitter:player:stream" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude-mobile-20s.mp4">
+  <meta name="twitter:player:stream:content_type" content="video/mp4">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,7 +185,7 @@
 <body>
   <div class="container">
     <h1>Slack MCP Server</h1>
-    <p class="subtitle">Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for search, replies, reactions, unread triage, and user lookup. Cloud provides {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, {{TEAM_AI_WORKFLOW_COUNT}} Team AI workflows, and Gemini CLI support.</p>
+    <p class="subtitle">No OAuth. No admin approval. {{SELF_HOSTED_TOOL_COUNT}} tools for Claude, Cursor, Copilot, Gemini, and any MCP client. <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;font-size:0.875rem">npx -y @jtalk22/slack-mcp --setup</code></p>
     <div class="cta-strip">
       <div class="links">
 {{DEMO_LINKS}}
@@ -184,7 +196,7 @@
     </div>
 
     <div class="video-wrapper">
-      <video id="demo" poster="../docs/images/demo-poster.png" playsinline>
+      <video id="demo" poster="../docs/images/demo-poster.png" playsinline autoplay muted loop>
         <source src="../docs/videos/demo-claude.webm" type="video/webm">
         <source src="https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude.webm" type="video/webm">
         Your browser does not support the video tag.
