@@ -2170,6 +2170,8 @@
     // Initialize
     // ═══════════════════════════════════════════════════════════════
     document.addEventListener('DOMContentLoaded', () => {
+      // Skip initial scenario when recording (?noauto flag)
+      if (new URLSearchParams(window.location.search).has('noauto')) return;
       runScenario('triage');
     });
   </script>

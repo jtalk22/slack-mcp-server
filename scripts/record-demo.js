@@ -4,7 +4,14 @@
  * Records the Claude Desktop demo in fullscreen mode with auto-play
  *
  * Usage: npm run record-demo
- * Output: docs/videos/demo-claude-TIMESTAMP.webm
+ * Output: docs/videos/demo-claude.webm
+ *
+ * Flow:
+ *   1. Load page with ?noauto (prevents DOMContentLoaded auto-scenario)
+ *   2. Set speed to 0.5x, enter fullscreen
+ *   3. Trigger autoPlayAll() via JS (button is hidden in fullscreen)
+ *   4. Watch DOM for title card → 7 scenarios → closing card
+ *   5. Close context to flush video file
  */
 
 import { chromium } from 'playwright';
@@ -22,13 +29,10 @@ const argValue = (flag) => {
   return idx >= 0 && idx + 1 < argv.length ? argv[idx + 1] : null;
 };
 
-// Configuration
 const CONFIG = {
   viewport: { width: 1280, height: 800 },
-  speed: '0.5', // Slow speed for video recording
-  initialHold: 500,
-  // Max time to wait for the full demo to complete (safety net)
-  maxDemoTimeout: 600000, // 10 minutes
+  speed: '0.5',
+  maxDemoTimeout: 600000, // 10 minutes safety net
 };
 
 const canonicalOutput = argValue('--out') || join(projectRoot, 'docs', 'videos', 'demo-claude.webm');
@@ -36,141 +40,127 @@ const archiveOutput = hasArg('--archive');
 
 async function recordDemo() {
   console.log('╔════════════════════════════════════════════════════════════╗');
-  console.log('║  Slack MCP Server - Demo Video Recording                   ║');
+  console.log('║  Slack MCP Server — Demo Video Recording                  ║');
   console.log('╚════════════════════════════════════════════════════════════╝');
   console.log();
 
-  // Ensure videos directory exists
   const videosDir = join(projectRoot, 'docs', 'videos');
   if (!existsSync(videosDir)) {
     mkdirSync(videosDir, { recursive: true });
-    console.log(`📁 Created directory: ${videosDir}`);
   }
 
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
   const timestampedOutput = join(videosDir, `demo-claude-${timestamp}.webm`);
 
   console.log('🚀 Launching browser...');
-  const browser = await chromium.launch({
-    headless: true,
-  });
+  const browser = await chromium.launch({ headless: true });
 
   const context = await browser.newContext({
     viewport: CONFIG.viewport,
-    recordVideo: {
-      dir: videosDir,
-      size: CONFIG.viewport
-    },
-    colorScheme: 'dark'
+    recordVideo: { dir: videosDir, size: CONFIG.viewport },
+    colorScheme: 'dark',
   });
 
   const page = await context.newPage();
 
-  // Load the demo
+  // Load with ?noauto — prevents DOMContentLoaded from starting a scenario
+  // (which would set isRunning=true and silently block autoPlayAll)
   const demoPath = join(projectRoot, 'public', 'demo-claude.html');
-  console.log(`📄 Loading: ${demoPath}`);
-  await page.goto(`file://${demoPath}`);
-  await page.waitForTimeout(1000);
+  console.log(`📄 Loading: file://${demoPath}?noauto`);
+  await page.goto(`file://${demoPath}?noauto`);
+  await page.waitForTimeout(800);
 
-  // Keep first frame brief so autoplay reaches full-screen flow quickly.
-  console.log(`⏸️  Holding initial frame (${CONFIG.initialHold}ms)...`);
-  await page.waitForTimeout(CONFIG.initialHold);
+  // Set speed and enter fullscreen BEFORE starting auto-play.
+  // This way the first recorded frame is already fullscreen —
+  // no jarring window-resize mid-recording.
+  console.log(`⏱️  Speed: ${CONFIG.speed}x`);
+  await page.evaluate((s) => updateSpeed(s), CONFIG.speed);
 
-  // Set slow speed for video recording
-  console.log(`⏱️  Setting speed to ${CONFIG.speed}x...`);
-  await page.selectOption('#speedSelect', CONFIG.speed);
-  await page.waitForTimeout(300);
-
-  // Start auto-play BEFORE entering fullscreen (button hidden in fullscreen)
-  console.log('▶️  Starting auto-play...');
-  await page.click('#autoPlayBtn');
-  await page.waitForTimeout(500);
-
-  // Now enter fullscreen mode
-  console.log('🖥️  Entering fullscreen mode...');
-  console.log();
+  console.log('🖥️  Entering fullscreen...');
   await page.keyboard.press('f');
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(400);
 
-  // Wait for title card to appear (autoplay just started)
+  // Start auto-play via JS. The autoPlay button is hidden in fullscreen,
+  // but the function is still callable. Use { autoPlayAll(); } so evaluate
+  // returns undefined immediately (doesn't await the async function).
+  console.log('▶️  Starting auto-play...');
+  await page.evaluate(() => { autoPlayAll(); });
+
+  // ── Watch the demo via DOM state ────────────────────────────────
+
+  // Title card
   console.log('📺 Waiting for title card...');
   await page.waitForFunction(
     () => document.getElementById('titleCard')?.classList.contains('visible'),
-    { timeout: 15000 }
+    { timeout: 15000 },
   );
-  console.log('   Title card visible — "It\'s Monday, 9:07 AM."');
+  console.log('   "It\'s Monday, 9:07 AM. You have 47 unread Slack messages."');
 
-  // Wait for title card to finish and scenarios to begin
   await page.waitForFunction(
     () => !document.getElementById('titleCard')?.classList.contains('visible'),
-    { timeout: 30000 }
+    { timeout: 30000 },
   );
-  console.log('▶️  Scenarios running...');
-  console.log('   (Watching DOM — no hardcoded waits. At 0.5x this takes ~4 min.)');
+  console.log('▶️  Scenarios running (watching DOM — at 0.5x this takes ~3 min)');
   console.log();
 
-  // Watch scenario progress by polling currentScenario
-  const scenarioOrder = ['triage', 'search', 'thread', 'respond', 'people', 'react', 'export'];
+  // Poll scenario progress for console output
+  const scenarios = ['triage', 'search', 'thread', 'respond', 'people', 'react', 'export'];
   let lastScenario = null;
-  const progressPoller = setInterval(async () => {
+  const poller = setInterval(async () => {
     try {
       const current = await page.evaluate(() => window.currentScenario);
       if (current && current !== lastScenario) {
-        const idx = scenarioOrder.indexOf(current);
-        console.log(`  📍 Scenario ${idx + 1}/7: ${current}`);
+        const idx = scenarios.indexOf(current);
+        console.log(`  📍 ${idx + 1}/7: ${current}`);
         lastScenario = current;
       }
-    } catch (_) { /* page may be closing */ }
+    } catch (_) { /* page closing */ }
   }, 2000);
 
-  // Wait for closing card to appear (all 7 scenarios done)
-  console.log('⏳ Waiting for all scenarios to complete...');
+  // Closing card
   await page.waitForFunction(
     () => document.getElementById('closingCard')?.classList.contains('visible'),
-    { timeout: CONFIG.maxDemoTimeout }
+    { timeout: CONFIG.maxDemoTimeout },
   );
-  clearInterval(progressPoller);
+  clearInterval(poller);
   console.log();
-  console.log('🎬 Closing card visible — "0 unreads. You never opened Slack."');
+  console.log('🎬 "0 unreads. You never opened Slack."');
 
-  // Wait for closing card animation to finish
+  // Wait for closing card to fully fade out (0.5s CSS transition)
   await page.waitForFunction(
     () => !document.getElementById('closingCard')?.classList.contains('visible'),
-    { timeout: 30000 }
+    { timeout: 30000 },
   );
-  await page.waitForTimeout(800); // small buffer for fade
+  // Small buffer — let the fade complete before closing context.
+  // The closing card's CSS opacity transition is 0.5s; the JS then waits
+  // sleep(500) at 0.5x = 1s real before restoring chatContainer.
+  // Closing context HERE captures the fade but not the chat reappearing.
+  await page.waitForTimeout(600);
 
-  // Exit fullscreen
-  console.log('🔚 Exiting fullscreen...');
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(500);
+  // ── Save video ──────────────────────────────────────────────────
 
-  // Close context to flush video
   console.log('💾 Saving video...');
   const video = await page.video();
   await context.close();
   await browser.close();
 
-  // Get the actual video path
   const videoPath = await video.path();
-
+  copyFileSync(videoPath, canonicalOutput);
   console.log();
   console.log('╔════════════════════════════════════════════════════════════╗');
-  console.log('║  ✅ Recording Complete!                                     ║');
+  console.log('║  ✅ Recording Complete                                     ║');
   console.log('╚════════════════════════════════════════════════════════════╝');
   console.log();
-  copyFileSync(videoPath, canonicalOutput);
-  console.log(`📹 Canonical video: ${canonicalOutput}`);
+  console.log(`📹 Video: ${canonicalOutput}`);
   if (archiveOutput) {
     copyFileSync(videoPath, timestampedOutput);
-    console.log(`🗂️  Archived copy: ${timestampedOutput}`);
+    console.log(`🗂️  Archive: ${timestampedOutput}`);
   }
   console.log();
   console.log('Next steps:');
-  console.log('  1. Review the canonical video in a media player');
-  console.log('  2. Convert to GIF with FFmpeg:');
-  console.log(`     ffmpeg -i "${canonicalOutput}" -vf "fps=15,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" docs/images/demo-claude.gif`);
-  console.log('  3. Re-run with --archive to keep timestamped historical outputs');
+  console.log('  1. Review in a media player');
+  console.log('  2. Optional GIF:');
+  console.log(`     ffmpeg -y -i "${canonicalOutput}" -vf "fps=12,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" docs/images/demo-claude.gif`);
 }
 
 recordDemo().catch(err => {
