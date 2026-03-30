@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [4.0.0] - 2026-03-30
 
 ### Changed
-- **README rewritten** — Stripped commercial sales funnel (34+ tracking links removed). Restored original voice with multi-client positioning: "Works with Claude, Cursor, Copilot, and basically anything that speaks MCP. Slack's official server doesn't."
+- **README rewritten** — Stripped commercial sales funnel (34+ tracking links removed). Restored original voice with multi-client positioning: "Works with any MCP client. Slack's official server doesn't."
 - **Version bumped to 4.0.0** across package.json, server.json, glama.json
 - **Commercial files removed** — 25 files deleted (+143/-2,762 lines). Removed launch ops, demand tracking, revenue routing, and marketplace readiness infrastructure.
 - **Public pages simplified** — `lib/public-metadata.js` stripped from 107 to 22 lines. `lib/public-pages.js` simplified (sales funnel removed). 4 dead npm scripts removed.
@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Integer validation** — `safeParseInt` guards numeric API parameters
 
 ### Added
-- **`.claude/settings.json`** — MCP server registration for Claude Code integration
+- **Editor MCP config** — Local MCP server registration for development
 
 ### Removed
 - `LAUNCH-OPS.md`, `DEMAND-VISIBILITY.md`, `COMMUNICATION-STYLE.md`, and 22 other commercial/ops files
@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.2.1] - 2026-03-10
 
 ### Fixed
-- **Safety annotations** — `destructiveHint: true` on 4 write-path tools (send_message, add_reaction, remove_reaction, conversations_mark). Claude now prompts for confirmation before write operations.
+- **Safety annotations** — `destructiveHint: true` on 4 write-path tools (send_message, add_reaction, remove_reaction, conversations_mark). MCP clients now prompt for confirmation before write operations.
 
 ### Changed
 - **README restructured** — 571 → ~180 lines. Annotation table, collapsible install configs, modern MCP patterns. Architecture and internals moved to docs/ARCHITECTURE.md.
@@ -95,7 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Compatibility
 - No MCP tool renames or removals. All 11 local tools unchanged.
-- Cloud adds 2 AI compound tools (team plan only): `slack_channel_summary`, `slack_extract_action_items`
+- Cloud adds 2 compound workflow tools (team plan only): `slack_channel_summary`, `slack_extract_action_items`
 
 ## [3.0.0] - 2026-02-28
 
@@ -256,7 +256,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Magic Link**: One-click dashboard URL with embedded API key
-- **Interactive Simulator**: Split-screen Claude + Slack demo with 3 scenarios
+- **Interactive Simulator**: Split-screen MCP client + Slack demo with 3 scenarios
 - **Auth Modal**: Secure key entry with localStorage persistence
 - **Reset Demo** button for simulator restart
 - `scripts/verify-web.js` for automated Web UI testing
