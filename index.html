@@ -298,13 +298,13 @@
       <h1>Give Claude your Slack</h1>
       <p>16 self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Cloud provides 15 managed tools, with 3 AI workflows on Team, Claude-first onboarding, and Gemini CLI support.</p>
       <div class="cta-row">
-        <a href="https://mcp.revasserlabs.com/pricing?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45)"><strong style="color:#f0c246">Cloud</strong></a>
+        <a href="https://mcp.revasserlabs.com/pricing" style="background:rgba(240,194,70,0.18);border-color:rgba(240,194,70,0.45)"><strong style="color:#f0c246">Cloud</strong></a>
         <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md"><strong>Self-Host</strong> (free)</a>
         <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest"><strong>Latest Release</strong></a>
-        <a href="https://mcp.revasserlabs.com/pricing?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud"><strong>Pricing</strong></a>
-        <a href="https://mcp.revasserlabs.com/docs?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud"><strong>Cloud Docs</strong></a>
-        <a href="https://mcp.revasserlabs.com/deployment?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud"><strong>Deployment</strong></a>
-        <a href="https://mcp.revasserlabs.com/support?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud"><strong>Support</strong></a>
+        <a href="https://mcp.revasserlabs.com/pricing"><strong>Pricing</strong></a>
+        <a href="https://mcp.revasserlabs.com/docs"><strong>Cloud Docs</strong></a>
+        <a href="https://mcp.revasserlabs.com/deployment"><strong>Deployment</strong></a>
+        <a href="https://mcp.revasserlabs.com/support"><strong>Support</strong></a>
         <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><strong>npm</strong></a>
       </div>
       <div class="verify">npx -y @jtalk22/slack-mcp --setup
@@ -333,46 +333,24 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
         </div>
         <div class="snapshot-card">
           <span class="snapshot-label">Operator links</span>
-          <strong class="snapshot-value"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/latest.md">Release health</a></strong>
-          <span class="snapshot-note"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/version-parity.md">Version parity</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/LAUNCH-OPS.md">Runbook</a></span>
+          <strong class="snapshot-value"><a href="https://github.com/jtalk22/slack-mcp-server/releases/latest">Release health</a></strong>
+          <span class="snapshot-note"><a href="https://github.com/jtalk22/slack-mcp-server/releases/latest">Version parity</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md">Runbook</a></span>
         </div>
       </div>
     </section>
 
 <section class="stage" style="padding-top:0">
-      <div class="decision-grid" aria-label="Cloud versus self-host decision guide">
+      <div class="decision-grid" aria-label="Self-host info">
         <article class="decision-card">
           <span class="decision-label">Self-host</span>
           <h2>16 tools and full operator control.</h2>
-          <p>Choose the open-source path if you want npm or Docker, local-first transport control, and direct ownership of token extraction, storage, and process management.</p>
+          <p>Session-based auth, stdio transport. Works with Claude, ChatGPT, Cursor, Copilot, Gemini, Windsurf, and any other MCP client.</p>
           <ul>
             <li>stdio, web, and Docker paths stay fully under your control</li>
-            <li>Best fit for local development, custom transport, or internal operator ownership</li>
-            <li>Proof surfaces: install guide, release health, and version parity remain public</li>
+            <li>No OAuth app registration or admin approval needed</li>
+            <li>Token persistence with automatic refresh on macOS</li>
           </ul>
-          <p class="decision-links"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md">Setup guide</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/version-parity.md">Version parity</a> · <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/release-health/latest.md">Release health</a></p>
-        </article>
-        <article class="decision-card accent">
-          <span class="decision-label">Cloud</span>
-          <h2>15 managed tools, 3 Team AI workflows.</h2>
-          <p>Choose Cloud if you want one remote endpoint, hosted credential handling, deployment review, and an operational support path instead of running the transport yourself. Slack now has an official MCP path, so the Cloud case is managed rollout, buyer review, workflow packaging, and continuity. Claude stays primary; Gemini CLI is supported as the second client path.</p>
-          <ul>
-            <li>Solo: $19/mo for the managed endpoint and hosted credential handling</li>
-            <li>Team: $49/mo and adds 3 AI workflows</li>
-            <li>Turnkey Team Launch: from $2.5k+; Managed Reliability: from $800/mo+</li>
-          </ul>
-          <p class="decision-links"><a href="https://mcp.revasserlabs.com/checkout?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud&plan=solo">Start Solo</a> · <a href="https://mcp.revasserlabs.com/checkout?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud&plan=team">Start Team</a> · <a href="https://mcp.revasserlabs.com/workflows?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Workflows</a> · <a href="https://mcp.revasserlabs.com/official-slack-mcp-vs-managed?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Official vs managed</a> · <a href="https://mcp.revasserlabs.com/gemini-cli?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Gemini CLI</a> · <a href="https://mcp.revasserlabs.com/deployment?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Deployment review</a> · <a href="https://mcp.revasserlabs.com/security?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Security</a></p>
-        </article>
-        <article class="decision-card">
-          <span class="decision-label">Buyer proof</span>
-          <h2>Technical trust surfaces stay public.</h2>
-          <p>The static Pages root shows npm, GitHub release, and hosted status together. The hosted site publishes <code>/status</code>, <code>/pricing</code>, <code>/docs</code>, <code>/security</code>, <code>/deployment</code>, <code>/support</code>, and <code>/account</code> as the operator-facing Cloud surface.</p>
-          <ul>
-            <li>GitHub Pages reads the hosted <code>/status</code> contract live</li>
-            <li>Registry, npm, runtime parity, and hosted funnel reporting are tracked in the public reports</li>
-            <li>Rollout and security questions route to hosted review surfaces instead of ad hoc GitHub issues</li>
-          </ul>
-          <p class="decision-links"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/LAUNCH-OPS.md">Runbook</a> · <a href="https://mcp.revasserlabs.com/status">Raw status JSON</a> · <a href="https://mcp.revasserlabs.com/procurement?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Procurement</a> · <a href="https://mcp.revasserlabs.com/marketplace-readiness?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Marketplace readiness</a> · <a href="https://mcp.revasserlabs.com/readiness?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Readiness</a> · <a href="https://mcp.revasserlabs.com/pricing?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Plans & offers</a></p>
+          <p class="decision-links"><a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md">Setup guide</a> · <a href="https://github.com/jtalk22/slack-mcp-server/releases/latest">Latest release</a> · <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp">npm</a></p>
         </article>
       </div>
     </section>
@@ -393,7 +371,7 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
     </section>
 
     <footer class="footer">
-      <span><a href="https://mcp.revasserlabs.com/pricing?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Cloud Plans</a> · <a href="https://mcp.revasserlabs.com/docs?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Cloud Docs</a> · <a href="https://mcp.revasserlabs.com/deployment?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Deployment</a> · <a href="https://mcp.revasserlabs.com/support?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud">Support</a> · <a href="https://mcp.revasserlabs.com/privacy">Privacy</a> · <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a> · <a href="mailto:support@revasserlabs.com">support@revasserlabs.com</a></span>
+      <span><a href="https://mcp.revasserlabs.com/pricing">Cloud Plans</a> · <a href="https://mcp.revasserlabs.com/docs">Cloud Docs</a> · <a href="https://mcp.revasserlabs.com/deployment">Deployment</a> · <a href="https://mcp.revasserlabs.com/support">Support</a> · <a href="https://mcp.revasserlabs.com/privacy">Privacy</a> · <a href="https://github.com/jtalk22/slack-mcp-server">GitHub</a> · <a href="mailto:support@revasserlabs.com">support@revasserlabs.com</a></span>
       <span>25+ releases · 300+ edge PoPs · <a href="https://github.com/sponsors/jtalk22">Sponsor</a></span>
     </footer>
   </main>
@@ -477,7 +455,7 @@ npx -y @jtalk22/slack-mcp@latest --status</div>
           const hostedVersion = data.version ? `v${data.version}` : 'version unavailable';
           const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'Unavailable';
           const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'Unavailable';
-          const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : 'https://mcp.revasserlabs.com/docs?utm_source=github&utm_medium=pages&utm_campaign=slack_mcp_cloud';
+          const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : 'https://mcp.revasserlabs.com/docs';
           cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} Team AI workflows · <a href="${docsUrl}">Cloud docs</a>`;
         })
         .catch((error) => {

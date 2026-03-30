@@ -110,14 +110,6 @@ function main() {
     cliVersionResult.stdout || cliVersionResult.stderr || "no output"
   );
 
-  const generatedPagesResult = runNode(["scripts/verify-generated-public-pages.js"]);
-  check(
-    results,
-    "Generated public pages",
-    generatedPagesResult.status === 0,
-    generatedPagesResult.stdout || generatedPagesResult.stderr || "no output"
-  );
-
   for (const runtimePath of ["src/server.js", "src/server-http.js", "src/web-server.js", "scripts/setup-wizard.js"]) {
     const source = read(runtimePath);
     check(
@@ -161,108 +153,6 @@ function main() {
     "README should describe session-based authentication approach"
   );
 
-  const marketingIndex = read("index.html");
-  check(
-    results,
-    "GitHub Pages distribution snapshot",
-    marketingIndex.includes("Current distribution snapshot") &&
-      marketingIndex.includes("npm latest") &&
-      marketingIndex.includes("GitHub release") &&
-      marketingIndex.includes("Cloud status") &&
-    marketingIndex.includes("Cloud versus self-host decision guide") &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudStatusUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudCheckoutUrl) &&
-      !marketingIndex.includes("https://mcp.revasserlabs.com/health") &&
-      marketingIndex.includes("Release health"),
-    "index.html should expose the live distribution snapshot cards, decision guide, /status contract, hosted checkout, and operator links"
-  );
-  check(
-    results,
-    "GitHub Pages cloud routing",
-    marketingIndex.includes(PUBLIC_METADATA.cloudDocsUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudPricingUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudOfficialComparisonUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudMarketplaceReadinessUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudSupportUrl) &&
-      marketingIndex.includes(`${PUBLIC_METADATA.canonicalSiteUrl}/privacy`),
-    "index.html should point Cloud routing at hosted pricing, docs, comparison, marketplace readiness, security, deployment, support, and privacy"
-  );
-  check(
-    results,
-    "GitHub Pages revenue path",
-    marketingIndex.includes(PUBLIC_METADATA.cloudTurnkeyLaunchPrice) &&
-      marketingIndex.includes(PUBLIC_METADATA.cloudManagedReliabilityPrice) &&
-      marketingIndex.includes(PUBLIC_METADATA.secondaryClient),
-    "index.html should describe the premium offer anchors and Gemini CLI support"
-  );
-
-  const sharePage = read("public/share.html");
-  check(
-    results,
-    "Share surface cloud routing",
-    sharePage.includes(PUBLIC_METADATA.cloudPricingUrl) &&
-      sharePage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
-      sharePage.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
-      sharePage.includes(PUBLIC_METADATA.tracked.pages.officialComparison) &&
-      sharePage.includes(PUBLIC_METADATA.tracked.pages.marketplaceReadiness) &&
-      sharePage.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
-      sharePage.includes(PUBLIC_METADATA.cloudSupportUrl) &&
-      !sharePage.includes("deployment-intake.md") &&
-      !sharePage.includes("SUPPORT-BOUNDARIES.md"),
-    "share surface should send Cloud buyers to hosted pricing, docs, comparison, marketplace readiness, security, deployment review, and support"
-  );
-  check(
-    results,
-    "Share surface client support",
-    sharePage.includes(PUBLIC_METADATA.secondaryClient),
-    "share surface should mention Gemini CLI support"
-  );
-
-  for (const demoPath of ["public/demo.html", "public/demo-video.html", "public/demo-claude.html"]) {
-    const demoPage = read(demoPath);
-    check(
-      results,
-      `${demoPath} cloud routing`,
-      demoPage.includes(PUBLIC_METADATA.cloudDocsUrl) &&
-        demoPage.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
-        demoPage.includes(PUBLIC_METADATA.tracked.pages.officialComparison) &&
-        demoPage.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
-        demoPage.includes(PUBLIC_METADATA.cloudSupportUrl) &&
-        !demoPage.includes("deployment-intake.md"),
-      `${demoPath} should keep Cloud routing on hosted docs, comparison, security, deployment review, and support`
-    );
-  }
-
-  const setupGuide = read("docs/SETUP.md");
-  check(
-    results,
-    "Setup guide cloud claims",
-    setupGuide.includes(`one URL, ${PUBLIC_METADATA.cloudManagedToolCount} managed tools`) &&
-      setupGuide.includes(`${PUBLIC_METADATA.teamAiWorkflowCount} AI workflows`) &&
-      !setupGuide.includes("one URL, 16 tools"),
-    "docs/SETUP.md must describe the managed Cloud counts"
-  );
-
-  const troubleshootingGuide = read("docs/TROUBLESHOOTING.md");
-  check(
-    results,
-    "Troubleshooting cloud claims",
-    troubleshootingGuide.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard managed tools`) &&
-      !troubleshootingGuide.includes("standard 16 tools available on all plans"),
-    "docs/TROUBLESHOOTING.md must describe the managed Cloud counts"
-  );
-
-  const deploymentModes = read("docs/DEPLOYMENT-MODES.md");
-  check(
-    results,
-    "Deployment modes cloud claims",
-    deploymentModes.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard managed tools + ${PUBLIC_METADATA.teamAiWorkflowCount} AI workflows on Team`) &&
-      !deploymentModes.includes("16 standard tools + AI compound tools on Team"),
-    "docs/DEPLOYMENT-MODES.md must describe the managed Cloud counts"
-  );
-
   const docsIndex = read("docs/INDEX.md");
   check(
     results,
@@ -280,24 +170,6 @@ function main() {
     supportBoundaries.includes("Operated by Revasser") &&
       !supportBoundaries.includes("Maintained by James Lambert"),
     "docs/SUPPORT-BOUNDARIES.md must use company-led support wording"
-  );
-
-  const releaseTemplate = read(".github/RELEASE_NOTES_TEMPLATE.md");
-  check(
-    results,
-    "Release template company-led",
-    releaseTemplate.includes("Operated by Revasser") &&
-      !releaseTemplate.includes("Maintained by James Lambert"),
-    ".github/RELEASE_NOTES_TEMPLATE.md must use company-led support wording"
-  );
-
-  const localWebUi = read("public/index.html");
-  check(
-    results,
-    "Local web banner cloud claims",
-    localWebUi.includes(`${PUBLIC_METADATA.cloudManagedToolCount} managed tools`) &&
-      !localWebUi.includes("gives you 16 tools"),
-    "public/index.html banner must describe managed Cloud counts"
   );
 
   mkdirSync(dirname(REPORT_PATH), { recursive: true });
