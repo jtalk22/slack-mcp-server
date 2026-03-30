@@ -12,26 +12,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="@jtalk22">
   <title>Slack MCP Server — Claude Desktop Demo</title>
-  <meta name="description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
+  <meta name="description" content="No OAuth. No admin. 16 Slack tools for any MCP client. Works with Claude, Cursor, Copilot, Gemini. One command setup.">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Slack MCP Server — Claude Desktop Demo">
-  <meta property="og:description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
+  <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
+  <meta property="og:description" content="Slack's official MCP needs OAuth + admin approval. This one uses your browser session. 16 tools, works with Claude, Cursor, Copilot, Gemini.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html">
   <meta property="og:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server — Claude Desktop Demo">
-  <meta name="twitter:description" content="Give Claude your Slack. 16 MCP tools for channels, search, replies, reactions, unread triage, and user lookup. Managed Cloud deployment is also available.">
+  <meta name="twitter:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
+  <meta name="twitter:description" content="16 tools for Claude, Cursor, Copilot, Gemini. npx -y @jtalk22/slack-mcp --setup">
   <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
 
   <!-- Theme -->
   <meta name="theme-color" content="#1a1a1a">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <link rel="icon" href="../docs/assets/icon-512.png" type="image/png">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+    /* Self-hosted fonts — eliminates CDN latency and sandboxed-env fallback */
+    @font-face {
+      font-family: "Space Grotesk";
+      font-style: normal;
+      font-weight: 500 700;
+      font-display: swap;
+      src: url("../public/fonts/space-grotesk-500.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Sans";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("../public/fonts/ibm-plex-sans-400.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Sans";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("../public/fonts/ibm-plex-sans-500.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "IBM Plex Sans";
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url("../public/fonts/ibm-plex-sans-600.woff2") format("woff2");
+    }
 
     /* ═══════════════════════════════════════════════════════════════
        Claude Desktop Color Palette (Dark Mode)
@@ -1124,7 +1154,7 @@
       margin: 16px 0 8px;
     }
 
-    .title-card .title-logo { font-size: 48px; }
+    .title-card .title-logo { width: 56px; height: 56px; border-radius: 12px; }
     .title-card .title-tagline { color: var(--text-secondary); font-size: 16px; }
     .title-card .title-version { color: var(--text-muted); font-size: 13px; margin-top: 24px; }
 
@@ -1319,10 +1349,10 @@
 
     <!-- Title Card (auto-play only) -->
     <div class="title-card" id="titleCard">
-      <div class="title-logo">💬</div>
+      <img class="title-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="Slack MCP Server">
       <h1>Slack MCP Server</h1>
-      <p class="title-tagline">Full Slack access for Claude Desktop</p>
-      <p class="title-version">Live demo • @jtalk22</p>
+      <p class="title-tagline">No OAuth. No admin. Just your browser session.</p>
+      <p class="title-version">@jtalk22</p>
     </div>
 
     <!-- Scenario Caption Overlay -->
@@ -1331,8 +1361,8 @@
     <!-- Closing Card (auto-play only) -->
     <div class="closing-card" id="closingCard">
       <div class="closing-check">✅</div>
-      <h2>Demo Complete</h2>
-      <p class="closing-cta">Session-based Slack access aligned to your existing workspace permissions.</p>
+      <h2>Works with Claude, Cursor, Copilot, and Gemini.</h2>
+      <p class="closing-cta">16 tools. One command. No OAuth, no admin approval.</p>
       <div class="closing-links">
         <code>npx -y @jtalk22/slack-mcp --setup</code>
       </div>
@@ -1726,11 +1756,11 @@
 
       // Show scenario caption
       const captions = {
-        search: "🔍 Searching Messages",
-        thread: "📜 Reading Thread",
-        list: "💬 Listing DMs",
-        send: "✉️ Sending Message",
-        multi: "🔗 Multi-Tool Workflow"
+        search: "🔍 Search across your workspace",
+        thread: "📜 Read full thread context",
+        list: "💬 Triage your DM inbox",
+        send: "✉️ Send without opening Slack",
+        multi: "🔗 Chain tools: search → summarize → send"
       };
       const caption = document.getElementById('scenarioCaption');
       caption.textContent = captions[scenarioId] || scenarioId;

@@ -571,7 +571,7 @@ export default {
     // Health check
     if (url.pathname === '/health') {
       return Response.json(
-        { status: 'ok', server: 'slack-mcp-server', version: '3.0.0' },
+        { status: 'ok', server: 'slack-mcp-server', version: '4.0.0' },
         { headers: corsHeaders }
       );
     }

@@ -10,7 +10,7 @@ Give your AI agent full Slack access. No app registration, no admin approval, no
 npx -y @jtalk22/slack-mcp --setup
 ```
 
-![demo](docs/images/demo-readme.gif)
+[![Slack MCP Server Demo](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
 > **Ask Claude to catch you up on #engineering from the last 24 hours.** Search for that deployment thread from last week. Find every message mentioning the API key. Send a reply. All from your editor.
 
