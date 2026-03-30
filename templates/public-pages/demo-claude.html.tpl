@@ -953,8 +953,7 @@
       display: none !important;
     }
 
-    body.fullscreen-mode .cta-strip,
-    body.fullscreen-mode .scenario-caption {
+    body.fullscreen-mode .cta-strip {
       display: none !important;
     }
 
@@ -1363,9 +1362,11 @@
 
     <!-- Title Card (auto-play only) -->
     <div class="title-card" id="titleCard">
-      <h1 style="font-size: 32px; margin-bottom: 4px;">It's Monday, 9:07 AM.</h1>
+      <img class="title-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="Slack MCP Server" style="width: 48px; height: 48px; border-radius: 10px; margin-bottom: 16px;">
+      <h1 style="font-size: 32px; margin-bottom: 4px; letter-spacing: -0.01em;">It's Monday, 9:07 AM.</h1>
       <p class="title-tagline" style="font-size: 20px; color: var(--text-secondary);">You have 47 unread Slack messages.</p>
-      <p class="title-version" style="margin-top: 32px; font-size: 13px;">Slack MCP Server v4.0.0 · @jtalk22</p>
+      <p style="margin-top: 20px; font-size: 14px; color: var(--text-muted);">No OAuth. No admin. One command.</p>
+      <p class="title-version" style="margin-top: 8px; font-size: 12px;">Slack MCP Server v4.0.0</p>
     </div>
 
     <!-- Scenario Caption Overlay -->
@@ -1454,6 +1455,10 @@
             <div class="dropdown-item">
               <div class="dropdown-item-name">slack_users_search</div>
               <div class="dropdown-item-desc">Search users by name or email</div>
+            </div>
+            <div class="dropdown-item">
+              <div class="dropdown-item-name">slack_remove_reaction</div>
+              <div class="dropdown-item-desc">Remove emoji reaction</div>
             </div>
             <div class="dropdown-item">
               <div class="dropdown-item-name">slack_health_check</div>
@@ -1731,22 +1736,30 @@
         return;
       }
 
-      // Character-by-character typing with cursor
-      element.innerHTML = '<span class="typing-cursor"></span>';
-      const cursor = element.querySelector('.typing-cursor');
-
       // Parse HTML and type text content while preserving tags
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = formattedText;
       const plainText = tempDiv.textContent;
 
-      let currentIndex = 0;
+      // Character-by-character typing with cursor
+      element.innerHTML = '<span class="typing-cursor"></span>';
+      const cursor = element.querySelector('.typing-cursor');
       const textSpan = document.createElement('span');
       element.insertBefore(textSpan, cursor);
 
-      for (const char of plainText) {
-        textSpan.textContent += char;
-        await sleep(speed);
+      if (plainText.length > 150) {
+        // Word-by-word for long text (summaries) — 3x faster, still animated
+        const words = plainText.split(/(\s+)/);
+        for (const word of words) {
+          textSpan.textContent += word;
+          if (word.trim()) await sleep(speed * 2.5);
+        }
+      } else {
+        // Character-by-character for short text (intros)
+        for (const char of plainText) {
+          textSpan.textContent += char;
+          await sleep(speed);
+        }
       }
 
       // Replace with formatted HTML and remove cursor
@@ -1816,7 +1829,7 @@
             return `<div class="result-item">
               <span class="result-user">${item.user}</span> ·
               <span class="result-time">${item.time}</span><br>
-              "${item.text}"
+              <em>"${item.text}"</em>
             </div>`;
           }
         }).join('');
