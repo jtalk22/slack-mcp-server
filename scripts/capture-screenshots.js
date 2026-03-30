@@ -82,23 +82,21 @@ async function captureScreenshots() {
     await context.close();
   }
 
-  // Poster from the Claude demo — capture when first tool results are visible
+  // Poster from the Claude demo — capture the title card in fullscreen
+  // "It's Monday, 9:07 AM. 47 unreads. A database outage. A jammed printer."
+  // Fullscreen gives a clean frame — title card fills the viewport, no chrome.
   {
-    const { context, page } = await openPage(browser, demoClaudePath, { width: 1280, height: 800 });
-    console.log('Capturing poster image...');
-    // The triage scenario runs on load. Wait until the first tool call shows
-    // "Complete" with expanded results — this is the most visually compelling
-    // moment (unreads list visible, second tool still running).
+    const { context, page } = await openPage(browser, `${demoClaudePath}?noauto`, { width: 1280, height: 800 });
+    console.log('Capturing poster image (title card, fullscreen)...');
+    await page.keyboard.press('f');
+    await page.waitForTimeout(300);
+    await page.evaluate(() => { autoPlayAll(); });
     await page.waitForFunction(
-      () => document.querySelectorAll('.tool-status.success').length >= 1,
+      () => document.getElementById('titleCard')?.classList.contains('visible'),
       null,
-      { timeout: 30000 },
+      { timeout: 10000 },
     );
-    await page.waitForTimeout(600); // Let expand animation finish
-    await page.evaluate(() => {
-      const caption = document.getElementById('scenarioCaption');
-      if (caption) caption.classList.remove('visible');
-    });
+    await page.waitForTimeout(3500);
     await page.screenshot({
       path: join(imagesDir, 'demo-poster.png'),
       clip: { x: 0, y: 0, width: 1280, height: 800 }
