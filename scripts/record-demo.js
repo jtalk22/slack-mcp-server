@@ -5,13 +5,6 @@
  *
  * Usage: npm run record-demo
  * Output: docs/videos/demo-claude.webm
- *
- * Flow:
- *   1. Load page with ?noauto (prevents DOMContentLoaded auto-scenario)
- *   2. Set speed to 0.5x, enter fullscreen
- *   3. Trigger autoPlayAll() via JS (button is hidden in fullscreen)
- *   4. Watch DOM for title card → 7 scenarios → closing card
- *   5. Close context to flush video file
  */
 
 import { chromium } from 'playwright';
@@ -32,7 +25,7 @@ const argValue = (flag) => {
 const CONFIG = {
   viewport: { width: 1280, height: 800 },
   speed: '0.5',
-  maxDemoTimeout: 600000, // 10 minutes safety net
+  maxDemoTimeout: 600000, // 10 min safety net
 };
 
 const canonicalOutput = argValue('--out') || join(projectRoot, 'docs', 'videos', 'demo-claude.webm');
@@ -54,53 +47,58 @@ async function recordDemo() {
 
   console.log('🚀 Launching browser...');
   const browser = await chromium.launch({ headless: true });
-
   const context = await browser.newContext({
     viewport: CONFIG.viewport,
     recordVideo: { dir: videosDir, size: CONFIG.viewport },
     colorScheme: 'dark',
   });
-
   const page = await context.newPage();
 
-  // Load with ?noauto — prevents DOMContentLoaded from starting a scenario
-  // (which would set isRunning=true and silently block autoPlayAll)
+  // ── Load page ────────────────────────────────────────────────
+  // ?noauto prevents DOMContentLoaded from starting a scenario
+  // (which sets isRunning=true and silently blocks autoPlayAll)
   const demoPath = join(projectRoot, 'public', 'demo-claude.html');
-  console.log(`📄 Loading: file://${demoPath}?noauto`);
+  console.log(`📄 Loading: ${demoPath}`);
   await page.goto(`file://${demoPath}?noauto`);
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(1000);
 
-  // Set speed and enter fullscreen BEFORE starting auto-play.
-  // This way the first recorded frame is already fullscreen —
-  // no jarring window-resize mid-recording.
+  // ── Set speed ────────────────────────────────────────────────
   console.log(`⏱️  Speed: ${CONFIG.speed}x`);
-  await page.evaluate((s) => updateSpeed(s), CONFIG.speed);
+  await page.selectOption('#speedSelect', CONFIG.speed);
+  await page.waitForTimeout(300);
+
+  // ── Start auto-play, then enter fullscreen ───────────────────
+  // Click the button BEFORE fullscreen (it's hidden in fullscreen).
+  // The title card immediately covers the window, so the fullscreen
+  // resize is invisible — just a dark bg expanding.
+  console.log('▶️  Starting auto-play...');
+  await page.click('#autoPlayBtn');
+  await page.waitForTimeout(500);
 
   console.log('🖥️  Entering fullscreen...');
   await page.keyboard.press('f');
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(300);
 
-  // Start auto-play via JS. The autoPlay button is hidden in fullscreen,
-  // but the function is still callable. Use { autoPlayAll(); } so evaluate
-  // returns undefined immediately (doesn't await the async function).
-  console.log('▶️  Starting auto-play...');
-  await page.evaluate(() => { autoPlayAll(); });
+  // ── Watch the demo via DOM state ─────────────────────────────
 
-  // ── Watch the demo via DOM state ────────────────────────────────
-
-  // Title card
   console.log('📺 Waiting for title card...');
   await page.waitForFunction(
-    () => document.getElementById('titleCard')?.classList.contains('visible'),
+    () => {
+      const el = document.getElementById('titleCard');
+      return el && el.classList.contains('visible');
+    },
     { timeout: 15000 },
   );
-  console.log('   "It\'s Monday, 9:07 AM. You have 47 unread Slack messages."');
+  console.log('   Title card visible.');
 
   await page.waitForFunction(
-    () => !document.getElementById('titleCard')?.classList.contains('visible'),
-    { timeout: 30000 },
+    () => {
+      const el = document.getElementById('titleCard');
+      return el && !el.classList.contains('visible');
+    },
+    { timeout: 60000 },
   );
-  console.log('▶️  Scenarios running (watching DOM — at 0.5x this takes ~3 min)');
+  console.log('▶️  Scenarios running...');
   console.log();
 
   // Poll scenario progress for console output
@@ -117,28 +115,29 @@ async function recordDemo() {
     } catch (_) { /* page closing */ }
   }, 2000);
 
-  // Closing card
+  // Wait for closing card
   await page.waitForFunction(
-    () => document.getElementById('closingCard')?.classList.contains('visible'),
+    () => {
+      const el = document.getElementById('closingCard');
+      return el && el.classList.contains('visible');
+    },
     { timeout: CONFIG.maxDemoTimeout },
   );
   clearInterval(poller);
   console.log();
-  console.log('🎬 "0 unreads. You never opened Slack."');
+  console.log('🎬 Closing card visible.');
 
-  // Wait for closing card to fully fade out (0.5s CSS transition)
+  // Wait for closing card to fade out
   await page.waitForFunction(
-    () => !document.getElementById('closingCard')?.classList.contains('visible'),
-    { timeout: 30000 },
+    () => {
+      const el = document.getElementById('closingCard');
+      return el && !el.classList.contains('visible');
+    },
+    { timeout: 60000 },
   );
-  // Small buffer — let the fade complete before closing context.
-  // The closing card's CSS opacity transition is 0.5s; the JS then waits
-  // sleep(500) at 0.5x = 1s real before restoring chatContainer.
-  // Closing context HERE captures the fade but not the chat reappearing.
   await page.waitForTimeout(600);
 
-  // ── Save video ──────────────────────────────────────────────────
-
+  // ── Save video ──────────────────────────────────────────────
   console.log('💾 Saving video...');
   const video = await page.video();
   await context.close();
@@ -146,6 +145,7 @@ async function recordDemo() {
 
   const videoPath = await video.path();
   copyFileSync(videoPath, canonicalOutput);
+
   console.log();
   console.log('╔════════════════════════════════════════════════════════════╗');
   console.log('║  ✅ Recording Complete                                     ║');

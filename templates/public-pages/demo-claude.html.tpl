@@ -33,25 +33,7 @@
   <meta name="theme-color" content="#1a1a1a">
   <link rel="icon" href="../docs/assets/icon-512.png" type="image/png">
   <style>
-    /* ═══════════════════════════════════════════════════════════════
-       Self-hosted fonts
-       Priority: Geist (modern, Vercel) → fallback to IBM Plex / Space Grotesk
-       Install Geist: see public/fonts/README.md
-       ═══════════════════════════════════════════════════════════════ */
-    @font-face {
-      font-family: "Geist";
-      font-style: normal;
-      font-weight: 100 900;
-      font-display: swap;
-      src: url("../public/fonts/geist-sans-variable.woff2") format("woff2-variations");
-    }
-    @font-face {
-      font-family: "Geist Mono";
-      font-style: normal;
-      font-weight: 100 900;
-      font-display: swap;
-      src: url("../public/fonts/geist-mono-variable.woff2") format("woff2-variations");
-    }
+    /* Self-hosted fonts — no CDN, instant load */
     @font-face {
       font-family: "Space Grotesk";
       font-style: normal;
@@ -85,9 +67,9 @@
        Claude Desktop Color Palette (Dark Mode)
        ═══════════════════════════════════════════════════════════════ */
     :root {
-      --font-heading: "Space Grotesk", "Geist", "Avenir Next", "Segoe UI", sans-serif;
-      --font-body: "Geist", "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-      --font-mono: "Geist Mono", "SF Mono", "Menlo", "Monaco", monospace;
+      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+      --font-mono: "SF Mono", "Menlo", "Monaco", monospace;
 
       /* Window chrome */
       --window-bg: #1a1a1a;
