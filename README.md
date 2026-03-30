@@ -248,3 +248,8 @@ Not affiliated with Slack Technologies, Inc. Uses browser session credentials â€
 ---
 
 Managed hosting available â€” [mcp.revasserlabs.com](https://mcp.revasserlabs.com)
+
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/jtalk22-slack-mcp-server).
+
