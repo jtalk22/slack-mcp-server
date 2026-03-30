@@ -82,6 +82,7 @@ async function captureScreenshots() {
     await context.close();
   }
 
+<<<<<<< HEAD
   // Poster from the Claude demo — capture when first tool results are visible
   {
     const { context, page } = await openPage(browser, demoClaudePath, { width: 1280, height: 800 });
@@ -99,6 +100,25 @@ async function captureScreenshots() {
       const caption = document.getElementById('scenarioCaption');
       if (caption) caption.classList.remove('visible');
     });
+=======
+  // Poster from the Claude demo — capture the title card in fullscreen
+  // "It's Monday, 9:07 AM. 47 unreads. A database outage. A jammed printer."
+  // Fullscreen gives a clean frame — title card fills the viewport, no chrome.
+  {
+    const { context, page } = await openPage(browser, `${demoClaudePath}?noauto`, { width: 1280, height: 800 });
+    console.log('Capturing poster image (title card, fullscreen)...');
+    // Enter fullscreen first — window fills viewport, title card fills window
+    await page.keyboard.press('f');
+    await page.waitForTimeout(300);
+    // Trigger auto-play to show the title card
+    await page.evaluate(() => { autoPlayAll(); });
+    await page.waitForFunction(
+      () => document.getElementById('titleCard')?.classList.contains('visible'),
+      null,
+      { timeout: 10000 },
+    );
+    await page.waitForTimeout(3500); // Let all stagger animations complete
+>>>>>>> origin/final-polish
     await page.screenshot({
       path: join(imagesDir, 'demo-poster.png'),
       clip: { x: 0, y: 0, width: 1280, height: 800 }

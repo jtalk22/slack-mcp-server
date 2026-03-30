@@ -13,10 +13,15 @@ npx -y @jtalk22/slack-mcp --setup
 [![Slack MCP Server Demo](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
 **[▶ Watch the demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)** — 7 scenarios, from 47 unreads to inbox zero, without opening Slack.
+<<<<<<< HEAD
+
+> **Ask your AI to catch you up on #engineering from the last 24 hours.** Search for that deployment thread from last week. Find the printer admin PIN nobody can remember. Send a reply. All from your editor.
+=======
+>>>>>>> origin/final-polish
 
 > **Ask your AI to catch you up on #engineering from the last 24 hours.** Search for that deployment thread from last week. Find the printer admin PIN nobody can remember. Send a reply. All from your editor.
 
-[Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
+[Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
 
 ## Why This Exists
 

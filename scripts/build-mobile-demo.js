@@ -29,8 +29,8 @@ const validationDir = resolve(
   argValue("--validation-dir") || join(ROOT, "output", "release-health", "mobile-first3-frames")
 );
 
-// Start from a frame where tool execution is already visible.
-const startSeconds = Number(argValue("--start") || 8);
+// Start from the title card — the hook frame ("47 unreads. A database outage. A jammed printer.")
+const startSeconds = Number(argValue("--start") || 3);
 const durationSeconds = Number(argValue("--duration") || 20);
 
 function run(label, args) {
@@ -88,9 +88,9 @@ run("Build 9:16 mobile clip", [
   "-c:v",
   "libx264",
   "-preset",
-  "medium",
+  "slow",
   "-crf",
-  "20",
+  "18",
   "-pix_fmt",
   "yuv420p",
   "-movflags",
