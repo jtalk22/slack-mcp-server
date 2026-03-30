@@ -4,17 +4,25 @@
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-blue)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Slack MCP server. Session-based auth, 16 tools, stdio transport. Works with Claude, Cursor, Copilot, and basically anything that speaks MCP. Slack's official server doesn't.
+Give your AI agent full Slack access. No app registration, no admin approval, no OAuth. One command, 16 tools, works with any MCP client.
 
-[![demo](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
+```bash
+npx -y @jtalk22/slack-mcp --setup
+```
+
+![demo](docs/images/demo-readme.gif)
+
+> **Ask Claude to catch you up on #engineering from the last 24 hours.** Search for that deployment thread from last week. Find every message mentioning the API key. Send a reply. All from your editor.
 
 [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
 
 ## Why This Exists
 
-I built this because I needed context from Slack messages in my workflow and OAuth flows were too rigid for that. Screenshotting messages is not a workflow.
+Slack's official MCP server requires a registered app, admin approval, and [doesn't work with Claude Code or GitHub Copilot](https://github.com/anthropics/claude-code/issues/30564) due to OAuth/DCR incompatibility. Screenshotting messages is not a workflow.
 
-It started as a bridge for Claude. Turns out stdio means it works with everything — Cursor, Copilot, Gemini, Windsurf, whatever. Slack has their own MCP server now but it needs a registered app, admin approval, and doesn't actually work with Claude Code or GitHub Copilot. This one just uses your browser session.
+This server uses your browser's session tokens instead. If you can see it in Slack, your AI agent can see it too. No app install, no scopes, no admin.
+
+![OAuth vs Session](docs/images/diagram-oauth-comparison.svg)
 
 ## Tools
 
