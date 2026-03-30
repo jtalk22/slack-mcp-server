@@ -1,80 +1,80 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400">
   <defs>
     <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#1a1a2e"/>
       <stop offset="100%" style="stop-color:#16213e"/>
     </linearGradient>
-    <marker id="arrowRed2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#e94560"/>
+    <marker id="arrowMuted" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#b0b0b0"/>
     </marker>
-    <marker id="arrowTeal2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#4ecdc4"/>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#da7756"/>
     </marker>
   </defs>
 
   <!-- Background -->
-  <rect width="900" height="420" fill="url(#bgGrad2)" rx="12"/>
+  <rect width="900" height="400" fill="url(#bgGrad2)" rx="12"/>
 
-  <!-- Left Side: OAuth (Red-tinted) -->
-  <rect x="30" y="50" width="400" height="340" rx="12" fill="#e94560" opacity="0.1" stroke="#e94560" stroke-width="2"/>
-  <text x="230" y="85" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600">Official Slack API (OAuth)</text>
+  <!-- Left Side: OAuth -->
+  <rect x="30" y="45" width="395" height="320" rx="12" fill="rgba(255,255,255,0.03)" stroke="#666666" stroke-width="1.5"/>
+  <text x="228" y="78" text-anchor="middle" fill="#b0b0b0" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="15" font-weight="600" letter-spacing="0.03em">Official Slack API (OAuth)</text>
 
   <!-- OAuth Flow - Row 1 -->
-  <rect x="45" y="110" width="120" height="45" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="105" y="138" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">Create App</text>
+  <rect x="50" y="105" width="130" height="44" rx="8" fill="#252525" stroke="#555555" stroke-width="1"/>
+  <text x="115" y="132" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5">Create App</text>
 
-  <path d="M 170 132 L 190 132" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+  <path d="M 185 127 L 205 127" stroke="#b0b0b0" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
 
-  <rect x="195" y="110" width="120" height="45" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="255" y="138" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">Request Scopes</text>
+  <rect x="210" y="105" width="130" height="44" rx="8" fill="#252525" stroke="#555555" stroke-width="1"/>
+  <text x="275" y="132" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5">Request Scopes</text>
 
-  <path d="M 320 132 L 340 132" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+  <path d="M 345 127 L 365 127" stroke="#b0b0b0" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
 
-  <rect x="345" y="110" width="75" height="45" rx="8" fill="#e94560" opacity="0.4" stroke="#e94560" stroke-width="1"/>
-  <text x="382" y="128" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Admin</text>
-  <text x="382" y="144" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600">Approval</text>
+  <rect x="370" y="105" width="46" height="44" rx="8" fill="#3a3a3a" stroke="#888888" stroke-width="1"/>
+  <text x="393" y="124" text-anchor="middle" fill="#ffffff" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="10" font-weight="600">Admin</text>
+  <text x="393" y="138" text-anchor="middle" fill="#ffffff" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="10" font-weight="600">OK?</text>
 
-  <!-- Arrow down from Admin Approval -->
-  <path d="M 382 160 L 382 195" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+  <!-- Arrow down -->
+  <path d="M 393 154 L 393 180" stroke="#b0b0b0" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
 
   <!-- OAuth Flow - Row 2 -->
-  <rect x="95" y="205" width="140" height="45" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="165" y="233" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">User Authorization</text>
+  <rect x="100" y="190" width="130" height="44" rx="8" fill="#252525" stroke="#555555" stroke-width="1"/>
+  <text x="165" y="217" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5">User Authorization</text>
 
-  <path d="M 240 227 L 260 227" stroke="#e94560" stroke-width="2" marker-end="url(#arrowRed2)"/>
+  <path d="M 235 212 L 255 212" stroke="#b0b0b0" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
 
-  <rect x="265" y="205" width="140" height="45" rx="8" fill="#2d2d2d" stroke="#e94560" stroke-width="1"/>
-  <text x="335" y="233" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12">Limited Access</text>
+  <rect x="260" y="190" width="130" height="44" rx="8" fill="#252525" stroke="#555555" stroke-width="1"/>
+  <text x="325" y="217" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5">Limited Access</text>
 
-  <!-- OAuth Result (blocked) -->
-  <rect x="70" y="280" width="290" height="60" rx="8" fill="#e94560" opacity="0.15" stroke="#e94560" stroke-width="2" stroke-dasharray="4"/>
-  <text x="215" y="305" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500">No DMs without</text>
-  <text x="215" y="325" text-anchor="middle" fill="#fca5a5" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500">per-conversation consent</text>
+  <!-- OAuth Result -->
+  <rect x="75" y="265" width="275" height="50" rx="8" fill="rgba(255,255,255,0.04)" stroke="#666666" stroke-width="1" stroke-dasharray="4"/>
+  <text x="212" y="286" text-anchor="middle" fill="#b0b0b0" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12">No DMs without per-conversation consent</text>
+  <text x="212" y="304" text-anchor="middle" fill="#666666" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="11">Broken with several MCP clients</text>
 
-  <!-- Right Side: Session Mirroring (Green-tinted) -->
-  <rect x="470" y="50" width="400" height="340" rx="12" fill="#4ecdc4" opacity="0.1" stroke="#4ecdc4" stroke-width="2"/>
-  <text x="670" y="85" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600">Session Mirroring</text>
+  <!-- Right Side: Session Mirroring -->
+  <rect x="475" y="45" width="395" height="320" rx="12" fill="rgba(218,119,86,0.06)" stroke="#da7756" stroke-width="1.5"/>
+  <text x="672" y="78" text-anchor="middle" fill="#da7756" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="15" font-weight="600" letter-spacing="0.03em">Session Mirroring</text>
 
-  <!-- Session Mirroring Flow -->
-  <rect x="495" y="120" width="160" height="50" rx="8" fill="#3b82f6" opacity="0.9"/>
-  <text x="575" y="150" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">Open Slack in Chrome</text>
+  <!-- Session Flow -->
+  <rect x="500" y="115" width="160" height="48" rx="8" fill="#252525" stroke="#da7756" stroke-width="1"/>
+  <text x="580" y="144" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5">Open Slack in Chrome</text>
 
-  <path d="M 660 145 L 700 145" stroke="#4ecdc4" stroke-width="3" marker-end="url(#arrowTeal2)"/>
+  <path d="M 665 139 L 700 139" stroke="#da7756" stroke-width="2" marker-end="url(#arrowOrange)"/>
 
-  <rect x="705" y="120" width="140" height="50" rx="8" fill="#da7756" opacity="0.9"/>
-  <text x="775" y="150" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="500">Mirror Session</text>
+  <rect x="705" y="115" width="140" height="48" rx="8" fill="#da7756" opacity="0.85" stroke="#da7756" stroke-width="1"/>
+  <text x="775" y="144" text-anchor="middle" fill="#ffffff" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5" font-weight="500">Mirror Session</text>
 
-  <path d="M 775 175 L 775 210" stroke="#4ecdc4" stroke-width="3" marker-end="url(#arrowTeal2)"/>
+  <path d="M 775 168 L 775 200" stroke="#da7756" stroke-width="2" marker-end="url(#arrowOrange)"/>
 
-  <rect x="605" y="220" width="160" height="50" rx="8" fill="#4ecdc4" opacity="0.9"/>
-  <text x="685" y="250" text-anchor="middle" fill="#1a1a2e" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600">Full Access</text>
+  <rect x="630" y="210" width="150" height="48" rx="8" fill="#da7756" opacity="0.2" stroke="#da7756" stroke-width="1"/>
+  <text x="705" y="239" text-anchor="middle" fill="#da7756" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="13" font-weight="600">Full Access</text>
 
-  <!-- Session Mirroring Result (success) -->
-  <rect x="510" y="295" width="340" height="60" rx="8" fill="#4ecdc4" opacity="0.2" stroke="#4ecdc4" stroke-width="2"/>
-  <text x="680" y="320" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500">Your DMs, Channels, Search, History</text>
-  <text x="680" y="340" text-anchor="middle" fill="#5eead4" font-family="system-ui, -apple-system, sans-serif" font-size="11">✓ Same access as your browser</text>
+  <!-- Session Result -->
+  <rect x="515" y="285" width="330" height="50" rx="8" fill="rgba(218,119,86,0.08)" stroke="#da7756" stroke-width="1"/>
+  <text x="680" y="306" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12" font-weight="500">Your DMs, Channels, Search, History</text>
+  <text x="680" y="324" text-anchor="middle" fill="#da7756" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="11">Same access as your browser</text>
 
   <!-- VS divider -->
-  <circle cx="450" cy="210" r="24" fill="#1a1a2e" stroke="#ffffff" stroke-width="2" opacity="0.9"/>
-  <text x="450" y="216" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700">vs</text>
+  <circle cx="450" cy="200" r="22" fill="#1a1a2e" stroke="#3a3a3a" stroke-width="1.5"/>
+  <text x="450" y="205" text-anchor="middle" fill="#b0b0b0" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="13" font-weight="600">vs</text>
 </svg>
