@@ -150,7 +150,7 @@ server.setRequestHandler(GetPromptRequestSchema, async (request) => {
     }
     case "summarize-channel": {
       const channelId = args?.channel_id || "";
-      const days = parseInt(args?.days) || 7;
+      const days = parseInt(args?.days, 10) || 7;
       const since = Math.floor(Date.now() / 1000) - (days * 24 * 60 * 60);
       return {
         messages: [

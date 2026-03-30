@@ -4,7 +4,8 @@ This file provides maintainer-oriented context for automated edits in this repos
 
 ## Project Scope
 
-Session-based Slack MCP server for local and hosted runtimes.
+Session-based Slack MCP server. Works with any MCP client via stdio transport,
+or via hosted HTTP for browser-based clients.
 
 ## Build and Run
 
@@ -69,3 +70,8 @@ lib/
   tools.js         MCP tool definitions
   handlers.js      MCP tool handlers
 ```
+
+## Claude Code Integration
+
+The repo includes `.claude/settings.json` for local MCP server registration.
+Tokens load from `~/.slack-mcp-tokens.json` or `SLACK_TOKEN`/`SLACK_COOKIE` env vars.

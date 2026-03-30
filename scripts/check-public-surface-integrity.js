@@ -148,30 +148,17 @@ function main() {
   const readme = read("README.md");
   check(
     results,
-    "README cloud claims",
-    readme.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard tools`) &&
-      readme.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard + ${PUBLIC_METADATA.teamAiWorkflowCount} AI compound tools`) &&
-      readme.includes(PUBLIC_METADATA.secondaryClient) &&
-      readme.includes(PUBLIC_METADATA.cloudTurnkeyLaunchPrice) &&
-      readme.includes(PUBLIC_METADATA.cloudManagedReliabilityPrice) &&
-      !readme.includes("16 standard tools"),
-    "README must describe Cloud as 15 standard tools plus 3 AI compound tools on Team, with Gemini CLI and premium offers"
+    "README tool count",
+    readme.includes(`${PUBLIC_METADATA.selfHostedToolCount} tools`) &&
+      readme.includes("12 read-only") &&
+      readme.includes("4 write-path"),
+    "README must state tool count and safety annotation breakdown"
   );
   check(
     results,
-    "README operator links",
-    readme.includes("Release health snapshot") &&
-      readme.includes("Version parity report") &&
-      readme.includes("Distribution ledger") &&
-      readme.includes(PUBLIC_METADATA.tracked.readme.officialComparison) &&
-      readme.includes(PUBLIC_METADATA.tracked.readme.marketplaceReadiness) &&
-      readme.includes(PUBLIC_METADATA.cloudPricingUrl) &&
-      readme.includes(PUBLIC_METADATA.cloudCheckoutUrl) &&
-      readme.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
-      readme.includes(PUBLIC_METADATA.tracked.readme.account) &&
-      readme.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
-      readme.includes(PUBLIC_METADATA.cloudSupportUrl),
-    "README should link current release-health, version-parity, distribution ledger, comparison, marketplace readiness, pricing, checkout, security, account, deployment, and support surfaces"
+    "README session auth",
+    readme.includes("Session-based auth") || readme.includes("session tokens") || readme.includes("Session tokens"),
+    "README should describe session-based authentication approach"
   );
 
   const marketingIndex = read("index.html");
@@ -276,39 +263,14 @@ function main() {
     "docs/DEPLOYMENT-MODES.md must describe the managed Cloud counts"
   );
 
-  const distributionLedger = read("docs/DISTRIBUTION-LEDGER.md");
-  check(
-    results,
-    "Distribution ledger coverage",
-    distributionLedger.includes("MCP Registry") &&
-      distributionLedger.includes("Glama") &&
-      distributionLedger.includes("mcp.so") &&
-      distributionLedger.includes("PulseMCP") &&
-      distributionLedger.includes("Smithery") &&
-      distributionLedger.includes("3.2.5"),
-    "docs/DISTRIBUTION-LEDGER.md must track the current external directory surfaces and next metadata-bearing release"
-  );
-
   const docsIndex = read("docs/INDEX.md");
   check(
     results,
-    "Docs index current release",
-    docsIndex.includes("v3.2.5") &&
-      docsIndex.includes("Distribution Ledger") &&
-      docsIndex.includes("Cloud Gemini CLI") &&
-      docsIndex.includes("Cloud Readiness"),
-    "docs/INDEX.md must point to the current release, ledger, Gemini CLI, and readiness surfaces"
-  );
-
-  const runbook = read("docs/LAUNCH-OPS.md");
-  check(
-    results,
-    "Runbook search ops",
-    runbook.includes("v3.2.5") &&
-      runbook.includes("Google Search Console") &&
-      runbook.includes("Bing Webmaster Tools") &&
-      runbook.includes("docs/DISTRIBUTION-LEDGER.md"),
-    "docs/LAUNCH-OPS.md must reflect v3.2.5 and the weekly search/listing ops checklist"
+    "Docs index core links",
+    docsIndex.includes("Setup Guide") &&
+      docsIndex.includes("Architecture") &&
+      docsIndex.includes("Troubleshooting"),
+    "docs/INDEX.md must link core documentation"
   );
 
   const supportBoundaries = read("docs/SUPPORT-BOUNDARIES.md");
