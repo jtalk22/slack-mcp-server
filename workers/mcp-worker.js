@@ -168,6 +168,71 @@ const TOOLS = [
       }
     },
     annotations: { title: "List Users", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_add_reaction",
+    description: "Add an emoji reaction to a message",
+    inputSchema: {
+      type: "object",
+      properties: {
+        channel_id: { type: "string", description: "Channel or DM ID containing the message" },
+        timestamp: { type: "string", description: "Timestamp of the message to react to" },
+        reaction: { type: "string", description: "Emoji name without colons (e.g., thumbsup)" }
+      },
+      required: ["channel_id", "timestamp", "reaction"]
+    },
+    annotations: { title: "Add Reaction", readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_remove_reaction",
+    description: "Remove an emoji reaction from a message",
+    inputSchema: {
+      type: "object",
+      properties: {
+        channel_id: { type: "string", description: "Channel or DM ID containing the message" },
+        timestamp: { type: "string", description: "Timestamp of the message" },
+        reaction: { type: "string", description: "Emoji name without colons (e.g., thumbsup)" }
+      },
+      required: ["channel_id", "timestamp", "reaction"]
+    },
+    annotations: { title: "Remove Reaction", readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_conversations_mark",
+    description: "Mark a conversation as read up to a given message timestamp",
+    inputSchema: {
+      type: "object",
+      properties: {
+        channel_id: { type: "string", description: "Channel or DM ID" },
+        timestamp: { type: "string", description: "Timestamp of the last read message" }
+      },
+      required: ["channel_id", "timestamp"]
+    },
+    annotations: { title: "Mark Read", readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_conversations_unreads",
+    description: "Get channels and DMs with unread messages, sorted by priority",
+    inputSchema: {
+      type: "object",
+      properties: {
+        limit: { type: "number", description: "Maximum conversations to return (default 50)" }
+      }
+    },
+    annotations: { title: "Unreads", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_users_search",
+    description: "Search workspace users by name, display name, or email",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "Search query (name, display name, or email)" },
+        limit: { type: "number", description: "Maximum results (default 20)" }
+      },
+      required: ["query"]
+    },
+    annotations: { title: "Search Users", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
   }
 ];
 
@@ -178,6 +243,9 @@ const FORM_ENCODED_METHODS = new Set([
   "search.all",
   "search.files",
   "users.info",
+  "reactions.add",
+  "reactions.remove",
+  "conversations.mark",
 ]);
 
 // Slack API wrapper
@@ -323,6 +391,48 @@ async function handleToolCall(name, args, env, queryParams) {
         const result = await slackApi('users.list', { limit: args.limit || 100 }, token, cookie);
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
+      case "slack_add_reaction": {
+        const result = await slackApi('reactions.add', {
+          channel: args.channel_id,
+          timestamp: args.timestamp,
+          name: args.reaction
+        }, token, cookie);
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+      case "slack_remove_reaction": {
+        const result = await slackApi('reactions.remove', {
+          channel: args.channel_id,
+          timestamp: args.timestamp,
+          name: args.reaction
+        }, token, cookie);
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+      case "slack_conversations_mark": {
+        const result = await slackApi('conversations.mark', {
+          channel: args.channel_id,
+          ts: args.timestamp
+        }, token, cookie);
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+      case "slack_conversations_unreads": {
+        const result = await slackApi('client.counts', {}, token, cookie);
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+      }
+      case "slack_users_search": {
+        const result = await slackApi('users.list', { limit: args.limit || 100 }, token, cookie);
+        if (!result.ok) {
+          return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+        }
+        const query = (args.query || "").toLowerCase();
+        const matches = (result.members || []).filter(u => {
+          const name = (u.name || "").toLowerCase();
+          const realName = (u.real_name || "").toLowerCase();
+          const displayName = (u.profile?.display_name || "").toLowerCase();
+          const email = (u.profile?.email || "").toLowerCase();
+          return name.includes(query) || realName.includes(query) || displayName.includes(query) || email.includes(query);
+        });
+        return { content: [{ type: "text", text: JSON.stringify({ ok: true, members: matches, count: matches.length }, null, 2) }] };
+      }
       default:
         return {
           content: [{
@@ -382,7 +492,7 @@ async function handleMcpRequest(request, env, queryParams) {
         responses.push(jsonRpcResponse(id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {}, prompts: {}, resources: {} },
-          serverInfo: { name: "slack-mcp-server", version: "3.0.0" }
+          serverInfo: { name: "slack-mcp-server", version: "4.0.0" }
         }));
         break;
 
@@ -471,7 +581,7 @@ export default {
       return Response.json({
         serverInfo: {
           name: "Slack MCP",
-          version: "3.0.0"
+          version: "4.0.0"
         },
         authentication: {
           required: false
