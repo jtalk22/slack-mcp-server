@@ -85,18 +85,24 @@ async function captureScreenshots() {
   // Poster from the Claude demo — capture the title card in fullscreen
   // "It's Monday, 9:07 AM. 47 unreads. A database outage. A jammed printer."
   // Fullscreen gives a clean frame — title card fills the viewport, no chrome.
+  // Speed is set to 0.5x so the title card stays visible for 6 real seconds
+  // (stagger animations complete at ~3.3s, screenshot at 4s, card gone at 6s).
   {
     const { context, page } = await openPage(browser, `${demoClaudePath}?noauto`, { width: 1280, height: 800 });
     console.log('Capturing poster image (title card, fullscreen)...');
     await page.keyboard.press('f');
     await page.waitForTimeout(300);
+    await page.evaluate(() => updateSpeed('0.5'));
     await page.evaluate(() => { autoPlayAll(); });
     await page.waitForFunction(
       () => document.getElementById('titleCard')?.classList.contains('visible'),
       null,
       { timeout: 10000 },
     );
-    await page.waitForTimeout(3500);
+    // Stagger animations: CSS delays 0.2s-2.8s + 0.5s duration = done by 3.3s
+    // Title card at 0.5x: sleep(3000)/0.5 = visible for 6 real seconds
+    // Capture at 4s: all text visible, card still has 2s before disappearing
+    await page.waitForTimeout(4000);
     await page.screenshot({
       path: join(imagesDir, 'demo-poster.png'),
       clip: { x: 0, y: 0, width: 1280, height: 800 }
