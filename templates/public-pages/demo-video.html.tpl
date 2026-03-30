@@ -26,6 +26,24 @@
   <meta name="twitter:player:height" content="800">
   <meta name="twitter:player:stream" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude-mobile-20s.mp4">
   <meta name="twitter:player:stream:content_type" content="video/mp4">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "Slack MCP Server — Monday Morning Demo",
+    "description": "Watch an AI handle 47 unread Slack messages without opening Slack. 16 tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
+    "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
+    "uploadDate": "2026-03-30",
+    "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude.webm",
+    "embedUrl": "{{GITHUB_PAGES_ROOT}}/public/demo-video.html",
+    "duration": "PT3M",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Revasser",
+      "url": "https://mcp.revasserlabs.com"
+    }
+  }
+  </script>
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
