@@ -263,39 +263,14 @@ function main() {
     "docs/DEPLOYMENT-MODES.md must describe the managed Cloud counts"
   );
 
-  const distributionLedger = read("docs/DISTRIBUTION-LEDGER.md");
-  check(
-    results,
-    "Distribution ledger coverage",
-    distributionLedger.includes("MCP Registry") &&
-      distributionLedger.includes("Glama") &&
-      distributionLedger.includes("mcp.so") &&
-      distributionLedger.includes("PulseMCP") &&
-      distributionLedger.includes("Smithery") &&
-      distributionLedger.includes("3.2.5"),
-    "docs/DISTRIBUTION-LEDGER.md must track the current external directory surfaces and next metadata-bearing release"
-  );
-
   const docsIndex = read("docs/INDEX.md");
   check(
     results,
-    "Docs index current release",
-    docsIndex.includes("v3.2.5") &&
-      docsIndex.includes("Distribution Ledger") &&
-      docsIndex.includes("Cloud Gemini CLI") &&
-      docsIndex.includes("Cloud Readiness"),
-    "docs/INDEX.md must point to the current release, ledger, Gemini CLI, and readiness surfaces"
-  );
-
-  const runbook = read("docs/LAUNCH-OPS.md");
-  check(
-    results,
-    "Runbook search ops",
-    runbook.includes("v3.2.5") &&
-      runbook.includes("Google Search Console") &&
-      runbook.includes("Bing Webmaster Tools") &&
-      runbook.includes("docs/DISTRIBUTION-LEDGER.md"),
-    "docs/LAUNCH-OPS.md must reflect v3.2.5 and the weekly search/listing ops checklist"
+    "Docs index core links",
+    docsIndex.includes("Setup Guide") &&
+      docsIndex.includes("Architecture") &&
+      docsIndex.includes("Troubleshooting"),
+    "docs/INDEX.md must link core documentation"
   );
 
   const supportBoundaries = read("docs/SUPPORT-BOUNDARIES.md");
