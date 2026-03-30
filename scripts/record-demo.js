@@ -87,6 +87,7 @@ async function recordDemo() {
       const el = document.getElementById('titleCard');
       return el && el.classList.contains('visible');
     },
+    null,
     { timeout: 15000 },
   );
   console.log('   Title card visible.');
@@ -96,6 +97,7 @@ async function recordDemo() {
       const el = document.getElementById('titleCard');
       return el && !el.classList.contains('visible');
     },
+    null,
     { timeout: 60000 },
   );
   console.log('▶️  Scenarios running...');
@@ -121,6 +123,7 @@ async function recordDemo() {
       const el = document.getElementById('closingCard');
       return el && el.classList.contains('visible');
     },
+    null,
     { timeout: CONFIG.maxDemoTimeout },
   );
   clearInterval(poller);
@@ -133,6 +136,7 @@ async function recordDemo() {
       const el = document.getElementById('closingCard');
       return el && !el.classList.contains('visible');
     },
+    null,
     { timeout: 60000 },
   );
   await page.waitForTimeout(600);
