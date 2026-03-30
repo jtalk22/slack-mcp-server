@@ -1131,19 +1131,23 @@
       position: absolute;
       inset: 0;
       top: 32px; /* Below window chrome */
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       background: var(--window-bg);
       z-index: 100;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.5s ease, visibility 0s linear 0.5s;
     }
 
     .title-card.visible {
-      display: flex;
       opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.5s ease, visibility 0s linear 0s;
     }
 
     .title-card h1 {
@@ -1198,19 +1202,23 @@
       position: absolute;
       inset: 0;
       top: 32px;
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       background: var(--window-bg);
       z-index: 100;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.5s ease, visibility 0s linear 0.5s;
     }
 
     .closing-card.visible {
-      display: flex;
       opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.5s ease, visibility 0s linear 0s;
     }
 
     .closing-check { font-size: 48px; margin-bottom: 16px; }
@@ -1616,7 +1624,7 @@
               limit: 5
             },
             result: [
-              { name: "atorres", id: "U04XTORRES", lastMessage: "", preview: "Alex Torres — Backend Engineer" }
+              { name: "Alex Torres", id: "U04XTORRES", lastMessage: "Backend Engineer", preview: "Started 2 weeks ago · PST" }
             ]
           },
           {
@@ -1839,11 +1847,14 @@
           <em>"${tool.result.status_text}"</em>
         </div>`;
       } else if (tool.result.total_unread_conversations !== undefined) {
-        resultHtml = tool.result.conversations.map(c =>
+        const typeLabel = t => ({ dm: 'DM', mpim: 'Group DM', public_channel: 'Channel', private_channel: 'Private' }[t] || t);
+        resultHtml = `<div class="result-item" style="color:var(--text-muted);font-size:12px;padding-bottom:4px;">
+            ${tool.result.total_unread_conversations} conversations with unreads
+          </div>` + tool.result.conversations.map(c =>
           `<div class="result-item">
             <span class="result-channel">${c.name}</span> ·
-            <span class="result-user">${c.type}</span> ·
-            <strong>${c.unread_count} unread</strong>
+            <span class="result-time">${typeLabel(c.type)}</span> ·
+            <strong style="color:var(--warning-color)">${c.unread_count} unread</strong>
           </div>`
         ).join('');
       }

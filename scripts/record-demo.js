@@ -26,21 +26,9 @@ const argValue = (flag) => {
 const CONFIG = {
   viewport: { width: 1280, height: 800 },
   speed: '0.5', // Slow speed for video recording
-  scenarioCount: 7,
   initialHold: 500,
-  // Title and closing card durations (ms)
-  introDuration: 5000,   // Title card (narrative title card needs more time)
-  outroDuration: 5500,   // Closing card (4s visible + fades)
-  // Approximate duration per scenario at 0.5x speed (in ms)
-  scenarioDurations: {
-    triage: 32000,   // ~32s (multi-tool, rich data)
-    search: 24000,   // ~24s
-    thread: 26000,   // ~26s
-    respond: 30000,  // ~30s (multi-tool: read + write)
-    people: 26000,   // ~26s (multi-tool: search + info)
-    react: 20000,    // ~20s (multi-tool but quick results)
-    export: 22000    // ~22s
-  }
+  // Max time to wait for the full demo to complete (safety net)
+  maxDemoTimeout: 600000, // 10 minutes
 };
 
 const canonicalOutput = argValue('--out') || join(projectRoot, 'docs', 'videos', 'demo-claude.webm');
@@ -104,27 +92,53 @@ async function recordDemo() {
   await page.keyboard.press('f');
   await page.waitForTimeout(500);
 
-  // Wait for title card
-  console.log('📺 Showing title card...');
-  await page.waitForTimeout(CONFIG.introDuration);
+  // Wait for title card to appear (autoplay just started)
+  console.log('📺 Waiting for title card...');
+  await page.waitForFunction(
+    () => document.getElementById('titleCard')?.classList.contains('visible'),
+    { timeout: 15000 }
+  );
+  console.log('   Title card visible — "It\'s Monday, 9:07 AM."');
 
-  // Wait for each scenario
-  const scenarios = ['triage', 'search', 'thread', 'respond', 'people', 'react', 'export'];
-  let totalWait = 0;
-
-  for (let i = 0; i < scenarios.length; i++) {
-    const scenario = scenarios[i];
-    const duration = CONFIG.scenarioDurations[scenario];
-    totalWait += duration;
-
-    console.log(`  📍 Scenario ${i + 1}/${scenarios.length}: ${scenario} (${Math.round(duration/1000)}s)`);
-    await page.waitForTimeout(duration);
-  }
-
-  // Wait for closing card
+  // Wait for title card to finish and scenarios to begin
+  await page.waitForFunction(
+    () => !document.getElementById('titleCard')?.classList.contains('visible'),
+    { timeout: 30000 }
+  );
+  console.log('▶️  Scenarios running...');
+  console.log('   (Watching DOM — no hardcoded waits. At 0.5x this takes ~4 min.)');
   console.log();
-  console.log('🎬 Showing closing screen...');
-  await page.waitForTimeout(CONFIG.outroDuration);
+
+  // Watch scenario progress by polling currentScenario
+  const scenarioOrder = ['triage', 'search', 'thread', 'respond', 'people', 'react', 'export'];
+  let lastScenario = null;
+  const progressPoller = setInterval(async () => {
+    try {
+      const current = await page.evaluate(() => window.currentScenario);
+      if (current && current !== lastScenario) {
+        const idx = scenarioOrder.indexOf(current);
+        console.log(`  📍 Scenario ${idx + 1}/7: ${current}`);
+        lastScenario = current;
+      }
+    } catch (_) { /* page may be closing */ }
+  }, 2000);
+
+  // Wait for closing card to appear (all 7 scenarios done)
+  console.log('⏳ Waiting for all scenarios to complete...');
+  await page.waitForFunction(
+    () => document.getElementById('closingCard')?.classList.contains('visible'),
+    { timeout: CONFIG.maxDemoTimeout }
+  );
+  clearInterval(progressPoller);
+  console.log();
+  console.log('🎬 Closing card visible — "0 unreads. You never opened Slack."');
+
+  // Wait for closing card animation to finish
+  await page.waitForFunction(
+    () => !document.getElementById('closingCard')?.classList.contains('visible'),
+    { timeout: 30000 }
+  );
+  await page.waitForTimeout(800); // small buffer for fade
 
   // Exit fullscreen
   console.log('🔚 Exiting fullscreen...');
