@@ -10,7 +10,7 @@ const ROOT = resolve(__dirname, "..");
 
 const WIDTH = 1280;
 const HEIGHT = 640;
-const MAX_BYTES = 1_000_000;
+const MAX_BYTES = 2_000_000;
 
 function parseArg(flag) {
   const idx = process.argv.indexOf(flag);
@@ -167,7 +167,7 @@ const html = `<!doctype html>
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({
   viewport: { width: WIDTH, height: HEIGHT },
-  deviceScaleFactor: 1,
+  deviceScaleFactor: 2,
   colorScheme: "dark",
 });
 
