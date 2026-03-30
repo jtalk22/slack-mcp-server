@@ -82,12 +82,19 @@ async function captureScreenshots() {
     await context.close();
   }
 
-  // Poster from the Claude demo
+  // Poster from the Claude demo — capture when first tool results are visible
   {
     const { context, page } = await openPage(browser, demoClaudePath, { width: 1280, height: 800 });
     console.log('Capturing poster image...');
-    // Wait for transient scenario caption animation to settle.
-    await page.waitForTimeout(2600);
+    // The triage scenario runs on load. Wait until the first tool call shows
+    // "Complete" with expanded results — this is the most visually compelling
+    // moment (unreads list visible, second tool still running).
+    await page.waitForFunction(
+      () => document.querySelectorAll('.tool-status.success').length >= 1,
+      null,
+      { timeout: 30000 },
+    );
+    await page.waitForTimeout(600); // Let expand animation finish
     await page.evaluate(() => {
       const caption = document.getElementById('scenarioCaption');
       if (caption) caption.classList.remove('visible');
