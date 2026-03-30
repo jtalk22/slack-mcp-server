@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-03-30
+
+### Changed
+- **README rewritten** — Stripped commercial sales funnel (34+ tracking links removed). Restored original voice with multi-client positioning: "Works with Claude, Cursor, Copilot, and basically anything that speaks MCP. Slack's official server doesn't."
+- **Version bumped to 4.0.0** across package.json, server.json, glama.json
+- **Commercial files removed** — 25 files deleted (+143/-2,762 lines). Removed launch ops, demand tracking, revenue routing, and marketplace readiness infrastructure.
+- **Public pages simplified** — `lib/public-metadata.js` stripped from 107 to 22 lines. `lib/public-pages.js` simplified (sales funnel removed). 4 dead npm scripts removed.
+
+### Security
+- **File permissions** — `fs.chmodSync` added to token file writes
+- **API key redaction** — Dashboard URL prints truncated key
+- **Integer validation** — `safeParseInt` guards numeric API parameters
+
+### Added
+- **`.claude/settings.json`** — MCP server registration for Claude Code integration
+
+### Removed
+- `LAUNCH-OPS.md`, `DEMAND-VISIBILITY.md`, `COMMUNICATION-STYLE.md`, and 22 other commercial/ops files
+- UTM tracking URLs from all public surfaces
+- Checkout and revenue routing infrastructure
+
+### Compatibility
+- No MCP tool names were removed or renamed. All 16 tools unchanged.
+- All CLI entry points unchanged (`--setup`, `--status`, `--doctor`, `web`, `http`).
+
 ## [3.2.4] - 2026-03-11
 
 ### Fixed
@@ -315,6 +340,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.0...v1.0.5
 [1.0.0]: https://github.com/jtalk22/slack-mcp-server/releases/tag/v1.0.0
+[4.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.5...v4.0.0
+[3.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.3...v3.2.4
 [3.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v2.0.0...v3.0.0
