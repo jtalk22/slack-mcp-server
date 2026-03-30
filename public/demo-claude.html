@@ -1366,9 +1366,9 @@
     <div class="title-card" id="titleCard">
       <img class="title-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="Slack MCP Server" style="width: 48px; height: 48px; border-radius: 10px; margin-bottom: 16px;">
       <h1 style="font-size: 32px; margin-bottom: 4px; letter-spacing: -0.01em;">It's Monday, 9:07 AM.</h1>
-      <p class="title-tagline" style="font-size: 20px; color: var(--text-secondary);">You have 47 unread Slack messages.</p>
-      <p style="margin-top: 20px; font-size: 14px; color: var(--text-muted);">No OAuth. No admin. One command.</p>
-      <p class="title-version" style="margin-top: 8px; font-size: 12px;">Slack MCP Server v4.0.0</p>
+      <p class="title-tagline" style="font-size: 20px; color: var(--text-secondary);">47 unreads. A database outage. A jammed printer.</p>
+      <p style="margin-top: 16px; font-size: 15px; color: var(--text-muted);">What if your AI could read your Slack?</p>
+      <p class="title-version" style="margin-top: 20px; font-size: 12px;">Slack MCP Server · No OAuth · One command</p>
     </div>
 
     <!-- Scenario Caption Overlay -->
@@ -1378,7 +1378,7 @@
     <div class="closing-card" id="closingCard">
       <div class="closing-check" style="font-size: 36px; margin-bottom: 8px;">0 unreads.</div>
       <h2>You never opened Slack.</h2>
-      <p class="closing-cta" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">(The printer PIN is 4729, by the way.)</p>
+      <p class="closing-cta" style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">The printer PIN is 4729.</p>
       <div class="closing-links">
         <code>npx -y @jtalk22/slack-mcp --setup</code>
       </div>
@@ -1540,12 +1540,12 @@
             ]
           }
         ],
-        claudeSummary: "Here's your Monday morning:\n\n🔴 <strong>P1 database outage at 2:14 AM</strong> — RDS connection pool exhausted. Kai resolved it at 3:47 AM with a manual failover. He described the runbook's automatic failover step as \"a myth.\" At 3am. Love that energy.\n\n<strong>4 channels, 47 unreads:</strong>\n• #incidents (23) — the P1 above\n• #engineering (14) — Postgres 17 migration thread\n• #product (8) — sprint planning\n• DM from Lena Park (2) — your CTO, probably about the incident\n\nYour CTO is waiting — I'd start there. She's also asking someone to find the 3rd floor printer admin PIN. IT shared it in #facilities months ago but, quote, \"who reads that channel.\" Want me to find it?"
+        claudeSummary: "Here's your Monday morning:\n\n🔴 <strong>P1 database outage at 2:14 AM</strong> — RDS connection pool exhausted. Kai resolved it at 3:47 AM with a manual failover. He described the runbook's automatic failover step as \"a myth.\" At 3am. Love that energy.\n\n<strong>4 channels, 47 unreads:</strong>\n• #incidents (23) — the P1 above\n• #engineering (14) — Postgres 17 migration thread\n• #product (8) — sprint planning\n• DM from Lena Park (2) — your CTO, probably about the incident\n\nYour CTO is waiting — I'd start there. She's also on a mission to find the 3rd floor printer admin PIN. IT posted it in #facilities five months ago. She says \"who reads that channel.\" Valid question. Want me to find it?"
       },
 
       search: {
-        userMessage: "Yeah find that printer PIN. Nobody knows it.",
-        claudeIntro: "Searching #facilities and related channels for the printer admin PIN.",
+        userMessage: "Yeah find that printer PIN before I lose my mind. I'm standing here staring at it.",
+        claudeIntro: "Searching your entire Slack history for a printer PIN. This is what I'm here for.",
         toolCall: {
           name: "slack_search_messages",
           params: {
@@ -1553,12 +1553,12 @@
             count: 10
           },
           result: [
-            { channel: "#facilities", user: "Dave Chen (IT)", time: "Oct 12", text: "For anyone who needs it — the admin PIN for the 3rd floor printer is 4729. Go to Menu → Admin Settings → enter PIN to clear jams." },
+            { channel: "#facilities", user: "Dave Chen (IT)", time: "Oct 12", text: "For anyone who needs it — the admin PIN for the 3rd floor printer is 4729. Go to Menu → Admin Settings → enter PIN to clear jams. Posting here so nobody has to ask again." },
             { channel: "#random", user: "Marcus Webb", time: "2 weeks ago", text: "does anyone know the admin PIN for the printer on 3? it's jammed again and I'm just staring at it" },
-            { channel: "#general", user: "Priya Sharma", time: "3 months ago", text: "the 3rd floor printer is jammed. I tried turning it off and on. I am not proud." }
+            { channel: "#general", user: "Priya Sharma", time: "3 months ago", text: "the 3rd floor printer is jammed. I tried turning it off and on. I am not proud of what I said to it." }
           ]
         },
-        claudeSummary: "The PIN is <strong>4729</strong>.\n\nDave from IT shared it in #facilities on October 12th: Menu → Admin Settings → enter PIN. That message had <strong>zero reactions</strong>. Nobody read it.\n\nMarcus asked the exact same question in #random two weeks ago. No one answered him either. Priya tried turning it off and on three months ago. She is not proud.\n\nI'd suggest taping the PIN to the printer like Lena asked."
+        claudeSummary: "<strong>Incident resolved.</strong> The PIN is <strong>4729</strong>.\n\nDave from IT posted it in #facilities on October 12th: Menu → Admin Settings → enter PIN. He even wrote \"posting here so nobody has to ask again.\"\n\nThat message had <strong>zero reactions</strong>. Nobody read it. Marcus asked the exact same question in #random two weeks ago and was met with silence. Priya attempted a power cycle three months ago and described the experience as humbling.\n\nFive months. Three people. Same printer. The answer was there the whole time.\n\nTape it to the printer."
       },
 
       thread: {
