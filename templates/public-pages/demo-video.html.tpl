@@ -34,9 +34,14 @@
     "description": "Watch an AI handle 47 unread Slack messages without opening Slack. 16 tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
     "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
     "uploadDate": "2026-03-30",
-    "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude.webm",
+    "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude.mp4",
     "embedUrl": "{{GITHUB_PAGES_ROOT}}/public/demo-video.html",
-    "duration": "PT3M",
+    "duration": "PT3M33S",
+    "author": {
+      "@type": "Person",
+      "name": "James Lambert",
+      "url": "https://github.com/jtalk22"
+    },
     "publisher": {
       "@type": "Organization",
       "name": "Revasser",
@@ -215,8 +220,8 @@
 
     <div class="video-wrapper">
       <video id="demo" poster="../docs/images/demo-poster.png" playsinline autoplay muted loop>
+        <source src="../docs/videos/demo-claude.mp4" type="video/mp4">
         <source src="../docs/videos/demo-claude.webm" type="video/webm">
-        <source src="https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude.webm" type="video/webm">
         Your browser does not support the video tag.
       </video>
     </div>
