@@ -1,8 +1,8 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "3.2.5",
-  "description": "Slack MCP for self-host or managed Cloud, with Gemini CLI and secure-default HTTP.",
+  "version": "4.0.0",
+  "description": "Slack MCP server. Session-based auth, 16 tools, stdio transport. Works with any MCP client.",
   "type": "module",
   "main": "src/server.js",
   "bin": {

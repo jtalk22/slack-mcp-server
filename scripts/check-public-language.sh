@@ -14,7 +14,6 @@ SCAN_PATHS=(
   "$ROOT/templates/public-pages"
   "$ROOT/.github/ISSUE_REPLY_TEMPLATE.md"
   "$ROOT/.github/RELEASE_NOTES_TEMPLATE.md"
-  "$ROOT/docs/COMMUNICATION-STYLE.md"
 )
 
 echo "Scanning public-facing text for disallowed wording..."

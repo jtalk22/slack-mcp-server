@@ -148,30 +148,17 @@ function main() {
   const readme = read("README.md");
   check(
     results,
-    "README cloud claims",
-    readme.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard tools`) &&
-      readme.includes(`${PUBLIC_METADATA.cloudManagedToolCount} standard + ${PUBLIC_METADATA.teamAiWorkflowCount} AI compound tools`) &&
-      readme.includes(PUBLIC_METADATA.secondaryClient) &&
-      readme.includes(PUBLIC_METADATA.cloudTurnkeyLaunchPrice) &&
-      readme.includes(PUBLIC_METADATA.cloudManagedReliabilityPrice) &&
-      !readme.includes("16 standard tools"),
-    "README must describe Cloud as 15 standard tools plus 3 AI compound tools on Team, with Gemini CLI and premium offers"
+    "README tool count",
+    readme.includes(`${PUBLIC_METADATA.selfHostedToolCount} tools`) &&
+      readme.includes("12 read-only") &&
+      readme.includes("4 write-path"),
+    "README must state tool count and safety annotation breakdown"
   );
   check(
     results,
-    "README operator links",
-    readme.includes("Release health snapshot") &&
-      readme.includes("Version parity report") &&
-      readme.includes("Distribution ledger") &&
-      readme.includes(PUBLIC_METADATA.tracked.readme.officialComparison) &&
-      readme.includes(PUBLIC_METADATA.tracked.readme.marketplaceReadiness) &&
-      readme.includes(PUBLIC_METADATA.cloudPricingUrl) &&
-      readme.includes(PUBLIC_METADATA.cloudCheckoutUrl) &&
-      readme.includes(PUBLIC_METADATA.cloudSecurityUrl) &&
-      readme.includes(PUBLIC_METADATA.tracked.readme.account) &&
-      readme.includes(PUBLIC_METADATA.cloudDeploymentUrl) &&
-      readme.includes(PUBLIC_METADATA.cloudSupportUrl),
-    "README should link current release-health, version-parity, distribution ledger, comparison, marketplace readiness, pricing, checkout, security, account, deployment, and support surfaces"
+    "README session auth",
+    readme.includes("Session-based auth") || readme.includes("session tokens") || readme.includes("Session tokens"),
+    "README should describe session-based authentication approach"
   );
 
   const marketingIndex = read("index.html");
