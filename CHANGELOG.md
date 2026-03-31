@@ -7,24 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.0] - 2026-03-30
 
+### Highlights
+- **Monday Morning demo** — 7-scenario interactive narrative: triage 47 unreads, find a lost printer PIN, reply to incidents, export for post-mortems — without opening Slack once.
+- **H.264 video pipeline** — `npm run record-demo` auto-encodes MP4 from Playwright recordings. Demo video page serves MP4 first with WebM fallback.
+- **16 tools, one command** — `npx -y @jtalk22/slack-mcp --setup` gets you running with any MCP client: Claude, Cursor, Copilot, Gemini, Windsurf.
+- **Schema.org SEO** — VideoObject markup on demo-video.html for Google rich results.
+- **Play button poster** — README poster image composites a play button overlay for click-through.
+
 ### Changed
-- **README rewritten** — Stripped commercial sales funnel (34+ tracking links removed). Restored original voice with multi-client positioning: "Works with any MCP client. Slack's official server doesn't."
+- **README rewritten** — Leads with the problem (Slack's OAuth is broken with Claude Code). Multi-client positioning, comparison diagram, demo video above the fold.
+- **Landing page** — Hero rewritten to lead with differentiation, not features. Demo is the primary CTA.
 - **Version bumped to 4.0.0** across package.json, server.json, glama.json
-- **Commercial files removed** — 25 files deleted (+143/-2,762 lines). Removed launch ops, demand tracking, revenue routing, and marketplace readiness infrastructure.
-- **Public pages simplified** — `lib/public-metadata.js` stripped from 107 to 22 lines. `lib/public-pages.js` simplified (sales funnel removed). 4 dead npm scripts removed.
 
 ### Security
 - **File permissions** — `fs.chmodSync` added to token file writes
 - **API key redaction** — Dashboard URL prints truncated key
 - **Integer validation** — `safeParseInt` guards numeric API parameters
-
-### Added
-- **Editor MCP config** — Local MCP server registration for development
-
-### Removed
-- `LAUNCH-OPS.md`, `DEMAND-VISIBILITY.md`, `COMMUNICATION-STYLE.md`, and 22 other commercial/ops files
-- UTM tracking URLs from all public surfaces
-- Checkout and revenue routing infrastructure
 
 ### Compatibility
 - No MCP tool names were removed or renamed. All 16 tools unchanged.

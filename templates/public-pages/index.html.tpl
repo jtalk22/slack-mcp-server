@@ -296,14 +296,14 @@
 <body>
   <main class="shell">
     <section class="hero">
-      <h1>Give your AI agent Slack access</h1>
-      <p>{{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search. No OAuth app, no admin approval. Works with any MCP client.</p>
+      <h1>Slack MCP &mdash; without the broken OAuth</h1>
+      <p>Slack's official MCP server requires OAuth app registration, admin approval, and <strong>doesn't work with Claude Code or Copilot</strong>. This one uses your browser session instead. No app, no admin, no friction. {{SELF_HOSTED_TOOL_COUNT}} tools, one command.</p>
       <div class="cta-row">
+        <a href="{{GITHUB_PAGES_ROOT}}/public/demo-claude.html" style="background:rgba(218,119,86,0.18);border-color:rgba(218,119,86,0.45)"><strong style="color:#da7756">Watch the Demo</strong></a>
         <a href="{{SETUP_URL}}"><strong>Setup Guide</strong></a>
+        <a href="{{GITHUB_REPO_URL}}"><strong>GitHub</strong></a>
         <a href="{{NPM_URL}}"><strong>npm</strong></a>
-        <a href="{{RELEASES_URL}}"><strong>Latest Release</strong></a>
-        <a href="{{GITHUB_PAGES_ROOT}}/public/demo-claude.html"><strong>Interactive Demo</strong></a>
-        <a href="{{CANONICAL_SITE_URL}}" style="background:rgba(218,119,86,0.18);border-color:rgba(218,119,86,0.45)"><strong style="color:#da7756">Cloud</strong></a>
+        <a href="{{CANONICAL_SITE_URL}}"><strong>Cloud</strong></a>
       </div>
       <div class="verify">npx -y @jtalk22/slack-mcp --setup</div>
     </section>
