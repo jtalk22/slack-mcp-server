@@ -2,36 +2,47 @@
 
 ## Show HN
 
-**Title:** Show HN: Slack MCP server that uses your browser session instead of OAuth
+**Title:** Show HN: I rebuilt Slack's MCP server because theirs doesn't work with Claude Code
 
 **Body:**
 
 Hey HN,
 
-I built an MCP server that lets AI assistants (Claude, Cursor, Copilot, Gemini) read and write to Slack using your existing browser session — no OAuth app, no admin approval, no scopes to configure.
-
-**Why this exists:** Slack's official MCP server requires you to register an OAuth app, get workspace admin approval, and configure redirect URIs. That process is broken with Claude Code and GitHub Copilot due to OAuth/DCR incompatibility. For a tool that's supposed to reduce friction, it creates a lot of it.
-
-This server takes a different approach: it uses the same session tokens your browser already has (xoxc- + xoxd-). One command to set up:
+Slack shipped an official MCP server, but it requires OAuth app registration, admin approval, and is broken with Claude Code and GitHub Copilot due to an OAuth/DCR incompatibility. I built an alternative that uses your browser session instead — one command, zero config, works with every MCP client.
 
     npx -y @jtalk22/slack-mcp --setup
 
-16 tools: search messages, read threads, list channels/DMs, send messages, add reactions, export conversations, look up users. Read-only by default — write tools require explicit confirmation.
+On Mac, it auto-extracts tokens from Chrome (no DevTools needed). On other platforms, a Console one-liner copies both tokens to clipboard in one paste.
 
-**The trust tradeoff:** Session tokens give full account access. This is the same access your browser has, but now an AI assistant has it too. I think that's an acceptable tradeoff for personal use — you're trusting the MCP client (Claude, Cursor) to behave, which you're already doing for your codebase. For teams, we offer a managed Cloud version with audit logs and access controls.
+**What you can do with it:**
 
-**Technical details:**
-- Pure Node.js, zero runtime dependencies beyond @modelcontextprotocol/sdk and Express
-- 4-layer token persistence: env vars → token file → macOS Keychain → Chrome auto-extraction
-- Atomic file writes, mutex locking, LRU user cache
-- Works over stdio (local) or HTTP (hosted)
-- MIT licensed
+- "What did I miss overnight?" — triages 47 unreads across channels and DMs
+- "Find the printer admin PIN that IT shared 5 months ago" — searches your entire workspace history
+- "Reply to the incidents thread with a fix update" — reads context, composes a reply
+- "Export #architecture-decisions with all threads" — full JSON export for post-mortems
 
-Interactive demo: https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html
+16 tools total. Read-only by default, write actions require confirmation.
+
+**The demo tells a story:** A developer handles their entire Monday morning Slack — from 47 unreads to inbox zero — without opening Slack once. The printer PIN that nobody could find? It was in #facilities from 5 months ago with zero reactions. Nobody read it. Until now. https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html
+
+**Works with:** Claude Desktop, Claude Code, Cursor, GitHub Copilot, Gemini CLI, Windsurf — config snippets for each in the README.
+
+**The trust tradeoff:** Session tokens = full account access, same as your browser. Fine for personal use (you're already trusting these tools with your codebase). For teams, there's a managed Cloud version with audit logs.
+
+**Technical stack:** Node.js, zero heavy dependencies, 4-layer token persistence (env → file → macOS Keychain → Chrome auto-extraction), atomic writes, mutex locking, stdio + HTTP transports. MIT licensed.
+
+| | Slack Official | This Server |
+|---|---|---|
+| OAuth required | Yes | No |
+| Admin approval | Yes | No |
+| Works with Claude Code | No | Yes |
+| Works with Copilot | No | Yes |
+| Setup time | ~30 min | ~2 min |
+| Tools | Limited | 16 |
+
 GitHub: https://github.com/jtalk22/slack-mcp-server
 npm: https://www.npmjs.com/package/@jtalk22/slack-mcp
-
-I'd love feedback on the approach. The session-token model isn't for everyone, but for the "I just want to search my own Slack from Claude" use case, it's hard to beat zero-config.
+Interactive demo: https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html
 
 ---
 
