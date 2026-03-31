@@ -32,8 +32,65 @@ This server uses your browser's session tokens instead. If you can see it in Sla
 | Admin approval | Yes | **No** |
 | Works with Claude Code | No (DCR incompatible) | **Yes** |
 | Works with Copilot | No | **Yes** |
+| Works with Cursor | No | **Yes** |
+| Works with Gemini CLI | No | **Yes** |
+| Works with Windsurf | No | **Yes** |
 | Setup time | ~30 min | **~2 min** |
 | Tools | Limited | **16** |
+
+## Quick Start per Client
+
+<details>
+<summary><strong>Claude Desktop / Claude Code</strong></summary>
+
+Add to `~/.claude.json` or Claude Desktop settings:
+```json
+{
+  "mcpServers": {
+    "slack": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"] }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Cursor</strong></summary>
+
+Add to `.cursor/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "slack": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"] }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Windsurf</strong></summary>
+
+Add to `~/.codeium/windsurf/mcp_config.json`:
+```json
+{
+  "mcpServers": {
+    "slack": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"] }
+  }
+}
+```
+</details>
+
+<details>
+<summary><strong>Gemini CLI</strong></summary>
+
+Add to `~/.gemini/settings.json`:
+```json
+{
+  "mcpServers": {
+    "slack": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"] }
+  }
+}
+```
+</details>
 
 ## Tools
 

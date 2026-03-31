@@ -30,6 +30,7 @@
     "build:demo-mobile:gif": "node scripts/build-mobile-demo.js --gif",
     "record-demo": "node scripts/record-demo.js",
     "social-preview:update": "node scripts/update-github-social-preview.js --headed",
+    "bookmarklet": "node scripts/generate-bookmarklet.js",
     "cf:browser": "node scripts/cloudflare-browser-tool.js",
     "verify:attribution-guardrail": "node scripts/verify-attribution-guardrail.js",
     "verify:public-pages": "node scripts/verify-generated-public-pages.js",

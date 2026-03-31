@@ -10,7 +10,7 @@
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { mkdirSync, existsSync, copyFileSync, statSync } from 'fs';
+import { mkdirSync, existsSync, copyFileSync, statSync, readdirSync, unlinkSync, rmSync } from 'fs';
 import { spawnSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,8 +23,10 @@ const argValue = (flag) => {
   return idx >= 0 && idx + 1 < argv.length ? argv[idx + 1] : null;
 };
 
+const pngSequenceMode = hasArg('--png-sequence');
+
 const CONFIG = {
-  viewport: { width: 1280, height: 800 },
+  viewport: pngSequenceMode ? { width: 2560, height: 1600 } : { width: 1280, height: 800 },
   speed: '0.5',
   maxDemoTimeout: 600000, // 10 min safety net
 };
@@ -46,13 +48,20 @@ async function recordDemo() {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
   const timestampedOutput = join(videosDir, `demo-claude-${timestamp}.webm`);
 
+  const framesDir = join(videosDir, 'frames');
+  if (pngSequenceMode) {
+    mkdirSync(framesDir, { recursive: true });
+    console.log(`📸 PNG sequence mode: ${CONFIG.viewport.width}x${CONFIG.viewport.height} (2x Retina)`);
+  }
+
   console.log('🚀 Launching browser...');
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({
+  const contextOpts = {
     viewport: CONFIG.viewport,
-    recordVideo: { dir: videosDir, size: CONFIG.viewport },
     colorScheme: 'dark',
-  });
+    ...(pngSequenceMode ? { deviceScaleFactor: 2 } : { recordVideo: { dir: videosDir, size: CONFIG.viewport } }),
+  };
+  const context = await browser.newContext(contextOpts);
   const page = await context.newPage();
 
   // ── Load page ────────────────────────────────────────────────
@@ -104,6 +113,20 @@ async function recordDemo() {
   console.log('▶️  Scenarios running...');
   console.log();
 
+  // PNG frame capture loop (--png-sequence mode only)
+  let frameCount = 0;
+  let frameCapture = null;
+  if (pngSequenceMode) {
+    const captureFrame = async () => {
+      try {
+        const framePath = join(framesDir, `frame-${String(frameCount).padStart(5, '0')}.png`);
+        await page.screenshot({ path: framePath, type: 'png' });
+        frameCount++;
+      } catch (_) { /* page closing */ }
+    };
+    frameCapture = setInterval(captureFrame, 33); // ~30fps
+  }
+
   // Poll scenario progress for console output
   const scenarios = ['triage', 'search', 'thread', 'respond', 'people', 'react', 'export'];
   let lastScenario = null;
@@ -128,8 +151,10 @@ async function recordDemo() {
     { timeout: CONFIG.maxDemoTimeout },
   );
   clearInterval(poller);
+  if (frameCapture) clearInterval(frameCapture);
   console.log();
   console.log('🎬 Closing card visible.');
+  if (pngSequenceMode) console.log(`   Captured ${frameCount} frames`);
 
   // Wait for closing card to fade out
   await page.waitForFunction(
@@ -143,13 +168,42 @@ async function recordDemo() {
   await page.waitForTimeout(600);
 
   // ── Save video ──────────────────────────────────────────────
-  console.log('💾 Saving video...');
-  const video = await page.video();
-  await context.close();
-  await browser.close();
+  if (pngSequenceMode) {
+    console.log('💾 Stitching PNG frames with FFmpeg...');
+    await context.close();
+    await browser.close();
 
-  const videoPath = await video.path();
-  copyFileSync(videoPath, canonicalOutput);
+    const hqOutput = canonicalOutput.replace(/\.webm$/, '-hq.mp4');
+    const enc = spawnSync('ffmpeg', [
+      '-y', '-framerate', '30',
+      '-i', join(framesDir, 'frame-%05d.png'),
+      '-vf', 'scale=1280:800:flags=lanczos',
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
+      '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+      hqOutput,
+    ], { stdio: 'inherit' });
+
+    if (enc.status === 0) {
+      const hqSize = (statSync(hqOutput).size / 1048576).toFixed(1);
+      console.log(`   HQ MP4: ${hqSize} MB (${frameCount} frames @ 30fps)`);
+      // Also copy as the standard MP4
+      copyFileSync(hqOutput, canonicalOutput.replace(/\.webm$/, '.mp4'));
+    } else {
+      console.warn('   ⚠️  FFmpeg stitch failed');
+    }
+
+    // Clean up frames
+    console.log('🧹 Cleaning up frames...');
+    rmSync(framesDir, { recursive: true, force: true });
+  } else {
+    console.log('💾 Saving video...');
+    const video = await page.video();
+    await context.close();
+    await browser.close();
+
+    const videoPath = await video.path();
+    copyFileSync(videoPath, canonicalOutput);
+  }
 
   // ── Encode H.264 MP4 from WebM ──────────────────────────────
   // Playwright records VP8 WebM (~9MB). Re-encode to H.264 MP4
