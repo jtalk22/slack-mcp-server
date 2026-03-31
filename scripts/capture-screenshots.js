@@ -119,9 +119,9 @@ async function captureScreenshots() {
     const overlayHTML = `
       <html><body style="margin:0;padding:0;width:1280px;height:800px;position:relative">
         <img src="data:image/png;base64,${posterB64}" style="width:1280px;height:800px;display:block">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
-          <div style="width:88px;height:88px;background:rgba(218,119,86,0.82);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.5)">
-            <div style="width:0;height:0;border-style:solid;border-width:18px 0 18px 30px;border-color:transparent transparent transparent #fff;margin-left:4px"></div>
+        <div style="position:absolute;bottom:28px;left:28px">
+          <div style="width:48px;height:48px;background:rgba(218,119,86,0.55);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.3)">
+            <div style="width:0;height:0;border-style:solid;border-width:10px 0 10px 16px;border-color:transparent transparent transparent rgba(255,255,255,0.9);margin-left:2px"></div>
           </div>
         </div>
       </body></html>`;
