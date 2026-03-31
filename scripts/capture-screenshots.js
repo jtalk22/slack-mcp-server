@@ -39,7 +39,7 @@ async function captureScreenshots() {
   });
 
   const demoPath = join(projectRoot, 'public', 'demo.html');
-  const demoClaudePath = join(projectRoot, 'public', 'demo-claude.html');
+  const demoClaudePath = join(projectRoot, 'public', 'demo-slack-mcp.html');
   const indexPath = join(projectRoot, 'public', 'index.html');
 
   // Desktop captures from demo.html
@@ -149,7 +149,7 @@ async function captureScreenshots() {
     {
       const { context, page } = await openPage(browser, demoClaudePath, viewport);
       await page.screenshot({
-        path: join(imagesDir, `demo-claude-mobile-${viewport.suffix}.png`),
+        path: join(imagesDir, `demo-slack-mcp-mobile-${viewport.suffix}.png`),
         fullPage: true
       });
       await context.close();
@@ -176,8 +176,8 @@ async function captureScreenshots() {
   console.log('  - demo-poster.png');
   console.log('  - demo-main-mobile-390x844.png');
   console.log('  - demo-main-mobile-360x800.png');
-  console.log('  - demo-claude-mobile-390x844.png');
-  console.log('  - demo-claude-mobile-360x800.png');
+  console.log('  - demo-slack-mcp-mobile-390x844.png');
+  console.log('  - demo-slack-mcp-mobile-360x800.png');
   console.log('  - web-api-mobile-390x844.png');
   console.log('  - web-api-mobile-360x800.png');
 }

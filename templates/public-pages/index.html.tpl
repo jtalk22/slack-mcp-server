@@ -299,11 +299,11 @@
       <h1>Slack MCP &mdash; without the broken OAuth</h1>
       <p>Slack's official MCP server requires OAuth app registration, admin approval, and <strong>doesn't work with Claude Code or Copilot</strong>. This one uses your browser session instead. No app, no admin, no friction. {{SELF_HOSTED_TOOL_COUNT}} tools, one command.</p>
       <div class="cta-row">
-        <a href="{{GITHUB_PAGES_ROOT}}/public/demo-claude.html" style="background:rgba(218,119,86,0.18);border-color:rgba(218,119,86,0.45)"><strong style="color:#da7756">Watch the Demo</strong></a>
+        <a href="{{GITHUB_PAGES_ROOT}}/public/demo-slack-mcp.html" style="background:rgba(218,119,86,0.18);border-color:rgba(218,119,86,0.45)"><strong style="color:#da7756">Watch the Demo</strong></a>
         <a href="{{SETUP_URL}}"><strong>Setup Guide</strong></a>
         <a href="{{GITHUB_REPO_URL}}"><strong>GitHub</strong></a>
         <a href="{{NPM_URL}}"><strong>npm</strong></a>
-        <a href="{{CANONICAL_SITE_URL}}"><strong>Cloud</strong></a>
+        <a href="{{CANONICAL_SITE_URL}}"><strong>Hosted</strong></a>
       </div>
       <div class="verify">npx -y @jtalk22/slack-mcp --setup</div>
     </section>
@@ -321,7 +321,7 @@
           <span class="snapshot-note" id="releaseTagNote">Latest tagged release from GitHub.</span>
         </div>
         <div class="snapshot-card">
-          <span class="snapshot-label">Cloud status</span>
+          <span class="snapshot-label">Hosted status</span>
           <strong class="snapshot-value" id="cloudHealth">Checking...</strong>
           <span class="snapshot-note" id="cloudHealthNote">Reads the hosted <code>/status</code> endpoint and degrades to a raw status link only if cross-origin access is unavailable.</span>
         </div>
@@ -337,13 +337,13 @@
 
     <section class="stage">
       <div class="video-shell">
-        <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-claude-mobile-poster.png" aria-label="Slack MCP demo autoplay">
-          <source src="docs/videos/demo-claude-mobile-20s.mp4" type="video/mp4">
+        <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-slack-mcp-mobile-poster.png" aria-label="Slack MCP demo autoplay">
+          <source src="docs/videos/demo-slack-mcp-mobile-20s.mp4" type="video/mp4">
         </video>
         <div class="video-controls">
           <button type="button" id="playBtn">Play</button>
           <button type="button" id="pauseBtn">Pause</button>
-          <a href="public/demo-claude.html">Interactive Demo</a>
+          <a href="public/demo-slack-mcp.html">Interactive Demo</a>
           <a href="public/demo-video.html">Video Demo</a>
         </div>
       </div>
@@ -351,7 +351,7 @@
     </section>
 
     <footer class="footer">
-      <span><a href="{{GITHUB_REPO_URL}}">GitHub</a> · <a href="{{NPM_URL}}">npm</a> · <a href="{{CANONICAL_SITE_URL}}">Cloud</a> · <a href="mailto:{{SUPPORT_EMAIL}}">{{SUPPORT_EMAIL}}</a></span>
+      <span><a href="{{GITHUB_REPO_URL}}">GitHub</a> · <a href="{{NPM_URL}}">npm</a> · <a href="{{CANONICAL_SITE_URL}}">Hosted</a> · <a href="mailto:{{SUPPORT_EMAIL}}">{{SUPPORT_EMAIL}}</a></span>
       <span>MIT License · <a href="https://github.com/sponsors/jtalk22">Sponsor</a></span>
     </footer>
   </main>
@@ -427,7 +427,7 @@
         headers: { accept: 'application/json' }
       })
         .then((res) => {
-          if (!res.ok) throw new Error(`Cloud status returned ${res.status}`);
+          if (!res.ok) throw new Error(`Hosted status returned ${res.status}`);
           return res.json();
         })
         .then((data) => {
@@ -436,7 +436,7 @@
           const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'Unavailable';
           const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'Unavailable';
           const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : '{{CLOUD_DOCS_URL}}';
-          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} Team AI workflows · <a href="${docsUrl}">Cloud docs</a>`;
+          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} <a href="${docsUrl}">Hosted docs</a>`;
         })
         .catch((error) => {
           cloudHealthEl.textContent = 'Status available';

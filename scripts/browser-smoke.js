@@ -224,7 +224,7 @@ async function runLocal() {
     await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Managed hosting available/i, "share note");
     await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Self-host free for 16 tools/i, "demo video note");
     await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", /Self-host free for 16 tools/i, "demo note");
-    await checkStaticPage(page, `${server.url}/public/demo-claude.html`, ".note", /Self-host free for 16 tools/i, "demo claude note");
+    await checkStaticPage(page, `${server.url}/public/demo-slack-mcp.html`, ".note", /Self-host free for 16 tools/i, "demo claude note");
 
     if (errors.length > 0) {
       throw new Error(errors.join("\n"));
