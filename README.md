@@ -26,6 +26,15 @@ This server uses your browser's session tokens instead. If you can see it in Sla
 
 ![OAuth vs Session](docs/images/diagram-oauth-comparison.svg)
 
+|  | Slack Official MCP | This Server |
+|---|---|---|
+| OAuth app required | Yes | **No** |
+| Admin approval | Yes | **No** |
+| Works with Claude Code | No (DCR incompatible) | **Yes** |
+| Works with Copilot | No | **Yes** |
+| Setup time | ~30 min | **~2 min** |
+| Tools | Limited | **16** |
+
 ## Tools
 
 | Tool | Description | Safety |

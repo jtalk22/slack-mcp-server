@@ -2,7 +2,7 @@
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
   "version": "4.0.0",
-  "description": "Slack MCP server. Session-based auth, 16 tools, stdio transport. Works with any MCP client.",
+  "description": "Slack MCP without OAuth — no app registration, no admin approval. Works with Claude Code, Cursor, Copilot (where the official server doesn't). 16 tools, one command.",
   "type": "module",
   "main": "src/server.js",
   "bin": {
@@ -61,7 +61,12 @@
     "slack-integration",
     "ai-agents",
     "automation",
-    "productivity"
+    "productivity",
+    "oauth-free",
+    "no-admin-approval",
+    "cursor",
+    "copilot",
+    "windsurf"
   ],
   "author": {
     "name": "Revasser",

@@ -107,7 +107,11 @@ async function collectErrors(page) {
   const errors = [];
   page.on("console", (msg) => {
     if (msg.type() === "error") {
-      errors.push(`console:${msg.text()}`);
+      const text = msg.text();
+      // Browsers log console errors for video <source> 404s when trying
+      // formats in order (MP4 first, WebM fallback). These are expected.
+      if (/Failed to load resource.*404/.test(text)) return;
+      errors.push(`console:${text}`);
     }
   });
   page.on("pageerror", (error) => {
