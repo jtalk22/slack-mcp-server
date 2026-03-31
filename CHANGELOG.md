@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-04-01
+
+### Highlights
+- **Chrome DB decryption** — Session cookie extracted directly from Chrome's encrypted SQLite store (PBKDF2 + AES-128-CBC from macOS Keychain). No DevTools, no manual copy-paste.
+- **Stealth Mode** — Session-token auth leaves zero footprint in workspace admin settings. No app install, no bot user, no audit trail.
+- **Codex CLI support** — Config examples and confirmed compatibility.
+
+### Changed
+- README: Stealth Mode framing, Codex CLI quick start, expanded comparison table
+- Diagram: Updated to show Chrome DB decryption flow, dark theme, attribution updated (version number dropped to prevent staleness)
+- Landing page: Cloud messaging updated for hosted product direction
+- Launch posts: Rewritten to lead with Chrome DB decryption (technical hook)
+- Docs: Stale Cloud pricing removed from SETUP, TROUBLESHOOTING, DEPLOYMENT-MODES, ARCHITECTURE
+- Demo assets rebranded: `demo-claude-*` → `demo-slack-mcp-*` (files, URLs, OG tags, scripts, templates) — client-agnostic naming
+- Video polish: color grade, contrast +12%, sharpen, vignette, CRF 18 encode (2.5× bitrate) across all 5 video assets
+- First 2s trimmed from recordings (stale badge eliminated)
+- Old `demo-claude.html` preserved as redirect to canonical URL
+
+### Removed
+- 13 hash-named `.webm` iteration recordings (80.7MB) — stale pipeline artifacts, preserved in git history
+
+### Fixed
+- HttpOnly cookie extraction — The `d` cookie was always HttpOnly; `document.cookie` never worked for extraction. Now reads Chrome's encrypted SQLite DB directly.
+
 ## [4.0.0] - 2026-03-30
 
 ### Highlights
@@ -32,10 +56,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **Release integrity** — Runtime version emitters now resolve from `package.json`, restoring parity for CLI output, Docker smoke tests, and hosted runtime metadata.
-- **Public surface drift** — Current README, marketing pages, setup docs, and Cloud plan claims were aligned so self-hosted and managed offerings no longer contradict each other.
+- **Public surface drift** — Current README, marketing pages, setup docs, and hosted offering claims were aligned so self-hosted and managed offerings no longer contradict each other.
 
 ### Added
-- **Public surface integrity gate** — CI and release preflight now validate current-version surfaces, managed Cloud tool-count claims, and core metadata parity before release.
+- **Public surface integrity gate** — CI and release preflight now validate current-version surfaces, hosted tool-count claims, and core metadata parity before release.
 - **Attribution guardrail regression check** — CI and release preflight now verify the Dependabot skip conditions and main-branch owner enforcement remain intact.
 - **Current release docs** — Added a `v3.2.4` release-note block and a same-day release runbook covering the Docker tag push vs GitHub Release sequencing.
 - **Support routing visibility** — Deployment intake and support-boundary guidance are now elevated across the current repo trust surfaces.
@@ -68,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Tool count: 11 → 16 across all three transports (stdio, web, hosted HTTP)
-- Cloud docs added to SETUP.md, DEPLOYMENT-MODES.md, and TROUBLESHOOTING.md
+- Hosted endpoint docs added to SETUP.md, DEPLOYMENT-MODES.md, and TROUBLESHOOTING.md
 
 ### Compatibility
 - No MCP tool renames or removals. Fully backwards compatible.
@@ -76,10 +100,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.1.0] - 2026-03-10
 
 ### Added
-- **Cloud product surface** — `cloud.html` landing page with Solo ($19/mo) and Team ($49/mo) Stripe checkout
-- **Post-checkout key delivery** — `success.html` polls for provisioned access tokens, shows config with copy-to-clipboard
-- **Homepage Cloud CTA** — `index.html` links to Cloud page
-- **README Cloud section** — pricing table and Cloud link
+- **Hosted endpoint surface** — landing page with hosted endpoint and post-checkout key delivery
+- **Homepage hosted CTA** — `index.html` links to hosted page
+- **README hosted section** — link to hosted endpoint
 - **Revenue Protection** — plan-based tool gating, D1 rate limit persistence, timing-safe admin auth
 - **OAuth 2.1 + PKCE S256** — MCP Registry remote endpoint at `mcp.revasserlabs.com/oauth/mcp`
 - **MCP Registry v3.1.0 published** with `remotes` section
@@ -93,7 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Compatibility
 - No MCP tool renames or removals. All 11 local tools unchanged.
-- Cloud adds 2 compound workflow tools (team plan only): `slack_channel_summary`, `slack_extract_action_items`
+- Hosted endpoint adds compound workflow tools for team deployments.
 
 ## [3.0.0] - 2026-02-28
 
@@ -338,6 +361,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.0...v1.0.5
 [1.0.0]: https://github.com/jtalk22/slack-mcp-server/releases/tag/v1.0.0
+[4.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.5...v4.0.0
 [3.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.3...v3.2.4
 [3.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.1.0...v3.2.0

@@ -4,7 +4,7 @@
  * Records the Claude Desktop demo in fullscreen mode with auto-play
  *
  * Usage: npm run record-demo
- * Output: docs/videos/demo-claude.webm
+ * Output: docs/videos/demo-slack-mcp.webm
  */
 
 import { chromium } from 'playwright';
@@ -31,7 +31,7 @@ const CONFIG = {
   maxDemoTimeout: 600000, // 10 min safety net
 };
 
-const canonicalOutput = argValue('--out') || join(projectRoot, 'docs', 'videos', 'demo-claude.webm');
+const canonicalOutput = argValue('--out') || join(projectRoot, 'docs', 'videos', 'demo-slack-mcp.webm');
 const archiveOutput = hasArg('--archive');
 
 async function recordDemo() {
@@ -46,7 +46,7 @@ async function recordDemo() {
   }
 
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-  const timestampedOutput = join(videosDir, `demo-claude-${timestamp}.webm`);
+  const timestampedOutput = join(videosDir, `demo-slack-mcp-${timestamp}.webm`);
 
   const framesDir = join(videosDir, 'frames');
   if (pngSequenceMode) {
@@ -67,7 +67,7 @@ async function recordDemo() {
   // ── Load page ────────────────────────────────────────────────
   // ?noauto prevents DOMContentLoaded from starting a scenario
   // (which sets isRunning=true and silently blocks autoPlayAll)
-  const demoPath = join(projectRoot, 'public', 'demo-claude.html');
+  const demoPath = join(projectRoot, 'public', 'demo-slack-mcp.html');
   console.log(`📄 Loading: ${demoPath}`);
   await page.goto(`file://${demoPath}?noauto`);
   await page.waitForTimeout(1000);

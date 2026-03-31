@@ -188,13 +188,15 @@ async function runManualSetup(rl) {
   print();
   if (IS_MACOS) {
     info("Switching to manual token entry...");
+    info("Note: On macOS, the session cookie can be extracted automatically.");
   } else {
     info(`Detected platform: ${platform()}`);
     warn("Auto-extraction not available on this platform.");
   }
 
   const consoleHotkey = IS_MACOS ? "Cmd+Option+J" : "Ctrl+Shift+J";
-  const oneLiner = `copy(JSON.stringify({token:JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token,cookie:document.cookie.split('; ').find(c=>c.startsWith('d=')).slice(2)}))`;
+  // Token-only one-liner (cookie is HttpOnly and cannot be read via document.cookie)
+  const oneLiner = `copy(JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token)`;
 
   print();
   print(`${colors.bold}Quick extract (recommended):${colors.reset}`);
@@ -205,38 +207,60 @@ async function runManualSetup(rl) {
   print();
   printBox([oneLiner], oneLiner.length + 4);
   print();
-  print(`  4. Your tokens are now on the clipboard. Paste below.`);
+  print(`  4. Your token is now on the clipboard. Paste below.`);
+  if (IS_MACOS) {
+    print(`  ${colors.dim}(Cookie will be extracted automatically from Chrome)${colors.reset}`);
+  }
   print();
-  print(`${colors.dim}(Or paste a raw xoxc- token for manual two-step entry)${colors.reset}`);
+  print(`${colors.dim}(Or paste a JSON object with token+cookie, or a raw xoxc- token)${colors.reset}`);
   print();
 
-  const input = await question(rl, `${colors.bold}Paste tokens:${colors.reset} `);
+  const input = await question(rl, `${colors.bold}Paste token:${colors.reset} `);
   const trimmed = input.trim();
 
   let token, cookie;
 
-  // Try JSON parse first (one-liner output: {"token":"xoxc-...","cookie":"xoxd-..."})
+  // Try JSON parse first (legacy one-liner output or manual JSON)
   if (trimmed.startsWith('{')) {
     try {
       const parsed = JSON.parse(trimmed);
-      if (parsed.token && parsed.cookie) {
-        token = parsed.token;
-        cookie = parsed.cookie;
-      }
+      if (parsed.token) token = parsed.token;
+      if (parsed.cookie) cookie = parsed.cookie;
     } catch (_) {
-      // Not valid JSON — fall through to manual
+      // Not valid JSON — fall through to raw token
     }
   }
 
-  // If JSON didn't work, treat as raw token
+  // Treat as raw token
   if (!token) {
     token = trimmed;
     if (!token.startsWith('xoxc-')) {
-      error("Invalid input. Expected JSON from the one-liner or a token starting with 'xoxc-'");
+      error("Invalid input. Expected a token starting with 'xoxc-'");
       return false;
     }
+  }
+
+  // On macOS, try to extract cookie from Chrome's cookie database automatically
+  if (!cookie && IS_MACOS) {
     print();
-    print(`Now paste the cookie. In Chrome: ${colors.cyan}Application${colors.reset} tab → ${colors.cyan}Cookies${colors.reset} → find '${colors.cyan}d${colors.reset}'`);
+    print("Extracting session cookie from Chrome...");
+    const chromeTokens = extractFromChrome();
+    if (chromeTokens?.cookie) {
+      cookie = chromeTokens.cookie;
+      success("Cookie extracted from Chrome automatically");
+    } else {
+      warn("Could not extract cookie automatically.");
+      print(`  Paste the cookie manually. In Chrome: ${colors.cyan}Application${colors.reset} tab → ${colors.cyan}Cookies${colors.reset} → find '${colors.cyan}d${colors.reset}'`);
+      print();
+      const cookieInput = await question(rl, `${colors.bold}Paste cookie (xoxd-...):${colors.reset} `);
+      cookie = cookieInput.trim();
+    }
+  }
+
+  // Non-macOS: always ask for cookie
+  if (!cookie) {
+    print();
+    print(`Paste the cookie. In Chrome: ${colors.cyan}Application${colors.reset} tab → ${colors.cyan}Cookies${colors.reset} → find '${colors.cyan}d${colors.reset}'`);
     print();
     const cookieInput = await question(rl, `${colors.bold}Paste cookie (xoxd-...):${colors.reset} `);
     cookie = cookieInput.trim();

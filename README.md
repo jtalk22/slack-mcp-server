@@ -16,7 +16,7 @@ npx -y @jtalk22/slack-mcp --setup
 
 > **Ask your AI to catch you up on #engineering from the last 24 hours.** Search for that deployment thread from last week. Find the printer admin PIN nobody can remember. Send a reply. All from your editor.
 
-[Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo-claude.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
+[Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
 
 ## Why This Exists
 
@@ -24,19 +24,23 @@ Slack's official MCP server requires a registered app, admin approval, and [does
 
 This server uses your browser's session tokens instead. If you can see it in Slack, your AI agent can see it too. No app install, no scopes, no admin.
 
-![OAuth vs Session](docs/images/diagram-oauth-comparison.svg)
+**Stealth Mode:** Session tokens leave zero footprint in your workspace admin panel. No bot user appears, no app install shows up, no audit trail. Your AI agent operates with the same invisibility as your browser tab.
+
+![OAuth vs Chrome DB Decryption](docs/images/diagram-oauth-comparison.svg)
 
 |  | Slack Official MCP | This Server |
 |---|---|---|
 | OAuth app required | Yes | **No** |
 | Admin approval | Yes | **No** |
 | Works with Claude Code | No (DCR incompatible) | **Yes** |
-| Works with Copilot | No | **Yes** |
 | Works with Cursor | No | **Yes** |
-| Works with Gemini CLI | No | **Yes** |
+| Works with Copilot | No | **Yes** |
 | Works with Windsurf | No | **Yes** |
+| Works with Gemini CLI | No | **Yes** |
+| Works with Codex CLI | No | **Yes** |
 | Setup time | ~30 min | **~2 min** |
 | Tools | Limited | **16** |
+| Visible to admins | Yes | **No — Stealth Mode** |
 
 ## Quick Start per Client
 
@@ -90,6 +94,19 @@ Add to `~/.gemini/settings.json`:
   }
 }
 ```
+</details>
+
+<details>
+<summary><strong>Codex CLI</strong></summary>
+
+Add to `~/.codex/config.toml`:
+```toml
+[mcp_servers.slack]
+command = "npx"
+args = ["-y", "@jtalk22/slack-mcp"]
+```
+
+Or via CLI: `codex mcp add slack -- npx -y @jtalk22/slack-mcp`
 </details>
 
 ## Tools
@@ -213,13 +230,7 @@ On macOS, tokens are auto-extracted from Chrome — `env` block is optional.
 <details>
 <summary><strong>Claude Web / Remote MCP</strong></summary>
 
-For browser-based clients that can't run local processes, use the hosted HTTP endpoint:
-
-```
-https://mcp.revasserlabs.com/oauth/mcp
-```
-
-Add this as a remote MCP server in your client's settings. Transport: Streamable HTTP. Auth: OAuth 2.1 + PKCE.
+Hosted version with permanent OAuth tokens coming soon. See [mcp.revasserlabs.com](https://mcp.revasserlabs.com) for updates.
 
 </details>
 
@@ -315,4 +326,4 @@ Not affiliated with Slack Technologies, Inc. Uses browser session credentials �
 
 ---
 
-Managed hosting available — [mcp.revasserlabs.com](https://mcp.revasserlabs.com)
+Hosted version with semantic search, AI summaries, and permanent OAuth — coming soon at [mcp.revasserlabs.com](https://mcp.revasserlabs.com)

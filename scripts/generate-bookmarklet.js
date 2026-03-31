@@ -9,7 +9,8 @@
  * while on app.slack.com, then the result pasted into --setup.
  */
 
-const oneLiner = `copy(JSON.stringify({token:JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token,cookie:document.cookie.split('; ').find(c=>c.startsWith('d=')).slice(2)}))`;
+// Token-only extraction (cookie is HttpOnly — extracted from Chrome's cookie DB on macOS)
+const oneLiner = `copy(JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token)`;
 
 const isMac = process.platform === 'darwin';
 const hotkey = isMac ? 'Cmd+Option+J' : 'Ctrl+Shift+J';
@@ -24,7 +25,13 @@ console.log(`3. Paste this and press Enter:`);
 console.log();
 console.log(`   ${oneLiner}`);
 console.log();
-console.log(`4. Your tokens are now on the clipboard`);
-console.log(`5. Run: npx -y @jtalk22/slack-mcp --setup`);
-console.log(`6. Paste when prompted`);
+console.log(`4. Your token is now on the clipboard`);
+if (isMac) {
+  console.log(`5. Run: npx -y @jtalk22/slack-mcp --setup`);
+  console.log(`6. Paste when prompted (cookie is extracted automatically)`);
+} else {
+  console.log(`5. You'll also need the 'd' cookie from Chrome DevTools > Application > Cookies`);
+  console.log(`6. Run: npx -y @jtalk22/slack-mcp --setup`);
+  console.log(`7. Paste both when prompted`);
+}
 console.log();

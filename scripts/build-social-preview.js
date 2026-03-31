@@ -145,7 +145,7 @@ const html = `<!doctype html>
   <main class="card">
     <header class="top">
       <span>Slack MCP Server</span>
-      <span class="pill">Self-Hosted + Cloud</span>
+      <span class="pill">Self-Hosted + Hosted</span>
     </header>
     <section class="image-frame">
       <img src="${sourceDataUri}" alt="Slack MCP live demo frame">
@@ -153,7 +153,7 @@ const html = `<!doctype html>
     <footer class="bottom">
       <div>
         <div class="subhead">Session-based Slack MCP for Claude and MCP clients.</div>
-        <div class="detail">16 self-hosted tools. Cloud offers 15 managed tools, plus 3 AI workflows on Team.</div>
+        <div class="detail">16 self-hosted tools. Hosted version with semantic search and AI summaries coming soon.</div>
       </div>
       <div class="attribution">
         <div>jtalk22</div>

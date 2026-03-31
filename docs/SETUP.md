@@ -1,40 +1,8 @@
 # Setup Guide
 
-## Cloud
+## Hosted (Coming Soon)
 
-Use **Slack MCP Cloud** when you want a managed endpoint rather than local token handling:
-
-1. Go to [Slack MCP Cloud](https://mcp.revasserlabs.com) and purchase a plan ($19/mo Solo, $49/mo Team)
-2. After checkout, you'll receive an API key and ready-to-paste config for Claude Desktop / Claude Code
-3. Use the hosted endpoint and API key — one URL, 15 managed tools. Team adds 3 AI workflows.
-
-**Claude Desktop config (Cloud):**
-```json
-{
-  "mcpServers": {
-    "slack": {
-      "url": "https://mcp.revasserlabs.com/oauth/mcp"
-    }
-  }
-}
-```
-
-**Claude Code config (Cloud):**
-```json
-{
-  "mcpServers": {
-    "slack": {
-      "type": "sse",
-      "url": "https://mcp.revasserlabs.com/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
-
-If you prefer self-hosting, continue below.
+A hosted version with permanent OAuth tokens, semantic search, and AI summaries is in development at [mcp.revasserlabs.com](https://mcp.revasserlabs.com). The current release is self-hosted only — continue below.
 
 ---
 

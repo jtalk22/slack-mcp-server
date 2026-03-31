@@ -15,15 +15,15 @@ const argValue = (flag) => {
   return idx >= 0 && idx + 1 < argv.length ? argv[idx + 1] : null;
 };
 
-const input = resolve(argValue("--in") || join(ROOT, "docs", "videos", "demo-claude.webm"));
+const input = resolve(argValue("--in") || join(ROOT, "docs", "videos", "demo-slack-mcp.webm"));
 const outputVideo = resolve(
-  argValue("--out-video") || join(ROOT, "docs", "videos", "demo-claude-mobile-20s.mp4")
+  argValue("--out-video") || join(ROOT, "docs", "videos", "demo-slack-mcp-mobile-20s.mp4")
 );
 const outputPoster = resolve(
-  argValue("--out-poster") || join(ROOT, "docs", "images", "demo-claude-mobile-poster.png")
+  argValue("--out-poster") || join(ROOT, "docs", "images", "demo-slack-mcp-mobile-poster.png")
 );
 const outputGif = resolve(
-  argValue("--out-gif") || join(ROOT, "docs", "images", "demo-claude-mobile-20s.gif")
+  argValue("--out-gif") || join(ROOT, "docs", "images", "demo-slack-mcp-mobile-20s.gif")
 );
 const validationDir = resolve(
   argValue("--validation-dir") || join(ROOT, "output", "release-health", "mobile-first3-frames")

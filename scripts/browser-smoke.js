@@ -183,7 +183,7 @@ async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) 
 
   if (/^ok$/i.test(snapshot.cloud)) {
     assertText(snapshot.cloudNote, /15 managed tools/i, "#cloudHealthNote");
-    assertText(snapshot.cloudNote, /3 Team AI workflows/i, "#cloudHealthNote");
+    assertText(snapshot.cloudNote, /3 Hosted docs/i, "#cloudHealthNote");
     return { cloudState: "ok" };
   }
 
@@ -221,10 +221,10 @@ async function runLocal() {
     });
 
     await checkRoot(page, `${server.url}/`);
-    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Managed hosting available/i, "share note");
+    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Hosted version coming soon/i, "share note");
     await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Self-host free for 16 tools/i, "demo video note");
     await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", /Self-host free for 16 tools/i, "demo note");
-    await checkStaticPage(page, `${server.url}/public/demo-claude.html`, ".note", /Self-host free for 16 tools/i, "demo claude note");
+    await checkStaticPage(page, `${server.url}/public/demo-slack-mcp.html`, ".note", /Self-host free for 16 tools/i, "demo claude note");
 
     if (errors.length > 0) {
       throw new Error(errors.join("\n"));
@@ -248,7 +248,7 @@ async function runLive() {
         // fetches to the hosted site are blocked. GitHub-hosted runners can hit that
         // path even when the public site is rendering correctly for real users.
         const snapshot = await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { allowHostedStatusFallback: true });
-        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Managed hosting available/i, "live share note");
+        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Hosted version coming soon/i, "live share note");
         const normalizedErrors = normalizeErrors(errors, { allowHostedStatusFallback: snapshot.cloudState === "fallback" });
         if (normalizedErrors.length > 0) {
           throw new Error(normalizedErrors.join("\n"));

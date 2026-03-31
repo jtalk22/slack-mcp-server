@@ -2,13 +2,9 @@
 
 ## Two Access Models
 
-### Cloud (OAuth 2.1)
+### Hosted Product (Coming Soon)
 
-Standard authorization code flow with PKCE S256. User authorizes via browser. Encrypted token storage on Cloudflare's global edge (300+ PoPs). AES-256-GCM at rest.
-
-- Dynamic client registration (RFC 7591)
-- RFC 8414 metadata discovery
-- 24-hour token TTL with refresh
+A managed endpoint with permanent OAuth tokens, semantic search, and AI summaries is in development at [mcp.revasserlabs.com](https://mcp.revasserlabs.com).
 
 ### Self-Hosted (Session Tokens)
 

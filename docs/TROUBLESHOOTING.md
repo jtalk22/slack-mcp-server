@@ -29,31 +29,9 @@ If `--version` fails here, the issue is install/runtime path, not Slack credenti
 
 ---
 
-## Cloud Issues
+## Hosted Version
 
-### API Key Not Working
-
-**Symptom:** `401 Unauthorized` or `403 Forbidden` when using Cloud endpoint.
-
-**Solutions:**
-1. Verify your API key starts with `stmh_` (team) or `smsh_` (solo)
-2. Check the key hasn't been revoked — contact support@revasserlabs.com for key issues
-3. Ensure you're using the correct endpoint: `https://mcp.revasserlabs.com/mcp`
-
-### Cloud Tools Not Available
-
-**Symptom:** Only seeing fewer tools than expected.
-
-**Cause:** AI compound tools (`slack_channel_summary`, `slack_extract_action_items`, `slack_find_decisions`) are Team plan only ($49/mo).
-
-**Solution:** Upgrade to Team plan for AI compound tools, or use the 15 standard managed tools available on all Cloud plans.
-
-### Cloud Endpoint Health Check
-
-```bash
-curl -s https://mcp.revasserlabs.com/health | jq .
-# Expected: {"status":"healthy","server":"slack-mcp-hosted","version":"0.5.0"}
-```
+A hosted version with permanent OAuth tokens, semantic search, and AI summaries is coming soon at [mcp.revasserlabs.com](https://mcp.revasserlabs.com). The current release is self-hosted only.
 
 ---
 

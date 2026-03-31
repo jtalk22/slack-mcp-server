@@ -107,7 +107,7 @@
 <body>
   <main class="wrap">
     <h1>Slack MCP Server</h1>
-    <p class="sub">Give Claude full access to your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free, or use Cloud for {{CLOUD_MANAGED_TOOL_COUNT}} managed tools, Gemini CLI support, hosted credentials, rollout support, and buyer-facing security review.</p>
+    <p class="sub">Give Claude full access to your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free. Hosted version with semantic search, AI summaries, and permanent OAuth coming soon.</p>
 
     <a class="preview" href="{{GITHUB_REPO_URL}}" rel="noopener">
       <img src="{{SOCIAL_IMAGE_URL}}" alt="Slack MCP Server social preview card">

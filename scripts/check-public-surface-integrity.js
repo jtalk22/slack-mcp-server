@@ -126,7 +126,7 @@ function main() {
     "public/share.html",
     "public/demo.html",
     "public/demo-video.html",
-    "public/demo-claude.html",
+    "public/demo-slack-mcp.html",
   ]) {
     const versions = semverLiterals(read(marketingPath));
     check(

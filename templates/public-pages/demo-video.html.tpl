@@ -12,8 +12,8 @@
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
-  <meta property="og:video" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude-mobile-20s.mp4">
-  <meta property="og:video:secure_url" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude-mobile-20s.mp4">
+  <meta property="og:video" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp-mobile-20s.mp4">
+  <meta property="og:video:secure_url" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp-mobile-20s.mp4">
   <meta property="og:video:type" content="video/mp4">
   <meta property="og:video:width" content="1080">
   <meta property="og:video:height" content="1920">
@@ -24,7 +24,7 @@
   <meta name="twitter:player" content="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
   <meta name="twitter:player:width" content="1280">
   <meta name="twitter:player:height" content="800">
-  <meta name="twitter:player:stream" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude-mobile-20s.mp4">
+  <meta name="twitter:player:stream" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp-mobile-20s.mp4">
   <meta name="twitter:player:stream:content_type" content="video/mp4">
   <script type="application/ld+json">
   {
@@ -34,7 +34,7 @@
     "description": "Watch an AI handle 47 unread Slack messages without opening Slack. 16 tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
     "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
     "uploadDate": "2026-03-30",
-    "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-claude.mp4",
+    "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp.mp4",
     "embedUrl": "{{GITHUB_PAGES_ROOT}}/public/demo-video.html",
     "duration": "PT3M33S",
     "author": {
@@ -220,8 +220,8 @@
 
     <div class="video-wrapper">
       <video id="demo" poster="../docs/images/demo-poster.png" playsinline autoplay muted loop>
-        <source src="../docs/videos/demo-claude.mp4" type="video/mp4">
-        <source src="../docs/videos/demo-claude.webm" type="video/webm">
+        <source src="../docs/videos/demo-slack-mcp.mp4" type="video/mp4">
+        <source src="../docs/videos/demo-slack-mcp.webm" type="video/webm">
         Your browser does not support the video tag.
       </video>
     </div>

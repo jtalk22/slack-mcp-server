@@ -12,4 +12,4 @@ Verify:
 
 If it still reproduces, reply with OS, Node version, runtime mode (`stdio|web|http|worker`), and exact error output.
 
-Maintainer note: GitHub issues are for reproducible self-host bugs and docs fixes. Managed rollout, billing, and Cloud operational support live at `https://mcp.revasserlabs.com/deployment` and `https://mcp.revasserlabs.com/support`.
+Maintainer note: GitHub issues are for reproducible self-host bugs and docs fixes. Hosted support lives at `https://mcp.revasserlabs.com`.

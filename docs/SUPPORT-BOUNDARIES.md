@@ -5,7 +5,7 @@ This document sets expectations for issue triage, support scope, and rollout saf
 ## Start With The Right Channel
 
 - Reproducible product bugs: open a standard bug issue with version, runtime mode, and exact error text.
-- Team rollout help or managed evaluation: use [Cloud deployment review](https://mcp.revasserlabs.com/deployment).
+- Team rollout help or managed evaluation: see [mcp.revasserlabs.com](https://mcp.revasserlabs.com).
 - Privacy or credential-sensitive concerns: use `support@revasserlabs.com` and redact all tokens/cookies.
 
 ## In Scope
@@ -37,7 +37,7 @@ Include the following in every issue:
 - Installation/blocker bugs: initial response target within 2 business days.
 - Non-blocking bugs: initial response target within 5 business days.
 - Feature requests: triaged in backlog batches.
-- Managed rollout questions: route to hosted deployment review and hosted support instead of GitHub issue threads.
+- Managed rollout questions: see [mcp.revasserlabs.com](https://mcp.revasserlabs.com) for hosted options.
 
 ## Solo Maintainer Capacity Guardrail
 
@@ -53,12 +53,12 @@ Include the following in every issue:
 
 ## Deployment Escalation Rule
 
-For team/hosted usage, use [Cloud deployment review](https://mcp.revasserlabs.com/deployment) before broad rollout.
+For team/hosted usage, see [mcp.revasserlabs.com](https://mcp.revasserlabs.com) before broad rollout.
 
 ## Managed vs Self-Hosted Support Posture
 
 - Self-hosted support is best-effort and focused on reproducible product behavior, install blockers, and docs clarity.
-- Guided rollout support is routed through hosted deployment review so requirements, runtime target, and validation criteria stay on the product surface.
+- Guided rollout support is routed through the hosted product so requirements, runtime target, and validation criteria stay on the product surface.
 - Public issue threads are not the place for open-ended environment consulting or workspace-specific Slack policy interpretation.
 
-Operated by Revasser. Self-host support stays on GitHub; managed rollout, billing, and Cloud support stay on `https://mcp.revasserlabs.com`.
+Operated by Revasser. Self-host support stays on GitHub; managed rollout and hosted support stay on `https://mcp.revasserlabs.com`.

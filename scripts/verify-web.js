@@ -157,8 +157,8 @@ async function testDemoVideoAssets(baseUrl) {
       "https://jtalk22.github.io/slack-mcp-server/docs/images/demo-poster.png",
     ],
     [
-      "/docs/videos/demo-claude.webm",
-      "https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-claude.webm",
+      "/docs/videos/demo-slack-mcp.webm",
+      "https://jtalk22.github.io/slack-mcp-server/docs/videos/demo-slack-mcp.webm",
     ],
   ];
 
