@@ -114,17 +114,22 @@ async function recordDemo() {
   console.log();
 
   // PNG frame capture loop (--png-sequence mode only)
+  // Sequential: await each screenshot before starting the next.
+  // setInterval doesn't work — screenshots take ~100-200ms at 2x DPI,
+  // so 33ms intervals cause overlapping captures that pile up.
   let frameCount = 0;
-  let frameCapture = null;
+  let captureRunning = false;
   if (pngSequenceMode) {
-    const captureFrame = async () => {
-      try {
-        const framePath = join(framesDir, `frame-${String(frameCount).padStart(5, '0')}.png`);
-        await page.screenshot({ path: framePath, type: 'png' });
-        frameCount++;
-      } catch (_) { /* page closing */ }
-    };
-    frameCapture = setInterval(captureFrame, 33); // ~30fps
+    captureRunning = true;
+    (async () => {
+      while (captureRunning) {
+        try {
+          const framePath = join(framesDir, `frame-${String(frameCount).padStart(5, '0')}.png`);
+          await page.screenshot({ path: framePath, type: 'png' });
+          frameCount++;
+        } catch (_) { break; } // page closing
+      }
+    })(); // fire-and-forget — runs concurrently with DOM watchers below
   }
 
   // Poll scenario progress for console output
@@ -151,7 +156,7 @@ async function recordDemo() {
     { timeout: CONFIG.maxDemoTimeout },
   );
   clearInterval(poller);
-  if (frameCapture) clearInterval(frameCapture);
+  captureRunning = false; // signal PNG capture loop to stop
   console.log();
   console.log('🎬 Closing card visible.');
   if (pngSequenceMode) console.log(`   Captured ${frameCount} frames`);

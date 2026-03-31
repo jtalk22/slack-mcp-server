@@ -131,10 +131,18 @@ async function runMacOSSetup(rl) {
     }
     print();
     if (extractionError?.code === "apple_events_javascript_disabled") {
-      print("Fix and retry:");
-      print("  1. In Chrome menu: View > Developer > Allow JavaScript from Apple Events");
-      print("  2. Keep Slack open in a Chrome tab (app.slack.com)");
-      print("  3. Re-run: npx -y @jtalk22/slack-mcp --setup");
+      print();
+      printBox([
+        "Chrome needs one setting enabled (one-time only):",
+        "",
+        "1. Open Chrome",
+        "2. Menu bar: View → Developer → Allow JavaScript",
+        "   from Apple Events  ✓",
+        "3. Run this command again",
+      ], 55);
+      print();
+      print("Once enabled, --setup extracts tokens automatically.");
+      print("No DevTools, no copy-paste, just one command.");
     } else {
       print("Make sure:");
       print("  1. Chrome is running");
@@ -184,38 +192,55 @@ async function runManualSetup(rl) {
     info(`Detected platform: ${platform()}`);
     warn("Auto-extraction not available on this platform.");
   }
+
+  const consoleHotkey = IS_MACOS ? "Cmd+Option+J" : "Ctrl+Shift+J";
+  const oneLiner = `copy(JSON.stringify({token:JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token,cookie:document.cookie.split('; ').find(c=>c.startsWith('d=')).slice(2)}))`;
+
   print();
-  print("Follow these steps to extract tokens from Chrome:");
+  print(`${colors.bold}Quick extract (recommended):${colors.reset}`);
   print();
-  print(`${colors.bold}Step 1:${colors.reset} Open Chrome and navigate to your Slack workspace`);
-  print("         https://app.slack.com");
+  print(`  1. Open Chrome → ${colors.cyan}app.slack.com${colors.reset} (must be logged in)`);
+  print(`  2. Press ${colors.cyan}${consoleHotkey}${colors.reset} to open the Console`);
+  print(`  3. Paste this one-liner and press Enter:`);
   print();
-  print(`${colors.bold}Step 2:${colors.reset} Press F12 to open DevTools`);
+  printBox([oneLiner], oneLiner.length + 4);
   print();
-  print(`${colors.bold}Step 3:${colors.reset} Go to the ${colors.cyan}Console${colors.reset} tab and paste this:`);
+  print(`  4. Your tokens are now on the clipboard. Paste below.`);
   print();
-  printBox([
-    "JSON.parse(localStorage.localConfig_v2).teams[",
-    "  Object.keys(JSON.parse(localStorage.localConfig_v2)",
-    "  .teams)[0]].token",
-  ], 55);
-  print();
-  print(`         Copy the token (starts with ${colors.cyan}xoxc-${colors.reset})`);
+  print(`${colors.dim}(Or paste a raw xoxc- token for manual two-step entry)${colors.reset}`);
   print();
 
-  const token = await question(rl, `${colors.bold}Paste your token:${colors.reset} `);
+  const input = await question(rl, `${colors.bold}Paste tokens:${colors.reset} `);
+  const trimmed = input.trim();
 
-  if (!token.startsWith('xoxc-')) {
-    error("Invalid token. Token should start with 'xoxc-'");
-    return false;
+  let token, cookie;
+
+  // Try JSON parse first (one-liner output: {"token":"xoxc-...","cookie":"xoxd-..."})
+  if (trimmed.startsWith('{')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed.token && parsed.cookie) {
+        token = parsed.token;
+        cookie = parsed.cookie;
+      }
+    } catch (_) {
+      // Not valid JSON — fall through to manual
+    }
   }
 
-  print();
-  print(`${colors.bold}Step 4:${colors.reset} Go to ${colors.cyan}Application${colors.reset} tab → ${colors.cyan}Cookies${colors.reset} → slack.com`);
-  print(`         Find the '${colors.cyan}d${colors.reset}' cookie and copy its value`);
-  print();
-
-  const cookie = await question(rl, `${colors.bold}Paste your cookie:${colors.reset} `);
+  // If JSON didn't work, treat as raw token
+  if (!token) {
+    token = trimmed;
+    if (!token.startsWith('xoxc-')) {
+      error("Invalid input. Expected JSON from the one-liner or a token starting with 'xoxc-'");
+      return false;
+    }
+    print();
+    print(`Now paste the cookie. In Chrome: ${colors.cyan}Application${colors.reset} tab → ${colors.cyan}Cookies${colors.reset} → find '${colors.cyan}d${colors.reset}'`);
+    print();
+    const cookieInput = await question(rl, `${colors.bold}Paste cookie (xoxd-...):${colors.reset} `);
+    cookie = cookieInput.trim();
+  }
 
   if (!cookie.startsWith('xoxd-')) {
     error("Invalid cookie. Cookie should start with 'xoxd-'");

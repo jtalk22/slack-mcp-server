@@ -1,60 +1,30 @@
 #!/usr/bin/env node
 /**
- * Generates a bookmarklet for one-click Slack token extraction.
+ * Prints a Chrome DevTools Console one-liner that extracts
+ * Slack session tokens and copies them to clipboard as JSON.
  *
- * Usage: node scripts/generate-bookmarklet.js
- * Output: Prints the bookmarklet URL to stdout.
+ * Usage: npm run bookmarklet
  *
- * How it works:
- *   1. User drags the bookmarklet to their Chrome toolbar
- *   2. Navigates to app.slack.com (must be logged in)
- *   3. Clicks the bookmarklet
- *   4. Token + cookie are copied to clipboard as JSON
- *   5. User pastes into `npx -y @jtalk22/slack-mcp --setup`
+ * The output is designed to be pasted into the Chrome Console
+ * while on app.slack.com, then the result pasted into --setup.
  */
 
-const js = `
-(function(){
-  try {
-    var c = document.cookie.split('; ').find(function(x){return x.startsWith('d=')});
-    if (!c) throw new Error('No session cookie found. Are you on app.slack.com?');
-    var cookie = c.split('=').slice(1).join('=');
-    var token = null;
-    try {
-      var cfg = JSON.parse(localStorage.localConfig_v2 || '{}');
-      var tid = Object.keys(cfg.teams || {})[0];
-      if (tid) token = cfg.teams[tid].token;
-    } catch(e){}
-    if (!token) {
-      try { token = window.boot_data && window.boot_data.api_token; } catch(e){}
-    }
-    if (!token) throw new Error('Token not found in localStorage. Try refreshing Slack first.');
-    var payload = JSON.stringify({token: token, cookie: cookie});
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(payload).then(function(){
-        alert('Tokens copied to clipboard.\\n\\nPaste into: npx -y @jtalk22/slack-mcp --setup');
-      });
-    } else {
-      window.prompt('Copy this (Cmd+A, Cmd+C):', payload);
-    }
-  } catch(e) {
-    alert('Token extraction failed: ' + e.message);
-  }
-})();
-`.replace(/\n/g, '').replace(/  +/g, ' ').trim();
+const oneLiner = `copy(JSON.stringify({token:JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token,cookie:document.cookie.split('; ').find(c=>c.startsWith('d=')).slice(2)}))`;
 
-const bookmarklet = `javascript:${encodeURIComponent(js)}`;
+const isMac = process.platform === 'darwin';
+const hotkey = isMac ? 'Cmd+Option+J' : 'Ctrl+Shift+J';
 
-console.log('Slack MCP Token Bookmarklet');
-console.log('==========================');
 console.log();
-console.log('Drag this URL to your Chrome bookmarks bar:');
+console.log('Slack MCP — Token Extractor');
+console.log('===========================');
 console.log();
-console.log(bookmarklet);
+console.log(`1. Open Chrome → app.slack.com (must be logged in)`);
+console.log(`2. Press ${hotkey} to open the Console`);
+console.log(`3. Paste this and press Enter:`);
 console.log();
-console.log('Then:');
-console.log('  1. Go to app.slack.com (must be logged in)');
-console.log('  2. Click the bookmarklet');
-console.log('  3. Tokens are copied to clipboard');
-console.log('  4. Run: npx -y @jtalk22/slack-mcp --setup');
-console.log('  5. Paste when prompted');
+console.log(`   ${oneLiner}`);
+console.log();
+console.log(`4. Your tokens are now on the clipboard`);
+console.log(`5. Run: npx -y @jtalk22/slack-mcp --setup`);
+console.log(`6. Paste when prompted`);
+console.log();
