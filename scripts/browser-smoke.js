@@ -183,7 +183,7 @@ async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) 
 
   if (/^ok$/i.test(snapshot.cloud)) {
     assertText(snapshot.cloudNote, /15 managed tools/i, "#cloudHealthNote");
-    assertText(snapshot.cloudNote, /3 Team AI workflows/i, "#cloudHealthNote");
+    assertText(snapshot.cloudNote, /3 Hosted docs/i, "#cloudHealthNote");
     return { cloudState: "ok" };
   }
 

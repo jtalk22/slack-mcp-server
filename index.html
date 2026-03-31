@@ -450,7 +450,7 @@
           const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'Unavailable';
           const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'Unavailable';
           const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : 'https://mcp.revasserlabs.com/docs';
-          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · <a href="${docsUrl}">Hosted docs</a>`;
+          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} <a href="${docsUrl}">Hosted docs</a>`;
         })
         .catch((error) => {
           cloudHealthEl.textContent = 'Status available';
