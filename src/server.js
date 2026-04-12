@@ -290,6 +290,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
     }
   } catch (error) {
+    if (error?.code === "token_auth_failed") {
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            status: "error",
+            code: "token_auth_failed",
+            message: String(error?.message || error),
+            slack_error: error.slack_error || null,
+            extraction_error: error.extraction_error || null,
+            next_action: error.next_action || "Open http://localhost:3000 and click Refresh, OR run `npm run tokens:auto` with Slack open in Chrome, OR check Chrome > View > Developer > Allow JavaScript from Apple Events."
+          }, null, 2)
+        }],
+        isError: true
+      };
+    }
     return {
       content: [{
         type: "text",
