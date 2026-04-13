@@ -230,7 +230,15 @@ On macOS, tokens are auto-extracted from Chrome — `env` block is optional.
 <details>
 <summary><strong>Claude Web / Remote MCP</strong></summary>
 
-Hosted version with permanent OAuth tokens coming soon. See [mcp.revasserlabs.com](https://mcp.revasserlabs.com) for updates.
+Hosted tiers at [mcp.revasserlabs.com](https://mcp.revasserlabs.com):
+
+| Tier | Price | What it owns |
+|------|-------|-------------|
+| Self-host | Free | Local stdio, all 16 tools, MIT licensed |
+| Solo | $19/mo | Managed endpoint + OAuth 2.1 bridge (required for Claude.ai web) + encrypted storage |
+| Team | $49/mo | Solo features + multi-seat routing |
+| Turnkey Team Launch | from $2,500+ | Dedicated instance + 30-day setup support |
+| Managed Reliability | from $800/mo+ | SLA-backed instance + incident response |
 
 </details>
 
@@ -269,6 +277,14 @@ Session tokens (`xoxc-` + `xoxd-`) from your browser. If you can see it in Slack
 4. Chrome auto-extraction (macOS)
 
 Tokens expire. The server notices before you do — proactive health monitoring, automatic refresh on macOS, warnings when tokens age out. File writes are atomic (temp file → chmod → rename) to prevent corruption. Concurrent refresh attempts are mutex-locked.
+
+## What's New in 4.1.2
+
+- **LevelDB extraction** — reads tokens directly from Chrome's LevelDB store. No live Slack tab required, no AppleScript flag dependency.
+- **Multi-profile enumeration** — automatically picks the freshest Chrome profile. Override with `SLACK_MCP_CHROME_USER_DATA_DIR`, `SLACK_MCP_CHROME_PROFILE`, or `SLACK_MCP_EXTRACTION_MODE`.
+- **Explicit shutdown handlers** — SIGTERM/SIGINT/SIGHUP/stdin EOF/stdin error all exit cleanly. Zero zombie processes.
+
+Full release notes in [docs/INDEX.md](docs/INDEX.md) and on [GitHub releases/latest](https://github.com/jtalk22/slack-mcp-server/releases/latest).
 
 ## Hosted HTTP Mode
 
@@ -326,4 +342,4 @@ Not affiliated with Slack Technologies, Inc. Uses browser session credentials �
 
 ---
 
-Hosted version with semantic search, AI summaries, and permanent OAuth — coming soon at [mcp.revasserlabs.com](https://mcp.revasserlabs.com)
+Hosted tiers live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com): Solo $19/mo, Team $49/mo, Turnkey Team Launch from $2,500+, Managed Reliability from $800/mo+. Hosted owns the managed MCP endpoint, the OAuth 2.1 bridge into Claude.ai, encrypted credential storage, and the structural absence of the zombie-process class. It does not replace Chrome — the user still pastes `xoxc-`/`xoxd-` at setup.
