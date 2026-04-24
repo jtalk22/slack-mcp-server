@@ -24,7 +24,7 @@ Slack's official MCP server requires a registered app, admin approval, and [does
 
 This server uses your browser's session tokens instead. If you can see it in Slack, your AI agent can see it too. No app install, no scopes, no admin.
 
-**Stealth Mode:** Session tokens leave zero footprint in your workspace admin panel. No bot user appears, no app install shows up, no audit trail. Your AI agent operates with the same invisibility as your browser tab.
+**Session-token transport:** No bot user appears in the workspace admin panel, no app install shows up, no audit trail entry is created. Your AI agent operates with the same workspace footprint as your browser tab — nothing more, nothing less.
 
 ![OAuth vs Chrome DB Decryption](docs/images/diagram-oauth-comparison.svg)
 
@@ -40,7 +40,7 @@ This server uses your browser's session tokens instead. If you can see it in Sla
 | Works with Codex CLI | No | **Yes** |
 | Setup time | ~30 min | **~2 min** |
 | Tools | Limited | **16** |
-| Visible to admins | Yes | **No — Stealth Mode** |
+| Visible to admins | Yes | **No — session-token transport** |
 
 ## Quick Start per Client
 

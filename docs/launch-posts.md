@@ -90,7 +90,7 @@ GitHub: https://github.com/jtalk22/slack-mcp-server
 
 **Do say:**
 - "Auto-extracts tokens from Chrome's encrypted cookie database"
-- "Stealth mode — no admin approval, no app install, no audit trail"
+- "Session-token transport — no admin approval, no app install, no audit trail"
 - "The `d` cookie is HttpOnly by design — we decrypt it from Chrome's SQLite store"
 - "One command. 30 seconds. Works with Claude Code, Cursor, Codex, Gemini."
 
