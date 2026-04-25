@@ -4,7 +4,7 @@
   "description": "Slack MCP without OAuth — no app registration, no admin approval. Works with Claude Code, Cursor, Copilot (where the official server doesn't). 16 tools, one command.",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
-  "version": "4.1.0",
+  "version": "4.1.2",
   "license": "MIT",
   "maintainers": ["jtalk22"],
   "categories": ["communication", "productivity"],

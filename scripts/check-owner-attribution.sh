@@ -30,8 +30,8 @@ contains_banned_markers() {
   if command -v rg >/dev/null 2>&1; then
     rg -Niq "$BANNED_REGEX" <<<"$text"
   else
-    grep -Eiq '(Co-authored-by|Generated with|Claude|GPT|Copilot|Gemini)' <<<"$text" \
-      || grep -Eiq '(^|[^[:alnum:]_])[Aa][Ii]([^[:alnum:]_]|$)' <<<"$text"
+    grep -Eiq '(Co-authored-by|Generated with)' <<<"$text" \
+      || grep -Eiq '\b(Claude|GPT|Copilot|Gemini|AI)\b' <<<"$text"
   fi
 }
 
