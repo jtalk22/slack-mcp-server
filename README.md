@@ -234,11 +234,11 @@ Hosted tiers at [mcp.revasserlabs.com](https://mcp.revasserlabs.com):
 
 | Tier | Price | What it owns |
 |------|-------|-------------|
-| Self-host | Free | Local stdio, all 16 tools, MIT licensed |
-| Solo | $19/mo | Managed endpoint + OAuth 2.1 bridge (required for Claude.ai web) + encrypted storage |
-| Team | $49/mo | Solo features + multi-seat routing |
-| Turnkey Team Launch | from $2,500+ | Dedicated instance + 30-day setup support |
-| Managed Reliability | from $800/mo+ | SLA-backed instance + incident response |
+| Self-host | Free (MIT) | Local stdio, all 21 tools (16 read/write Slack + 2 workflow profile primitives + 3 discoverable upgrade stubs to hosted brain) |
+| Hosted Free | $0 (no card) | Email signup, 1 workspace, 10 smart_search/mo + 3 catch_me_up/mo + 5 triage/day. All 5 workflow profile types. 7-day index retention. |
+| Pro | $9/mo | Unlimited AI tools, **scheduled morning catch-up DM (8am workspace tz)**, permanent OAuth, 90-day Vectorize, 2 workspaces |
+| Team | $49/mo flat | Pro + shared workflow profiles + audit log + 24h support + scheduled catch-up to channel + 5 workspaces |
+| Ops | from $199/mo (custom) | SLA, custom retention, SOC2 evidence path, multi-tenant isolation, 10+ workspaces, dedicated workflow tuning |
 
 </details>
 
@@ -342,4 +342,4 @@ Not affiliated with Slack Technologies, Inc. Uses browser session credentials â€
 
 ---
 
-Hosted tiers live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com): Solo $19/mo, Team $49/mo, Turnkey Team Launch from $2,500+, Managed Reliability from $800/mo+. Hosted owns the managed MCP endpoint, the OAuth 2.1 bridge into Claude.ai, encrypted credential storage, and the structural absence of the zombie-process class. It does not replace Chrome â€” the user still pastes `xoxc-`/`xoxd-` at setup.
+Hosted version live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com): Free tier (no card), $9/mo Pro, $49/mo Team flat, Ops from $199/mo. Hosted owns the AI brain (smart_search, catch_me_up, triage), the scheduled morning catch-up DM at 8am workspace time, permanent OAuth (no 2-week token rotation), 90-day Vectorize retention, and shared workflow profiles. The OSS package owns local stdio + all 14 read/write Slack tools + workflow profile primitives (slack_workflow_save, slack_workflows). The 3 paid stubs (slack_smart_search, slack_catch_me_up, slack_triage) appear in OSS as discoverable upgrade prompts.

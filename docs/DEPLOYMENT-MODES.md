@@ -8,7 +8,7 @@ Use this guide to choose the right operating mode before rollout.
 - Choose local `web` for browser workflows and manual Slack browsing.
 - Choose hosted HTTP only when you need remote execution and can handle token operations.
 - Choose Smithery/Worker only when your consumers require registry-hosted MCP transport.
-- A managed **Hosted** version is coming soon at [mcp.revasserlabs.com](https://mcp.revasserlabs.com).
+- A managed **Hosted** version is live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) — Free tier (no card), Pro $9/mo, Team $49/mo flat, Ops from $199/mo. See [pricing](https://mcp.revasserlabs.com/pricing).
 
 ## Mode Matrix
 

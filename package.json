@@ -1,8 +1,8 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "4.1.2",
-  "description": "Slack MCP without OAuth — no app registration, no admin approval. Works with Claude Code, Cursor, Copilot (where the official server doesn't). 16 tools, one command.",
+  "version": "4.2.0-rc.1",
+  "description": "Slack MCP without OAuth. 21 tools: 16 read/write Slack + 2 workflow profile primitives + 3 discoverable upgrade stubs to hosted AI brain. Free OSS or hosted (free tier, no card; $9/mo Pro adds scheduled morning catch-up DM).",
   "type": "module",
   "main": "src/server.js",
   "bin": {
@@ -99,9 +99,12 @@
     "public/share.html",
     "scripts/setup-wizard.js",
     "scripts/token-cli.js",
+    "scripts/apply-template.js",
+    "templates/workflow-profiles/",
     "docs/SETUP.md",
     "docs/API.md",
     "docs/TROUBLESHOOTING.md",
+    "docs/DEPLOYMENT-MODES.md",
     "docs/assets/icon.svg",
     "docs/assets/icon-512.png",
     "README.md",

@@ -46,6 +46,11 @@ import {
   handleConversationsMark,
   handleConversationsUnreads,
   handleUsersSearch,
+  handleWorkflowSave,
+  handleWorkflows,
+  handleSmartSearch,
+  handleCatchMeUp,
+  handleTriage,
 } from "../lib/handlers.js";
 
 // Background refresh interval (4 hours)
@@ -274,6 +279,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "slack_users_search":
         return await handleUsersSearch(args);
+
+      // Workflow profile primitives (OSS local JSON store)
+      case "slack_workflow_save":
+        return await handleWorkflowSave(args);
+
+      case "slack_workflows":
+        return await handleWorkflows(args);
+
+      // Hosted-only AI tools (OSS = upgrade stubs)
+      case "slack_smart_search":
+        return await handleSmartSearch(args);
+
+      case "slack_catch_me_up":
+        return await handleCatchMeUp(args);
+
+      case "slack_triage":
+        return await handleTriage(args);
 
       default:
         return {
