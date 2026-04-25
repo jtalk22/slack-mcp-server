@@ -71,7 +71,12 @@ function gitIdentityStep() {
 }
 
 function ownerAttributionStep() {
-  const result = run("bash", ["scripts/check-owner-attribution.sh", OWNER_RANGE]);
+  // Mirror the Attribution Guardrail workflow env (ALLOW_GITHUB_WEB_COMMITTER=1)
+  // so the local dry-run matches CI behavior on merge commits + dependabot
+  // squash-merges with GitHub noreply emails.
+  const result = run("bash", ["scripts/check-owner-attribution.sh", OWNER_RANGE], {
+    env: { ...process.env, ALLOW_GITHUB_WEB_COMMITTER: "1" }
+  });
   return stepResult(
     "Owner attribution",
     `bash scripts/check-owner-attribution.sh ${OWNER_RANGE}`,
