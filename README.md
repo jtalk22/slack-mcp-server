@@ -44,7 +44,15 @@ This server uses your browser's session tokens instead. If you can see it in Sla
 
 ## Workflow Primitives (new in 4.2)
 
-Save a workflow profile that binds a `workflow_kind` (`support_inbox`, `incident_room`, `exec_brief`, `product_launch_watch`, `custom`) to channels + priority people + retention + cadence. Stored locally at `~/.slack-mcp-workflows.json`. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) reads these profiles and returns **structured JSON per workflow_kind** — `incident_room` returns `{incident_summary, timeline, open_risks, owner_gaps, next_actions}`; `exec_brief` returns `{summary, decisions, risks, asks, action_items}`. Downstream automation (Linear, Notion, status dashboards) consumes the JSON directly.
+Save a workflow profile that binds a `workflow_kind` to channels + priority people + retention + cadence. Stored locally at `~/.slack-mcp-workflows.json`. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) reads these profiles and returns **structured JSON per workflow_kind** — downstream automation (Linear, Notion, status dashboards) consumes the JSON directly.
+
+| `workflow_kind` | Returns (structured JSON) |
+|---|---|
+| `incident_room` | `{incident_summary, timeline, open_risks, owner_gaps, next_actions}` |
+| `exec_brief` | `{summary, decisions, risks, asks, action_items}` |
+| `support_inbox` | `{open_threads, ack_lag, owner_gaps, escalations, next_actions}` |
+| `product_launch_watch` | `{launch_signals, feedback_themes, blockers, metrics, next_actions}` |
+| `custom` | `{summary, highlights, open_questions, next_actions}` |
 
 Six prebuilt templates ship with the package:
 

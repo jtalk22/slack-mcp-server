@@ -14,8 +14,8 @@
 
     <!-- Box gradient (right/orange) -->
     <linearGradient id="boxGradOrange" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#da7756"/>
-      <stop offset="100%" style="stop-color:#c4613f"/>
+      <stop offset="0%" style="stop-color:#4ecdc4"/>
+      <stop offset="100%" style="stop-color:#45b7aa"/>
     </linearGradient>
 
     <!-- Box gradient (right/orange subtle) -->
@@ -27,7 +27,7 @@
     <!-- Orange glow filter -->
     <filter id="glowOrange" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.855  0 0 0 0 0.467  0 0 0 0 0.337  0 0 0 0.35 0" result="glow"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.306  0 0 0 0 0.804  0 0 0 0 0.769  0 0 0 0.35 0" result="glow"/>
       <feMerge>
         <feMergeNode in="glow"/>
         <feMergeNode in="SourceGraphic"/>
@@ -44,7 +44,7 @@
       <path d="M0,0 L0,6 L7,3 z" fill="#777777"/>
     </marker>
     <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#da7756"/>
+      <path d="M0,0 L0,6 L7,3 z" fill="#4ecdc4"/>
     </marker>
   </defs>
 
@@ -108,48 +108,48 @@
   <text x="250" y="360" text-anchor="middle" fill="#999999" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="11">Broken with several MCP clients</text>
 
   <!-- ═══════════ RIGHT SIDE: Chrome DB Decryption ═══════════ -->
-  <rect x="475" y="40" width="400" height="360" rx="12" fill="rgba(218,119,86,0.05)" stroke="#da7756" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="675" y="72" text-anchor="middle" fill="#da7756" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="0.05em">CHROME DB DECRYPTION</text>
+  <rect x="475" y="40" width="400" height="360" rx="12" fill="rgba(78,205,196,0.05)" stroke="#4ecdc4" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="675" y="72" text-anchor="middle" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="0.05em">CHROME DB DECRYPTION</text>
 
   <!-- Step 1: Slack in Chrome -->
-  <text x="555" y="106" fill="#da7756" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">1</text>
-  <rect x="568" y="90" width="210" height="42" rx="8" fill="url(#boxGradOrangeSoft)" stroke="#da7756" stroke-width="1" opacity="0.9"/>
+  <text x="555" y="106" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">1</text>
+  <rect x="568" y="90" width="210" height="42" rx="8" fill="url(#boxGradOrangeSoft)" stroke="#4ecdc4" stroke-width="1" opacity="0.9"/>
   <text x="673" y="116" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5">Slack Open in Chrome</text>
 
   <!-- Arrow down -->
-  <line x1="673" y1="137" x2="673" y2="162" stroke="#da7756" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="673" y1="137" x2="673" y2="162" stroke="#4ecdc4" stroke-width="2" marker-end="url(#arrowOrange)"/>
 
   <!-- Step 2: Chrome DB Decrypt (highlighted) -->
-  <text x="555" y="182" fill="#da7756" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">2</text>
+  <text x="555" y="182" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">2</text>
   <rect x="568" y="168" width="210" height="52" rx="8" fill="url(#boxGradOrange)" filter="url(#glowOrange)"/>
   <text x="673" y="192" text-anchor="middle" fill="#ffffff" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="13" font-weight="600">Chrome DB Decrypt</text>
   <text x="673" y="208" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="9.5">PBKDF2 + AES-128-CBC</text>
 
   <!-- Arrow down -->
-  <line x1="673" y1="224" x2="673" y2="250" stroke="#da7756" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="673" y1="224" x2="673" y2="250" stroke="#4ecdc4" stroke-width="2" marker-end="url(#arrowOrange)"/>
 
   <!-- Step 3: Full Access + Session-Token badge -->
-  <text x="555" y="270" fill="#da7756" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">3</text>
-  <rect x="568" y="256" width="210" height="52" rx="8" fill="rgba(218,119,86,0.12)" stroke="#da7756" stroke-width="1"/>
-  <text x="673" y="276" text-anchor="middle" fill="#da7756" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="13" font-weight="700">Full Access</text>
+  <text x="555" y="270" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">3</text>
+  <rect x="568" y="256" width="210" height="52" rx="8" fill="rgba(78,205,196,0.12)" stroke="#4ecdc4" stroke-width="1"/>
+  <text x="673" y="276" text-anchor="middle" fill="#4ecdc4" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="13" font-weight="700">Full Access</text>
   <!-- Session-Token sub-badge -->
-  <rect x="636" y="283" width="74" height="16" rx="4" fill="rgba(218,119,86,0.2)" stroke="#da7756" stroke-width="0.5"/>
-  <text x="673" y="294" text-anchor="middle" fill="#da7756" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="8" font-weight="600" letter-spacing="0.06em">SESSION TOKEN</text>
+  <rect x="636" y="283" width="74" height="16" rx="4" fill="rgba(78,205,196,0.2)" stroke="#4ecdc4" stroke-width="0.5"/>
+  <text x="673" y="294" text-anchor="middle" fill="#4ecdc4" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="8" font-weight="600" letter-spacing="0.06em">SESSION TOKEN</text>
   <!-- No admin visibility — positioned below the badge -->
   <text x="673" y="270" text-anchor="middle" fill="#777777" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="0" opacity="0">No admin visibility</text>
 
   <!-- Arrow down to result -->
-  <line x1="673" y1="312" x2="673" y2="324" stroke="#da7756" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <line x1="673" y1="312" x2="673" y2="324" stroke="#4ecdc4" stroke-width="2" marker-end="url(#arrowOrange)"/>
 
   <!-- Result box (right) with green checkmark -->
-  <rect x="505" y="330" width="340" height="56" rx="8" fill="rgba(78,205,196,0.06)" stroke="#da7756" stroke-width="1.5" filter="url(#glowOrange)"/>
+  <rect x="505" y="330" width="340" height="56" rx="8" fill="rgba(78,205,196,0.06)" stroke="#4ecdc4" stroke-width="1.5" filter="url(#glowOrange)"/>
   <!-- Green check icon — SVG path, precisely centered -->
   <circle cx="534" cy="358" r="12" fill="rgba(78,205,196,0.15)" stroke="#4ecdc4" stroke-width="1.5"/>
   <g transform="translate(534,358)">
     <polyline points="-5,0 -1.5,4 6,-5" fill="none" stroke="#4ecdc4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <text x="690" y="352" text-anchor="middle" fill="#eeeeee" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5" font-weight="500">Your DMs, Channels, Search, History</text>
-  <text x="690" y="370" text-anchor="middle" fill="#da7756" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="11">Same access as your browser session</text>
+  <text x="690" y="370" text-anchor="middle" fill="#4ecdc4" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="11">Same access as your browser session</text>
 
   <!-- ═══════════ VS DIVIDER ═══════════ -->
   <line x1="450" y1="50" x2="450" y2="198" stroke="#3a3a3a" stroke-width="0.5" stroke-dasharray="3,5"/>
@@ -158,5 +158,5 @@
   <line x1="450" y1="242" x2="450" y2="390" stroke="#3a3a3a" stroke-width="0.5" stroke-dasharray="3,5"/>
 
   <!-- Bottom attribution -->
-  <text x="450" y="425" text-anchor="middle" fill="#555555" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="9" letter-spacing="0.04em">@jtalk22/slack-mcp · github.com/jtalk22/slack-mcp-server</text>
+  <text x="450" y="425" text-anchor="middle" fill="#9fb0cf" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="9" letter-spacing="0.04em">@jtalk22/slack-mcp · github.com/jtalk22/slack-mcp-server</text>
 </svg>
