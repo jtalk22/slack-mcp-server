@@ -31,7 +31,7 @@
     "@context": "https://schema.org",
     "@type": "VideoObject",
     "name": "Slack MCP Server — Monday Morning Demo",
-    "description": "Watch an AI handle 47 unread Slack messages without opening Slack. 16 tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
+    "description": "Watch an AI handle 47 unread Slack messages without opening Slack. {{SELF_HOSTED_TOOL_COUNT}} tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
     "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
     "uploadDate": "2026-03-30",
     "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp.mp4",
