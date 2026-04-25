@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.2] - 2026-04-12
+
+### Fixed
+- **LevelDB token extraction** — Reads session tokens directly from Chrome's LevelDB store (`{ChromeProfile}/Local Storage/leveldb/*.{ldb,log}`). Pure Node.js implementation, no AppleScript, no live Slack tab required. AppleScript path demoted to fallback.
+- **Multi-profile Chrome enumeration** — Walks `Local State` → `profile.info_cache`, ranks candidate profiles by Cookies file mtime (freshest wins). Three new env vars for explicit override: `SLACK_MCP_CHROME_USER_DATA_DIR`, `SLACK_MCP_CHROME_PROFILE`, `SLACK_MCP_EXTRACTION_MODE`.
+- **Explicit shutdown handlers** — SIGTERM, SIGINT, SIGHUP, stdin EOF, and stdin error all trigger clean exit. Closes the 53-orphan zombie-process bug where `unref()` on the background timer failed to exit because `StdioServerTransport` held the event loop open.
+
+## [4.1.1] - 2026-04-12
+
+### Added
+- **Auto-heal telemetry** — Token store now persists `last_auto_heal_attempt`, `last_auto_heal_error`, and `stuck_since` fields. Surfaces via `slack_token_status`.
+- **Structured `token_auth_failed` error code** — Auth failure response includes `next_action` route-to-fix payload so callers know exactly what to do (re-extract vs re-paste vs re-auth).
+
+### Fixed
+- **Error surface hardening** — Auth failures no longer swallowed as generic MCP errors; structured codes propagate to the client.
+
 ## [4.1.0] - 2026-04-01
 
 ### Highlights
@@ -361,6 +377,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.0...v1.0.5
 [1.0.0]: https://github.com/jtalk22/slack-mcp-server/releases/tag/v1.0.0
+[4.1.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.1...v4.1.2
+[4.1.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.5...v4.0.0
 [3.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.3...v3.2.4

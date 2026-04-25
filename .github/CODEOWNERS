@@ -1,0 +1,12 @@
+# CODEOWNERS — revereveal repos
+# Location: <repo>/.github/CODEOWNERS OR <repo>/CODEOWNERS
+#
+# Solo dev. One owner. This file exists so:
+#   1. CODEOWNERS-driven review-request routing works if you ever invite a collaborator
+#   2. GitHub's "Suggested reviewers" stops guessing
+#   3. Future-you (multi-op era) has one line to extend
+#
+# Extend when (and only when) a collaborator joins. Do not pre-emptively
+# add fake owners or area-based rules you won't enforce.
+
+* @jtalk22

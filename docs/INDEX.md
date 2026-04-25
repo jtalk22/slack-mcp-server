@@ -23,4 +23,5 @@
 
 ## Release Notes
 
+- [v4.1.2 — LevelDB extraction, multi-profile enumeration, zero zombies](RELEASE-NOTES-v4.1.2.md)
 - [Changelog](../CHANGELOG.md)
