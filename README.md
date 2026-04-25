@@ -4,7 +4,7 @@
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-blue)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Give your AI agent full Slack access. No app registration, no admin approval, no OAuth. One command, 16 tools, works with any MCP client.
+Give your AI agent full Slack access — and structured workflow output the AI can actually use. No app registration, no admin approval, no OAuth. One command, 21 tools, works with any MCP client.
 
 ```bash
 npx -y @jtalk22/slack-mcp --setup
@@ -39,8 +39,20 @@ This server uses your browser's session tokens instead. If you can see it in Sla
 | Works with Gemini CLI | No | **Yes** |
 | Works with Codex CLI | No | **Yes** |
 | Setup time | ~30 min | **~2 min** |
-| Tools | Limited | **16** |
+| Tools | Limited | **21** |
 | Visible to admins | Yes | **No — session-token transport** |
+
+## Workflow Primitives (new in 4.2)
+
+Save a workflow profile that binds a `workflow_kind` (`support_inbox`, `incident_room`, `exec_brief`, `product_launch_watch`, `custom`) to channels + priority people + retention + cadence. Stored locally at `~/.slack-mcp-workflows.json`. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) reads these profiles and returns **structured JSON per workflow_kind** — `incident_room` returns `{incident_summary, timeline, open_risks, owner_gaps, next_actions}`; `exec_brief` returns `{summary, decisions, risks, asks, action_items}`. Downstream automation (Linear, Notion, status dashboards) consumes the JSON directly.
+
+Six prebuilt templates ship with the package:
+
+```bash
+npx -y @jtalk22/slack-mcp --apply-template oncall-handoff --channels C012345,C067890
+```
+
+Available templates: `oncall-handoff`, `support-triage`, `exec-monday`, `sprint-tracker`, `customer-feedback`, `incident-room`. The structural primitives (`slack_workflow_save`, `slack_workflows`) are free forever in OSS; the hosted brain is `$0` to start (no card) and `$9/mo` Pro for unlimited + the scheduled morning catch-up DM at 8am workspace time.
 
 ## Quick Start per Client
 
@@ -129,10 +141,17 @@ Or via CLI: `codex mcp add slack -- npx -y @jtalk22/slack-mcp`
 | `slack_add_reaction` | Add an emoji reaction to a message | **destructive** |
 | `slack_remove_reaction` | Remove an emoji reaction from a message | **destructive** |
 | `slack_conversations_mark` | Mark a conversation as read | **destructive** |
+| `slack_workflow_save` | Save a workflow profile (channels, kind, retention, cadence) to `~/.slack-mcp-workflows.json` | local-write |
+| `slack_workflows` | List saved workflow profiles | read-only |
+| `slack_smart_search` | Semantic search across indexed channels — hosted brain | hosted-stub† |
+| `slack_catch_me_up` | AI-summarized digest of unreads + priority threads — hosted brain | hosted-stub† |
+| `slack_triage` | Prioritized action queue across channels — hosted brain | hosted-stub† |
 
-12 read-only, 4 write-path. All carry [MCP safety annotations](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations).
+21 tools total: 12 read-only Slack, 4 write-path Slack, 2 workflow profile primitives (1 local-write, 1 read-only), 3 hosted stubs. All carry [MCP safety annotations](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations).
 
 \* `slack_refresh_tokens` modifies local token file only.
+
+† Hosted stubs return a structured upgrade payload (`signup_url`, `free_tier_quota`, `pro_value_prop`) — no Slack write occurs from OSS. Activate the brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) (free tier, no card).
 
 ## Install
 
@@ -278,13 +297,15 @@ Session tokens (`xoxc-` + `xoxd-`) from your browser. If you can see it in Slack
 
 Tokens expire. The server notices before you do — proactive health monitoring, automatic refresh on macOS, warnings when tokens age out. File writes are atomic (temp file → chmod → rename) to prevent corruption. Concurrent refresh attempts are mutex-locked.
 
-## What's New in 4.1.2
+## What's New in 4.2.0
 
-- **LevelDB extraction** — reads tokens directly from Chrome's LevelDB store. No live Slack tab required, no AppleScript flag dependency.
-- **Multi-profile enumeration** — automatically picks the freshest Chrome profile. Override with `SLACK_MCP_CHROME_USER_DATA_DIR`, `SLACK_MCP_CHROME_PROFILE`, or `SLACK_MCP_EXTRACTION_MODE`.
-- **Explicit shutdown handlers** — SIGTERM/SIGINT/SIGHUP/stdin EOF/stdin error all exit cleanly. Zero zombie processes.
+- **Workflow primitives** — `slack_workflow_save` + `slack_workflows` bind a `workflow_kind` (`incident_room`, `exec_brief`, `support_inbox`, `product_launch_watch`, `custom`) to channels, priority people, retention, and cadence. The hosted brain returns structured JSON per kind — `incident_room` returns `{incident_summary, timeline, open_risks, owner_gaps, next_actions}`, `exec_brief` returns `{summary, decisions, risks, asks, action_items}`. Downstream automation (Linear, Notion, dashboards) consumes the JSON directly.
+- **Discoverable upgrade stubs** — `slack_smart_search`, `slack_catch_me_up`, `slack_triage` appear in OSS as upgrade payloads pointing at the hosted brain. Response shape is `{signup_url, free_tier_quota, pro_value_prop}` — no interruptions, the AI routes the user cleanly.
+- **Six prebuilt templates** — apply with `npx -y @jtalk22/slack-mcp --apply-template <name> --channels C012,C034`. Names: `oncall-handoff`, `support-triage`, `exec-monday`, `sprint-tracker`, `customer-feedback`, `incident-room`. Read them, fork them, edit them — they're JSON profiles.
+- **Setup wizard hosted bridge** — six in-wizard moments surface the hosted free tier (no card) where it matches the user's pain. Stays out of the way otherwise.
+- **Prior reliability fixes carried forward** — LevelDB token extraction, multi-profile enumeration, and explicit SIGTERM/SIGINT/SIGHUP/stdin shutdown handlers ship in 4.2.0 too.
 
-Full release notes in [docs/INDEX.md](docs/INDEX.md) and on [GitHub releases/latest](https://github.com/jtalk22/slack-mcp-server/releases/latest).
+Full release notes on [GitHub releases/latest](https://github.com/jtalk22/slack-mcp-server/releases/latest).
 
 ## Hosted HTTP Mode
 
