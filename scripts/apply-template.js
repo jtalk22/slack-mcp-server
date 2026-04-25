@@ -61,6 +61,13 @@ if (!templateName || templateName === "--help" || templateName === "-h") {
   process.exit(templateName ? 0 : 1);
 }
 
+if (templateName.startsWith("--") || templateName.startsWith("-")) {
+  console.error(`Missing template name. Got "${templateName}" as the first positional argument.`);
+  console.error("");
+  printUsage();
+  process.exit(1);
+}
+
 const templatePath = join(TEMPLATES_DIR, `${templateName}.json`);
 if (!existsSync(templatePath)) {
   console.error(`Template "${templateName}" not found at ${templatePath}`);
