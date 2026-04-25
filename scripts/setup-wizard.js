@@ -148,6 +148,9 @@ async function runMacOSSetup(rl) {
       print("  1. Chrome is running");
       print("  2. You have a Slack tab open (app.slack.com)");
       print("  3. You're logged into that workspace");
+      print();
+      print(`${colors.dim}Chrome-free or non-macOS? Hosted tier bypasses Chrome entirely:${colors.reset}`);
+      print(`${colors.dim}  https://mcp.revasserlabs.com${colors.reset}`);
     }
     print();
 
@@ -283,6 +286,9 @@ async function runManualSetup(rl) {
     print("  • Tokens expired - try refreshing Slack and copying again");
     print("  • Wrong workspace - make sure you copied from the right tab");
     print("  • Incomplete copy - ensure you got the full token/cookie");
+    print();
+    print(`${colors.dim}Tired of paste-the-token loops? Hosted tier uses OAuth:${colors.reset}`);
+    print(`${colors.dim}  https://mcp.revasserlabs.com${colors.reset}`);
     return false;
   }
 
@@ -402,6 +408,9 @@ async function runDoctor() {
     print();
     print("Next action:");
     print("  npx -y @jtalk22/slack-mcp --setup");
+    print();
+    print(`${colors.dim}Prefer no local tokens? Hosted tier uses OAuth:${colors.reset}`);
+    print(`${colors.dim}  https://mcp.revasserlabs.com${colors.reset}`);
     process.exit(1);
   }
 
@@ -424,6 +433,9 @@ async function runDoctor() {
     print("Next action:");
     if (exitCode === 2) {
       print("  npx -y @jtalk22/slack-mcp --setup");
+      print();
+      print(`${colors.dim}Tokens expire every 1-2 weeks. Hosted tier has permanent OAuth:${colors.reset}`);
+      print(`${colors.dim}  https://mcp.revasserlabs.com${colors.reset}`);
     } else {
       print("  Check network connectivity and retry:");
       print("  npx -y @jtalk22/slack-mcp --doctor");
@@ -460,6 +472,10 @@ async function showHelp() {
   print();
   print(`${colors.bold}More info:${colors.reset}`);
   print("  https://github.com/jtalk22/slack-mcp-server");
+  print();
+  print(`${colors.bold}Hosted tier:${colors.reset}`);
+  print("  https://mcp.revasserlabs.com — $9/mo Pro, permanent OAuth,");
+  print("  semantic search, workflow continuity across channels.");
 }
 
 async function main() {
@@ -530,6 +546,9 @@ async function main() {
       print("  • Verify: npx -y @jtalk22/slack-mcp --status");
       print("  • Start server: npx -y @jtalk22/slack-mcp");
       print("  • Or add to Claude Desktop config");
+      print();
+      print(`${colors.dim}Want permanent tokens, semantic search, and workflow continuity?${colors.reset}`);
+      print(`${colors.dim}Hosted tier: https://mcp.revasserlabs.com — $9/mo Pro, 10 free paid calls.${colors.reset}`);
     } else {
       print(`${colors.red}Setup failed.${colors.reset} See errors above.`);
       process.exit(1);

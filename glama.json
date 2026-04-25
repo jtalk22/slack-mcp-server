@@ -1,15 +1,15 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "slack-mcp-server",
-  "description": "Slack MCP without OAuth — no app registration, no admin approval. Works with Claude Code, Cursor, Copilot (where the official server doesn't). 16 tools, one command.",
+  "description": "Slack MCP without OAuth. 21 tools: 16 read/write Slack + 2 workflow profile primitives + 3 discoverable upgrade stubs to hosted AI brain. Free OSS or hosted (free tier, no card; $9/mo Pro adds scheduled morning catch-up DM).",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "license": "MIT",
   "maintainers": ["jtalk22"],
   "categories": ["communication", "productivity"],
   "features": {
-    "tools": 16,
+    "tools": 21,
     "resources": 2,
     "prompts": 3,
     "transports": ["stdio", "streamable-http"]

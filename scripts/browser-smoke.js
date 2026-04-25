@@ -7,7 +7,7 @@ import { extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import playwright from "playwright";
-import { RELEASE_VERSION } from "../lib/public-metadata.js";
+import { RELEASE_VERSION, PUBLIC_METADATA } from "../lib/public-metadata.js";
 
 const { chromium } = playwright;
 
@@ -179,7 +179,7 @@ async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) 
 
   assertText(snapshot.npm, new RegExp(`^v${RELEASE_VERSION.replace(/\./g, "\\.")}$`), "#npmLatest");
   assertText(snapshot.release, new RegExp(`^v${RELEASE_VERSION.replace(/\./g, "\\.")}$`), "#releaseTag");
-  assertText(snapshot.decision, /16 tools and full operator control/i, "decision guide");
+  assertText(snapshot.decision, new RegExp(`${PUBLIC_METADATA.selfHostedToolCount} tools and full operator control`, "i"), "decision guide");
 
   if (/^ok$/i.test(snapshot.cloud)) {
     assertText(snapshot.cloudNote, /15 managed tools/i, "#cloudHealthNote");
@@ -221,10 +221,11 @@ async function runLocal() {
     });
 
     await checkRoot(page, `${server.url}/`);
-    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Hosted version coming soon/i, "share note");
-    await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Self-host free for 16 tools/i, "demo video note");
-    await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", /Self-host free for 16 tools/i, "demo note");
-    await checkStaticPage(page, `${server.url}/public/demo-slack-mcp.html`, ".note", /Self-host free for 16 tools/i, "demo claude note");
+    const toolCount = PUBLIC_METADATA.selfHostedToolCount;
+    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Hosted free tier \(no card\) live/i, "share note");
+    await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", new RegExp(`Self-host free for ${toolCount} tools`, "i"), "demo video note");
+    await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", new RegExp(`Self-host free for ${toolCount} tools`, "i"), "demo note");
+    await checkStaticPage(page, `${server.url}/public/demo-slack-mcp.html`, ".note", new RegExp(`Self-host free for ${toolCount} tools`, "i"), "demo claude note");
 
     if (errors.length > 0) {
       throw new Error(errors.join("\n"));
@@ -248,7 +249,7 @@ async function runLive() {
         // fetches to the hosted site are blocked. GitHub-hosted runners can hit that
         // path even when the public site is rendering correctly for real users.
         const snapshot = await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { allowHostedStatusFallback: true });
-        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Hosted version coming soon/i, "live share note");
+        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Hosted free tier \(no card\) live/i, "live share note");
         const normalizedErrors = normalizeErrors(errors, { allowHostedStatusFallback: snapshot.cloudState === "fallback" });
         if (normalizedErrors.length > 0) {
           throw new Error(normalizedErrors.join("\n"));

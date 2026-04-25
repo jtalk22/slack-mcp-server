@@ -56,6 +56,26 @@ is_allowed_owner_author() {
   return 1
 }
 
+is_allowed_bot_author() {
+  local name="$1"
+  local email="$2"
+
+  if [[ "$ALLOW_GITHUB_WEB_COMMITTER" != "1" ]]; then
+    return 1
+  fi
+
+  case "$name" in
+    "dependabot[bot]"|"dependabot-preview[bot]") ;;
+    *) return 1 ;;
+  esac
+
+  if [[ "$email" =~ ^[0-9]+\+dependabot(-preview)?\[bot\]@users\.noreply\.github\.com$ ]]; then
+    return 0
+  fi
+
+  return 1
+}
+
 is_allowed_owner_committer() {
   local committer_name="$1"
   local committer_email="$2"
@@ -77,6 +97,9 @@ is_allowed_owner_committer() {
 
     if [[ "$committer_name" == "GitHub" && "$committer_email" == "noreply@github.com" ]]; then
       if is_allowed_owner_author "$author_name" "$author_email"; then
+        return 0
+      fi
+      if is_allowed_bot_author "$author_name" "$author_email"; then
         return 0
       fi
     fi
@@ -122,8 +145,13 @@ while IFS= read -r sha; do
   committer_email="$(git show -s --format=%ce "$sha")"
   body="$(git show -s --format=%B "$sha")"
 
-  if ! is_allowed_owner_author "$author_name" "$author_email"; then
-    echo "Commit $sha has author '$author_name <$author_email>' (expected '$EXPECTED_NAME <$EXPECTED_EMAIL>')." >&2
+  is_bot_commit=0
+  if is_allowed_bot_author "$author_name" "$author_email"; then
+    is_bot_commit=1
+  fi
+
+  if [[ "$is_bot_commit" -ne 1 ]] && ! is_allowed_owner_author "$author_name" "$author_email"; then
+    echo "Commit $sha has author '$author_name <$author_email>' (expected '$EXPECTED_NAME <$EXPECTED_EMAIL>' or allowed bot)." >&2
     errors=1
   fi
 
@@ -132,7 +160,7 @@ while IFS= read -r sha; do
     errors=1
   fi
 
-  if contains_banned_markers "$body"; then
+  if [[ "$is_bot_commit" -ne 1 ]] && contains_banned_markers "$body"; then
     echo "Commit $sha contains disallowed attribution markers in commit message." >&2
     errors=1
   fi

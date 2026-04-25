@@ -1435,7 +1435,7 @@
       <div class="input-field">Message Claude...</div>
       <div class="tools-button">
         <span class="icon">🔨</span>
-        <span>16 tools</span>
+        <span>{{SELF_HOSTED_TOOL_COUNT}} tools</span>
         <div class="tools-dropdown">
           <div class="dropdown-header">
             <span>🔨</span> Available Slack Tools

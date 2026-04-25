@@ -72,15 +72,23 @@ This release fixes the local-machine pain points the maintainer can reach into a
 
 ---
 
-## Tier mapping
+## Tier mapping (current — see v4.2 for the active model)
 
-| Tier | Who it serves | What hosted actually owns for them |
-|------|--------------|-------------------------------------|
-| Self-host (free) | Developers, power users, local-first setups | Nothing — self-host is self-contained |
-| Solo — $19/mo | Individual knowledge workers who need Claude.ai web access | Managed endpoint + OAuth 2.1 bridge + encrypted storage |
-| Team — $49/mo | Small teams sharing a workspace connection | All Solo features + multi-seat routing + shared token management |
-| Turnkey Team Launch — from $2,500+ | Teams who want setup done for them | Dedicated instance + configuration + 30-day onboarding support |
-| Managed Reliability — from $800/mo+ | Teams with uptime requirements | SLA-backed managed instance + incident response |
+This v4.1.2 release predates the v4.2 pricing reorchestration. As of v4.2 the
+hosted tiers are: Free $0 (no card, monthly AI credits), Pro $9/mo (unlimited
++ scheduled morning catch-up DM), Team $49/mo flat (5 workspaces + shared
+profiles + audit log), Ops from $199/mo custom (SLA, retention, SOC2,
+multi-tenant isolation). See https://mcp.revasserlabs.com/pricing for live
+plans and v4.2 release notes for the workflow profile primitives + paid stub
+discoverability changes that landed alongside the pricing change.
+
+| Tier | Who it serves |
+|------|--------------|
+| Self-host (free, MIT) | Developers, power users, local-first setups, and anyone who wants the workflow profile primitives + 3 discoverable upgrade stubs without the hosted brain |
+| Hosted Free ($0, no card) | Anyone validating the AI brain with monthly credits — 10 smart_search + 3 catch_me_up + 5 triage/day |
+| Hosted Pro ($9/mo) | Solo operators who want unlimited AI tools and the scheduled morning catch-up DM at 8am workspace time |
+| Hosted Team ($49/mo flat) | 2-10 person ops squads needing shared workflow profiles + audit log + 24h support across 5 workspaces |
+| Ops engagement (from $199/mo, custom) | 10+ workspace organizations with SLA, custom retention, SOC2 evidence, or multi-tenant isolation requirements |
 
 ---
 

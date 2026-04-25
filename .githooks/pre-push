@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# ALLOW_GITHUB_WEB_COMMITTER=1 mirrors the Attribution Guardrail workflow
+# (.github/workflows/attribution-guardrail.yml). Without it, the local
+# hook trips on legitimate merge commits and dependabot squash-merges
+# whose author email matches the GitHub noreply pattern, while the CI
+# (which DOES set this env) reports the same range as green. Local checks
+# should not be stricter than CI for patterns CI accepts.
 repo_root="$(git rev-parse --show-toplevel)"
-bash "$repo_root/scripts/check-owner-attribution.sh"
+ALLOW_GITHUB_WEB_COMMITTER=1 bash "$repo_root/scripts/check-owner-attribution.sh"

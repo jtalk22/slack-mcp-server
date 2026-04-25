@@ -8,13 +8,13 @@ Use this guide to choose the right operating mode before rollout.
 - Choose local `web` for browser workflows and manual Slack browsing.
 - Choose hosted HTTP only when you need remote execution and can handle token operations.
 - Choose Smithery/Worker only when your consumers require registry-hosted MCP transport.
-- A managed **Hosted** version is coming soon at [mcp.revasserlabs.com](https://mcp.revasserlabs.com).
+- A managed **Hosted** version is live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) — Free tier (no card), Pro $9/mo, Team $49/mo flat, Ops from $199/mo. See [pricing](https://mcp.revasserlabs.com/pricing).
 
 ## Mode Matrix
 
 | Mode | Start Command | Best For | Auth Material | Exposure | Notes |
 |------|---------------|----------|---------------|----------|-------|
-| Local MCP (`stdio`) | `npx -y @jtalk22/slack-mcp` | Individual daily usage in Claude | `SLACK_TOKEN` + `SLACK_COOKIE` via token file/env | Local process | Lowest ops burden. Free. 16 tools. |
+| Local MCP (`stdio`) | `npx -y @jtalk22/slack-mcp` | Individual daily usage in Claude | `SLACK_TOKEN` + `SLACK_COOKIE` via token file/env | Local process | Lowest ops burden. Free. 21 tools (16 read/write + 2 workflow profile primitives + 3 discoverable upgrade stubs to hosted). |
 | Local Web UI (`web`) | `npx -y @jtalk22/slack-mcp web` | Browser-first usage, manual search/send | Same as above + generated API key | `localhost` by default | Useful when MCP is not available |
 | Hosted MCP (`http`) | `node src/server-http.js` | Controlled hosted integration | Env-injected Slack token/cookie + HTTP bearer token | Remote endpoint | `/mcp` is bearer-protected by default; configure CORS allowlist |
 | Smithery/Worker | `wrangler deploy` + Smithery publish flow | Registry distribution for hosted consumers | Query/env token handoff | Remote endpoint | Keep worker version parity with npm release |

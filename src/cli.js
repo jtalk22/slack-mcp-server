@@ -34,6 +34,9 @@ if (firstArg === "web") {
 } else if (firstArg === "http") {
   scriptPath = join(__dirname, "server-http.js");
   scriptArgs = args.slice(1);
+} else if (firstArg === "--apply-template" || firstArg === "apply-template") {
+  scriptPath = join(__dirname, "../scripts/apply-template.js");
+  scriptArgs = args.slice(1);
 } else if (WIZARD_ARGS.has(firstArg)) {
   scriptPath = join(__dirname, "../scripts/setup-wizard.js");
   scriptArgs = args;
