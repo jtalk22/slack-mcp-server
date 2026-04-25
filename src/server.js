@@ -290,6 +290,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
     }
   } catch (error) {
+    if (error?.code === "token_auth_failed") {
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            status: "error",
+            code: "token_auth_failed",
+            message: String(error?.message || error),
+            slack_error: error.slack_error || null,
+            extraction_error: error.extraction_error || null,
+            next_action: error.next_action || "Open http://localhost:3000 and click Refresh, OR run `npm run tokens:auto` with Slack open in Chrome, OR check Chrome > View > Developer > Allow JavaScript from Apple Events."
+          }, null, 2)
+        }],
+        isError: true
+      };
+    }
     return {
       content: [{
         type: "text",
@@ -323,8 +339,9 @@ async function main() {
   }
 
   // Background token health check (every 4 hours)
-  // Use unref() so this timer doesn't prevent the process from exiting
-  // when the MCP transport closes (prevents zombie processes)
+  // unref() alone doesn't prevent StdioServerTransport from keeping the event
+  // loop alive after the MCP client disconnects — we add explicit shutdown
+  // handlers below to kill zombie processes on stdin EOF and signals.
   const backgroundTimer = setInterval(async () => {
     try {
       const health = await checkTokenHealth(console);
@@ -338,6 +355,23 @@ async function main() {
     }
   }, BACKGROUND_REFRESH_INTERVAL);
   backgroundTimer.unref();
+
+  // Explicit shutdown path prevents the zombie-process pileup we were seeing
+  // when Claude Code or another MCP client disconnected without signalling.
+  // StdioServerTransport doesn't exit the event loop on its own when stdin EOFs.
+  let shuttingDown = false;
+  const shutdown = (reason) => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    try { clearInterval(backgroundTimer); } catch {}
+    console.error(`slack-mcp-server exiting: ${reason}`);
+    process.exit(0);
+  };
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on("SIGHUP", () => shutdown("SIGHUP"));
+  process.stdin.on("end", () => shutdown("stdin end (MCP client disconnected)"));
+  process.stdin.on("error", (err) => shutdown(`stdin error: ${err?.message || err}`));
 
   // Start server
   const transport = new StdioServerTransport();
