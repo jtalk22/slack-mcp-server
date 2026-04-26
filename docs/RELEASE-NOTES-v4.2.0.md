@@ -78,23 +78,27 @@ We chose to ship v4.2.0 today rather than wait for the morning DM build because 
 
 ## Honest tradeoff
 
-**What self-host (free) owns:** Workflow profile primitives (`slack_workflow_save`, `slack_workflows`), 6 packaged templates, all 16 read/write Slack tools, LevelDB token extraction, multi-profile Chrome enumeration, zombie-free process lifecycle, structured error codes, auto-heal telemetry. MIT licensed. The 3 discoverable upgrade stubs ship in OSS as honest signposts to the hosted brain.
+The v4.2.0 release widens the OSS surface (16 → 21 tools) without widening what self-host can structurally do. The 3 new tools that ship paid-only as hosted features (`slack_smart_search`, `slack_catch_me_up`, `slack_triage`) land in OSS as discoverable stubs that return a `tool_requires_hosted` payload pointing at signup. No silent failure. No bait-and-switch. The reader's MCP client sees the stub, knows the upgrade path, and routes the operator to mcp.revasserlabs.com when the AI brain is the right move.
 
-**What hosted owns that self-host structurally cannot:**
+**What v4.2.0 adds to self-host (free, MIT):**
 
-- The AI brain (`slack_smart_search`, `slack_catch_me_up`, `slack_triage`) — Vectorize semantic search, structured workflow_kind output, multi-channel triage scoring. Stateful. Hosted-only.
-- Managed MCP endpoint on the public internet — required for Claude.ai web users.
-- OAuth 2.1 bridge into the Anthropic MCP Directory.
-- Encrypted credential storage (AES-256-GCM in Cloudflare D1) — credentials never touch your filesystem.
-- Permanent OAuth (no 2-week token rotation).
-- Stripe subscription billing + SLA guarantees on Team and Ops tiers.
-- Structural absence of the zombie-process class.
+- 2 new workflow profile primitives — `slack_workflow_save`, `slack_workflows`. 5 named workflow_kind shapes, each returning a 4–5-key JSON contract.
+- 6 packaged templates that bind a `workflow_kind` to a channel set in 30 seconds: `npx -y @jtalk22/slack-mcp --apply-template exec-monday --channels C012,C067`.
+- 3 discoverable upgrade stubs that surface the hosted brain at the tool-list level instead of in marketing copy.
 
-**What's coming in v4.3.0 (Q2 2026):**
+The v4.1.x carry-over (LevelDB token extraction, multi-profile Chrome enumeration, explicit shutdown handlers — all detailed in [v4.1.2 notes](RELEASE-NOTES-v4.1.2.md)) ships unchanged.
 
-- Scheduled morning catch-up DM at 8am workspace time (Pro+).
-- Scheduled catch-up to a team Slack channel (Team).
-- Cron handler in `slack-mcp-hosted` that reads active Pro/Team tenants from D1, runs structured catch-ups against each tenant's primary workflow profile, posts the brief via `chat.postMessage`, and records the run in `scheduled_catchup_runs`.
+**What self-host structurally cannot do — and where hosted picks up:**
+
+- Semantic search across Slack history. Vectorize is stateful and hosted-only.
+- Connect Claude.ai web users. Their MCP transport is HTTP; self-host is stdio. This is a transport contract difference, not a configuration issue.
+- Live in the Anthropic MCP Directory. The Directory's OAuth 2.1 bridge is a hosted-side surface; an npm package can't satisfy it.
+- Persist credentials in encrypted at-rest storage that the operator never touches. Self-host writes tokens to `~/.slack-mcp-tokens.json` with `chmod 600`; hosted writes to AES-256-GCM-encrypted Cloudflare D1.
+- Eliminate the 2-week token rotation cycle. Self-host re-pastes when Slack rotates the session; hosted holds an OAuth grant.
+
+**What hosted does NOT own yet:** server-side OAuth refresh for tokens that pre-date the OAuth grant — operators connecting via session paste still re-paste on rotation, just like self-host. v4.1.3 territory.
+
+**What v4.3.0 closes (Q2 2026):** the daily-habit lever. Pro tier names "scheduled morning catch-up DM at 8am workspace time" today; the Cloudflare Cron handler that posts the brief lands in v4.3.0. Until then, Pro $9/mo is real (unlimited AI tools, permanent OAuth, 90-day Vectorize, 2 workspaces) and the morning DM is forward-looking — same shape v4.1.2 used for the `last_verified_with_slack_at` field.
 
 ---
 
