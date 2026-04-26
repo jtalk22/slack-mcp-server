@@ -60,7 +60,7 @@ Six prebuilt templates ship with the package:
 npx -y @jtalk22/slack-mcp --apply-template oncall-handoff --channels C012345,C067890
 ```
 
-Available templates: `oncall-handoff`, `support-triage`, `exec-monday`, `sprint-tracker`, `customer-feedback`, `incident-room`. The structural primitives (`slack_workflow_save`, `slack_workflows`) are free forever in OSS; the hosted brain is `$0` to start (no card) and `$9/mo` Pro for unlimited + the scheduled morning catch-up DM at 8am workspace time.
+Available templates: `oncall-handoff`, `support-triage`, `exec-monday`, `sprint-tracker`, `customer-feedback`, `incident-room`. The structural primitives (`slack_workflow_save`, `slack_workflows`) are free forever in OSS; the hosted brain is `$0` to start (no card) and `$9/mo` Pro for unlimited AI tools (scheduled morning catch-up DM rolling out Q2 2026).
 
 ## Quick Start per Client
 
@@ -263,7 +263,7 @@ Hosted tiers at [mcp.revasserlabs.com](https://mcp.revasserlabs.com):
 |------|-------|-------------|
 | Self-host | Free (MIT) | Local stdio, all 21 tools (16 read/write Slack + 2 workflow profile primitives + 3 discoverable upgrade stubs to hosted brain) |
 | Hosted Free | $0 (no card) | Email signup, 1 workspace, 10 smart_search/mo + 3 catch_me_up/mo + 5 triage/day. All 5 workflow profile types. 7-day index retention. |
-| Pro | $9/mo | Unlimited AI tools, **scheduled morning catch-up DM (8am workspace tz)**, permanent OAuth, 90-day Vectorize, 2 workspaces |
+| Pro | $9/mo | Unlimited AI tools, **scheduled morning catch-up DM** *(rolling out Q2 2026, 8am workspace tz)*, permanent OAuth, 90-day Vectorize, 2 workspaces |
 | Team | $49/mo flat | Pro + shared workflow profiles + audit log + 24h support + scheduled catch-up to channel + 5 workspaces |
 | Ops | from $199/mo (custom) | SLA, custom retention, SOC2 evidence path, multi-tenant isolation, 10+ workspaces, dedicated workflow tuning |
 
@@ -371,4 +371,4 @@ Not affiliated with Slack Technologies, Inc. Uses browser session credentials â€
 
 ---
 
-Hosted version live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com): Free tier (no card), $9/mo Pro, $49/mo Team flat, Ops from $199/mo. Hosted owns the AI brain (smart_search, catch_me_up, triage), the scheduled morning catch-up DM at 8am workspace time, permanent OAuth (no 2-week token rotation), 90-day Vectorize retention, and shared workflow profiles. The OSS package owns local stdio + all 16 read/write Slack tools + workflow profile primitives (slack_workflow_save, slack_workflows). The 3 paid stubs (slack_smart_search, slack_catch_me_up, slack_triage) appear in OSS as discoverable upgrade prompts.
+Hosted version live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com): Free tier (no card), $9/mo Pro, $49/mo Team flat, Ops from $199/mo. Hosted owns the AI brain (smart_search, catch_me_up, triage), the scheduled morning catch-up DM at 8am workspace time *(rolling out Q2 2026)*, permanent OAuth (no 2-week token rotation), 90-day Vectorize retention, and shared workflow profiles. The OSS package owns local stdio + all 16 read/write Slack tools + workflow profile primitives (slack_workflow_save, slack_workflows). The 3 paid stubs (slack_smart_search, slack_catch_me_up, slack_triage) appear in OSS as discoverable upgrade prompts.
