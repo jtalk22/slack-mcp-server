@@ -113,5 +113,5 @@ if (!profile.channels.length) {
   console.log("Or call slack_workflow_save from your MCP client to update.");
 } else {
   console.log("Profile is ready. Run slack_catch_me_up against it from your MCP client.");
-  console.log(`(Free tier: 3 catch_me_up calls/month. Pro $9/mo unlocks unlimited + scheduled morning DM.)`);
+  console.log(`(Free tier: 3 catch_me_up calls/month. Pro $9/mo unlocks unlimited; scheduled morning DM rolling out Q2 2026.)`);
 }
