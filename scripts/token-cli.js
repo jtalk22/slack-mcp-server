@@ -133,7 +133,7 @@ async function autoExtract() {
 
 async function clearTokens() {
   const fs = await import("fs");
-  const { execSync } = await import("child_process");
+  const { spawnSync } = await import("child_process");
 
   try {
     fs.unlinkSync(TOKEN_FILE);
@@ -142,11 +142,12 @@ async function clearTokens() {
     console.log("No token file to delete");
   }
 
-  try {
-    execSync(`security delete-generic-password -s "${KEYCHAIN_SERVICE}" -a "token" 2>/dev/null`);
-    execSync(`security delete-generic-password -s "${KEYCHAIN_SERVICE}" -a "cookie" 2>/dev/null`);
+  const securityArgs = (account) => ["delete-generic-password", "-s", KEYCHAIN_SERVICE, "-a", account];
+  const tokenResult = spawnSync("security", securityArgs("token"), { stdio: "ignore" });
+  const cookieResult = spawnSync("security", securityArgs("cookie"), { stdio: "ignore" });
+  if (tokenResult.status === 0 || cookieResult.status === 0) {
     console.log("Deleted keychain entries");
-  } catch (e) {
+  } else {
     console.log("No keychain entries to delete");
   }
 
