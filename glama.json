@@ -4,7 +4,7 @@
   "description": "Slack MCP without OAuth. 21 tools (16 read/write Slack + 2 workflow profile primitives + 3 hosted-brain upgrade stubs). Free OSS or hosted (free tier no card; $9/mo Pro = unlimited; morning DM rolling out Q2 2026).",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "license": "MIT",
   "maintainers": ["jtalk22"],
   "categories": ["communication", "productivity"],

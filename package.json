@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "description": "Slack MCP without OAuth. 21 tools (16 read/write Slack + 2 workflow profile primitives + 3 hosted-brain upgrade stubs). Free OSS or hosted (free tier no card; $9/mo Pro = unlimited; morning DM rolling out Q2 2026).",
   "type": "module",
   "main": "src/server.js",
