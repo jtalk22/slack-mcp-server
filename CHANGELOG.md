@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.0] - 2026-05-12
+
+### Added
+- **`--refresh-tokens` CLI flag** — `npx -y @jtalk22/slack-mcp --refresh-tokens` now runs the Chrome auto-extract path (equivalent to `npm run tokens:auto`). Closes the gap between the wizard-only `--setup` flag and the unscheduled-by-default token-refresh capability. Designed to be called from a LaunchAgent, cron, or CI to keep tokens fresh while Claude is closed for weeks at a time.
+- **Token-refresh LaunchAgent docs** (`docs/SETUP.md`) — Optional macOS LaunchAgent template that runs `--refresh-tokens` twice a day, regardless of whether Claude is running. Closes the "tokens expired after vacation" failure mode. Honest about the trade-off (Chrome must be running for extraction to succeed).
+
+### Changed
+- **Tool count in maintainer docs** — `CLAUDE.md` updated from 16 to 21 tools, regrouped into Slack reads (12) / Slack writes (4) / workflow primitives (2) / hosted-brain upgrade stubs (3). Aligns with README's Tools section.
+- **README clarity** — Workflow Primitives heading no longer pinned to "(new in 4.2)" — version info moved into body copy. Footer math clarified: "16 Slack tools (12 read, 4 write)" replaces the ambiguous "all 16 read/write Slack tools". "What's New in 4.2.0" section now collapsible (`<details>`) — sets a maintenance pattern for future release-note rollups.
+
+### Fixed
+- **SETUP.md troubleshooting** — "Verify the path to server.js is correct" replaced with "Verify JSON syntax in your client's MCP config", aligning with the npx invocation pattern that's already canonical elsewhere in the docs.
+
 ## [4.1.2] - 2026-04-12
 
 ### Fixed
