@@ -162,3 +162,8 @@ docs/release-health/social-proof-*/
 
 # Wrangler cache
 workers/.wrangler/
+
+# Local-only release/sync helper scripts (not part of public package)
+scripts/publish-public.sh
+scripts/sync-from-onedrive.sh
+scripts/sync-to-onedrive.sh

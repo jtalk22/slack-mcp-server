@@ -138,6 +138,54 @@ slack_health_check
 
 You should see your username and team name.
 
+## Keep Tokens Fresh While Claude Is Closed (macOS, Optional)
+
+The MCP server auto-refreshes tokens every 4 hours while Claude is running. But if you keep Claude closed for a couple weeks, tokens expire silently — your next session opens with `invalid_auth`.
+
+A LaunchAgent fixes this. It runs token refresh twice a day regardless of whether Claude is open, as long as Chrome is running with a Slack tab somewhere.
+
+Create `~/Library/LaunchAgents/com.yourname.slack-token-refresh.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.yourname.slack-token-refresh</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>export NVM_DIR="$HOME/.nvm" &amp;&amp; [ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh" &amp;&amp; exec npx -y @jtalk22/slack-mcp --refresh-tokens</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>17</integer></dict>
+        <dict><key>Hour</key><integer>18</integer><key>Minute</key><integer>17</integer></dict>
+    </array>
+    <key>RunAtLoad</key><true/>
+    <key>StandardErrorPath</key><string>/tmp/slack-token-refresh.log</string>
+</dict>
+</plist>
+```
+
+Load it:
+
+```bash
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.yourname.slack-token-refresh.plist
+```
+
+Check it ran:
+
+```bash
+tail /tmp/slack-token-refresh.log
+```
+
+**Why the `bash -c` wrapper:** LaunchAgents start without a TTY, so a bare `node` won't be on PATH if you use nvm. The wrapper sources `nvm.sh` first, then runs the refresher. (If you installed node via Homebrew, replace the whole inner command with `/opt/homebrew/bin/node /opt/homebrew/bin/npx -y @jtalk22/slack-mcp --refresh-tokens`.)
+
+**Trade-off:** Chrome must be running for extraction to succeed. If it's not, the LaunchAgent logs "Failed to extract" and tokens stay where they are — which is fine for another 12 hours.
+
 ## Troubleshooting
 
 ### "No credentials found"
@@ -151,7 +199,7 @@ Tokens have expired. Run `npx -y @jtalk22/slack-mcp --doctor` and follow the sug
 ### MCP Server Not Loading
 
 1. Check `~/.claude.json` syntax
-2. Verify the path to server.js is correct
+2. Verify JSON syntax in your client's MCP config
 3. Restart Claude Code
 
 ### Chrome Extraction Fails

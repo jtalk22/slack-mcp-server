@@ -42,9 +42,9 @@ This server uses your browser's session tokens instead. If you can see it in Sla
 | Tools | Limited | **21** |
 | Visible to admins | Yes | **No — session-token transport** |
 
-## Workflow Primitives (new in 4.2)
+## Workflow Primitives
 
-Save a workflow profile that binds a `workflow_kind` to channels + priority people + retention + cadence. Stored locally at `~/.slack-mcp-workflows.json`. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) reads these profiles and returns **structured JSON per workflow_kind** — downstream automation (Linear, Notion, status dashboards) consumes the JSON directly.
+Introduced in 4.2. Save a workflow profile that binds a `workflow_kind` to channels + priority people + retention + cadence. Stored locally at `~/.slack-mcp-workflows.json`. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) reads these profiles and returns **structured JSON per workflow_kind** — downstream automation (Linear, Notion, status dashboards) consumes the JSON directly.
 
 | `workflow_kind` | Returns (structured JSON) |
 |---|---|
@@ -305,7 +305,8 @@ Session tokens (`xoxc-` + `xoxd-`) from your browser. If you can see it in Slack
 
 Tokens expire. The server notices before you do — proactive health monitoring, automatic refresh on macOS, warnings when tokens age out. File writes are atomic (temp file → chmod → rename) to prevent corruption. Concurrent refresh attempts are mutex-locked.
 
-## What's New in 4.2.0
+<details>
+<summary><strong>What's New in 4.2.0</strong></summary>
 
 - **Workflow primitives** — `slack_workflow_save` + `slack_workflows` bind a `workflow_kind` (`incident_room`, `exec_brief`, `support_inbox`, `product_launch_watch`, `custom`) to channels, priority people, retention, and cadence. The hosted brain returns structured JSON per kind — `incident_room` returns `{incident_summary, timeline, open_risks, owner_gaps, next_actions}`, `exec_brief` returns `{summary, decisions, risks, asks, action_items}`. Downstream automation (Linear, Notion, dashboards) consumes the JSON directly.
 - **Discoverable upgrade stubs** — `slack_smart_search`, `slack_catch_me_up`, `slack_triage` appear in OSS as upgrade payloads pointing at the hosted brain. Response shape is `{signup_url, free_tier_quota, pro_value_prop}` — no interruptions, the AI routes the user cleanly.
@@ -314,6 +315,8 @@ Tokens expire. The server notices before you do — proactive health monitoring,
 - **Prior reliability fixes carried forward** — LevelDB token extraction, multi-profile enumeration, and explicit SIGTERM/SIGINT/SIGHUP/stdin shutdown handlers ship in 4.2.0 too.
 
 Full release notes on [GitHub releases/latest](https://github.com/jtalk22/slack-mcp-server/releases/latest).
+
+</details>
 
 ## Hosted HTTP Mode
 
@@ -331,7 +334,7 @@ Details: [docs/DEPLOYMENT-MODES.md](docs/DEPLOYMENT-MODES.md)
 
 ## Troubleshooting
 
-**Tokens expired:** Run `npx -y @jtalk22/slack-mcp --setup` or use `slack_refresh_tokens` (macOS).
+**Tokens expired:** Run `npx -y @jtalk22/slack-mcp --setup` or use `slack_refresh_tokens` (macOS). To prevent silent expiration during long Claude-idle windows, set up the optional [token-refresh LaunchAgent](docs/SETUP.md#keep-tokens-fresh-while-claude-is-closed-macos-optional).
 
 **DMs not showing:** Use `slack_list_conversations` with `discover_dms=true`.
 
@@ -371,4 +374,4 @@ Not affiliated with Slack Technologies, Inc. Uses browser session credentials �
 
 ---
 
-Hosted version live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com): Free tier (no card), $9/mo Pro, $49/mo Team flat, Ops from $199/mo. Hosted owns the AI brain (smart_search, catch_me_up, triage), the scheduled morning catch-up DM at 8am workspace time *(rolling out Q2 2026)*, permanent OAuth (no 2-week token rotation), 90-day Vectorize retention, and shared workflow profiles. The OSS package owns local stdio + all 16 read/write Slack tools + workflow profile primitives (slack_workflow_save, slack_workflows). The 3 paid stubs (slack_smart_search, slack_catch_me_up, slack_triage) appear in OSS as discoverable upgrade prompts.
+Hosted version live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com): Free tier (no card), $9/mo Pro, $49/mo Team flat, Ops from $199/mo. Hosted owns the AI brain (smart_search, catch_me_up, triage), the scheduled morning catch-up DM at 8am workspace time *(rolling out Q2 2026)*, permanent OAuth (no 2-week token rotation), 90-day Vectorize retention, and shared workflow profiles. The OSS package owns local stdio + the 16 Slack tools (12 read, 4 write) + workflow profile primitives (slack_workflow_save, slack_workflows). The 3 paid stubs (slack_smart_search, slack_catch_me_up, slack_triage) appear in OSS as discoverable upgrade prompts.

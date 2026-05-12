@@ -24,26 +24,30 @@ npx -y @jtalk22/slack-mcp      # package entrypoint
 docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 ```
 
-## MCP Tools
+## MCP Tools (21 total)
+
+**Slack reads (12):**
 
 | Tool | Purpose |
 |------|---------|
 | `slack_health_check` | Verify token validity and show workspace info |
-| `slack_token_status` | Check current token health |
-| `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome |
+| `slack_token_status` | Token age, health, cache stats |
+| `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome (macOS) |
 | `slack_list_conversations` | List DMs and channels with resolved names |
 | `slack_conversations_history` | Get messages from a channel or DM |
 | `slack_get_full_conversation` | Export full history with threads |
 | `slack_search_messages` | Search across workspace |
-| `slack_send_message` | Send a message |
 | `slack_get_thread` | Get thread replies |
 | `slack_users_info` | Get user details |
-| `slack_list_users` | List workspace users |
-| `slack_add_reaction` | Add emoji reaction to a message |
-| `slack_remove_reaction` | Remove emoji reaction from a message |
-| `slack_conversations_mark` | Mark conversation as read |
-| `slack_conversations_unreads` | Get channels/DMs with unread messages |
-| `slack_users_search` | Search users by name/email |
+| `slack_list_users` | List workspace users (paginated, 500+) |
+| `slack_users_search` | Search by name, display name, or email |
+| `slack_conversations_unreads` | Channels/DMs with unread messages |
+
+**Slack writes (4):** `slack_send_message`, `slack_add_reaction`, `slack_remove_reaction`, `slack_conversations_mark` — all carry MCP `destructive` safety annotation.
+
+**Workflow primitives (2):** `slack_workflow_save`, `slack_workflows` — bind a `workflow_kind` (`incident_room`, `exec_brief`, `support_inbox`, `product_launch_watch`, `custom`) to channels + priority people + retention + cadence. Stored locally at `~/.slack-mcp-workflows.json`.
+
+**Hosted-brain upgrade stubs (3):** `slack_smart_search`, `slack_catch_me_up`, `slack_triage` — return `{signup_url, free_tier_quota, pro_value_prop}` payloads pointing at `mcp.revasserlabs.com`. No Slack write occurs from OSS.
 
 ## Token Persistence Layers
 

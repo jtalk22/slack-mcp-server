@@ -37,6 +37,9 @@ if (firstArg === "web") {
 } else if (firstArg === "--apply-template" || firstArg === "apply-template") {
   scriptPath = join(__dirname, "../scripts/apply-template.js");
   scriptArgs = args.slice(1);
+} else if (firstArg === "--refresh-tokens" || firstArg === "refresh-tokens") {
+  scriptPath = join(__dirname, "../scripts/token-cli.js");
+  scriptArgs = ["auto"];
 } else if (WIZARD_ARGS.has(firstArg)) {
   scriptPath = join(__dirname, "../scripts/setup-wizard.js");
   scriptArgs = args;
