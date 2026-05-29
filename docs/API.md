@@ -122,6 +122,8 @@ Get messages from a channel or DM.
 | oldest | string | - | Unix timestamp, get messages after |
 | latest | string | - | Unix timestamp, get messages before |
 | resolve_users | boolean | true | Convert user IDs to names |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
+| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` |
 
 **Returns:**
 ```json
@@ -136,11 +138,19 @@ Get messages from a channel or DM.
       "user_id": "U05GPEVH7J9",
       "text": "Hello!",
       "datetime": "2026-01-02T15:33:50.000Z",
-      "has_thread": false
+      "has_thread": false,
+      "attachments": [
+        {
+          "text": "Additional message context"
+        }
+      ]
     }
   ]
 }
 ```
+
+`attachments`, `blocks`, `metadata`, `files`, and `reactions` are returned only when
+`include_rich_message_fields` is true and Slack includes those fields in the API response.
 
 ---
 
@@ -156,6 +166,8 @@ Export full conversation with threads.
 | latest | string | - | Unix timestamp end |
 | max_messages | number | 2000 | Max messages (up to 10000) |
 | include_threads | boolean | true | Fetch thread replies |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
+| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` |
 | output_file | string | - | Filename (saved to ~/.slack-mcp-exports/) |
 
 **Timestamps:**
@@ -188,6 +200,7 @@ Search messages across the workspace.
 |------|------|---------|-------------|
 | query | string | *required* | Search query |
 | count | number | 20 | Number of results (max 100) |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
 
 **Query Syntax:**
 - `from:@username` - From specific user
@@ -249,6 +262,8 @@ Get all replies in a thread.
 |------|------|---------|-------------|
 | channel_id | string | *required* | Channel or DM ID |
 | thread_ts | string | *required* | Thread parent timestamp |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
+| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.replies` |
 
 **Returns:**
 ```json
