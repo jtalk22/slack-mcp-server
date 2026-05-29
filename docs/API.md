@@ -119,8 +119,8 @@ Get messages from a channel or DM.
 |------|------|---------|-------------|
 | channel_id | string | *required* | Channel or DM ID |
 | limit | number | 50 | Messages to fetch (max 100) |
-| oldest | string | - | Unix timestamp, get messages after |
-| latest | string | - | Unix timestamp, get messages before |
+| oldest | string | - | Unix timestamp, get messages after; matching boundary timestamp is included |
+| latest | string | - | Unix timestamp, get messages before; matching boundary timestamp is included |
 | resolve_users | boolean | true | Convert user IDs to names |
 | include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
 | include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` |
@@ -162,12 +162,12 @@ Export full conversation with threads.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | channel_id | string | *required* | Channel or DM ID |
-| oldest | string | - | Unix timestamp start |
-| latest | string | - | Unix timestamp end |
+| oldest | string | - | Unix timestamp start; matching boundary timestamp is included |
+| latest | string | - | Unix timestamp end; matching boundary timestamp is included |
 | max_messages | number | 2000 | Max messages (up to 10000) |
 | include_threads | boolean | true | Fetch thread replies |
 | include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
-| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` |
+| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` and `conversations.replies` |
 | output_file | string | - | Filename (saved to ~/.slack-mcp-exports/) |
 
 **Timestamps:**
