@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server - Install in 30 Seconds</title>
   <meta name="description" content="21 Slack tools for any MCP client. No OAuth, no admin approval. One command setup.">
+  <link rel="canonical" href="https://jtalk22.github.io/slack-mcp-server/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
   <meta property="og:description" content="Give your AI agent full Slack access. 21 tools for search, threads, DMs, reactions. Works with any MCP client. One command: npx -y @jtalk22/slack-mcp --setup">
@@ -297,7 +298,7 @@
   <main class="shell">
     <section class="hero">
       <h1>Slack MCP &mdash; without the broken OAuth</h1>
-      <p>Slack's official MCP server requires OAuth app registration, admin approval, and <strong>doesn't work with Claude Code or Copilot</strong>. This one uses your browser session instead. No app, no admin, no friction. 21 tools, one command.</p>
+      <p>Slack's official MCP server is OAuth-first and may require app registration, admin approval, or client compatibility workarounds. This one uses your browser session instead. No app, no admin, no friction. 21 tools, one command.</p>
       <div class="cta-row">
         <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html" style="background:rgba(218,119,86,0.18);border-color:rgba(218,119,86,0.45)"><strong style="color:#da7756">Watch the Demo</strong></a>
         <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md"><strong>Setup Guide</strong></a>
@@ -353,10 +354,11 @@
       <div class="video-shell">
         <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-slack-mcp-mobile-poster.png" aria-label="Slack MCP demo autoplay">
           <source src="docs/videos/demo-slack-mcp-mobile-20s.mp4" type="video/mp4">
+          <track kind="captions" src="docs/videos/demo-slack-mcp-mobile-20s.vtt" srclang="en" label="English captions" default>
         </video>
         <div class="video-controls">
-          <button type="button" id="playBtn">Play</button>
-          <button type="button" id="pauseBtn">Pause</button>
+          <button type="button" id="playBtn" aria-label="Play Slack MCP demo video">Play</button>
+          <button type="button" id="pauseBtn" aria-label="Pause Slack MCP demo video">Pause</button>
           <a href="public/demo-slack-mcp.html">Interactive Demo</a>
           <a href="public/demo-video.html">Video Demo</a>
         </div>
@@ -450,7 +452,7 @@
           const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'Unavailable';
           const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'Unavailable';
           const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : 'https://mcp.revasserlabs.com/docs';
-          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools · ${aiTools} <a href="${docsUrl}">Hosted docs</a>`;
+          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools + ${aiTools} AI workflows. OSS has 21 self-hosted tools; <a href="${docsUrl}">Hosted docs</a>`;
         })
         .catch((error) => {
           cloudHealthEl.textContent = 'Status available';

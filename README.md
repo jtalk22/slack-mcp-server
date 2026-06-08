@@ -20,7 +20,7 @@ npx -y @jtalk22/slack-mcp --setup
 
 ## Why This Exists
 
-Slack's official MCP server requires a registered app, admin approval, and [doesn't work with Claude Code or GitHub Copilot](https://github.com/anthropics/claude-code/issues/30564) due to OAuth/DCR incompatibility. Screenshotting messages is not a workflow.
+Slack's official MCP server is OAuth-first and can require a registered app, admin approval, or client compatibility workarounds. See the tracked [Claude Code/GitHub Copilot compatibility discussion](https://github.com/anthropics/claude-code/issues/30564). Screenshotting messages is not a workflow.
 
 This server uses your browser's session tokens instead. If you can see it in Slack, your AI agent can see it too. No app install, no scopes, no admin.
 

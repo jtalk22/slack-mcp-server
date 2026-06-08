@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00.000 --> 00:12.000
+Slack MCP lets an AI client review Slack messages through your browser session instead of a workspace OAuth app.
+
+00:12.000 --> 00:35.000
+The demo shows morning triage: finding unread conversations, summarizing priorities, and surfacing actions.
+
+00:35.000 --> 01:10.000
+Slack search and conversation tools help locate decisions, threads, channels, and people from the MCP client.
+
+01:10.000 --> 01:55.000
+Read and write tools support replies, reactions, and mark-as-read actions while preserving local operator control.
+
+01:55.000 --> 02:45.000
+Workflow profiles capture recurring channel sets and priority people for handoffs, incident rooms, launches, and inbox triage.
+
+02:45.000 --> 03:33.000
+Self-host the open-source server for 21 tools, or use the hosted tier when you want managed AI workflows and retention.
