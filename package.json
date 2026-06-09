@@ -13,6 +13,7 @@
     "slack-mcp-setup": "scripts/setup-wizard.js"
   },
   "scripts": {
+    "test": "node --test",
     "start": "node src/server.js",
     "http": "node src/server-http.js",
     "web": "node src/web-server.js",

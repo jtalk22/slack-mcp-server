@@ -119,9 +119,11 @@ Get messages from a channel or DM.
 |------|------|---------|-------------|
 | channel_id | string | *required* | Channel or DM ID |
 | limit | number | 50 | Messages to fetch (max 100) |
-| oldest | string | - | Unix timestamp, get messages after |
-| latest | string | - | Unix timestamp, get messages before |
+| oldest | string | - | Unix timestamp, get messages after; matching boundary timestamp is included |
+| latest | string | - | Unix timestamp, get messages before; matching boundary timestamp is included |
 | resolve_users | boolean | true | Convert user IDs to names |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
+| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` |
 
 **Returns:**
 ```json
@@ -136,11 +138,31 @@ Get messages from a channel or DM.
       "user_id": "U05GPEVH7J9",
       "text": "Hello!",
       "datetime": "2026-01-02T15:33:50.000Z",
-      "has_thread": false
+      "has_thread": false,
+      "attachments": [
+        {
+          "text": "Additional message context"
+        }
+      ]
     }
   ]
 }
 ```
+
+`include_rich_message_fields` changes this tool's **output shape only** — it surfaces fields Slack
+already returns on the message object: `attachments`, `blocks`, `files`, `reactions`, `metadata`,
+plus `subtype`, `bot_id`, `app_id` (markers that flag automated / bot / app messages) and `team`
+(the workspace id, present on all messages). Especially `blocks` can be large, so it's opt-in per
+call to keep MCP client context lean.
+
+`include_all_metadata` is a **separate, independent** Slack request flag: its only effect is to add
+the full `event_payload` inside a message's developer `metadata` (without it you still get
+`metadata.event_type`). The two are orthogonal — set `include_rich_message_fields` to see `metadata`
+in the output at all; additionally set `include_all_metadata` for the full payload.
+
+Note: `slack_search_messages` matches are thin — Slack's search API does not return these rich
+fields on matches (only `team`). To read rich content for a search hit, call
+`slack_conversations_history` or `slack_get_thread` on the match's channel/ts.
 
 ---
 
@@ -152,10 +174,12 @@ Export full conversation with threads.
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | channel_id | string | *required* | Channel or DM ID |
-| oldest | string | - | Unix timestamp start |
-| latest | string | - | Unix timestamp end |
+| oldest | string | - | Unix timestamp start; matching boundary timestamp is included |
+| latest | string | - | Unix timestamp end; matching boundary timestamp is included |
 | max_messages | number | 2000 | Max messages (up to 10000) |
 | include_threads | boolean | true | Fetch thread replies |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
+| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` and `conversations.replies` |
 | output_file | string | - | Filename (saved to ~/.slack-mcp-exports/) |
 
 **Timestamps:**
@@ -188,6 +212,7 @@ Search messages across the workspace.
 |------|------|---------|-------------|
 | query | string | *required* | Search query |
 | count | number | 20 | Number of results (max 100) |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
 
 **Query Syntax:**
 - `from:@username` - From specific user
@@ -249,6 +274,8 @@ Get all replies in a thread.
 |------|------|---------|-------------|
 | channel_id | string | *required* | Channel or DM ID |
 | thread_ts | string | *required* | Thread parent timestamp |
+| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
+| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.replies` |
 
 **Returns:**
 ```json
