@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slack MCP Server — Video Demo</title>
-  <meta name="description" content="Slack's official MCP needs OAuth + admin approval and doesn't work with Claude Code or Copilot. This one uses your browser session. 21 tools, one command.">
+  <link rel="canonical" href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
+  <meta name="description" content="OAuth-free Slack MCP using your browser session. 21 tools, one command, no app registration.">
   <meta property="og:type" content="video.other">
   <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
   <meta property="og:description" content="21 tools for search, threads, DMs, reactions, and more. Works with Claude, Cursor, Copilot, Gemini. One command: npx -y @jtalk22/slack-mcp --setup">
@@ -224,13 +225,14 @@
       <video id="demo" poster="../docs/images/demo-poster.png" playsinline autoplay muted loop>
         <source src="../docs/videos/demo-slack-mcp.mp4" type="video/mp4">
         <source src="../docs/videos/demo-slack-mcp.webm" type="video/webm">
+        <track kind="captions" src="../docs/videos/demo-slack-mcp.vtt" srclang="en" label="English captions" default>
         Your browser does not support the video tag.
       </video>
     </div>
 
     <div class="controls">
-      <button class="btn btn-primary" onclick="togglePlay()">Play / Pause</button>
-      <button class="btn btn-secondary" onclick="restart()">Restart</button>
+      <button class="btn btn-primary" onclick="togglePlay()" aria-label="Play or pause the full Slack MCP demo video">Play / Pause</button>
+      <button class="btn btn-secondary" onclick="restart()" aria-label="Restart the full Slack MCP demo video">Restart</button>
     </div>
 
     <div class="back-link">
