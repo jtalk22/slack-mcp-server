@@ -5,7 +5,7 @@
 #   docker build -t slack-mcp-server .
 #   docker run -e SLACK_TOKEN=xoxc-... -e SLACK_COOKIE=xoxd-... slack-mcp-server --version
 
-FROM node:25-alpine
+FROM node:26-alpine
 
 # OCI Image Labels for registry discoverability
 LABEL maintainer="jtalk22"
