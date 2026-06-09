@@ -324,15 +324,30 @@ Full release notes on [GitHub releases/latest](https://github.com/jtalk22/slack-
 
 ## Rich Message Fields
 
-Added in 4.4.0. The four read tools marked ‡ above accept `include_rich_message_fields: true`, which surfaces the parts of a message that live outside `text`:
+Added in 4.4.0. The four read tools marked ‡ above accept `include_rich_message_fields: true`, which surfaces the parts of a message that live outside `text` — `attachments`, `blocks`, `files`, `reactions`, `metadata`, plus `subtype`/`bot_id`/`app_id` (automated/bot/app markers) and `team` (workspace id).
 
-- `attachments`, `blocks`, `files`, `reactions`, `metadata`
-- `subtype`, `bot_id`, `app_id` — markers that flag automated, bot, or app messages
-- `team` — the workspace id, present on every message
+An attachment-only alert reads as empty without the flag:
 
-This changes output shape only and requires no extra permissions. `blocks` in particular can be large, so it is opt-in per call to keep client context lean. For the full developer payload inside `metadata`, also set `include_all_metadata: true` (an independent Slack flag).
+```json
+{ "ts": "1767368030.607599", "user": "incident-bot", "text": "" }
+```
 
-`slack_search_messages` accepts the flag, but Slack's search API does not return rich fields on matches — read the full content with `slack_conversations_history` or `slack_get_thread` on the match's channel and timestamp.
+With `include_rich_message_fields: true`, the content is surfaced:
+
+```json
+{
+  "ts": "1767368030.607599",
+  "user": "incident-bot",
+  "text": "",
+  "subtype": "bot_message",
+  "bot_id": "B012345",
+  "attachments": [{ "title": "PagerDuty", "text": "P1 — API latency > 2s" }]
+}
+```
+
+Output shape only — no extra permissions. `blocks` can be large, so it is opt-in per call to keep client context lean. For the full developer payload inside `metadata`, also set `include_all_metadata: true` (an independent Slack flag).
+
+`slack_search_messages` accepts the flag, but Slack's search API does not return rich fields on matches — read full content with `slack_conversations_history` or `slack_get_thread` on the match's channel and timestamp.
 
 Patch by [@rvandam](https://github.com/rvandam) (#143).
 

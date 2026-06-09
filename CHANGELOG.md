@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [4.4.0] - 2026-06-09
 
 ### Added
-- **Rich message fields** — opt-in `include_rich_message_fields` on `slack_conversations_history`, `slack_get_full_conversation`, `slack_get_thread`, and `slack_search_messages`. Surfaces the Slack fields that live outside `text` — `attachments`, `blocks`, `files`, `reactions`, `metadata`, plus `subtype`/`bot_id`/`app_id`/`team` — so attachment-only and bot/app messages no longer read as empty. Opt-in per call to keep client context lean. The independent `include_all_metadata` flag additionally returns the full developer `event_payload`. Patch by @rvandam (#143).
-- **First unit tests** (`node --test`, wired into CI) — cover the rich-message-fields merge helper and tool-schema shape (opt-in present on the four read tools; `include_all_metadata` correctly absent from search).
+- `include_rich_message_fields` (opt-in) on `slack_conversations_history`, `slack_get_full_conversation`, `slack_get_thread`, and `slack_search_messages`: surfaces `attachments`, `blocks`, `files`, `reactions`, `metadata`, `subtype`, `bot_id`, `app_id`, and `team`. Independent `include_all_metadata` adds the full `event_payload`. (#143, thanks @rvandam)
+- Unit test suite (`node --test`, wired into CI) covering the rich-fields merge helper and tool schemas.
 
 ## [4.3.0] - 2026-05-12
 
