@@ -88,6 +88,7 @@ jobs:
         env:
           EXPECTED_GIT_NAME: jtalk22
           EXPECTED_GIT_EMAIL: ${{ vars.OWNER_GIT_EMAIL }}
+          IS_FORK_PR: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
           SKIP_LOCAL_CONFIG_CHECK: "1"
           ALLOW_GITHUB_WEB_COMMITTER: "1"
         run: |
@@ -117,13 +118,18 @@ jobs:
 
           while IFS= read -r file; do
             [[ -n "$file" ]] || continue
-            echo "Scanning $file"
-            if rg -Nni "$disallowed" "$file"; then
+            echo "Scanning added lines in $file"
+            # Only inspect lines ADDED in this range. Frozen history (e.g. CHANGELOG
+            # release notes that legitimately name tool brands) is never re-scanned.
+            added="$(git diff "$RANGE" -- "$file" | grep -E '^\+' | grep -Ev '^\+\+\+' | sed -E 's/^\+//' || true)"
+            [[ -n "$added" ]] || continue
+            if printf '%s\n' "$added" | rg -Nni "$disallowed"; then
               found=1
             fi
           done <<< "$target_files"
 
           if [[ "$found" -ne 0 ]]; then
-            echo "Disallowed attribution markers found in communication templates."
+            echo "Disallowed attribution markers found in NEWLY ADDED communication-template lines."
+            echo "Remove attribution markers from the added lines listed above."
             exit 1
           fi

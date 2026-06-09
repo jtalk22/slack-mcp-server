@@ -23,7 +23,22 @@ if [[ -z "$EXPECTED_EMAIL" ]]; then
   EXPECTED_EMAIL="$(git config --get user.email || true)"
 fi
 
-[[ -n "$EXPECTED_EMAIL" ]] || die "Missing EXPECTED_GIT_EMAIL or repo-local git user.email"
+# Fork PRs from GitHub Actions do NOT receive repo variables (vars.OWNER_GIT_EMAIL is
+# withheld on forks), so EXPECTED_GIT_EMAIL arrives empty on the external-contributor path.
+# That is expected, not a misconfiguration. We still enforce owner NAME on every commit and
+# full committer identity on merge; only the author-email comparison is relaxed, and ONLY when
+# this is genuinely a fork PR. A missing email on any other event (e.g. a same-repo push) still
+# fails closed.
+EXPECTED_EMAIL_UNSET=0
+if [[ -z "$EXPECTED_EMAIL" ]]; then
+  if [[ "${IS_FORK_PR:-}" == "true" || "${IS_FORK_PR:-}" == "1" ]]; then
+    echo "NOTE: owner git email not provided -- expected for external fork PRs (repo variables are withheld on forks)." >&2
+    echo "      Authorship lands under maintainer identity when the PR is merged; no contributor action needed. See CONTRIBUTING.md." >&2
+    EXPECTED_EMAIL_UNSET=1
+  else
+    die "Missing EXPECTED_GIT_EMAIL or repo-local git user.email"
+  fi
+fi
 
 contains_banned_markers() {
   local text="$1"
@@ -41,6 +56,12 @@ is_allowed_owner_author() {
 
   if [[ "$name" != "$EXPECTED_NAME" ]]; then
     return 1
+  fi
+
+  if [[ "${EXPECTED_EMAIL_UNSET:-0}" == "1" ]]; then
+    # Fork PR with no owner email available: name matched; accept the GitHub-recorded
+    # identity. Committer-side checks still apply on merge.
+    return 0
   fi
 
   if [[ "$email" == "$EXPECTED_EMAIL" ]]; then
