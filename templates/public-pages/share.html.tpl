@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server</title>
   <meta name="description" content="No OAuth. No admin. {{SELF_HOSTED_TOOL_COUNT}} Slack tools for Claude, Cursor, Copilot, Gemini, and any MCP client. One command: npx -y @jtalk22/slack-mcp --setup">
+  <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta property="og:description" content="Slack's official MCP needs OAuth + admin. This one uses your browser session. {{SELF_HOSTED_TOOL_COUNT}} tools, works with Claude, Cursor, Copilot, Gemini.">
+  <meta property="og:description" content="OAuth-free Slack MCP using your browser session. {{SELF_HOSTED_TOOL_COUNT}} tools, works with Claude, Cursor, Copilot, Gemini.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">

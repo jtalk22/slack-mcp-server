@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+Slack MCP connects your AI client to Slack through your browser session.
+
+00:04.000 --> 00:09.000
+Ask for unread triage, important threads, searches, and next actions without opening Slack.
+
+00:09.000 --> 00:14.000
+Use 21 self-hosted tools for channels, DMs, reactions, replies, workflow profiles, and hosted upgrade prompts.
+
+00:14.000 --> 00:20.000
+Install with npx -y @jtalk22/slack-mcp --setup and keep the local workflow under your control.
