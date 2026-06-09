@@ -137,10 +137,10 @@ Or via CLI: `codex mcp add slack -- npx -y @jtalk22/slack-mcp`
 | `slack_token_status` | Token age, health, and cache stats | read-only |
 | `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome | read-only* |
 | `slack_list_conversations` | List DMs and channels | read-only |
-| `slack_conversations_history` | Get messages from a channel or DM | read-only |
-| `slack_get_full_conversation` | Export full history with threads | read-only |
-| `slack_search_messages` | Search across workspace | read-only |
-| `slack_get_thread` | Get thread replies | read-only |
+| `slack_conversations_history` ‡ | Get messages from a channel or DM | read-only |
+| `slack_get_full_conversation` ‡ | Export full history with threads | read-only |
+| `slack_search_messages` ‡ | Search across workspace | read-only |
+| `slack_get_thread` ‡ | Get thread replies | read-only |
 | `slack_users_info` | Get user details | read-only |
 | `slack_list_users` | List workspace users (paginated, 500+) | read-only |
 | `slack_users_search` | Search users by name, display name, or email | read-only |
@@ -161,6 +161,8 @@ Or via CLI: `codex mcp add slack -- npx -y @jtalk22/slack-mcp`
 
 † Hosted stubs return a structured upgrade payload (`signup_url`, `free_tier_quota`, `pro_value_prop`) — no Slack write occurs from OSS. Activate the brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) (free tier, no card).
 
+‡ Also accepts `include_rich_message_fields` to return attachments, blocks, files, reactions, and metadata — see [Rich Message Fields](#rich-message-fields).
+
 ## Install
 
 **Node.js 20+**
@@ -170,6 +172,8 @@ npx -y @jtalk22/slack-mcp --setup
 ```
 
 The setup wizard handles token extraction and validation.
+
+After setup, have your client run `slack_health_check` — a workspace name in the response confirms you are connected.
 
 <details>
 <summary><strong>Claude Desktop (macOS)</strong></summary>
@@ -318,6 +322,20 @@ Full release notes on [GitHub releases/latest](https://github.com/jtalk22/slack-
 
 </details>
 
+## Rich Message Fields
+
+Added in 4.4.0. The four read tools marked ‡ above accept `include_rich_message_fields: true`, which surfaces the parts of a message that live outside `text`:
+
+- `attachments`, `blocks`, `files`, `reactions`, `metadata`
+- `subtype`, `bot_id`, `app_id` — markers that flag automated, bot, or app messages
+- `team` — the workspace id, present on every message
+
+This changes output shape only and requires no extra permissions. `blocks` in particular can be large, so it is opt-in per call to keep client context lean. For the full developer payload inside `metadata`, also set `include_all_metadata: true` (an independent Slack flag).
+
+`slack_search_messages` accepts the flag, but Slack's search API does not return rich fields on matches — read the full content with `slack_conversations_history` or `slack_get_thread` on the match's channel and timestamp.
+
+Patch by [@rvandam](https://github.com/rvandam) (#143).
+
 ## Hosted HTTP Mode
 
 For remote MCP endpoints (Cloudflare Worker, VPS, etc.):
@@ -346,6 +364,7 @@ More: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
 
 - [Setup Guide](docs/SETUP.md)
 - [API Reference](docs/API.md)
+- [Roadmap](docs/ROADMAP.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Deployment Modes](docs/DEPLOYMENT-MODES.md)
 - [Use Case Recipes](docs/USE_CASE_RECIPES.md)
