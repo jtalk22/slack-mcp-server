@@ -234,6 +234,8 @@ Add to `~/.claude.json`:
 }
 ```
 
+Or via CLI: `claude mcp add slack -- npx -y @jtalk22/slack-mcp`
+
 </details>
 
 <details>

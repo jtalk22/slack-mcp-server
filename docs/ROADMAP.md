@@ -18,7 +18,7 @@ Wraps `chat.update` and `chat.delete`. The server can post via `chat.postMessage
 
 ## Deferred (real competitor gaps, wrong investment for a maybe-retired OSS copy)
 
-Stealth/no-scope posting, OAuth `xoxp`/`xoxb`, canvas CRUD, SSE/proxy transport, usergroups CRUD, `conversations.create`/`invite`/`join`. Note: `reminders.*` and `canvases.*` are increasingly bot-token gated — verify session-token support before touching.
+Read-state-preserving fetches (no read-receipts), OAuth `xoxp`/`xoxb` token modes, canvas CRUD, SSE/proxy transport, usergroups CRUD, `conversations.create`/`invite`/`join`. Note: `reminders.*` and `canvases.*` are increasingly bot-token gated — verify session-token support before touching.
 
 ---
 
