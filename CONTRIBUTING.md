@@ -1,6 +1,12 @@
 # Contributing
 
-Fork it. Fix it. PR it. Keep changes focused.
+Fork it. Fix it. PR it. Keep changes focused. Patches and ideas both welcome.
+
+**How outside contributions land (please read):** for provenance and anti-takeover reasons, I land
+external contributions on `main` under my own authorship rather than merging fork commits directly,
+and credit contributors in `CONTRIBUTORS.md`. One consequence worth knowing up
+front: the `attribution` CI check shows **red on fork PRs by design** — that's policy, not a defect
+in your work. Your change still lands; it just lands as a commit authored by me, with credit to you.
 
 ## Setup
 
