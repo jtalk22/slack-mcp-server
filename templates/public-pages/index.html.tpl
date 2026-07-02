@@ -437,12 +437,26 @@
           const hostedVersion = data.version ? `v${data.version}` : 'version unavailable';
           const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'Unavailable';
           const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'Unavailable';
-          const docsUrl = data.docs && data.docs.docs_url ? data.docs.docs_url : '{{CLOUD_DOCS_URL}}';
-          cloudHealthNoteEl.innerHTML = `${hostedVersion} · ${standardTools} managed tools + ${aiTools} AI workflows. OSS has {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools; <a href="${docsUrl}">Hosted docs</a>`;
+          const remoteDocsUrl = data.docs && typeof data.docs.docs_url === 'string' ? data.docs.docs_url : '';
+          const docsUrl = remoteDocsUrl.startsWith('https://') ? remoteDocsUrl : '{{CLOUD_DOCS_URL}}';
+          // Remote /status fields are untrusted input: build the note from
+          // text nodes + setAttribute — never innerHTML string interpolation.
+          cloudHealthNoteEl.textContent = '';
+          cloudHealthNoteEl.append(`${hostedVersion} · ${standardTools} managed tools + ${aiTools} AI workflows. OSS has {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools; `);
+          const docsLink = document.createElement('a');
+          docsLink.setAttribute('href', docsUrl);
+          docsLink.textContent = 'Hosted docs';
+          cloudHealthNoteEl.append(docsLink);
         })
         .catch((error) => {
           cloudHealthEl.textContent = 'Status available';
-          cloudHealthNoteEl.innerHTML = `Cross-origin status lookup unavailable: ${error.message}. Use <a href="{{CLOUD_STATUS_URL}}">raw status JSON</a>.`;
+          cloudHealthNoteEl.textContent = '';
+          cloudHealthNoteEl.append(`Cross-origin status lookup unavailable: ${error.message}. Use `);
+          const statusLink = document.createElement('a');
+          statusLink.setAttribute('href', '{{CLOUD_STATUS_URL}}');
+          statusLink.textContent = 'raw status JSON';
+          cloudHealthNoteEl.append(statusLink);
+          cloudHealthNoteEl.append('.');
         });
 
       await Promise.allSettled([npmPromise, releasePromise, cloudPromise]);

@@ -216,6 +216,7 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
+        types: { type: "string", description: "Comma-separated types: im, mpim, public_channel, private_channel (default all)", default: "im,mpim,public_channel,private_channel" },
         limit: { type: "number", description: "Maximum conversations to return (default 50)" }
       }
     },
@@ -415,23 +416,140 @@ async function handleToolCall(name, args, env, queryParams) {
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
       }
       case "slack_conversations_unreads": {
-        const result = await slackApi('client.counts', {}, token, cookie);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-      }
-      case "slack_users_search": {
-        const result = await slackApi('users.list', { limit: args.limit || 100 }, token, cookie);
+        // Mirrors the stdio implementation (lib/handlers.js
+        // handleConversationsUnreads): list conversations, keep the ones
+        // with unreads, resolve DM display names, sort by unread count
+        // descending, and honor `limit`.
+        const types = args.types || "im,mpim,public_channel,private_channel";
+        const limit = args.limit || 50;
+        const result = await slackApi('conversations.list', {
+          types,
+          limit: 200,
+          exclude_archived: true
+        }, token, cookie);
         if (!result.ok) {
           return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
         }
-        const query = (args.query || "").toLowerCase();
-        const matches = (result.members || []).filter(u => {
-          const name = (u.name || "").toLowerCase();
-          const realName = (u.real_name || "").toLowerCase();
-          const displayName = (u.profile?.display_name || "").toLowerCase();
-          const email = (u.profile?.email || "").toLowerCase();
-          return name.includes(query) || realName.includes(query) || displayName.includes(query) || email.includes(query);
-        });
-        return { content: [{ type: "text", text: JSON.stringify({ ok: true, members: matches, count: matches.length }, null, 2) }] };
+
+        // Per-request users.info cache for DM display-name resolution
+        const userNameCache = new Map();
+        const resolveUserName = async (userId) => {
+          if (userNameCache.has(userId)) return userNameCache.get(userId);
+          let name = userId;
+          try {
+            const info = await slackApi('users.info', { user: userId }, token, cookie);
+            if (info.ok && info.user) {
+              name = info.user.real_name || info.user.name || userId;
+            }
+          } catch (e) {
+            // Fall back to the raw user ID on lookup failure
+          }
+          userNameCache.set(userId, name);
+          return name;
+        };
+
+        const withUnreads = (result.channels || []).filter(
+          (c) => (c.unread_count_display || c.unread_count || 0) > 0
+        );
+
+        // Resolve DM display names concurrently (deduped) — sequential awaits here
+        // would add one Slack round-trip of latency per unread DM.
+        const dmUserIds = [...new Set(withUnreads.filter((c) => c.is_im && c.user).map((c) => c.user))];
+        const nameEntries = await Promise.all(
+          dmUserIds.map(async (userId) => [userId, await resolveUserName(userId)])
+        );
+        const dmNames = new Map(nameEntries);
+
+        const unreads = withUnreads.map((c) => ({
+          id: c.id,
+          name: c.is_im && c.user ? (dmNames.get(c.user) || c.name) : c.name,
+          type: c.is_im ? "dm" : c.is_mpim ? "group_dm" : c.is_private ? "private_channel" : "public_channel",
+          unread_count: c.unread_count_display || c.unread_count || 0,
+          latest_ts: c.latest?.ts || null
+        }));
+
+        unreads.sort((a, b) => b.unread_count - a.unread_count);
+
+        return { content: [{ type: "text", text: JSON.stringify({
+          total_unread_conversations: unreads.length,
+          conversations: unreads.slice(0, limit)
+        }, null, 2) }] };
+      }
+      case "slack_users_search": {
+        // Mirrors the stdio implementation (lib/handlers.js
+        // handleUsersSearch): paginate users.list, filter client-side,
+        // explicit scan cap + truncated flag, slice to `limit`
+        //.
+        const rawQuery = typeof args.query === "string" ? args.query : "";
+        const query = rawQuery.trim().toLowerCase();
+        const limit = args.limit || 20;
+
+        if (!query) {
+          return {
+            content: [{
+              type: "text",
+              text: JSON.stringify({
+                status: "error",
+                code: "invalid_arguments",
+                message: "query must be a non-empty string (an empty query would match all users).",
+                next_action: "Provide a name, display name, real name, or email fragment to search for."
+              }, null, 2)
+            }],
+            isError: true
+          };
+        }
+
+        const MAX_SCANNED_USERS = 1000;
+        const matches = [];
+        let cursor;
+        let scannedUsers = 0;
+        let truncated = false;
+
+        do {
+          const result = await slackApi('users.list', { limit: 200, cursor }, token, cookie);
+          if (!result.ok) {
+            return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+          }
+
+          for (const u of (result.members || [])) {
+            scannedUsers++;
+            if (u.deleted || u.is_bot || u.id === "USLACKBOT") continue;
+
+            const searchFields = [
+              u.name,
+              u.real_name,
+              u.profile?.display_name,
+              u.profile?.email
+            ].filter(Boolean).map(s => s.toLowerCase());
+
+            if (searchFields.some(f => f.includes(query))) {
+              matches.push({
+                id: u.id,
+                name: u.name,
+                real_name: u.real_name,
+                display_name: u.profile?.display_name,
+                email: u.profile?.email,
+                title: u.profile?.title,
+                is_admin: u.is_admin
+              });
+            }
+          }
+
+          cursor = result.response_metadata?.next_cursor;
+          if (cursor && scannedUsers >= MAX_SCANNED_USERS) {
+            truncated = true;
+            break;
+          }
+          if (cursor) await new Promise(resolve => setTimeout(resolve, 100));
+        } while (cursor);
+
+        return { content: [{ type: "text", text: JSON.stringify({
+          query: args.query,
+          count: Math.min(matches.length, limit),
+          total_matches: matches.length,
+          truncated,
+          users: matches.slice(0, limit)
+        }, null, 2) }] };
       }
       default:
         return {

@@ -30,27 +30,9 @@ import { RELEASE_VERSION } from "../lib/public-metadata.js";
 import { checkTokenHealth } from "../lib/slack-client.js";
 import { TOOLS } from "../lib/tools.js";
 import {
-  handleTokenStatus,
+  TOOL_HANDLERS,
   handleHealthCheck,
-  handleRefreshTokens,
   handleListConversations,
-  handleConversationsHistory,
-  handleGetFullConversation,
-  handleSearchMessages,
-  handleUsersInfo,
-  handleSendMessage,
-  handleGetThread,
-  handleListUsers,
-  handleAddReaction,
-  handleRemoveReaction,
-  handleConversationsMark,
-  handleConversationsUnreads,
-  handleUsersSearch,
-  handleWorkflowSave,
-  handleWorkflows,
-  handleSmartSearch,
-  handleCatchMeUp,
-  handleTriage,
 } from "../lib/handlers.js";
 
 // Background refresh interval (4 hours)
@@ -231,86 +213,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
   try {
-    switch (name) {
-      case "slack_token_status":
-        return await handleTokenStatus();
-
-      case "slack_health_check":
-        return await handleHealthCheck();
-
-      case "slack_refresh_tokens":
-        return await handleRefreshTokens();
-
-      case "slack_list_conversations":
-        return await handleListConversations(args);
-
-      case "slack_conversations_history":
-        return await handleConversationsHistory(args);
-
-      case "slack_get_full_conversation":
-        return await handleGetFullConversation(args);
-
-      case "slack_search_messages":
-        return await handleSearchMessages(args);
-
-      case "slack_users_info":
-        return await handleUsersInfo(args);
-
-      case "slack_send_message":
-        return await handleSendMessage(args);
-
-      case "slack_get_thread":
-        return await handleGetThread(args);
-
-      case "slack_list_users":
-        return await handleListUsers(args);
-
-      case "slack_add_reaction":
-        return await handleAddReaction(args);
-
-      case "slack_remove_reaction":
-        return await handleRemoveReaction(args);
-
-      case "slack_conversations_mark":
-        return await handleConversationsMark(args);
-
-      case "slack_conversations_unreads":
-        return await handleConversationsUnreads(args);
-
-      case "slack_users_search":
-        return await handleUsersSearch(args);
-
-      // Workflow profile primitives (OSS local JSON store)
-      case "slack_workflow_save":
-        return await handleWorkflowSave(args);
-
-      case "slack_workflows":
-        return await handleWorkflows(args);
-
-      // Hosted-only AI tools (OSS = upgrade stubs)
-      case "slack_smart_search":
-        return await handleSmartSearch(args);
-
-      case "slack_catch_me_up":
-        return await handleCatchMeUp(args);
-
-      case "slack_triage":
-        return await handleTriage(args);
-
-      default:
-        return {
-          content: [{
-            type: "text",
-            text: JSON.stringify({
-              status: "error",
-              code: "unknown_tool",
-              message: `Unknown tool: ${name}`,
-              next_action: "Use tools/list to discover available tools."
-            }, null, 2)
-          }],
-          isError: true
-        };
+    // Shared dispatch map (lib/handlers.js) keeps this transport in lockstep
+    // with the HTTP server and the advertised TOOLS list.
+    const handler = TOOL_HANDLERS[name];
+    if (!handler) {
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            status: "error",
+            code: "unknown_tool",
+            message: `Unknown tool: ${name}`,
+            next_action: "Use tools/list to discover available tools."
+          }, null, 2)
+        }],
+        isError: true
+      };
     }
+    return await handler(args);
   } catch (error) {
     if (error?.code === "token_auth_failed") {
       return {

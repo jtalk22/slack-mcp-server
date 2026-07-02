@@ -744,7 +744,7 @@
 <body>
   <!-- Preview Banner -->
   <div class="preview-banner">
-    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or try <a href="{{CANONICAL_SITE_URL}}" style="color:#f0c246;font-weight:600">Hosted</a> — free tier (no card) live; Pro $9/mo unlocks unlimited AI tools (scheduled morning catch-up DM rolling out Q2 2026).
+    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or try <a href="{{CANONICAL_SITE_URL}}" style="color:#f0c246;font-weight:600">Hosted</a> — free tier (no card) live; Pro $9/mo unlocks unlimited AI tools (scheduled morning catch-up DM in development).
   </div>
   <div class="cta-strip">
     <div class="cta-links">
