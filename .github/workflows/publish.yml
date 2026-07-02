@@ -60,3 +60,56 @@ jobs:
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET_TOKEN }}
+
+      - name: Verify server.json matches release version
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          SJ_VERSION="$(jq -r '.version' server.json)"
+          if [[ "$SJ_VERSION" != "$VERSION" ]]; then
+            echo "server.json version ($SJ_VERSION) does not match release version ($VERSION)" >&2
+            exit 1
+          fi
+
+      - name: Check MCP registry for existing version
+        id: registry_check
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          VERSIONS_URL="https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions"
+          if curl -fsSL "$VERSIONS_URL" | jq -e --arg v "$VERSION" '[.servers[] | (.server.version // .version)] | index($v) != null' >/dev/null; then
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+            echo "Version $VERSION already exists in the MCP registry. Skipping registry publish."
+          else
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+            echo "Version $VERSION not found in the MCP registry. Proceeding with registry publish."
+          fi
+
+      - name: Wait for npm propagation
+        if: steps.registry_check.outputs.already_published != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.version.outputs.version }}"
+          # The registry validates the exact npm version exists before accepting a publish.
+          for i in $(seq 1 10); do
+            if npm view "@jtalk22/slack-mcp@$VERSION" version >/dev/null 2>&1; then
+              echo "npm has $VERSION."
+              exit 0
+            fi
+            echo "npm does not show $VERSION yet (attempt $i/10); waiting 15s..."
+            sleep 15
+          done
+          echo "npm version $VERSION not visible after 10 attempts" >&2
+          exit 1
+
+      - name: Publish to MCP registry
+        if: steps.registry_check.outputs.already_published != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
