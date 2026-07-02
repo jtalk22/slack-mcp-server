@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.2] - 2026-07-02
+
+### Fixed
+- **HTTP transport dispatches all 21 advertised tools** — `slack_workflow_save`, `slack_workflows`, and the three hosted upgrade stubs previously returned `unknown_tool` over HTTP. Both transports now route through a shared handler map, with a schema test guarding against future drift between `tools/list` and the dispatch surface.
+- **Worker tool contracts** — `slack_users_search` paginates `users.list` (explicit scan cap + `truncated` flag) and honors `limit`; `slack_conversations_unreads` returns the documented shape (`total_unread_conversations` + per-conversation entries) instead of a raw counts dump, with DM display names resolved concurrently.
+- **Token extraction robustness** — LevelDB extraction now returns the newest token instead of the oldest (fixes stale-token `invalid_auth` after re-login); Chrome cookie snapshots include the `-wal`/`-shm` sidecars so extraction works while Chrome is running; extraction temp directories are removed instead of leaking.
+- **Workflow store safety** — a corrupt profile store is quarantined aside (`.corrupt-<timestamp>`) with a warning instead of being silently replaced on the next save; saves are atomic (temp file + rename).
+- **Status widget hardening** — remote `/status` fields render as text nodes; docs links are validated `https://` URLs.
+- `conversations.history` only sets `inclusive` when a boundary timestamp is provided; empty user-search queries are rejected instead of matching everyone.
+
+## [4.4.1] - 2026-07-02
+
+### Changed
+- Copy accuracy pass across every shipped surface: the scheduled morning catch-up DM is described as in development everywhere (no dated rollout claims), and one canonical package description is enforced across `package.json`, `server.json`, and `glama.json`.
+
 ## [4.4.0] - 2026-06-09
 
 ### Added
