@@ -82,7 +82,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     // Shared dispatch map keeps this transport in lockstep with the stdio
-    // server and the advertised TOOLS list (review backlog #30/#123).
+    // server and the advertised TOOLS list.
     const handler = TOOL_HANDLERS[name];
     if (!handler) {
       return {

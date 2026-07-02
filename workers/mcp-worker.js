@@ -419,7 +419,7 @@ async function handleToolCall(name, args, env, queryParams) {
         // Mirrors the stdio implementation (lib/handlers.js
         // handleConversationsUnreads): list conversations, keep the ones
         // with unreads, resolve DM display names, sort by unread count
-        // descending, and honor `limit` (review backlog #83/#84).
+        // descending, and honor `limit`.
         const types = args.types || "im,mpim,public_channel,private_channel";
         const limit = args.limit || 50;
         const result = await slackApi('conversations.list', {
@@ -448,24 +448,25 @@ async function handleToolCall(name, args, env, queryParams) {
           return name;
         };
 
-        const unreads = [];
-        for (const c of (result.channels || [])) {
-          const unreadCount = c.unread_count_display || c.unread_count || 0;
-          if (unreadCount === 0) continue;
+        const withUnreads = (result.channels || []).filter(
+          (c) => (c.unread_count_display || c.unread_count || 0) > 0
+        );
 
-          let displayName = c.name;
-          if (c.is_im && c.user) {
-            displayName = await resolveUserName(c.user);
-          }
+        // Resolve DM display names concurrently (deduped) — sequential awaits here
+        // would add one Slack round-trip of latency per unread DM.
+        const dmUserIds = [...new Set(withUnreads.filter((c) => c.is_im && c.user).map((c) => c.user))];
+        const nameEntries = await Promise.all(
+          dmUserIds.map(async (userId) => [userId, await resolveUserName(userId)])
+        );
+        const dmNames = new Map(nameEntries);
 
-          unreads.push({
-            id: c.id,
-            name: displayName,
-            type: c.is_im ? "dm" : c.is_mpim ? "group_dm" : c.is_private ? "private_channel" : "public_channel",
-            unread_count: unreadCount,
-            latest_ts: c.latest?.ts || null
-          });
-        }
+        const unreads = withUnreads.map((c) => ({
+          id: c.id,
+          name: c.is_im && c.user ? (dmNames.get(c.user) || c.name) : c.name,
+          type: c.is_im ? "dm" : c.is_mpim ? "group_dm" : c.is_private ? "private_channel" : "public_channel",
+          unread_count: c.unread_count_display || c.unread_count || 0,
+          latest_ts: c.latest?.ts || null
+        }));
 
         unreads.sort((a, b) => b.unread_count - a.unread_count);
 
@@ -478,7 +479,7 @@ async function handleToolCall(name, args, env, queryParams) {
         // Mirrors the stdio implementation (lib/handlers.js
         // handleUsersSearch): paginate users.list, filter client-side,
         // explicit scan cap + truncated flag, slice to `limit`
-        // (review backlog #83/#84).
+        //.
         const rawQuery = typeof args.query === "string" ? args.query : "";
         const query = rawQuery.trim().toLowerCase();
         const limit = args.limit || 20;
