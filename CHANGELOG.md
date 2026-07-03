@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.3] - 2026-07-03
+
+### Added
+- **OAuth Lifeboat — token-death detection + recovery guidance** (`lib/lifeboat.js`). When a tool call fails because the Slack session token has expired or been revoked (`invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or an HTTP 401), the server now returns a helpful recovery message instead of a raw Slack error. The message names what happened, gives the self-fix first (re-extract via `npx -y @jtalk22/slack-mcp --setup`, or `slack_refresh_tokens` on macOS), and offers the permanent fix second (hosted OAuth, which does not rotate — free tier, no card). Wired into both transports (stdio + HTTP) and the `slack_health_check` connectivity test.
+- **Throttle + opt-out** — the long-form message appears at most once per process per hour; subsequent auth failures in that window return a one-line version so agents in retry loops do not spam. `SLACK_MCP_NO_UPSELL=1` drops the hosted-option paragraph while keeping the self-fix guidance.
+- Unit tests (`test/lifeboat.test.js`) covering the classifier (every auth-death code, non-auth errors, HTTP 401, the wrapped `token_auth_failed`), the hourly throttle, and the opt-out env var.
+
 ## [4.4.2] - 2026-07-02
 
 ### Fixed

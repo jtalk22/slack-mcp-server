@@ -17,6 +17,7 @@ import {
 import { TOOLS } from "../lib/tools.js";
 import { TOOL_HANDLERS } from "../lib/handlers.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
+import { isAuthDeath, lifeboatResponse } from "../lib/lifeboat.js";
 
 const SERVER_NAME = "slack-mcp-server";
 const SERVER_VERSION = RELEASE_VERSION;
@@ -100,6 +101,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
     return await handler(args);
   } catch (error) {
+    // OAuth Lifeboat: dead session token → recovery guidance, not a raw error.
+    if (isAuthDeath(error)) {
+      return lifeboatResponse(error);
+    }
     return {
       content: [{
         type: "text",
