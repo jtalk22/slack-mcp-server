@@ -56,7 +56,9 @@ test("HTTP 401 responses are classified as AUTH-DEATH", () => {
   assert.equal(isAuthDeath({ httpStatus: 401 }), true, "httpStatus field");
   assert.equal(isAuthDeath(new Error("Slack API users.info returned non-JSON (HTTP 401): ...")), true, "message");
   assert.equal(isAuthDeath("401"), true, "bare 401 string");
+  assert.equal(isAuthDeath(401), true, "raw 401 number");
   assert.equal(isAuthDeath({ status: 500 }), false, "HTTP 500 is not auth-death");
+  assert.equal(isAuthDeath(500), false, "raw 500 number is not auth-death");
 });
 
 test("authDeathCode extracts the specific Slack code (or null)", () => {
