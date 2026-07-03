@@ -449,8 +449,13 @@
         .then((data) => {
           cloudHealthEl.textContent = data.status || 'ok';
           const hostedVersion = data.version ? `v${data.version}` : 'version unavailable';
-          const standardTools = data.tools && typeof data.tools.standard === 'number' ? data.tools.standard : 'Unavailable';
-          const aiTools = data.tools && typeof data.tools.ai_compound === 'number' ? data.tools.ai_compound : 'Unavailable';
+          // Hosted /status emits tools:{free,paid,total} (v5 shape); accept the
+          // legacy {standard,ai_compound} keys too so neither side can strand the tile.
+          const toolCounts = data.tools || {};
+          const standardTools = typeof toolCounts.free === 'number' ? toolCounts.free
+            : (typeof toolCounts.standard === 'number' ? toolCounts.standard : 'Unavailable');
+          const aiTools = typeof toolCounts.paid === 'number' ? toolCounts.paid
+            : (typeof toolCounts.ai_compound === 'number' ? toolCounts.ai_compound : 'Unavailable');
           const remoteDocsUrl = data.docs && typeof data.docs.docs_url === 'string' ? data.docs.docs_url : '';
           const docsUrl = remoteDocsUrl.startsWith('https://') ? remoteDocsUrl : 'https://mcp.revasserlabs.com/docs';
           // Remote /status fields are untrusted input: build the note from
