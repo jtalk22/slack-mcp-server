@@ -1,8 +1,16 @@
 name: Live Browser Smoke
 
+# Two invariants, two triggers:
+#   push (main)          — deployment integrity: the page renders live upstream truth.
+#                          package.json ahead of the latest release = expected window.
+#   release (published)  — surface convergence: page + npm + releases API must all
+#                          equal the released version (strict; retries cover npm
+#                          propagation right after publish).
 on:
   push:
     branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -25,4 +33,9 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run deployed GitHub Pages smoke
-        run: node scripts/browser-smoke.js --mode live --base-url https://jtalk22.github.io/slack-mcp-server --retries 12 --retry-delay-ms 10000
+        run: >-
+          node scripts/browser-smoke.js --mode live
+          --base-url https://jtalk22.github.io/slack-mcp-server
+          --retries ${{ github.event_name == 'release' && '30' || '12' }}
+          --retry-delay-ms 10000
+          ${{ github.event_name == 'release' && '--strict-version' || '' }}

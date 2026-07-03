@@ -24,6 +24,18 @@ const liveBaseUrl = argValue("--base-url", "https://jtalk22.github.io/slack-mcp-
 const retries = Number(argValue("--retries", mode === "live" ? "8" : "1"));
 const retryDelayMs = Number(argValue("--retry-delay-ms", "10000"));
 
+// Two distinct invariants, two modes (the old single assertion conflated them and
+// went red on every version-bump merge during the normal merge→release window):
+//   default (push-to-main) — DEPLOYMENT INTEGRITY: the page must render what its
+//     upstream sources (GitHub releases API, npm registry) actually say right now.
+//     package.json being ahead of the latest release is the expected pre-release
+//     state, logged, never failed.
+//   --strict-version (release-published) — SURFACE CONVERGENCE: releases API, npm,
+//     and the page must all agree on RELEASE_VERSION. Upstreams are re-resolved on
+//     every retry so npm-publish propagation is covered by the retry budget.
+const strictVersion = process.argv.includes("--strict-version");
+const expectTagOverride = argValue("--expect-tag", null);
+
 const MIME_TYPES = {
   ".css": "text/css; charset=utf-8",
   ".gif": "image/gif",
@@ -37,14 +49,18 @@ const MIME_TYPES = {
 };
 
 function statusFixture() {
+  // Mirrors the LIVE hosted /status contract (buildHostedStatusPayload in the
+  // hosted repo): tools are {free,paid,total}. The old fixture pinned the dead
+  // {standard,ai_compound} shape, which is exactly how the landing-page tile
+  // drifted to "Unavailable managed tools" in production without a red test.
   return {
     status: "ok",
     server: "slack-mcp-hosted",
-    version: "0.6.7-local",
+    version: "5.0.0",
     timestamp: "2026-03-11T00:00:00.000Z",
     tools: {
-      standard: 15,
-      ai_compound: 3,
+      free: 15,
+      paid: 3,
       total: 18,
     },
     docs: {
@@ -160,7 +176,40 @@ function normalizeErrors(errors, { allowHostedStatusFallback = false } = {}) {
   });
 }
 
-async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) {
+// Resolve what the page's upstream sources say RIGHT NOW (same endpoints the page
+// itself fetches at runtime). Falls back to RELEASE_VERSION when an upstream is
+// unreachable (e.g. anonymous API rate limits on shared runners) so the smoke
+// degrades to the old strict behavior instead of a false failure.
+async function resolveExpectedVersions() {
+  let expectedTag = expectTagOverride;
+  let expectedNpm = null;
+
+  if (!expectedTag) {
+    try {
+      const res = await fetch("https://api.github.com/repos/jtalk22/slack-mcp-server/releases/latest", {
+        headers: { Accept: "application/vnd.github+json", "User-Agent": "browser-smoke" },
+      });
+      if (res.ok) expectedTag = (await res.json()).tag_name || null;
+    } catch {}
+  }
+  try {
+    const res = await fetch("https://registry.npmjs.org/@jtalk22/slack-mcp/latest", {
+      headers: { "User-Agent": "browser-smoke" },
+    });
+    if (res.ok) expectedNpm = `v${(await res.json()).version}` || null;
+  } catch {}
+
+  return {
+    expectedTag: expectedTag || `v${RELEASE_VERSION}`,
+    expectedNpm: expectedNpm || `v${RELEASE_VERSION}`,
+  };
+}
+
+function literalPattern(value) {
+  return new RegExp(`^${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+}
+
+async function checkRoot(page, url, { allowHostedStatusFallback = false, expectedNpm = `v${RELEASE_VERSION}`, expectedTag = `v${RELEASE_VERSION}` } = {}) {
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForFunction(() => {
     const npm = document.querySelector("#npmLatest")?.textContent?.trim();
@@ -177,8 +226,8 @@ async function checkRoot(page, url, { allowHostedStatusFallback = false } = {}) 
     decision: document.querySelector(".decision-grid")?.textContent?.trim() || "",
   }));
 
-  assertText(snapshot.npm, new RegExp(`^v${RELEASE_VERSION.replace(/\./g, "\\.")}$`), "#npmLatest");
-  assertText(snapshot.release, new RegExp(`^v${RELEASE_VERSION.replace(/\./g, "\\.")}$`), "#releaseTag");
+  assertText(snapshot.npm, literalPattern(expectedNpm), "#npmLatest");
+  assertText(snapshot.release, literalPattern(expectedTag), "#releaseTag");
   assertText(snapshot.decision, new RegExp(`${PUBLIC_METADATA.selfHostedToolCount} tools and full operator control`, "i"), "decision guide");
 
   if (/^ok$/i.test(snapshot.cloud)) {
@@ -246,10 +295,20 @@ async function runLive() {
       const errors = await collectErrors(page);
 
       try {
+        // Re-resolve upstream truth on every attempt: in strict mode this lets the
+        // retry budget absorb npm-publish / releases-API propagation after a release.
+        const { expectedTag, expectedNpm } = await resolveExpectedVersions();
+        if (strictVersion) {
+          assertText(expectedTag, literalPattern(`v${RELEASE_VERSION}`), "latest release tag (strict convergence)");
+          assertText(expectedNpm, literalPattern(`v${RELEASE_VERSION}`), "npm latest version (strict convergence)");
+        } else if (expectedTag !== `v${RELEASE_VERSION}`) {
+          console.log(`note: package version v${RELEASE_VERSION} is ahead of the latest release ${expectedTag} — expected merge→release window; asserting the page against live upstream truth.`);
+        }
+
         // The public page explicitly supports a raw-status fallback when cross-origin
         // fetches to the hosted site are blocked. GitHub-hosted runners can hit that
         // path even when the public site is rendering correctly for real users.
-        const snapshot = await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { allowHostedStatusFallback: true });
+        const snapshot = await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { allowHostedStatusFallback: true, expectedNpm, expectedTag });
         await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Hosted free tier \(no card\) live/i, "live share note");
         const normalizedErrors = normalizeErrors(errors, { allowHostedStatusFallback: snapshot.cloudState === "fallback" });
         if (normalizedErrors.length > 0) {
