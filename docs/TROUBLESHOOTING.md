@@ -31,7 +31,7 @@ If `--version` fails here, the issue is install/runtime path, not Slack credenti
 
 ## Hosted Version
 
-The hosted version is live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com). Free tier (no card) ships 10 smart_search/mo + 3 catch_me_up/mo + 5 triage/day + all 5 workflow profile types. Pro at $9/mo unlocks unlimited AI tools, the scheduled morning catch-up DM at 8am workspace time *(in development)*, permanent OAuth (no 2-week token rotation), and 90-day Vectorize retention. Team at $49/mo flat covers 5 workspaces with shared workflow profiles and audit log. Ops engagement starts at $199/mo (custom) for 10+ workspace organizations with SLA, custom retention, SOC2 evidence, or multi-tenant isolation.
+The hosted version is live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com). Free tier (no card) ships 2,000 requests/mo + 25 AI tool calls/mo + all 5 workflow profile types. Pro at $19/mo (or $190/yr) unlocks unlimited requests and AI tool calls, permanent OAuth (no 2-week token rotation), email support, and 2 workspaces. Team at $49/mo flat (or $490/yr) covers 5 workspaces with shared workflow profiles and 24h support. Safeguard at $199/mo (waitlist only) adds agent approval gates, the scheduled morning catch-up DM at 8am workspace time, and workspace memory — all *(in development)*.
 
 The OSS package keeps the local-machine path. The hosted version adds the AI brain (smart_search, catch_me_up, triage) — these tools also appear in the OSS package as discoverable upgrade stubs that point at the hosted signup.
 

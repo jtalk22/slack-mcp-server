@@ -43,7 +43,7 @@ function printUsage() {
   console.log("  slack-mcp --apply-template support-triage --channels C012345,C067890");
   console.log("");
   console.log("Templates write to ~/.slack-mcp-workflows.json. The hosted AI brain at");
-  console.log("mcp.revasserlabs.com (free tier or Pro $9/mo) reads these profiles and");
+  console.log("mcp.revasserlabs.com (free tier or Pro $19/mo) reads these profiles and");
   console.log("returns structured JSON per the workflow_kind. The OSS package ships the");
   console.log("profile primitives + 3 discoverable upgrade stubs (slack_smart_search,");
   console.log("slack_catch_me_up, slack_triage). The brain is hosted-only.");
@@ -113,5 +113,5 @@ if (!profile.channels.length) {
   console.log("Or call slack_workflow_save from your MCP client to update.");
 } else {
   console.log("Profile is ready. Run slack_catch_me_up against it from your MCP client.");
-  console.log(`(Free tier: 3 catch_me_up calls/month. Pro $9/mo unlocks unlimited; scheduled morning DM in development.)`);
+  console.log(`(Free tier: 25 AI tool calls/month. Pro $19/mo unlocks unlimited.)`);
 }

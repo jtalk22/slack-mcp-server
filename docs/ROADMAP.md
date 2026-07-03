@@ -12,7 +12,7 @@ Wraps `chat.update` and `chat.delete`. The server can post via `chat.postMessage
 
 | Feature | Effort | Why |
 |---|---|---|
-| `slack_schedule_message` | S–M | Wraps `chat.scheduleMessage`. An OSS teaser for the hosted Pro "scheduled morning catch-up DM" — proves cadence value before the upsell. |
+| `slack_schedule_message` | S–M | Wraps `chat.scheduleMessage`. An OSS teaser for the hosted Safeguard "scheduled morning catch-up DM" *(in development)* — proves cadence value before the upsell. |
 | Complete pagination / cursor passthrough | S | Correctness fix across `conversations_history` / `replies` / `search` / `unreads`, not a new tool. Makes every read complete and every corpus indexed for `smart_search` complete — the cheapest thing that raises hosted quality. |
 | `slack_upload_file` | M | `files.getUploadURLExternal` → `completeUploadExternal` (legacy `files.upload` is deprecated). Indexed file content feeds `smart_search`. Heaviest of the cheap tier; defer behind the two above. |
 

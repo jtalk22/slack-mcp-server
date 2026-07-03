@@ -474,7 +474,7 @@ async function showHelp() {
   print("  https://github.com/jtalk22/slack-mcp-server");
   print();
   print(`${colors.bold}Hosted tier:${colors.reset}`);
-  print("  https://mcp.revasserlabs.com — $9/mo Pro, permanent OAuth,");
+  print("  https://mcp.revasserlabs.com — $19/mo Pro, permanent OAuth,");
   print("  semantic search, workflow continuity across channels.");
 }
 
@@ -548,7 +548,7 @@ async function main() {
       print("  • Or add to Claude Desktop config");
       print();
       print(`${colors.dim}Want permanent tokens, semantic search, and workflow continuity?${colors.reset}`);
-      print(`${colors.dim}Hosted tier: https://mcp.revasserlabs.com — $9/mo Pro, 10 free paid calls.${colors.reset}`);
+      print(`${colors.dim}Hosted tier: https://mcp.revasserlabs.com — $19/mo Pro, 25 free AI calls/mo.${colors.reset}`);
     } else {
       print(`${colors.red}Setup failed.${colors.reset} See errors above.`);
       process.exit(1);
