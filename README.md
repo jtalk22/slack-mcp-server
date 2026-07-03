@@ -324,6 +324,22 @@ Full release notes on [GitHub releases/latest](https://github.com/jtalk22/slack-
 
 </details>
 
+## Token expired? / OAuth Lifeboat
+
+Session tokens (`xoxc-` + `xoxd-`) are extracted from your browser, and Slack rotates them roughly every 1-2 weeks. When they die, every tool call fails to authenticate. Instead of surfacing a raw Slack error, this server detects token death — `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or an HTTP 401 — and returns a recovery message at the moment of pain.
+
+**Self-fix — re-extract fresh tokens:**
+
+```bash
+npx -y @jtalk22/slack-mcp --setup
+```
+
+On macOS with a logged-in Slack tab open in Chrome, you can instead call the `slack_refresh_tokens` tool (or run `npm run tokens:auto`). To avoid silent expiration during long idle windows, set up the optional [token-refresh LaunchAgent](docs/SETUP.md#keep-tokens-fresh-while-claude-is-closed-macos-optional).
+
+**Permanent fix — no rotation:** the [hosted version](https://mcp.revasserlabs.com/setup?utm_source=lifeboat&utm_medium=npm&utm_campaign=token_death) uses OAuth, which does not rotate every 1-2 weeks. Free tier available, no card.
+
+The recovery message appears at most once per process per hour; repeat failures inside that window get a one-line reminder so agents in retry loops don't spam. Set `SLACK_MCP_NO_UPSELL=1` to drop the hosted-option line while keeping the self-fix guidance.
+
 ## Rich Message Fields
 
 Added in 4.4.0. The four read tools marked ‡ above accept `include_rich_message_fields: true`, which surfaces the parts of a message that live outside `text` — `attachments`, `blocks`, `files`, `reactions`, `metadata`, plus `subtype`/`bot_id`/`app_id` (automated/bot/app markers) and `team` (workspace id).

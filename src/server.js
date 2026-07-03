@@ -34,6 +34,7 @@ import {
   handleHealthCheck,
   handleListConversations,
 } from "../lib/handlers.js";
+import { isAuthDeath, lifeboatResponse } from "../lib/lifeboat.js";
 
 // Background refresh interval (4 hours)
 const BACKGROUND_REFRESH_INTERVAL = 4 * 60 * 60 * 1000;
@@ -232,21 +233,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
     return await handler(args);
   } catch (error) {
-    if (error?.code === "token_auth_failed") {
-      return {
-        content: [{
-          type: "text",
-          text: JSON.stringify({
-            status: "error",
-            code: "token_auth_failed",
-            message: String(error?.message || error),
-            slack_error: error.slack_error || null,
-            extraction_error: error.extraction_error || null,
-            next_action: error.next_action || "Open http://localhost:3000 and click Refresh, OR run `npm run tokens:auto` with Slack open in Chrome, OR check Chrome > View > Developer > Allow JavaScript from Apple Events."
-          }, null, 2)
-        }],
-        isError: true
-      };
+    // OAuth Lifeboat: dead session token → recovery guidance, not a raw error.
+    if (isAuthDeath(error)) {
+      return lifeboatResponse(error);
     }
     return {
       content: [{
