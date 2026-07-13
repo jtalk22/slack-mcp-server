@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Keychain-only credential storage** (`SLACK_MCP_TOKEN_STORAGE=keychain-only`, macOS) — credentials live exclusively in the macOS Keychain and no plaintext token file is ever written (#162). `--setup`, `slack_refresh_tokens`, and automatic refresh work unchanged. An existing `~/.slack-mcp-tokens.json` is migrated into the Keychain on first load and removed only after both entries verify by read-back; a failed migration leaves the file untouched and reports `keychain_migration_failed`. Keychain writes are verified and fail loudly (`keychain_write_failed`) instead of falling back to plaintext. Non-secret bookkeeping (token timestamp, auto-heal telemetry) moves to `~/.slack-mcp-meta.json` so `slack_token_status` age reporting and stuck-detection keep working.
+- **`SLACK_MCP_TOKEN_STORAGE=file`** — token file only, the Keychain is never touched (no Keychain prompts; useful on shared machines and in CI). Default remains `auto` (file + Keychain), the previous behavior unchanged.
+- `slack_token_status` reports the active backend under `storage` (`mode`, `keychain_available`, `plaintext_file_present`); `--doctor` and `npm run tokens:status` print the storage mode and warn when a plaintext file is pending migration.
+- Unit tests (`test/token-store.test.js`) covering mode parsing, verified writes, migration (success and failure paths), plaintext-file removal, telemetry routing, and fail-closed handling of unrecognized mode values.
+
+### Changed
+- Keychain writes use `security add-generic-password -U` (update-in-place) instead of delete-then-add, removing the window where a failed add after a successful delete lost the entry.
+
 ## [4.4.3] - 2026-07-03
 
 ### Added

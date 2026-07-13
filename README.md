@@ -311,6 +311,16 @@ Session tokens (`xoxc-` + `xoxd-`) from your browser. If you can see it in Slack
 
 Tokens expire. The server notices before you do — proactive health monitoring, automatic refresh on macOS, warnings when tokens age out. File writes are atomic (temp file → chmod → rename) to prevent corruption. Concurrent refresh attempts are mutex-locked.
 
+**Storage backend** — `SLACK_MCP_TOKEN_STORAGE` selects where credentials persist:
+
+| Value | Behavior |
+|-------|----------|
+| `auto` (default) | Token file + Keychain, exactly as above |
+| `keychain-only` | macOS Keychain only — no plaintext credentials ever touch disk. Setup, `slack_refresh_tokens`, and automatic refresh keep working; an existing token file is migrated into the Keychain and removed once both entries verify. Writes are verified by read-back and fail loudly instead of falling back to plaintext. |
+| `file` | Token file only — the Keychain is never touched (no Keychain prompts; useful on shared machines and in CI) |
+
+In `keychain-only` mode, non-secret bookkeeping (token timestamp, auto-heal telemetry) lives in `~/.slack-mcp-meta.json`, so `slack_token_status` age reporting still works — the active backend shows up there under `storage`. One trade-off to know about: background refresh can't write to a locked Keychain; it fails with a clear error and retries on the next cycle. Unrecognized values fail at startup rather than silently downgrading to plaintext.
+
 <details>
 <summary><strong>What's New in 4.2.0</strong></summary>
 
@@ -407,7 +417,7 @@ More: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
 ## Security
 
 - Token files: `chmod 600` (owner-only)
-- macOS Keychain encrypted backup
+- macOS Keychain encrypted backup — or exclusive storage via `SLACK_MCP_TOKEN_STORAGE=keychain-only` (zero plaintext credentials on disk)
 - Web server binds to localhost only
 - API keys: `crypto.randomBytes`
 - See [SECURITY.md](SECURITY.md)

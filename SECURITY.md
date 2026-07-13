@@ -9,6 +9,7 @@ This project uses Slack browser session tokens (`xoxc-` and `xoxd-`) which provi
 - **Never share your tokens** - They provide the same access as your Slack login
 - **Tokens are stored locally** with restricted permissions (`chmod 600`)
 - **macOS Keychain** provides encrypted storage when available
+- **Keychain-only mode** (`SLACK_MCP_TOKEN_STORAGE=keychain-only`, macOS) stores credentials exclusively in the Keychain: no plaintext token file is written, an existing one is migrated in and removed only after both entries verify, and Keychain writes fail loudly rather than falling back to plaintext
 - **Tokens expire** every 1-2 weeks, limiting exposure window
 
 ### Local Security

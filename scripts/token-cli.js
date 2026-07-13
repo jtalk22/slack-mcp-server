@@ -3,7 +3,7 @@
  * Token CLI - Manage Slack tokens
  */
 
-import { loadTokensReadOnly, saveTokens, extractFromChrome, getFromFile, TOKEN_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
+import { loadTokensReadOnly, saveTokens, extractFromChrome, getFromFile, getStorageInfo, TOKEN_FILE, META_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
 import { slackAPI } from "../lib/slack-client.js";
 import * as readline from "readline";
 
@@ -45,9 +45,14 @@ async function showStatus() {
     return;
   }
 
+  const storage = getStorageInfo();
   console.log("Token source:", creds.source);
+  console.log("Storage mode:", storage.mode);
   if (creds.source === "file") {
     console.log("Token file:", TOKEN_FILE);
+  }
+  if (storage.mode === "keychain-only" && storage.plaintext_file_present) {
+    console.log("WARNING: plaintext token file still present at", TOKEN_FILE);
   }
   console.log("");
 
@@ -140,6 +145,13 @@ async function clearTokens() {
     console.log("Deleted token file");
   } catch (e) {
     console.log("No token file to delete");
+  }
+
+  try {
+    fs.unlinkSync(META_FILE);
+    console.log("Deleted metadata file");
+  } catch (e) {
+    // No metadata file — nothing to report.
   }
 
   const securityArgs = (account) => ["delete-generic-password", "-s", KEYCHAIN_SERVICE, "-a", account];
