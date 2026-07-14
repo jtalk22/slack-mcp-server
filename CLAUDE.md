@@ -56,11 +56,12 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 3. macOS Keychain
 4. Chrome auto-extraction (macOS only)
 
-`SLACK_MCP_TOKEN_STORAGE` selects the backend: `auto` (file + Keychain, default),
-`keychain-only` (Keychain exclusively, no plaintext file, verified writes, legacy
-file migrated in and removed after verification, bookkeeping in
-`~/.slack-mcp-meta.json`), or `file` (Keychain never touched). Unrecognized
-values fail closed at startup.
+Storage backend: `auto` (file + Keychain, default), `keychain-only` (Keychain
+exclusively, no plaintext file, verified writes, legacy file migrated in and
+removed after verification, bookkeeping in `~/.slack-mcp-meta.json`), or
+`file` (Keychain never touched). On macOS, `--setup` asks and persists the
+choice in the meta file; the `SLACK_MCP_TOKEN_STORAGE` env var overrides.
+Unrecognized values from either source fail closed at startup.
 
 ## Architecture Notes
 

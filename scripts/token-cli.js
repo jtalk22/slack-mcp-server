@@ -34,10 +34,22 @@ async function main() {
   }
 }
 
+function storageModeLine() {
+  const storage = getStorageInfo();
+  const sourceLabel = storage.mode_source === "env"
+    ? "from SLACK_MCP_TOKEN_STORAGE"
+    : storage.mode_source === "persisted"
+      ? "chosen during setup"
+      : "default";
+  return { storage, line: `${storage.mode} (${sourceLabel})` };
+}
+
 async function showStatus() {
+  const { storage, line } = storageModeLine();
   const creds = loadTokensReadOnly();
   if (!creds) {
     console.log("No tokens found");
+    console.log("Storage mode:", line);
     console.log("");
     console.log("Run one of:");
     console.log("  npm run tokens:auto    (with Slack open in Chrome)");
@@ -45,9 +57,8 @@ async function showStatus() {
     return;
   }
 
-  const storage = getStorageInfo();
   console.log("Token source:", creds.source);
-  console.log("Storage mode:", storage.mode);
+  console.log("Storage mode:", line);
   if (creds.source === "file") {
     console.log("Token file:", TOKEN_FILE);
   }

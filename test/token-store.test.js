@@ -16,6 +16,8 @@ delete process.env.SLACK_MCP_TOKEN_STORAGE;
 
 const {
   getStorageMode,
+  getStorageModeDetail,
+  setPersistedStorageMode,
   getStorageInfo,
   saveTokens,
   loadTokensReadOnly,
@@ -80,6 +82,31 @@ test("storage mode defaults to auto and accepts documented aliases", () => {
 test("an unrecognized storage mode fails closed instead of guessing", () => {
   process.env.SLACK_MCP_TOKEN_STORAGE = "keychainonly";
   assert.throws(() => getStorageMode(), (e) => e.code === "invalid_token_storage_mode");
+});
+
+test("a persisted setup choice is honored, and the env var overrides it", () => {
+  assert.deepEqual(getStorageModeDetail(), { mode: "auto", source: "default" });
+
+  setPersistedStorageMode("keychain-only");
+  assert.deepEqual(getStorageModeDetail(), { mode: "keychain-only", source: "persisted" });
+
+  process.env.SLACK_MCP_TOKEN_STORAGE = "file";
+  assert.deepEqual(getStorageModeDetail(), { mode: "file", source: "env" });
+});
+
+test("an unrecognized persisted mode fails closed, and cannot be persisted in the first place", () => {
+  assert.throws(() => setPersistedStorageMode("keychainonly"), (e) => e.code === "invalid_token_storage_mode");
+
+  writeFileSync(META_FILE, JSON.stringify({ storage_mode: "keychian-only" }));
+  assert.throws(() => getStorageMode(), (e) => e.code === "invalid_token_storage_mode");
+});
+
+test("persisting a storage mode preserves other metadata fields", () => {
+  writeFileSync(META_FILE, JSON.stringify({ updated_at: "2026-07-01T00:00:00.000Z" }));
+  setPersistedStorageMode("keychain-only");
+  const meta = JSON.parse(readFileSync(META_FILE, "utf-8"));
+  assert.equal(meta.storage_mode, "keychain-only");
+  assert.equal(meta.updated_at, "2026-07-01T00:00:00.000Z");
 });
 
 // ---------- auto mode (default behavior unchanged) ----------
@@ -226,6 +253,7 @@ test("getStorageInfo reports the mode and whether a plaintext file is present", 
   writeLegacyTokenFile();
   assert.deepEqual(getStorageInfo(), {
     mode: "keychain-only",
+    mode_source: "env",
     keychain_available: true,
     plaintext_file_present: true,
   });

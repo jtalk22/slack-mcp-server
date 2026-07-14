@@ -127,7 +127,11 @@ Claude Code reads tokens from `~/.slack-mcp-tokens.json` automatically.
 
 ### Optional: Keychain-Only Credential Storage (macOS)
 
-By default, tokens are written to `~/.slack-mcp-tokens.json` (chmod 600) with the macOS Keychain as an encrypted backup. If you don't want plaintext credentials on disk at all, set the storage mode before running setup — for example in your MCP client config:
+By default, tokens are written to `~/.slack-mcp-tokens.json` (chmod 600) with the macOS Keychain as an encrypted backup. If you don't want plaintext credentials on disk at all, pick **Keychain only** when `--setup` asks where to store tokens — the choice is remembered (in `~/.slack-mcp-meta.json`), so the server, the CLI, and any LaunchAgent all follow it automatically. Already set up? Re-run `npx -y @jtalk22/slack-mcp --setup` and pick option 2; your existing token file is imported into the Keychain and deleted once both entries verify by read-back.
+
+In this mode credentials live exclusively in the macOS Keychain. `--setup`, `slack_refresh_tokens`, and automatic refresh all work unchanged, and non-secret bookkeeping (token timestamp, auto-heal telemetry) moves to `~/.slack-mcp-meta.json` so `slack_token_status` age reporting keeps working.
+
+The `SLACK_MCP_TOKEN_STORAGE` env var overrides the setup choice when set (`auto`, `keychain-only`, or `file`) — useful for forcing a mode per client config:
 
 ```json
 "env": {
@@ -135,14 +139,12 @@ By default, tokens are written to `~/.slack-mcp-tokens.json` (chmod 600) with th
 }
 ```
 
-In this mode credentials live exclusively in the macOS Keychain. `--setup`, `slack_refresh_tokens`, and automatic refresh all work unchanged; an existing token file is imported into the Keychain and deleted once both entries verify by read-back. Non-secret bookkeeping (token timestamp, auto-heal telemetry) moves to `~/.slack-mcp-meta.json`.
-
 Two things to know:
 
 - The Keychain must be unlocked for writes. A background refresh against a locked Keychain fails with a clear error and retries on the next cycle — your existing Keychain credentials are untouched.
-- Set the same env var everywhere the server runs (Claude Desktop config, Claude Code config, LaunchAgent) so every process agrees on where tokens live.
+- Unrecognized mode values fail at startup with a clear error rather than silently falling back to plaintext.
 
-`SLACK_MCP_TOKEN_STORAGE=file` is also available: token file only, Keychain never touched (no Keychain prompts — useful on shared machines and in CI).
+`SLACK_MCP_TOKEN_STORAGE=file` is the third mode: token file only, Keychain never touched (no Keychain prompts — useful on shared machines and in CI).
 
 ### 6. Restart Claude
 
@@ -177,7 +179,8 @@ Create `~/Library/LaunchAgents/com.yourname.slack-token-refresh.plist`:
         <string>/bin/bash</string>
         <string>-c</string>
         <string>export NVM_DIR="$HOME/.nvm" &amp;&amp; [ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh" &amp;&amp; exec npx -y @jtalk22/slack-mcp --refresh-tokens</string>
-        <!-- Using keychain-only storage? Add before ProgramArguments:
+        <!-- The storage mode chosen during --setup is followed automatically.
+             To force one for this agent only, add before ProgramArguments:
              <key>EnvironmentVariables</key>
              <dict><key>SLACK_MCP_TOKEN_STORAGE</key><string>keychain-only</string></dict> -->
     </array>
