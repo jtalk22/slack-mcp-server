@@ -5,7 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.5.0] - 2026-07-21
+
+### Keychain-Only Credential Storage — zero plaintext on disk, every failure loud
 
 ### Added
 - **Keychain-only credential storage** (`SLACK_MCP_TOKEN_STORAGE=keychain-only`, macOS) — credentials live exclusively in the macOS Keychain and no plaintext token file is ever written (#162). `--setup`, `slack_refresh_tokens`, and automatic refresh work unchanged. An existing `~/.slack-mcp-tokens.json` is migrated into the Keychain on first load and removed only after both entries verify by read-back; a failed migration leaves the file untouched and reports `keychain_migration_failed`, and a verified migration whose file removal fails reports `plaintext_removal_failed` with the exact cleanup command — removal is attempted, never assumed. Keychain writes are verified and fail loudly (`keychain_write_failed`) instead of falling back to plaintext. Non-secret bookkeeping (token timestamp, auto-heal telemetry) moves to `~/.slack-mcp-meta.json` so `slack_token_status` age reporting and stuck-detection keep working.
