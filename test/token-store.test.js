@@ -238,7 +238,10 @@ test("keychain-only: a plaintext file that cannot be removed after a verified wr
   assert.equal(getStorageInfo().unpersisted_fresh_tokens, false);
 });
 
-test("keychain-only: a migration whose file removal fails throws instead of silently looping", () => {
+// Root ignores directory write permissions, so the read-only-HOME trick can't
+// force the unlink failure there — the saveTokens-path sibling above covers
+// the same throw with a root-proof directory blocker.
+test("keychain-only: a migration whose file removal fails throws instead of silently looping", { skip: process.getuid?.() === 0 ? "read-only HOME cannot block unlink when running as root" : false }, () => {
   process.env.SLACK_MCP_TOKEN_STORAGE = "keychain-only";
   _setKeychainAdapterForTests(fakeKeychain());
   writeLegacyTokenFile();
