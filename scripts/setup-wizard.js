@@ -20,10 +20,75 @@ import {
   TOKEN_FILE,
   getFromFile,
   getFromKeychain,
+  getStorageMode,
+  getStorageModeDetail,
+  setPersistedStorageMode,
 } from "../lib/token-store.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
 
 const IS_MACOS = platform() === 'darwin';
+
+// Validate the storage mode up front so a bad SLACK_MCP_TOKEN_STORAGE value
+// fails with the clear one-line error instead of a mid-wizard stack trace.
+// Read live (not cached) everywhere below: the wizard can change the
+// persisted mode mid-run.
+try {
+  getStorageMode();
+} catch (e) {
+  console.error(e.message);
+  process.exit(1);
+}
+
+// keychain-only is a macOS-only backend. Fail here — before any credentials
+// are collected — instead of gathering valid tokens that cannot be saved.
+if (!IS_MACOS && getStorageMode() === 'keychain-only') {
+  const origin = getStorageModeDetail().source === 'env'
+    ? 'Unset SLACK_MCP_TOKEN_STORAGE, or set it to "file" or "auto".'
+    : 'Remove the storage_mode entry from ~/.slack-mcp-meta.json, or set SLACK_MCP_TOKEN_STORAGE=file to override.';
+  console.error(`keychain-only token storage requires the macOS Keychain, which is not available on this platform. ${origin}`);
+  process.exit(1);
+}
+
+function isKeychainOnly() {
+  return getStorageMode() === 'keychain-only';
+}
+
+function storageDestination() {
+  return isKeychainOnly() ? 'the macOS Keychain (keychain-only mode)' : TOKEN_FILE;
+}
+
+function savedMessage() {
+  return isKeychainOnly()
+    ? 'Tokens saved to the macOS Keychain — no plaintext file written'
+    : 'Tokens saved with chmod 600';
+}
+
+/**
+ * Persist tokens with a friendly failure path: saveTokens() throws in
+ * keychain-only mode when the Keychain is locked/unavailable or a leftover
+ * plaintext file cannot be removed. A first-run stack trace for a locked
+ * Keychain is the worst possible setup experience — translate each failure
+ * into the action that fixes it. The success message only prints after the
+ * save (including plaintext removal) fully succeeded.
+ */
+function persistTokens(token, cookie) {
+  print();
+  print(`Writing to ${storageDestination()}...`);
+  try {
+    saveTokens(token, cookie);
+  } catch (e) {
+    error(`Could not save tokens: ${e.message}`);
+    if (e.code === 'keychain_write_failed' || e.code === 'keychain_unavailable') {
+      print('Unlock the macOS Keychain (open Keychain Access, or log in again), then re-run --setup.');
+      print('Or re-run --setup and choose option 1 to store tokens in a file instead.');
+    } else if (e.code === 'plaintext_removal_failed') {
+      print('Your tokens ARE saved in the Keychain — but the old plaintext token file could not be removed.');
+    }
+    return false;
+  }
+  success(savedMessage());
+  return true;
+}
 const VERSION = RELEASE_VERSION;
 const MIN_NODE_MAJOR = 20;
 const AUTH_TEST_URL = process.env.SLACK_MCP_AUTH_TEST_URL || "https://slack.com/api/auth.test";
@@ -99,6 +164,47 @@ async function validateTokens(token, cookie) {
   } catch (e) {
     return { valid: false, error: e.message };
   }
+}
+
+/**
+ * Ask where credentials should live and remember the answer, so the choice
+ * follows every process (MCP server, CLI, LaunchAgent) without plumbing an
+ * env var into each client config. Skipped when SLACK_MCP_TOKEN_STORAGE is
+ * set — the env var is the authoritative override — and on platforms
+ * without a Keychain, where the token file is the only option.
+ */
+async function chooseStorageMode(rl) {
+  if (!IS_MACOS) return;
+
+  const detail = getStorageModeDetail();
+  if (detail.source === 'env') {
+    info(`Storage mode: ${detail.mode} (set via SLACK_MCP_TOKEN_STORAGE — overrides the setup choice)`);
+    return;
+  }
+
+  const current = detail.mode;
+  const defaultChoice = current === 'keychain-only' ? '2' : '1';
+  print();
+  print(`${colors.bold}Where should your Slack tokens be stored?${colors.reset}`);
+  print(`  1) Token file (chmod 600) + macOS Keychain backup${current !== 'keychain-only' ? `  ${colors.dim}(current)${colors.reset}` : ''}`);
+  print(`  2) macOS Keychain only — no plaintext file on disk${current === 'keychain-only' ? `  ${colors.dim}(current)${colors.reset}` : ''}`);
+  print();
+
+  // Accept only 1, 2, or Enter-for-default: for a credential-storage choice a
+  // typo must re-prompt, never silently select plaintext storage.
+  let mode = null;
+  while (mode === null) {
+    const answer = (await question(rl, `Choice [${defaultChoice}]: `)).trim() || defaultChoice;
+    if (answer === '1') mode = 'auto';
+    else if (answer === '2') mode = 'keychain-only';
+    else warn(`"${answer}" is not an option — answer 1 or 2.`);
+  }
+  setPersistedStorageMode(mode);
+
+  if (mode === 'keychain-only') {
+    success('Keychain-only storage selected — credentials never touch a plaintext file.');
+  }
+  print();
 }
 
 async function runMacOSSetup(rl) {
@@ -179,12 +285,7 @@ async function runMacOSSetup(rl) {
   success(`Workspace: ${validation.team}`);
   success(`User: ${validation.user}`);
 
-  print();
-  print(`Writing to ${TOKEN_FILE}...`);
-  saveTokens(tokens.token, tokens.cookie);
-  success("Tokens saved with chmod 600");
-
-  return true;
+  return persistTokens(tokens.token, tokens.cookie);
 }
 
 async function runManualSetup(rl) {
@@ -295,12 +396,7 @@ async function runManualSetup(rl) {
   success(`Workspace: ${validation.team}`);
   success(`User: ${validation.user}`);
 
-  print();
-  print(`Writing to ${TOKEN_FILE}...`);
-  saveTokens(token, cookie);
-  success("Tokens saved with chmod 600");
-
-  return true;
+  return persistTokens(token, cookie);
 }
 
 async function showStatus() {
@@ -345,6 +441,30 @@ async function showStatus() {
 function getDoctorCredentials() {
   if (process.env.SLACK_TOKEN && process.env.SLACK_COOKIE) {
     return { token: process.env.SLACK_TOKEN, cookie: process.env.SLACK_COOKIE, source: "environment" };
+  }
+
+  // The doctor is read-only, so in keychain-only mode it checks the Keychain
+  // first and flags a lingering plaintext file instead of migrating it here —
+  // migration runs on the next server start or token save.
+  if (isKeychainOnly()) {
+    const keychainToken = getFromKeychain("token");
+    const keychainCookie = getFromKeychain("cookie");
+    const legacy = getFromFile();
+    const pendingMigration = Boolean(legacy?.token && legacy?.cookie);
+    if (keychainToken && keychainCookie) {
+      return { token: keychainToken, cookie: keychainCookie, source: "keychain", pendingMigration };
+    }
+    if (pendingMigration) {
+      return {
+        token: legacy.token,
+        cookie: legacy.cookie,
+        source: "file",
+        path: TOKEN_FILE,
+        updatedAt: legacy.updatedAt,
+        pendingMigration: true,
+      };
+    }
+    return null;
   }
 
   const fileTokens = getFromFile();
@@ -420,6 +540,16 @@ async function runDoctor() {
   }
   if (creds.updatedAt) {
     print(`Last updated: ${creds.updatedAt}`);
+  }
+  const storageDetail = getStorageModeDetail();
+  const sourceLabel = storageDetail.source === 'env'
+    ? 'from SLACK_MCP_TOKEN_STORAGE'
+    : storageDetail.source === 'persisted'
+      ? 'chosen during setup'
+      : 'default';
+  print(`Storage mode: ${storageDetail.mode} (${sourceLabel})`);
+  if (isKeychainOnly() && creds.pendingMigration) {
+    warn(`Plaintext token file still present at ${TOKEN_FILE} — it will be migrated into the Keychain and removed on the next server start or token refresh.`);
   }
 
   print();
@@ -524,13 +654,13 @@ async function main() {
     '',
     'This wizard will extract your Slack session tokens',
     'from Chrome and configure slack-mcp-server.',
-    '',
-    'Your tokens will be stored locally at:',
-    `  ${TOKEN_FILE}`,
   ], 58);
 
   try {
     let success;
+
+    await chooseStorageMode(rl);
+    info(`Tokens will be stored in: ${storageDestination()}`);
 
     if (IS_MACOS && isAutoRefreshAvailable()) {
       success = await runMacOSSetup(rl);
