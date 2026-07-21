@@ -1,6 +1,6 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, existsSync, readFileSync, unlinkSync, chmodSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readFileSync, rmSync, chmodSync } from "node:fs";
 import { tmpdir, platform } from "node:os";
 import { join } from "node:path";
 
@@ -60,7 +60,8 @@ beforeEach(() => {
   _resetMemoryTokensForTests();
   chmodSync(SANDBOX, 0o700); // undo any read-only-HOME test
   for (const f of [TOKEN_FILE, META_FILE]) {
-    try { unlinkSync(f); } catch {}
+    // recursive: the undeletable-file test leaves a directory at TOKEN_FILE
+    try { rmSync(f, { recursive: true, force: true }); } catch {}
   }
 });
 
@@ -219,22 +220,22 @@ test("keychain-only mode without a usable keychain fails clearly", { skip: platf
 
 // ---------- fail-loud plaintext removal ----------
 
-test("keychain-only: a plaintext file that cannot be removed after a verified write fails loudly and stays reported", () => {
+test("keychain-only: a plaintext file that cannot be removed after a verified write fails loudly", () => {
   process.env.SLACK_MCP_TOKEN_STORAGE = "keychain-only";
   const kc = fakeKeychain();
   _setKeychainAdapterForTests(kc);
-  writeLegacyTokenFile();
 
-  chmodSync(SANDBOX, 0o500); // unlink of TOKEN_FILE now fails (read-only dir)
-  try {
-    assert.throws(() => saveTokens(TOKEN, COOKIE), (e) => e.code === "plaintext_removal_failed");
-  } finally {
-    chmodSync(SANDBOX, 0o700);
-  }
+  // A non-empty directory at the token path makes unlinkSync fail on every
+  // platform (and for root), simulating an undeletable plaintext file.
+  mkdirSync(TOKEN_FILE);
+  writeFileSync(join(TOKEN_FILE, "blocker"), "x");
 
-  assert.equal(existsSync(TOKEN_FILE), true, "the leftover file must remain visible, never silently 'gone'");
+  assert.throws(() => saveTokens(TOKEN, COOKIE), (e) => e.code === "plaintext_removal_failed");
   assert.equal(kc.store.get("token"), TOKEN, "the verified Keychain write itself must survive");
+  assert.equal(existsSync(TOKEN_FILE), true, "the leftover path must stay visible, never silently 'gone'");
   assert.equal(getStorageInfo().plaintext_file_present, true);
+  // Credentials DID persist — the removal failure must not claim otherwise.
+  assert.equal(getStorageInfo().unpersisted_fresh_tokens, false);
 });
 
 test("keychain-only: a migration whose file removal fails throws instead of silently looping", () => {
@@ -242,6 +243,8 @@ test("keychain-only: a migration whose file removal fails throws instead of sile
   _setKeychainAdapterForTests(fakeKeychain());
   writeLegacyTokenFile();
 
+  // The dir-blocker trick can't reach the migration path (a directory doesn't
+  // parse as a token file), so force the unlink failure with a read-only HOME.
   chmodSync(SANDBOX, 0o500);
   try {
     assert.throws(() => loadTokensReadOnly(), (e) => e.code === "plaintext_removal_failed");

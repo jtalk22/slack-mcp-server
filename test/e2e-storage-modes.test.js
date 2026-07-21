@@ -1,7 +1,7 @@
-import { test } from "node:test";
+import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, writeFileSync, existsSync, rmSync } from "node:fs";
 import { tmpdir, platform } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,14 +13,21 @@ import { fileURLToPath } from "node:url";
 const SERVER = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "server.js");
 const E2E_TIMEOUT_MS = 15000;
 
+const sandboxHomes = [];
+
+after(() => {
+  for (const home of sandboxHomes) {
+    try { rmSync(home, { recursive: true, force: true }); } catch {}
+  }
+});
+
 function sandboxHome() {
-  return mkdtempSync(join(tmpdir(), "slack-mcp-e2e-"));
+  const home = mkdtempSync(join(tmpdir(), "slack-mcp-e2e-"));
+  sandboxHomes.push(home);
+  return home;
 }
 
 function spawnServer(home, extraEnv = {}) {
-  // SLACK_MCP_TOKEN_STORAGE is blanked in the baseline so a mode set in the
-  // parent environment can't leak in and turn a "persisted" expectation into
-  // "env"; tests opt back in explicitly via extraEnv.
   return spawn(process.execPath, [SERVER], {
     env: {
       ...process.env,
@@ -28,6 +35,8 @@ function spawnServer(home, extraEnv = {}) {
       USERPROFILE: home,
       SLACK_TOKEN: "",
       SLACK_COOKIE: "",
+      // The child must not inherit a storage mode from the environment
+      // running the tests; each test opts in via extraEnv.
       SLACK_MCP_TOKEN_STORAGE: "",
       ...extraEnv,
     },
@@ -174,7 +183,6 @@ test(
     const { code, stderr } = await expectStartupFailure(home, { SLACK_MCP_TOKEN_STORAGE: "keychain-only" });
     assert.equal(code, 1);
     assert.match(stderr, /could not migrate/);
-    const { existsSync } = await import("node:fs");
     assert.equal(existsSync(tokenPath), true, "a failed migration must not delete the plaintext file");
   }
 );

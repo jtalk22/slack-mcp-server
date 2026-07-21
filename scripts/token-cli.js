@@ -45,6 +45,9 @@ function storageModeLine() {
 }
 
 async function showStatus() {
+  const creds = loadTokensReadOnly();
+  // Storage info is read AFTER the load so it reflects a migration the load
+  // may have just performed (plaintext_file_present would otherwise be stale).
   const { storage, line } = storageModeLine();
   const warnLingeringPlaintext = () => {
     if (storage.mode === "keychain-only" && storage.plaintext_file_present) {
@@ -52,7 +55,6 @@ async function showStatus() {
     }
   };
 
-  const creds = loadTokensReadOnly();
   if (!creds) {
     console.log("No tokens found");
     console.log("Storage mode:", line);
