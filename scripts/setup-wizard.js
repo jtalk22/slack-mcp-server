@@ -153,8 +153,19 @@ async function chooseStorageMode(rl) {
   print(`  2) macOS Keychain only — no plaintext file on disk${current === 'keychain-only' ? `  ${colors.dim}(current)${colors.reset}` : ''}`);
   print();
 
-  const answer = (await question(rl, `Choice [${defaultChoice}]: `)).trim() || defaultChoice;
-  const mode = answer === '2' ? 'keychain-only' : 'auto';
+  // Only "1", "2", or Enter are accepted — a typo must never silently
+  // select plaintext storage.
+  let mode = null;
+  while (mode === null) {
+    const answer = (await question(rl, `Choice [${defaultChoice}]: `)).trim() || defaultChoice;
+    if (answer === '1') {
+      mode = 'auto';
+    } else if (answer === '2') {
+      mode = 'keychain-only';
+    } else {
+      warn(`"${answer}" is not an option — enter 1 or 2.`);
+    }
+  }
   setPersistedStorageMode(mode);
 
   if (mode === 'keychain-only') {
@@ -243,7 +254,13 @@ async function runMacOSSetup(rl) {
 
   print();
   print(`Writing to ${storageDestination()}...`);
-  saveTokens(tokens.token, tokens.cookie);
+  try {
+    saveTokens(tokens.token, tokens.cookie);
+  } catch (e) {
+    error(`Could not save tokens: ${e.message}`);
+    print("Unlock the macOS Keychain (or adjust the storage mode) and rerun setup.");
+    return false;
+  }
   success(savedMessage());
 
   return true;
@@ -359,7 +376,13 @@ async function runManualSetup(rl) {
 
   print();
   print(`Writing to ${storageDestination()}...`);
-  saveTokens(token, cookie);
+  try {
+    saveTokens(token, cookie);
+  } catch (e) {
+    error(`Could not save tokens: ${e.message}`);
+    print("Unlock the macOS Keychain (or adjust the storage mode) and rerun setup.");
+    return false;
+  }
   success(savedMessage());
 
   return true;
@@ -606,6 +629,14 @@ async function main() {
       }
       await showHelp();
       return;
+  }
+
+  // keychain-only without a Keychain would collect credentials it can never
+  // save — refuse before asking the user for anything.
+  if (!IS_MACOS && isKeychainOnly()) {
+    error("keychain-only token storage requires macOS — this platform has no Keychain, so extracted credentials could not be saved.");
+    print('Unset SLACK_MCP_TOKEN_STORAGE (or set it to "file") and rerun setup.');
+    process.exit(1);
   }
 
   // Run setup wizard

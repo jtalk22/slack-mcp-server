@@ -45,11 +45,18 @@ function storageModeLine() {
 }
 
 async function showStatus() {
-  const { storage, line } = storageModeLine();
   const creds = loadTokensReadOnly();
+  // Storage info is read after the load so it reflects a migration that the
+  // load may have just performed.
+  const { storage, line } = storageModeLine();
+  const plaintextWarning = storage.mode === "keychain-only" && storage.plaintext_file_present;
+
   if (!creds) {
     console.log("No tokens found");
     console.log("Storage mode:", line);
+    if (plaintextWarning) {
+      console.log("WARNING: plaintext token file still present at", TOKEN_FILE);
+    }
     console.log("");
     console.log("Run one of:");
     console.log("  npm run tokens:auto    (with Slack open in Chrome)");
@@ -62,7 +69,7 @@ async function showStatus() {
   if (creds.source === "file") {
     console.log("Token file:", TOKEN_FILE);
   }
-  if (storage.mode === "keychain-only" && storage.plaintext_file_present) {
+  if (plaintextWarning) {
     console.log("WARNING: plaintext token file still present at", TOKEN_FILE);
   }
   console.log("");
@@ -151,19 +158,23 @@ async function clearTokens() {
   const fs = await import("fs");
   const { spawnSync } = await import("child_process");
 
-  try {
-    fs.unlinkSync(TOKEN_FILE);
-    console.log("Deleted token file");
-  } catch (e) {
-    console.log("No token file to delete");
-  }
+  let cleanupFailed = false;
+  const removeFile = (path, label, missingMessage) => {
+    try {
+      fs.unlinkSync(path);
+      console.log(`Deleted ${label}`);
+    } catch (e) {
+      if (e.code === "ENOENT") {
+        if (missingMessage) console.log(missingMessage);
+      } else {
+        console.log(`Could not delete ${label} (${path}): ${e.message}`);
+        cleanupFailed = true;
+      }
+    }
+  };
 
-  try {
-    fs.unlinkSync(META_FILE);
-    console.log("Deleted metadata file");
-  } catch (e) {
-    // No metadata file — nothing to report.
-  }
+  removeFile(TOKEN_FILE, "token file", "No token file to delete");
+  removeFile(META_FILE, "metadata file", null);
 
   const securityArgs = (account) => ["delete-generic-password", "-s", KEYCHAIN_SERVICE, "-a", account];
   const tokenResult = spawnSync("security", securityArgs("token"), { stdio: "ignore" });
@@ -174,7 +185,12 @@ async function clearTokens() {
     console.log("No keychain entries to delete");
   }
 
-  console.log("All tokens cleared");
+  if (cleanupFailed) {
+    console.log("Cleanup incomplete — remove the files listed above manually.");
+    process.exitCode = 1;
+  } else {
+    console.log("All tokens cleared");
+  }
 }
 
 main().catch(e => {

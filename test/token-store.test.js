@@ -1,6 +1,6 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, existsSync, readFileSync, unlinkSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, existsSync, readFileSync, unlinkSync, rmSync } from "node:fs";
 import { tmpdir, platform } from "node:os";
 import { join } from "node:path";
 
@@ -23,6 +23,7 @@ const {
   loadTokensReadOnly,
   saveAutoHealTelemetry,
   _setKeychainAdapterForTests,
+  _clearUnpersistedTokensForTests,
   TOKEN_FILE,
   META_FILE,
 } = await import("../lib/token-store.js");
@@ -56,8 +57,9 @@ function writeLegacyTokenFile(extra = {}) {
 beforeEach(() => {
   delete process.env.SLACK_MCP_TOKEN_STORAGE;
   _setKeychainAdapterForTests(null);
+  _clearUnpersistedTokensForTests();
   for (const f of [TOKEN_FILE, META_FILE]) {
-    try { unlinkSync(f); } catch {}
+    try { rmSync(f, { recursive: true, force: true }); } catch {}
   }
 });
 
@@ -171,6 +173,41 @@ test("keychain-only save that cannot be verified throws and writes nothing to di
 
   assert.throws(() => saveTokens(TOKEN, COOKIE), (e) => e.code === "keychain_write_failed");
   assert.equal(existsSync(TOKEN_FILE), false);
+});
+
+test("a failed persist keeps the fresh tokens in memory until a save succeeds", () => {
+  process.env.SLACK_MCP_TOKEN_STORAGE = "keychain-only";
+  _setKeychainAdapterForTests(fakeKeychain({ failSet: true }));
+
+  assert.throws(() => saveTokens(TOKEN, COOKIE));
+
+  // The extraction worked — an immediate retry must get the fresh pair, not
+  // the stale (here: absent) persisted credentials.
+  let creds = loadTokensReadOnly();
+  assert.equal(creds.source, "memory");
+  assert.equal(creds.token, TOKEN);
+
+  // Once persistence recovers, the durable store takes over again.
+  _setKeychainAdapterForTests(fakeKeychain());
+  saveTokens(TOKEN, COOKIE);
+  creds = loadTokensReadOnly();
+  assert.equal(creds.source, "keychain");
+});
+
+test("a plaintext file that cannot be removed after a verified write fails loudly", () => {
+  process.env.SLACK_MCP_TOKEN_STORAGE = "keychain-only";
+  const kc = fakeKeychain();
+  _setKeychainAdapterForTests(kc);
+
+  // A non-empty directory at the token path makes unlinkSync fail on every
+  // platform (and for root), simulating an undeletable plaintext file.
+  mkdirSync(TOKEN_FILE);
+  writeFileSync(join(TOKEN_FILE, "blocker"), "x");
+
+  assert.throws(() => saveTokens(TOKEN, COOKIE), (e) => e.code === "plaintext_removal_failed");
+  // The credentials themselves did reach the Keychain.
+  assert.equal(kc.store.get("token"), TOKEN);
+  assert.equal(existsSync(TOKEN_FILE), true, "the undeletable path must still be reported present");
 });
 
 test("keychain-only refresh removes a lingering plaintext file after the verified write", () => {
