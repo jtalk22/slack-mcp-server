@@ -323,6 +323,7 @@ test("getStorageInfo reports the mode and whether a plaintext file is present", 
   assert.deepEqual(getStorageInfo(), {
     mode: "keychain-only",
     mode_source: "env",
+    profile: null,
     keychain_available: true,
     plaintext_file_present: true,
     unpersisted_fresh_tokens: false,

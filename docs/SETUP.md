@@ -146,6 +146,21 @@ Two things to know:
 
 `SLACK_MCP_TOKEN_STORAGE=file` is the third mode: token file only, Keychain never touched (no Keychain prompts — useful on shared machines and in CI).
 
+### Optional: Multiple Workspaces (Profiles)
+
+Set `SLACK_MCP_PROFILE=<name>` (or pass `--profile <name>` to any CLI command) to give a server instance its own credential namespace — `~/.slack-mcp-tokens-<name>.json`, `~/.slack-mcp-meta-<name>.json`, and a per-profile Keychain service. Two MCP client entries with different profiles run side-by-side without sharing or overwriting each other's tokens:
+
+```json
+{
+  "mcpServers": {
+    "slack-work":     { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"], "env": { "SLACK_MCP_PROFILE": "work" } },
+    "slack-personal": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"], "env": { "SLACK_MCP_PROFILE": "personal" } }
+  }
+}
+```
+
+Run `--setup --profile work` once per profile. If each workspace lives in a different Chrome profile, also set `SLACK_MCP_CHROME_PROFILE` per entry so extraction reads the right browser profile. Profile names are 1-32 characters (letters, digits, `-`, `_`); anything else fails at startup rather than silently writing to the default namespace.
+
 ### 6. Restart Claude
 
 The Slack tools will now be available in both Claude Desktop and Claude Code.

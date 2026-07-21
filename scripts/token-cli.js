@@ -41,7 +41,8 @@ function storageModeLine() {
     : storage.mode_source === "persisted"
       ? "chosen during setup"
       : "default";
-  return { storage, line: `${storage.mode} (${sourceLabel})` };
+  const profileSuffix = storage.profile ? ` · profile: ${storage.profile}` : "";
+  return { storage, line: `${storage.mode} (${sourceLabel})${profileSuffix}` };
 }
 
 async function showStatus() {

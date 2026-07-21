@@ -35,9 +35,10 @@ function spawnServer(home, extraEnv = {}) {
       USERPROFILE: home,
       SLACK_TOKEN: "",
       SLACK_COOKIE: "",
-      // The child must not inherit a storage mode from the environment
-      // running the tests; each test opts in via extraEnv.
+      // The child must not inherit a storage mode or profile from the
+      // environment running the tests; each test opts in via extraEnv.
       SLACK_MCP_TOKEN_STORAGE: "",
+      SLACK_MCP_PROFILE: "",
       ...extraEnv,
     },
     stdio: ["pipe", "pipe", "pipe"],
@@ -186,3 +187,23 @@ test(
     assert.equal(existsSync(tokenPath), true, "a failed migration must not delete the plaintext file");
   }
 );
+
+test("e2e: a profile serves tokens from its own namespace and reports it", async () => {
+  const home = sandboxHome();
+  writeFileSync(join(home, ".slack-mcp-tokens-work.json"), JSON.stringify({
+    SLACK_TOKEN: "xoxc-1111-2222-3333-aaaaaaaaaaaaaaaaaaaaaaaa",
+    SLACK_COOKIE: "xoxd-e2e-work-cookie",
+    updated_at: new Date().toISOString(),
+  }));
+
+  const payload = await callTool(home, { SLACK_MCP_TOKEN_STORAGE: "file", SLACK_MCP_PROFILE: "work" }, "slack_token_status");
+  assert.equal(payload.status, "healthy");
+  assert.equal(payload.token.source, "file");
+  assert.equal(payload.storage.profile, "work");
+});
+
+test("e2e: an invalid profile kills the server at startup with a clear error", async () => {
+  const { code, stderr } = await expectStartupFailure(sandboxHome(), { SLACK_MCP_PROFILE: "Bad Name!" });
+  assert.equal(code, 1);
+  assert.match(stderr, /Invalid SLACK_MCP_PROFILE/);
+});

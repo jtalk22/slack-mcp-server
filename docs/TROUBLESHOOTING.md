@@ -254,6 +254,19 @@ tail -50 ~/Library/Logs/Claude/mcp-server-slack.log
 **Check permissions:**
 System Preferences → Privacy & Security → Accessibility → Ensure Terminal is enabled
 
+**Read the reason code.** Extraction errors name their cause per Chrome profile — the `detail` field of the error tells you which of these you're in:
+
+| Reason | Meaning | Fix |
+|--------|---------|-----|
+| `keychain_timeout` | The Chrome Safe Storage key lookup exceeded the timeout | Unlock the Keychain; retry; raise `SLACK_MCP_KEYCHAIN_TIMEOUT_MS` (default 15000) |
+| `keychain_lookup_failed` | Keychain refused the Safe Storage key | Unlock the Keychain; allow this terminal Keychain access |
+| `no_cookie_db` | Profile has no Cookies database | Point `SLACK_MCP_CHROME_USER_DATA_DIR` / `SLACK_MCP_CHROME_PROFILE` at the right Chrome |
+| `no_slack_cookie_row` | No Slack `d` cookie in that profile | Log into app.slack.com in that Chrome profile |
+| `cookie_decrypt_failed` | Cookie wouldn't decrypt with the Safe Storage key | Chrome may have re-keyed — restart Chrome, sign into Slack again, retry |
+| `cookie ok, no cached xoxc token in LevelDB` | Cookie found but no cached token on disk | Open Slack in Chrome once so the token gets cached, or use AppleScript mode |
+
+The Safe Storage key is looked up once per run and cached, so a failing Keychain produces one clear error — not a password prompt per profile.
+
 ---
 
 ## Why Browser Tokens Instead of Slack App?
