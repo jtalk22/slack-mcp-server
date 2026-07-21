@@ -125,6 +125,27 @@ Or manually edit `~/.claude.json`:
 
 Claude Code reads tokens from `~/.slack-mcp-tokens.json` automatically.
 
+### Optional: Keychain-Only Credential Storage (macOS)
+
+By default, tokens are written to `~/.slack-mcp-tokens.json` (chmod 600) with the macOS Keychain as an encrypted backup. If you don't want plaintext credentials on disk at all, pick **Keychain only** when `--setup` asks where to store tokens — the choice is remembered (in `~/.slack-mcp-meta.json`), so the server, the CLI, and any LaunchAgent all follow it automatically. Already set up? Re-run `npx -y @jtalk22/slack-mcp --setup` and pick option 2; your existing token file is imported into the Keychain, then deleted once both entries verify by read-back. If that deletion ever fails (e.g. a permissions problem), nothing is silent about it: the operation reports `plaintext_removal_failed` with the exact `rm` command to run, and the file is flagged as `plaintext_file_present` in `slack_token_status` until it is gone.
+
+In this mode credentials live exclusively in the macOS Keychain. `--setup`, `slack_refresh_tokens`, and automatic refresh all work unchanged, and non-secret bookkeeping (token timestamp, auto-heal telemetry) moves to `~/.slack-mcp-meta.json` so `slack_token_status` age reporting keeps working.
+
+The `SLACK_MCP_TOKEN_STORAGE` env var overrides the setup choice when set (`auto`, `keychain-only`, or `file`) — useful for forcing a mode per client config:
+
+```json
+"env": {
+  "SLACK_MCP_TOKEN_STORAGE": "keychain-only"
+}
+```
+
+Two things to know:
+
+- The Keychain must be unlocked for writes. A background refresh against a locked Keychain fails with a clear error and retries on the next cycle — your existing Keychain credentials are untouched.
+- Unrecognized mode values fail at startup with a clear error rather than silently falling back to plaintext.
+
+`SLACK_MCP_TOKEN_STORAGE=file` is the third mode: token file only, Keychain never touched (no Keychain prompts — useful on shared machines and in CI).
+
 ### 6. Restart Claude
 
 The Slack tools will now be available in both Claude Desktop and Claude Code.
@@ -153,6 +174,14 @@ Create `~/Library/LaunchAgents/com.yourname.slack-token-refresh.plist`:
 <dict>
     <key>Label</key>
     <string>com.yourname.slack-token-refresh</string>
+    <!-- The storage mode chosen in the setup wizard is followed automatically.
+         To force one for this agent only, uncomment this block:
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>SLACK_MCP_TOKEN_STORAGE</key>
+        <string>keychain-only</string>
+    </dict>
+    -->
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>

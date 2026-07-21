@@ -3,7 +3,7 @@
  * Token CLI - Manage Slack tokens
  */
 
-import { loadTokensReadOnly, saveTokens, extractFromChrome, getFromFile, TOKEN_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
+import { loadTokensReadOnly, saveTokens, extractFromChrome, getFromFile, getStorageInfo, TOKEN_FILE, META_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
 import { slackAPI } from "../lib/slack-client.js";
 import * as readline from "readline";
 
@@ -34,10 +34,33 @@ async function main() {
   }
 }
 
+function storageModeLine() {
+  const storage = getStorageInfo();
+  const sourceLabel = storage.mode_source === "env"
+    ? "from SLACK_MCP_TOKEN_STORAGE"
+    : storage.mode_source === "persisted"
+      ? "chosen during setup"
+      : "default";
+  return { storage, line: `${storage.mode} (${sourceLabel})` };
+}
+
 async function showStatus() {
   const creds = loadTokensReadOnly();
+  // Storage info is read AFTER the load so it reflects a migration the load
+  // may have just performed (plaintext_file_present would otherwise be stale).
+  const { storage, line } = storageModeLine();
+  const warnLingeringPlaintext = () => {
+    if (storage.mode === "keychain-only" && storage.plaintext_file_present) {
+      console.log("WARNING: plaintext token file still present at", TOKEN_FILE);
+    }
+  };
+
   if (!creds) {
     console.log("No tokens found");
+    console.log("Storage mode:", line);
+    // A leftover secret file matters MOST when no credentials load — warn
+    // before returning, not only on the happy path.
+    warnLingeringPlaintext();
     console.log("");
     console.log("Run one of:");
     console.log("  npm run tokens:auto    (with Slack open in Chrome)");
@@ -46,9 +69,11 @@ async function showStatus() {
   }
 
   console.log("Token source:", creds.source);
+  console.log("Storage mode:", line);
   if (creds.source === "file") {
     console.log("Token file:", TOKEN_FILE);
   }
+  warnLingeringPlaintext();
   console.log("");
 
   try {
@@ -135,12 +160,26 @@ async function clearTokens() {
   const fs = await import("fs");
   const { spawnSync } = await import("child_process");
 
-  try {
-    fs.unlinkSync(TOKEN_FILE);
-    console.log("Deleted token file");
-  } catch (e) {
-    console.log("No token file to delete");
-  }
+  // Only a missing file (ENOENT) counts as "nothing to delete" — a permission
+  // or I/O failure leaves secrets/state behind and must not be reported as a
+  // completed cleanup.
+  let cleanupFailed = false;
+  const removeFile = (path, label) => {
+    try {
+      fs.unlinkSync(path);
+      console.log(`Deleted ${label}`);
+    } catch (e) {
+      if (e.code === "ENOENT") {
+        console.log(`No ${label} to delete`);
+      } else {
+        console.error(`Could not delete ${label} at ${path}: ${e.message}`);
+        cleanupFailed = true;
+      }
+    }
+  };
+
+  removeFile(TOKEN_FILE, "token file");
+  removeFile(META_FILE, "metadata file");
 
   const securityArgs = (account) => ["delete-generic-password", "-s", KEYCHAIN_SERVICE, "-a", account];
   const tokenResult = spawnSync("security", securityArgs("token"), { stdio: "ignore" });
@@ -151,6 +190,10 @@ async function clearTokens() {
     console.log("No keychain entries to delete");
   }
 
+  if (cleanupFailed) {
+    console.error("Token cleanup INCOMPLETE — see errors above.");
+    process.exit(1);
+  }
   console.log("All tokens cleared");
 }
 
