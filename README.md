@@ -1,6 +1,7 @@
 # Slack MCP Server
 
 [![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
+[![CI](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-blue)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
@@ -313,13 +314,15 @@ Tokens expire. The server notices before you do — proactive health monitoring,
 
 **Storage backend** — on macOS, `--setup` asks where credentials should live and remembers the answer; every process (server, CLI, LaunchAgent) follows the same choice. `SLACK_MCP_TOKEN_STORAGE` overrides it when set:
 
+![Token storage backends: auto, keychain-only, file](docs/images/diagram-storage-modes.svg)
+
 | Mode | Behavior |
 |-------|----------|
 | `auto` (default) | Token file + Keychain, exactly as above |
-| `keychain-only` | macOS Keychain only — no plaintext credentials ever touch disk. Setup, `slack_refresh_tokens`, and automatic refresh keep working; an existing token file is migrated into the Keychain and removed once both entries verify. Writes are verified by read-back and fail loudly instead of falling back to plaintext. |
+| `keychain-only` | macOS Keychain only — no plaintext credentials ever touch disk. Setup, `slack_refresh_tokens`, and automatic refresh keep working; an existing token file is migrated into the Keychain and removed once both entries verify by read-back. Every failure is loud and structured: an unwritable Keychain reports `keychain_write_failed`, an unremovable leftover file reports `plaintext_removal_failed` with the exact cleanup command — never a silent fallback to plaintext. |
 | `file` | Token file only — the Keychain is never touched (no Keychain prompts; useful on shared machines and in CI) |
 
-In `keychain-only` mode, non-secret bookkeeping (token timestamp, auto-heal telemetry) lives in `~/.slack-mcp-meta.json`, so `slack_token_status` age reporting still works — the active backend and where it was configured show up there under `storage`. One trade-off to know about: background refresh can't write to a locked Keychain; it fails with a clear error and retries on the next cycle. Unrecognized values fail at startup rather than silently downgrading to plaintext.
+In `keychain-only` mode, non-secret bookkeeping (token timestamp, auto-heal telemetry) lives in `~/.slack-mcp-meta.json`, so `slack_token_status` age reporting still works — the active backend and where it was configured show up there under `storage`. One trade-off to know about: background refresh can't write to a locked Keychain; when that happens the freshly extracted tokens are kept in memory (reported as `storage.unpersisted_fresh_tokens`) so the session keeps working, the failure lands in auto-heal telemetry, and the next cycle retries. Unrecognized values fail at startup rather than silently downgrading to plaintext. Writes to the token file and metadata sidecar are serialized across processes with a lock file, so a LaunchAgent refresh and a running server can't clobber each other's state.
 
 <details>
 <summary><strong>What's New in 4.2.0</strong></summary>
@@ -417,7 +420,8 @@ More: [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
 ## Security
 
 - Token files: `chmod 600` (owner-only)
-- macOS Keychain encrypted backup — or exclusive storage via `SLACK_MCP_TOKEN_STORAGE=keychain-only` (zero plaintext credentials on disk)
+- macOS Keychain encrypted backup — or exclusive storage via `SLACK_MCP_TOKEN_STORAGE=keychain-only` (zero plaintext credentials on disk, verified writes, loud structured failures)
+- Fail-closed configuration: an unrecognized storage mode kills the server at startup instead of guessing
 - Web server binds to localhost only
 - API keys: `crypto.randomBytes`
 - See [SECURITY.md](SECURITY.md)

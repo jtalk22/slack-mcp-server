@@ -58,10 +58,14 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 
 Storage backend: `auto` (file + Keychain, default), `keychain-only` (Keychain
 exclusively, no plaintext file, verified writes, legacy file migrated in and
-removed after verification, bookkeeping in `~/.slack-mcp-meta.json`), or
+removed after verification — a removal failure throws `plaintext_removal_failed`
+rather than passing silently — bookkeeping in `~/.slack-mcp-meta.json`), or
 `file` (Keychain never touched). On macOS, `--setup` asks and persists the
 choice in the meta file; the `SLACK_MCP_TOKEN_STORAGE` env var overrides.
-Unrecognized values from either source fail closed at startup.
+Unrecognized values from either source fail closed at startup. Sidecar writes
+are serialized across processes via an `O_EXCL` lock file; a failed persist
+keeps fresh tokens in memory (`storage.unpersisted_fresh_tokens`) so the
+auth-retry path never reuses stale credentials.
 
 ## Architecture Notes
 
