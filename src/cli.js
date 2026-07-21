@@ -14,7 +14,27 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const args = process.argv.slice(2);
+const rawArgs = process.argv.slice(2);
+
+// `--profile <name>` / `--profile=<name>` anywhere on the command line maps
+// to SLACK_MCP_PROFILE for the child (#164), so every mode — server, wizard,
+// web, http, token refresh — honors the same workspace namespace.
+const args = [];
+let cliProfile = null;
+for (let i = 0; i < rawArgs.length; i++) {
+  const arg = rawArgs[i];
+  if (arg === "--profile") {
+    cliProfile = rawArgs[++i] ?? "";
+  } else if (arg.startsWith("--profile=")) {
+    cliProfile = arg.slice("--profile=".length);
+  } else {
+    args.push(arg);
+  }
+}
+const childEnv = cliProfile !== null
+  ? { ...process.env, SLACK_MCP_PROFILE: cliProfile }
+  : process.env;
+
 const firstArg = args[0];
 
 const WIZARD_ARGS = new Set([
@@ -47,7 +67,7 @@ if (firstArg === "web") {
 
 const child = spawn(process.execPath, [scriptPath, ...scriptArgs], {
   stdio: "inherit",
-  env: process.env,
+  env: childEnv,
 });
 
 child.on("error", (error) => {

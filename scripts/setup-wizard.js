@@ -23,6 +23,7 @@ import {
   getStorageMode,
   getStorageModeDetail,
   setPersistedStorageMode,
+  ACTIVE_PROFILE,
 } from "../lib/token-store.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
 
@@ -548,6 +549,9 @@ async function runDoctor() {
       ? 'chosen during setup'
       : 'default';
   print(`Storage mode: ${storageDetail.mode} (${sourceLabel})`);
+  if (ACTIVE_PROFILE) {
+    print(`Profile: ${ACTIVE_PROFILE}`);
+  }
   if (isKeychainOnly() && creds.pendingMigration) {
     warn(`Plaintext token file still present at ${TOKEN_FILE} — it will be migrated into the Keychain and removed on the next server start or token refresh.`);
   }
@@ -593,6 +597,11 @@ async function showHelp() {
   print("  npx -y @jtalk22/slack-mcp --doctor    Run runtime and auth diagnostics");
   print("  npx -y @jtalk22/slack-mcp --version   Print version");
   print("  npx -y @jtalk22/slack-mcp --help      Show this help");
+  print();
+  print(`${colors.bold}Multiple workspaces:${colors.reset}`);
+  print("  Add --profile <name> to any command (or set SLACK_MCP_PROFILE) to");
+  print("  keep credentials in a separate namespace per workspace — e.g.");
+  print("  --setup --profile work, then a second server with --profile personal.");
   print();
   print(`${colors.bold}npm scripts:${colors.reset}`);
   print("  npm start              Start MCP server");
