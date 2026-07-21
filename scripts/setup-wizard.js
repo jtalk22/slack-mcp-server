@@ -39,6 +39,16 @@ try {
   process.exit(1);
 }
 
+// keychain-only is a macOS-only backend. Fail here — before any credentials
+// are collected — instead of gathering valid tokens that cannot be saved.
+if (!IS_MACOS && getStorageMode() === 'keychain-only') {
+  const origin = getStorageModeDetail().source === 'env'
+    ? 'Unset SLACK_MCP_TOKEN_STORAGE, or set it to "file" or "auto".'
+    : 'Remove the storage_mode entry from ~/.slack-mcp-meta.json, or set SLACK_MCP_TOKEN_STORAGE=file to override.';
+  console.error(`keychain-only token storage requires the macOS Keychain, which is not available on this platform. ${origin}`);
+  process.exit(1);
+}
+
 function isKeychainOnly() {
   return getStorageMode() === 'keychain-only';
 }
@@ -51,6 +61,33 @@ function savedMessage() {
   return isKeychainOnly()
     ? 'Tokens saved to the macOS Keychain — no plaintext file written'
     : 'Tokens saved with chmod 600';
+}
+
+/**
+ * Persist tokens with a friendly failure path: saveTokens() throws in
+ * keychain-only mode when the Keychain is locked/unavailable or a leftover
+ * plaintext file cannot be removed. A first-run stack trace for a locked
+ * Keychain is the worst possible setup experience — translate each failure
+ * into the action that fixes it. The success message only prints after the
+ * save (including plaintext removal) fully succeeded.
+ */
+function persistTokens(token, cookie) {
+  print();
+  print(`Writing to ${storageDestination()}...`);
+  try {
+    saveTokens(token, cookie);
+  } catch (e) {
+    error(`Could not save tokens: ${e.message}`);
+    if (e.code === 'keychain_write_failed' || e.code === 'keychain_unavailable') {
+      print('Unlock the macOS Keychain (open Keychain Access, or log in again), then re-run --setup.');
+      print('Or re-run --setup and choose option 1 to store tokens in a file instead.');
+    } else if (e.code === 'plaintext_removal_failed') {
+      print('Your tokens ARE saved in the Keychain — but the old plaintext token file could not be removed.');
+    }
+    return false;
+  }
+  success(savedMessage());
+  return true;
 }
 const VERSION = RELEASE_VERSION;
 const MIN_NODE_MAJOR = 20;
@@ -153,8 +190,15 @@ async function chooseStorageMode(rl) {
   print(`  2) macOS Keychain only — no plaintext file on disk${current === 'keychain-only' ? `  ${colors.dim}(current)${colors.reset}` : ''}`);
   print();
 
-  const answer = (await question(rl, `Choice [${defaultChoice}]: `)).trim() || defaultChoice;
-  const mode = answer === '2' ? 'keychain-only' : 'auto';
+  // Accept only 1, 2, or Enter-for-default: for a credential-storage choice a
+  // typo must re-prompt, never silently select plaintext storage.
+  let mode = null;
+  while (mode === null) {
+    const answer = (await question(rl, `Choice [${defaultChoice}]: `)).trim() || defaultChoice;
+    if (answer === '1') mode = 'auto';
+    else if (answer === '2') mode = 'keychain-only';
+    else warn(`"${answer}" is not an option — answer 1 or 2.`);
+  }
   setPersistedStorageMode(mode);
 
   if (mode === 'keychain-only') {
@@ -241,12 +285,7 @@ async function runMacOSSetup(rl) {
   success(`Workspace: ${validation.team}`);
   success(`User: ${validation.user}`);
 
-  print();
-  print(`Writing to ${storageDestination()}...`);
-  saveTokens(tokens.token, tokens.cookie);
-  success(savedMessage());
-
-  return true;
+  return persistTokens(tokens.token, tokens.cookie);
 }
 
 async function runManualSetup(rl) {
@@ -357,12 +396,7 @@ async function runManualSetup(rl) {
   success(`Workspace: ${validation.team}`);
   success(`User: ${validation.user}`);
 
-  print();
-  print(`Writing to ${storageDestination()}...`);
-  saveTokens(token, cookie);
-  success(savedMessage());
-
-  return true;
+  return persistTokens(token, cookie);
 }
 
 async function showStatus() {

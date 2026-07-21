@@ -18,8 +18,19 @@ function sandboxHome() {
 }
 
 function spawnServer(home, extraEnv = {}) {
+  // SLACK_MCP_TOKEN_STORAGE is blanked in the baseline so a mode set in the
+  // parent environment can't leak in and turn a "persisted" expectation into
+  // "env"; tests opt back in explicitly via extraEnv.
   return spawn(process.execPath, [SERVER], {
-    env: { ...process.env, HOME: home, USERPROFILE: home, SLACK_TOKEN: "", SLACK_COOKIE: "", ...extraEnv },
+    env: {
+      ...process.env,
+      HOME: home,
+      USERPROFILE: home,
+      SLACK_TOKEN: "",
+      SLACK_COOKIE: "",
+      SLACK_MCP_TOKEN_STORAGE: "",
+      ...extraEnv,
+    },
     stdio: ["pipe", "pipe", "pipe"],
   });
 }

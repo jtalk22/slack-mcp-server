@@ -1,6 +1,6 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, existsSync, readFileSync, unlinkSync } from "node:fs";
+import { mkdtempSync, writeFileSync, existsSync, readFileSync, unlinkSync, chmodSync } from "node:fs";
 import { tmpdir, platform } from "node:os";
 import { join } from "node:path";
 
@@ -23,6 +23,7 @@ const {
   loadTokensReadOnly,
   saveAutoHealTelemetry,
   _setKeychainAdapterForTests,
+  _resetMemoryTokensForTests,
   TOKEN_FILE,
   META_FILE,
 } = await import("../lib/token-store.js");
@@ -56,6 +57,8 @@ function writeLegacyTokenFile(extra = {}) {
 beforeEach(() => {
   delete process.env.SLACK_MCP_TOKEN_STORAGE;
   _setKeychainAdapterForTests(null);
+  _resetMemoryTokensForTests();
+  chmodSync(SANDBOX, 0o700); // undo any read-only-HOME test
   for (const f of [TOKEN_FILE, META_FILE]) {
     try { unlinkSync(f); } catch {}
   }
@@ -214,6 +217,66 @@ test("keychain-only mode without a usable keychain fails clearly", { skip: platf
   assert.throws(() => saveTokens(TOKEN, COOKIE), (e) => e.code === "keychain_unavailable");
 });
 
+// ---------- fail-loud plaintext removal ----------
+
+test("keychain-only: a plaintext file that cannot be removed after a verified write fails loudly and stays reported", () => {
+  process.env.SLACK_MCP_TOKEN_STORAGE = "keychain-only";
+  const kc = fakeKeychain();
+  _setKeychainAdapterForTests(kc);
+  writeLegacyTokenFile();
+
+  chmodSync(SANDBOX, 0o500); // unlink of TOKEN_FILE now fails (read-only dir)
+  try {
+    assert.throws(() => saveTokens(TOKEN, COOKIE), (e) => e.code === "plaintext_removal_failed");
+  } finally {
+    chmodSync(SANDBOX, 0o700);
+  }
+
+  assert.equal(existsSync(TOKEN_FILE), true, "the leftover file must remain visible, never silently 'gone'");
+  assert.equal(kc.store.get("token"), TOKEN, "the verified Keychain write itself must survive");
+  assert.equal(getStorageInfo().plaintext_file_present, true);
+});
+
+test("keychain-only: a migration whose file removal fails throws instead of silently looping", () => {
+  process.env.SLACK_MCP_TOKEN_STORAGE = "keychain-only";
+  _setKeychainAdapterForTests(fakeKeychain());
+  writeLegacyTokenFile();
+
+  chmodSync(SANDBOX, 0o500);
+  try {
+    assert.throws(() => loadTokensReadOnly(), (e) => e.code === "plaintext_removal_failed");
+  } finally {
+    chmodSync(SANDBOX, 0o700);
+  }
+  assert.equal(existsSync(TOKEN_FILE), true);
+});
+
+// ---------- in-memory fallback for failed persistence ----------
+
+test("a failed save keeps the fresh tokens available in memory until persistence recovers", () => {
+  process.env.SLACK_MCP_TOKEN_STORAGE = "keychain-only";
+  _setKeychainAdapterForTests(fakeKeychain({ failSet: true }));
+
+  const FRESH_TOKEN = "xoxc-9999-8888-7777-bbbbbbbbbbbbbbbbbbbbbbbb";
+  assert.throws(() => saveTokens(FRESH_TOKEN, COOKIE), (e) => e.code === "keychain_write_failed");
+
+  // The extraction is not discarded: this process serves the fresh tokens,
+  // so an auth-failure retry uses them instead of the stale persisted copy.
+  const creds = loadTokensReadOnly();
+  assert.equal(creds.source, "memory");
+  assert.equal(creds.token, FRESH_TOKEN);
+  assert.equal(getStorageInfo().unpersisted_fresh_tokens, true);
+
+  // Once persistence recovers, the persistent store is authoritative again.
+  const kc = fakeKeychain();
+  _setKeychainAdapterForTests(kc);
+  saveTokens(FRESH_TOKEN, COOKIE);
+  const persisted = loadTokensReadOnly();
+  assert.equal(persisted.source, "keychain");
+  assert.equal(persisted.token, FRESH_TOKEN);
+  assert.equal(getStorageInfo().unpersisted_fresh_tokens, false);
+});
+
 // ---------- telemetry routing ----------
 
 test("auto-heal telemetry lands in the sidecar in keychain-only mode, with stuck_since semantics intact", () => {
@@ -256,6 +319,7 @@ test("getStorageInfo reports the mode and whether a plaintext file is present", 
     mode_source: "env",
     keychain_available: true,
     plaintext_file_present: true,
+    unpersisted_fresh_tokens: false,
   });
 
   loadTokensReadOnly(); // triggers migration
