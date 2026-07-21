@@ -130,6 +130,21 @@ args = ["-y", "@jtalk22/slack-mcp"]
 Or via CLI: `codex mcp add slack -- npx -y @jtalk22/slack-mcp`
 </details>
 
+## Multiple Workspaces
+
+Run work and personal Slack side-by-side — each server instance gets its own credential namespace (token file, Keychain entries, metadata), so setup or refresh in one never touches the other:
+
+```json
+{
+  "mcpServers": {
+    "slack-work":     { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"], "env": { "SLACK_MCP_PROFILE": "work" } },
+    "slack-personal": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"], "env": { "SLACK_MCP_PROFILE": "personal" } }
+  }
+}
+```
+
+Set each profile up once: `npx -y @jtalk22/slack-mcp --setup --profile work`. If the workspaces live in different Chrome profiles, add `SLACK_MCP_CHROME_PROFILE` to point each one's extraction at the right browser profile. Invalid profile names fail closed at startup — same discipline as every other credential setting here.
+
 ## Tools
 
 | Tool | Description | Safety |
@@ -311,6 +326,8 @@ Session tokens (`xoxc-` + `xoxd-`) from your browser. If you can see it in Slack
 4. Chrome auto-extraction (macOS)
 
 Tokens expire. The server notices before you do — proactive health monitoring, automatic refresh on macOS, warnings when tokens age out. File writes are atomic (temp file → chmod → rename) to prevent corruption. Concurrent refresh attempts are mutex-locked.
+
+Chrome extraction is built to diagnose itself: every failure names its cause (`keychain_timeout`, `no_slack_cookie_row`, `cookie_decrypt_failed`, …) per profile instead of a generic error, the Safe Storage key is looked up once per run and cached (no Keychain prompt storms), and the lookup timeout is configurable via `SLACK_MCP_KEYCHAIN_TIMEOUT_MS` for slow Keychains.
 
 **Storage backend** — on macOS, `--setup` asks where credentials should live and remembers the answer; every process (server, CLI, LaunchAgent) follows the same choice. `SLACK_MCP_TOKEN_STORAGE` overrides it when set:
 

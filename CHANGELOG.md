@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.0] - 2026-07-22
+
+### Workspace Profiles + Chrome Extraction Overhaul
+
+Two community-driven improvements: run work and personal Slack side-by-side, and extraction that tells you why it failed.
+
+### Added
+- **Workspace profiles** (`SLACK_MCP_PROFILE=work`, or `--profile work` on any CLI command) — every storage surface (token file, metadata sidecar, write lock, Keychain service) gets its own namespace, so multiple MCP server instances (work + personal) run side-by-side without sharing or overwriting each other's credentials (#164, requested by @iloveitaly). Pair with `SLACK_MCP_CHROME_PROFILE` to point each profile's extraction at the matching Chrome profile. Invalid profile names fail closed at startup. `slack_token_status` reports the active namespace under `storage.profile`; `--doctor` and `tokens:status` print it.
+- **`SLACK_MCP_KEYCHAIN_TIMEOUT_MS`** — configurable timeout for the Chrome Safe Storage Keychain lookup (default 15000, up from a hard 5000 that real-world Keychains were observed to exceed at 4.9s).
+- Chrome-extraction test rig (`test/chrome-extraction.test.js`) — builds a synthetic Chrome estate (real SQLite cookie DB with a genuine v10 AES-128-CBC-encrypted cookie, real LevelDB-style token log) and drives the actual extraction pipeline with only the Keychain lookup faked. Extraction was previously untestable without a live Chrome.
+
+### Fixed
+- **Chrome Safe Storage key looked up once per process, not once per profile per path** (#168) — the key is per-machine; it is now cached (refreshed once if a decrypt fails, in case Chrome re-keyed), and a fatal Keychain failure (timeout, denied) aborts the run instead of re-prompting for every profile and again in the AppleScript fallback.
+- **Extraction failures name their cause** (#168) — every cookie-extraction failure carries a machine-usable reason (`no_cookie_db`, `no_slack_cookie_row`, `keychain_timeout`, `keychain_lookup_failed`, `cookie_decrypt_failed`, `unsupported_cookie_format`, …) and the final error lists per-profile reasons instead of collapsing everything into `extraction_failed_all_paths`.
+- **AppleScript token read runs once per extraction, not once per profile** — it talks to the running Chrome app, not a profile directory, so repeating it per profile only multiplied prompts and wall-clock.
+
 ## [4.5.0] - 2026-07-21
 
 ### Keychain-Only Credential Storage — zero plaintext on disk, every failure loud
