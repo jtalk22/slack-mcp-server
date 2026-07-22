@@ -1,25 +1,47 @@
-# Slack MCP Server
+<div align="center">
 
-### Slack for your AI agent — no OAuth, no admin, no app to register.
+<h1>Slack MCP Server</h1>
 
-[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
-[![CI](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)
-[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-blue)](https://registry.modelcontextprotocol.io)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+<h3>Slack for your AI agent — no OAuth, no admin, no app to register.</h3>
 
-Every other Slack integration wants a registered app, an admin's blessing, and an OAuth scope review. This one wants the session tokens your browser already has. Point your agent at it and — **if you can read it in Slack, your agent can read it too.** Works with Claude, Cursor, Copilot, Windsurf, Gemini CLI, and Codex CLI. 21 tools. One command:
+<p>
+  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/v/@jtalk22/slack-mcp" alt="npm version"></a>
+  <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://registry.modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP_Registry-listed-blue" alt="MCP Registry"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT"></a>
+  <a href="https://github.com/jtalk22/slack-mcp-server/stargazers"><img src="https://img.shields.io/github/stars/jtalk22/slack-mcp-server?style=social" alt="GitHub stars"></a>
+</p>
+
+<p>
+  <kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd>
+</p>
+
+<p><b>If you can read it in Slack, your agent can read it too.</b> It borrows the session tokens your browser already holds — no registered app, no scope review, no admin in the loop. 21 tools. One command:</p>
+
+</div>
 
 ```bash
 npx -y @jtalk22/slack-mcp --setup
 ```
 
-[![Watch: 47 unreads to inbox zero, without opening Slack](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
+<div align="center">
 
-**[▶ Watch the 90-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)** — 47 unreads to inbox zero, and never a Slack tab in sight.
+<a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
+  <img src="docs/images/hero-demo.gif" width="800" alt="Demo: an AI agent triages 47 unread Slack messages into one morning briefing — unread counts, history pull, then the summary">
+</a>
 
-> *Catch me up on #engineering from the last 24 hours. Find that deployment thread from last week. Pull the printer admin PIN nobody can remember. Reply to Dana.* — all from your editor, in the client you already use.
+<p><sub>26 seconds of the real thing · <b><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ full 3:31 demo with chapters</a></b> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive demo</a> · <a href="docs/SETUP.md">setup guide</a></sub></p>
 
-[Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Setup guide](docs/SETUP.md)
+</div>
+
+<p align="center">
+  <a href="#the-trick-session-tokens-not-oauth">Why no OAuth</a> ·
+  <a href="#install">Install</a> ·
+  <a href="#the-21-tools">The 21 tools</a> ·
+  <a href="#workflows-slack-in-typed-json-out">Workflows</a> ·
+  <a href="#how-token-storage-works">Token storage</a> ·
+  <a href="#hosted-optional--the-oss-package-is-complete-without-it">Hosted</a>
+</p>
 
 ---
 
@@ -27,23 +49,33 @@ npx -y @jtalk22/slack-mcp --setup
 
 Slack's official MCP server is OAuth-first — a registered app, admin approval, and (for several clients) compatibility workarounds that don't exist yet (see the tracked [Claude Code / Copilot DCR discussion](https://github.com/anthropics/claude-code/issues/30564)). For a lot of people the "integration" quietly degrades into screenshotting messages into a chat window. That isn't an integration.
 
-So this server does the obvious thing instead: it reads the `xoxc-` + `xoxd-` session tokens your browser is already holding. No app install, no scopes to request, no admin in the loop. And because there's no bot user and no installed app, **nothing shows up in the workspace admin panel — no app entry, no audit-log install event.** Your agent's footprint is exactly your open browser tab's: no more, no less. (Yes — check your workspace's acceptable-use policy. This is your session, used by your tools, on your machine.)
+So this server does the obvious thing instead: it reads the `xoxc-` + `xoxd-` session tokens your browser is already holding and speaks Slack's own API with them. No app install, no scopes to request, no admin in the loop — and because there's no bot user and no installed app, nothing appears in the workspace admin panel. Your agent's footprint is exactly your open browser tab's: no more, no less.
 
-![OAuth app registration vs. browser session tokens](docs/images/diagram-oauth-comparison.svg)
+<div align="center">
+<img src="docs/images/diagram-oauth-comparison.svg" alt="OAuth app registration vs. browser session tokens" width="820">
+</div>
 
 |                          | Slack Official MCP        | **This Server**                 |
 | ------------------------ | ------------------------- | ------------------------------- |
 | OAuth app required       | Yes                       | **No**                          |
 | Admin approval           | Yes                       | **No**                          |
-| Works with Claude Code   | No (DCR incompatible)     | **Yes**                         |
-| Works with Cursor        | No                        | **Yes**                         |
-| Works with Copilot       | No                        | **Yes**                         |
-| Works with Windsurf      | No                        | **Yes**                         |
-| Works with Gemini CLI    | No                        | **Yes**                         |
-| Works with Codex CLI     | No                        | **Yes**                         |
+| Claude Code · Cursor · Copilot · Windsurf · Gemini CLI · Codex CLI | Blocked or partial (DCR) | **All six, today** |
 | Setup time               | ~30 min                   | **~2 min**                      |
 | Tools                    | Limited                   | **21**                          |
 | Visible to admins        | Yes                       | **No — session-token transport** |
+
+<sub>Same permissions either way — your agent sees exactly what you see. The difference is who has to approve it.</sub>
+
+<details>
+<summary><b>Is this against Slack's terms?</b></summary>
+<br>
+
+Honest answer: it's a gray area, and you should know exactly what this does before you run it. This server automates <i>your own session</i> — the same class of thing as a browser extension or a userscript. It grants your agent nothing you don't already have: it can't read a channel you can't read, join a workspace you're not in, or act as anyone but you. There is no permission escalation anywhere in this codebase — just your cookie, used from your machine.
+
+What it does <i>not</i> do: it does not evade compliance exports, DLP, or retention. Those run server-side at Slack and see this traffic like any other client's. "Invisible to admins" means there is no <i>app install</i> to review — not that your messages stop being subject to workspace policy.
+
+If your workspace's acceptable-use policy forbids unofficial clients, respect it — the OAuth-based <a href="https://mcp.revasserlabs.com">hosted version</a> exists for exactly that case.
+</details>
 
 ---
 
@@ -202,6 +234,8 @@ Full walkthrough — including the optional keep-tokens-fresh LaunchAgent — in
 
 ## The 21 tools
 
+**21 tools** — **12 read-only** Slack, **4 write-path** Slack (every one carrying an [MCP destructive annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations) so clients can gate them), **2** workflow-profile primitives, **3** hosted-brain stubs.
+
 | Tool | Description | Safety |
 | ---- | ----------- | ------ |
 | `slack_health_check` | Verify token validity and workspace info | read-only |
@@ -226,13 +260,11 @@ Full walkthrough — including the optional keep-tokens-fresh LaunchAgent — in
 | `slack_catch_me_up` | AI-summarized digest of unreads + priority threads | hosted-stub† |
 | `slack_triage` | Prioritized action queue across channels | hosted-stub† |
 
-**21 tools** total — **12 read-only** Slack, **4 write-path** Slack, **2** workflow-profile primitives, **3** hosted-brain stubs. Every one carries an [MCP safety annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations), so a client can gate the destructive ones.
-
-<sub>\* `slack_refresh_tokens` writes the local token file only. † Hosted stubs return a structured upgrade payload (`signup_url`, `free_tier_quota`, `pro_value_prop`) — no Slack call happens from OSS. ‡ Accepts `include_rich_message_fields` — see [Rich Message Fields](#rich-message-fields).</sub>
+<sub>\* `slack_refresh_tokens` writes the local token file only. † Hosted stubs return a structured upgrade payload (`signup_url`, `free_tier_quota`, `pro_value_prop`) — no Slack call happens from OSS. ‡ Accepts `include_rich_message_fields` — see [Rich message fields](#rich-message-fields).</sub>
 
 ---
 
-## Workflow primitives → structured JSON
+## Workflows: Slack in, typed JSON out
 
 Reading messages is table stakes. The primitives turn Slack into a **typed data source your automation can consume directly.** Bind a `workflow_kind` to a set of channels, priority people, retention, and cadence with `slack_workflow_save` (stored locally at `~/.slack-mcp-workflows.json`). The [hosted brain](https://mcp.revasserlabs.com) reads those profiles and returns structured JSON per kind — no prompt-parsing, no scraping, feed it straight into Linear, Notion, or a status dashboard.
 
@@ -254,7 +286,7 @@ npx -y @jtalk22/slack-mcp --apply-template oncall-handoff --channels C012345,C06
 
 ---
 
-## Rich Message Fields
+## Rich message fields
 
 The four read tools marked ‡ accept `include_rich_message_fields: true`, surfacing everything that lives *outside* a message's `text`: `attachments`, `blocks`, `files`, `reactions`, `metadata`, plus `subtype` / `bot_id` / `app_id` (bot & app markers) and `team` (workspace id).
 
@@ -300,7 +332,9 @@ Chrome extraction diagnoses itself: every failure names its cause — `keychain_
 
 On macOS, `--setup` asks where credentials should live and remembers the answer in `~/.slack-mcp-meta.json`; every process — server, CLI, LaunchAgent — follows the same choice. `SLACK_MCP_TOKEN_STORAGE` overrides it.
 
-![Token storage backends: auto, keychain-only, file](docs/images/diagram-storage-modes.svg)
+<div align="center">
+<img src="docs/images/diagram-storage-modes.svg" alt="Token storage backends: auto, keychain-only, file" width="820">
+</div>
 
 | Mode | Behavior |
 | ---- | -------- |
@@ -312,7 +346,7 @@ In `keychain-only` mode, non-secret bookkeeping (token timestamp, auto-heal tele
 
 ---
 
-## When tokens expire
+## When tokens expire (every week or two)
 
 Slack rotates session tokens roughly every 1–2 weeks. When they die, the server catches it — `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or a bare HTTP 401 — and hands back a recovery message at the moment of pain instead of a raw Slack error.
 
@@ -406,3 +440,13 @@ MIT — see [LICENSE](LICENSE).
 ## Disclaimer
 
 Not affiliated with Slack Technologies, Inc. This server uses browser session credentials — check your workspace's acceptable-use policy before running it.
+
+---
+
+<div align="center">
+
+<p><b>If this killed a Slack tab for you, <a href="https://github.com/jtalk22/slack-mcp-server/stargazers">star the repo</a></b> — stars are how the other admin-blocked developers find it.</p>
+
+<p><sub>Slack for your AI agent — session tokens, not OAuth · MIT · <a href="https://mcp.revasserlabs.com">hosted brain</a> for OAuth permanence + AI workflows</sub></p>
+
+</div>

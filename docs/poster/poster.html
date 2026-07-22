@@ -1,0 +1,85 @@
+<!doctype html>
+<!-- Demo-video poster source. Regenerate the 1280x800 PNG with:
+     node docs/poster/capture.mjs
+     (Playwright, 640x400 viewport at deviceScaleFactor 2 -> docs/images/demo-poster.png) -->
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 640px; height: 400px; overflow: hidden; }
+  body {
+    background: radial-gradient(120% 90% at 50% 8%, #1c1e26 0%, #14151a 45%, #0b0c0f 100%);
+    font-family: "Space Grotesk", -apple-system, "Helvetica Neue", sans-serif;
+    color: #e8eaed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .hairline {
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #ff6b6b 30%, #4ecdc4 70%, transparent 100%);
+    opacity: .9;
+  }
+  .figure {
+    font-weight: 700;
+    font-size: 118px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 22px;
+  }
+  .n47 { color: #ff6b6b; }
+  .arrow { color: #3a3d46; font-weight: 500; font-size: 84px; transform: translateY(-6px); }
+  .n0 { color: #4ecdc4; }
+  .subline {
+    margin-top: 14px;
+    font-weight: 500;
+    font-size: 21px;
+    letter-spacing: .01em;
+    color: #b7bcc6;
+  }
+  .subline b { color: #e8eaed; font-weight: 700; }
+  .play {
+    margin-top: 26px;
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 3px solid #4ecdc4;
+    background: rgba(78, 205, 196, 0.08);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .play::after {
+    content: "";
+    display: block;
+    margin-left: 6px;
+    border-style: solid;
+    border-width: 14px 0 14px 24px;
+    border-color: transparent transparent transparent #e8eaed;
+  }
+  .footer {
+    position: absolute;
+    bottom: 22px; left: 0; right: 0;
+    text-align: center;
+    font-family: "JetBrains Mono", "SF Mono", Menlo, monospace;
+    font-size: 12.5px;
+    letter-spacing: .02em;
+    color: #6f7480;
+  }
+  .footer .dot { color: #3a3d46; padding: 0 8px; }
+</style>
+</head>
+<body>
+  <div class="hairline"></div>
+  <div class="figure">
+    <span class="n47">47</span><span class="arrow">&rarr;</span><span class="n0">0</span>
+  </div>
+  <div class="subline">unreads &rarr; <b>one morning briefing</b> &mdash; without opening Slack</div>
+  <div class="play"></div>
+  <div class="footer">21 tools<span class="dot">&middot;</span>session tokens, not OAuth<span class="dot">&middot;</span>works with any MCP client</div>
+</body>
+</html>
