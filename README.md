@@ -9,7 +9,7 @@
   <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://registry.modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP_Registry-listed-blue" alt="MCP Registry"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT"></a>
-  <a href="https://github.com/jtalk22/slack-mcp-server/stargazers"><img src="https://img.shields.io/github/stars/jtalk22/slack-mcp-server?style=social" alt="GitHub stars"></a>
+  <a href="https://github.com/jtalk22/slack-mcp-server"><img src="https://img.shields.io/github/stars/jtalk22/slack-mcp-server?style=social" alt="GitHub stars"></a>
 </p>
 
 <p>
@@ -445,7 +445,7 @@ Not affiliated with Slack Technologies, Inc. This server uses browser session cr
 
 <div align="center">
 
-<p><b>If this killed a Slack tab for you, <a href="https://github.com/jtalk22/slack-mcp-server/stargazers">star the repo</a></b> — stars are how the other admin-blocked developers find it.</p>
+<p><b>If this killed a Slack tab for you, <a href="https://github.com/jtalk22/slack-mcp-server">star the repo</a></b> — stars are how the other admin-blocked developers find it.</p>
 
 <p><sub>Slack for your AI agent — session tokens, not OAuth · MIT · <a href="https://mcp.revasserlabs.com">hosted brain</a> for OAuth permanence + AI workflows</sub></p>
 
