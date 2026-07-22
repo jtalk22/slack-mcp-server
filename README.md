@@ -1,31 +1,33 @@
 # Slack MCP Server
 
+### Slack for your AI agent — no OAuth, no admin, no app to register.
+
 [![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp)](https://www.npmjs.com/package/@jtalk22/slack-mcp)
 [![CI](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-blue)](https://registry.modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-**Your agent, inside your Slack — in about two minutes.** No OAuth dance, no app to register, no admin to email. This MCP server rides your browser's own session tokens: if you can read it in Slack, your agent can read it too. 21 tools, every major MCP client, one setup command.
+Every other Slack integration wants a registered app, an admin's blessing, and an OAuth scope review. This one wants the session tokens your browser already has. Point your agent at it and — **if you can read it in Slack, your agent can read it too.** Works with Claude, Cursor, Copilot, Windsurf, Gemini CLI, and Codex CLI. 21 tools. One command:
 
 ```bash
 npx -y @jtalk22/slack-mcp --setup
 ```
 
-[![Slack MCP Server Demo](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
+[![Watch: 47 unreads to inbox zero, without opening Slack](docs/images/demo-poster.png)](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)
 
-**[▶ Watch the 90-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)** — 47 unreads to inbox zero, without opening Slack.
+**[▶ Watch the 90-second demo](https://jtalk22.github.io/slack-mcp-server/public/demo-video.html)** — 47 unreads to inbox zero, and never a Slack tab in sight.
 
-> *Catch me up on #engineering from the last 24 hours. Find that deployment thread from last week. Pull the printer admin PIN nobody can remember. Reply to Dana.* — all from your editor.
+> *Catch me up on #engineering from the last 24 hours. Find that deployment thread from last week. Pull the printer admin PIN nobody can remember. Reply to Dana.* — all from your editor, in the client you already use.
 
 [Interactive demo](https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html) · [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest) · [Setup guide](docs/SETUP.md)
 
 ---
 
-## Why session tokens instead of OAuth
+## The trick: session tokens, not OAuth
 
-Slack's official MCP server is OAuth-first: a registered app, admin approval, and — for some clients — compatibility workarounds that don't exist yet (see the tracked [Claude Code / Copilot DCR discussion](https://github.com/anthropics/claude-code/issues/30564)). For a lot of people the "workflow" degrades to screenshotting messages into a chat. That isn't a workflow.
+Slack's official MCP server is OAuth-first — a registered app, admin approval, and (for several clients) compatibility workarounds that don't exist yet (see the tracked [Claude Code / Copilot DCR discussion](https://github.com/anthropics/claude-code/issues/30564)). For a lot of people the "integration" quietly degrades into screenshotting messages into a chat window. That isn't an integration.
 
-This server takes the other road. It reads the `xoxc-` + `xoxd-` session tokens your browser already holds. No app install, no scopes to request, no admin in the loop — and **no bot user, no app entry, and no audit trail in the workspace admin panel.** Your agent operates with the exact footprint of your open browser tab: nothing more, nothing less.
+So this server does the obvious thing instead: it reads the `xoxc-` + `xoxd-` session tokens your browser is already holding. No app install, no scopes to request, no admin in the loop. And because there's no bot user and no installed app, **nothing shows up in the workspace admin panel — no app entry, no audit-log install event.** Your agent's footprint is exactly your open browser tab's: no more, no less. (Yes — check your workspace's acceptable-use policy. This is your session, used by your tools, on your machine.)
 
 ![OAuth app registration vs. browser session tokens](docs/images/diagram-oauth-comparison.svg)
 
@@ -47,13 +49,13 @@ This server takes the other road. It reads the `xoxc-` + `xoxd-` session tokens 
 
 ## Install
 
-**Requires Node.js 20+.** One command extracts your tokens, validates them, and remembers where to store them:
+**Node.js 20+.** One command extracts your tokens, validates them, and remembers where to keep them:
 
 ```bash
 npx -y @jtalk22/slack-mcp --setup
 ```
 
-Then register the server with your client and restart it. After it reconnects, ask your agent to run `slack_health_check` — a workspace name in the reply means you're live.
+Register the server with your client, restart it, then ask your agent to run `slack_health_check` — a workspace name in the reply means you're live. Pick your client:
 
 <details>
 <summary><strong>Claude Code</strong></summary>
@@ -98,6 +100,21 @@ Add to `.cursor/mcp.json`:
 ```json
 {
   "mcpServers": {
+    "slack": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"] }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>GitHub Copilot (VS Code)</strong></summary>
+
+Add to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
     "slack": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"] }
   }
 }
@@ -153,7 +170,7 @@ Or via CLI: `codex mcp add slack -- npx -y @jtalk22/slack-mcp`
 <details>
 <summary><strong>Any other stdio MCP client</strong></summary>
 
-Any client that speaks stdio MCP works. Point it at `npx -y @jtalk22/slack-mcp`. On macOS, tokens auto-extract from Chrome, so no `env` block is needed; elsewhere, pass `SLACK_TOKEN` / `SLACK_COOKIE` via `env`.
+Anything that speaks stdio MCP works — point it at `npx -y @jtalk22/slack-mcp`. On macOS, tokens auto-extract from Chrome (no `env` block needed); elsewhere, pass `SLACK_TOKEN` / `SLACK_COOKIE` via `env`.
 
 </details>
 
@@ -179,7 +196,7 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 
 </details>
 
-Full walkthrough, including the optional keep-tokens-fresh LaunchAgent: **[docs/SETUP.md](docs/SETUP.md)**.
+Full walkthrough — including the optional keep-tokens-fresh LaunchAgent — in **[docs/SETUP.md](docs/SETUP.md)**.
 
 ---
 
@@ -209,7 +226,7 @@ Full walkthrough, including the optional keep-tokens-fresh LaunchAgent: **[docs/
 | `slack_catch_me_up` | AI-summarized digest of unreads + priority threads | hosted-stub† |
 | `slack_triage` | Prioritized action queue across channels | hosted-stub† |
 
-**12** read-only Slack · **4** write-path Slack · **2** workflow-profile primitives · **3** hosted-brain stubs. Every tool carries an [MCP safety annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations).
+**21 tools** total — **12 read-only** Slack, **4 write-path** Slack, **2** workflow-profile primitives, **3** hosted-brain stubs. Every one carries an [MCP safety annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations), so a client can gate the destructive ones.
 
 <sub>\* `slack_refresh_tokens` writes the local token file only. † Hosted stubs return a structured upgrade payload (`signup_url`, `free_tier_quota`, `pro_value_prop`) — no Slack call happens from OSS. ‡ Accepts `include_rich_message_fields` — see [Rich Message Fields](#rich-message-fields).</sub>
 
@@ -307,7 +324,7 @@ npx -y @jtalk22/slack-mcp --setup
 
 On macOS with a logged-in Slack tab open in Chrome, call the `slack_refresh_tokens` tool (or `npm run tokens:auto`) without leaving your editor. To survive long idle stretches, wire up the optional [token-refresh LaunchAgent](docs/SETUP.md#keep-tokens-fresh-while-claude-is-closed-macos-optional).
 
-**Never rotate again** — the [hosted version](https://mcp.revasserlabs.com/setup?utm_source=lifeboat&utm_medium=npm&utm_campaign=token_death) uses OAuth, which doesn't expire on the 1–2-week clock. Free tier, no card.
+**Never rotate again** — the [hosted version](https://mcp.revasserlabs.com/setup?utm_source=lifeboat&utm_medium=npm&utm_campaign=token_death) uses OAuth, which doesn't die on the 1–2-week clock. Free tier, no card.
 
 The recovery message shows at most once per process per hour; repeat failures inside that window get a one-liner so agents in retry loops don't spam. Set `SLACK_MCP_NO_UPSELL=1` to drop the hosted line and keep only the self-fix guidance.
 
@@ -330,9 +347,9 @@ Set each one up once: `npx -y @jtalk22/slack-mcp --setup --profile work`. When t
 
 ---
 
-## Hosted (optional)
+## Hosted (optional — the OSS package is complete without it)
 
-Everything above is free and MIT-licensed and runs entirely on your machine. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) exists for two things the OSS package deliberately doesn't do: **AI summarization** (`smart_search`, `catch_me_up`, `triage`) and **permanent OAuth** (no 2-week token rotation).
+Everything above is free, MIT-licensed, and runs entirely on your machine. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) exists for exactly two things the OSS package deliberately doesn't do: **AI summarization** (`smart_search`, `catch_me_up`, `triage`) and **permanent OAuth** (no 2-week token rotation). If you don't want either, you never need it.
 
 | Tier | Price | What it adds |
 | ---- | ----- | ------------ |
