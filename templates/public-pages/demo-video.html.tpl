@@ -141,6 +141,32 @@
       display: block;
       border-radius: 12px;
     }
+    .chapters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+    .chapter {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      color: #d8efff;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .chapter:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .chapter.active {
+      background: rgba(78, 205, 196, 0.16);
+      border-color: #4ecdc4;
+      color: #4ecdc4;
+    }
     .controls {
       display: flex;
       justify-content: center;
@@ -228,6 +254,15 @@
       </video>
     </div>
 
+    <div class="chapters" id="chapters" aria-label="Video chapters">
+      <button type="button" class="chapter" data-t="0">0:00 What it is</button>
+      <button type="button" class="chapter" data-t="12">0:12 Morning triage</button>
+      <button type="button" class="chapter" data-t="35">0:35 Search &amp; threads</button>
+      <button type="button" class="chapter" data-t="70">1:10 Replies &amp; reactions</button>
+      <button type="button" class="chapter" data-t="115">1:55 Workflow profiles</button>
+      <button type="button" class="chapter" data-t="165">2:45 Self-host vs hosted</button>
+    </div>
+
     <div class="controls">
       <button class="btn btn-primary" onclick="togglePlay()" aria-label="Play or pause the full Slack MCP demo video">Play / Pause</button>
       <button class="btn btn-secondary" onclick="restart()" aria-label="Restart the full Slack MCP demo video">Restart</button>
@@ -274,6 +309,28 @@
     video.addEventListener('ended', () => {
       video.currentTime = HIGHLIGHT_START_SECONDS;
       video.play();
+    });
+
+    // Chapters: one delegated click listener seeks + plays
+    const chapters = document.getElementById('chapters');
+    const chapterButtons = Array.from(chapters.querySelectorAll('.chapter'));
+
+    chapters.addEventListener('click', (event) => {
+      const button = event.target.closest('.chapter');
+      if (!button) return;
+      video.currentTime = Number(button.dataset.t);
+      video.play();
+    });
+
+    // Active-state tracking follows playback position
+    video.addEventListener('timeupdate', () => {
+      let active = chapterButtons[0];
+      for (const button of chapterButtons) {
+        if (video.currentTime >= Number(button.dataset.t)) active = button;
+      }
+      for (const button of chapterButtons) {
+        button.classList.toggle('active', button === active);
+      }
     });
   </script>
 </body>

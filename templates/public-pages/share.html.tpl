@@ -108,7 +108,7 @@
 <body>
   <main class="wrap">
     <h1>Slack MCP Server</h1>
-    <p class="sub">Give Claude full access to your Slack. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free (16 read/write + 2 workflow profile primitives + 3 paid stubs that point at hosted). Hosted free tier — workflow continuity + AI catch-up. Sign up no card at <a href="{{CANONICAL_SITE_URL}}">mcp.revasserlabs.com</a>.</p>
+    <p class="sub">Slack for your AI agent — no OAuth, no admin, no app to register. Self-host {{SELF_HOSTED_TOOL_COUNT}} tools for free: 12 read, 4 write, 2 workflow-profile primitives, 3 hosted-brain stubs. Hosted free tier — workflow continuity + AI catch-up. Sign up no card at <a href="{{CANONICAL_SITE_URL}}">mcp.revasserlabs.com</a>.</p>
 
     <a class="preview" href="{{GITHUB_REPO_URL}}" rel="noopener">
       <img src="{{SOCIAL_IMAGE_URL}}" alt="Slack MCP Server social preview card">
