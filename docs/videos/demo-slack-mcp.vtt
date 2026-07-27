@@ -1,19 +1,22 @@
 WEBVTT
 
-00:00.000 --> 00:36.000
-Morning triage: the agent reads unread counts and channel history, then writes one prioritized briefing.
+00:00.000 --> 00:48.000
+Morning triage: 47 unreads across four channels become one prioritized briefing.
 
-00:36.000 --> 01:07.000
-Workspace search: the agent digs a printer admin PIN out of a five-month-old #facilities post.
+00:48.000 --> 01:08.000
+A jammed printer — the admin PIN is buried in a five-month-old #facilities post. Found.
 
-01:07.000 --> 01:32.000
-Decision recall: what was decided about the Postgres 17 migration, answered from #engineering history.
+01:08.000 --> 01:34.000
+"What was decided about the Postgres 17 migration?" — answered from the #engineering thread.
 
-01:32.000 --> 02:31.000
-Write paths: the agent reads the incident thread for context, then posts a tagged, threaded update.
+01:34.000 --> 01:58.000
+A tagged, threaded reply posted back to the incident — bump the pool to 250, tag Kai.
 
-02:31.000 --> 02:58.000
-Closing loops: a reaction lands on the resolution message and #incidents is marked as read.
+01:58.000 --> 02:30.000
+Who is Alex Torres? A user lookup names the new backend engineer.
 
-02:58.000 --> 03:24.000
-Export: the last 24 hours with threads saved for the post-mortem — ending the morning at 0 unreads.
+02:30.000 --> 02:54.000
+Closing loops: a reaction on the resolution message, #incidents marked as read.
+
+02:54.000 --> 03:24.000
+Export the last 24 hours with threads for the post-mortem — ending the morning at 0 unreads.

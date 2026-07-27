@@ -205,7 +205,9 @@ async function recordDemo() {
 
     // fps=30 resamples the variable-duration frames to constant 30fps
     // (duplicated frames cost ~nothing in x264/vp9).
-    const FILTERS = 'scale=1280:800:flags=lanczos,fps=30';
+    // Retina frames are captured at 2560x1600 (deviceScaleFactor 2); downscale
+    // to 1920x1200 (16:10) — keeps the detail the old 1280x800 threw away.
+    const FILTERS = 'scale=1920:1200:flags=lanczos,fps=30';
     const encode = (label, args, out) => {
       const r = spawnSync('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', concatPath, ...args, out], { stdio: 'inherit' });
       if (r.status === 0) {

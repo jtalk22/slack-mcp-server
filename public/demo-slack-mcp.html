@@ -31,7 +31,7 @@
   <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
 
   <!-- Theme -->
-  <meta name="theme-color" content="#1a1a1a">
+  <meta name="theme-color" content="#0b0e14">
   <link rel="icon" href="../docs/assets/icon-512.png" type="image/png">
   <style>
     /* Self-hosted fonts — no CDN, instant load */
@@ -65,49 +65,56 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       Claude Desktop Color Palette (Dark Mode)
+       Palette — poster canon (near-black · coral · teal)
+       Harmonized with docs/images/demo-poster.png. Teal = system/tool/
+       success register; coral = brand/emphasis. --claude-orange keeps its
+       name (many refs) but now carries the poster coral.
        ═══════════════════════════════════════════════════════════════ */
     :root {
       --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
       --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
       --font-mono: "SF Mono", "Menlo", "Monaco", monospace;
 
+      /* Poster triad */
+      --coral: #ff6b6b;
+      --teal: #4ecdc4;
+
       /* Window chrome */
-      --window-bg: #1a1a1a;
-      --window-chrome: #2d2d2d;
-      --window-border: #3a3a3a;
+      --window-bg: #0b0e14;
+      --window-chrome: #12161f;
+      --window-border: #1f2633;
       --traffic-red: #ff5f57;
       --traffic-yellow: #febc2e;
       --traffic-green: #28c840;
 
       /* Messages */
-      --user-bubble-bg: #3b3b3b;
-      --claude-bubble-bg: #2a2a2a;
-      --claude-orange: #da7756;
+      --user-bubble-bg: #1a2130;
+      --claude-bubble-bg: #12161f;
+      --claude-orange: #ff6b6b;
 
       /* Tool calls */
-      --tool-box-bg: #1f1f1f;
-      --tool-box-border: #3a3a3a;
-      --tool-header-bg: #252525;
-      --tool-name-color: #a0a0a0;
+      --tool-box-bg: #0e121a;
+      --tool-box-border: #1f2633;
+      --tool-header-bg: #141926;
+      --tool-name-color: #8d99a9;
 
       /* Text */
-      --text-primary: #ffffff;
-      --text-secondary: #b0b0b0;
-      --text-muted: #666666;
+      --text-primary: #f0f3f7;
+      --text-secondary: #a7b2c0;
+      --text-muted: #8d99a9;
 
       /* Accents */
-      --link-color: #6eb5ff;
-      --code-bg: #2d2d2d;
-      --code-text: #e6e6e6;
-      --success-color: #28c840;
-      --warning-color: #febc2e;
+      --link-color: #4ecdc4;
+      --code-bg: #12161f;
+      --code-text: #f0f3f7;
+      --success-color: #4ecdc4;
+      --warning-color: #f2b950;
 
       /* Brand DNA (subliminal) */
-      --text-warm: #E8E4DF;
+      --text-warm: #eef1f6;
 
       /* Shadows */
-      --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 30px 60px -18px rgba(0, 0, 0, 0.72);
 
       /* Z-index scale */
       --z-caption: 50;
@@ -126,11 +133,15 @@
 
     body {
       font-family: var(--font-body);
-      font-size: 15px;
+      font-size: 17px;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background:
+        radial-gradient(58% 46% at 14% 0%, rgba(255, 107, 107, 0.07), transparent 62%),
+        radial-gradient(58% 46% at 86% 0%, rgba(78, 205, 196, 0.07), transparent 62%),
+        linear-gradient(180deg, #0e1119 0%, #0b0e14 58%, #07090e 100%);
+      background-attachment: fixed;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -172,7 +183,7 @@
       width: 100%;
       max-width: 960px;
       margin-bottom: 14px;
-      background: rgba(15, 52, 96, 0.72);
+      background: rgba(18, 22, 31, 0.82);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px;
       padding: 10px 12px;
@@ -189,7 +200,7 @@
       flex-wrap: wrap;
     }
     .cta-strip .links a {
-      color: #d8efff;
+      color: #dfe6ee;
       text-decoration: none;
       border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 999px;
@@ -202,7 +213,7 @@
       color: rgba(255, 255, 255, 0.78);
     }
     .cta-strip .note a {
-      color: #9ee7ff;
+      color: #7fe0d6;
       text-decoration: underline;
     }
 
@@ -210,7 +221,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(218, 119, 86, 0.2);
+      background: rgba(255, 107, 107, 0.16);
       color: var(--claude-orange);
       padding: 4px 10px;
       border-radius: 12px;
@@ -253,7 +264,7 @@
     }
 
     .scenario-btn.active {
-      background: rgba(218, 119, 86, 0.2);
+      background: rgba(255, 107, 107, 0.16);
       border-color: var(--claude-orange);
       color: var(--claude-orange);
     }
@@ -263,8 +274,8 @@
     }
 
     @keyframes pulse-border {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(218, 119, 86, 0.4); }
-      50% { box-shadow: 0 0 0 4px rgba(218, 119, 86, 0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
+      50% { box-shadow: 0 0 0 4px rgba(255, 107, 107, 0); }
     }
 
     .scenario-btn .icon {
@@ -463,7 +474,7 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: linear-gradient(90deg, var(--window-border) 25%, #4a4a4a 50%, var(--window-border) 75%);
+      background: linear-gradient(90deg, var(--window-border) 25%, #26303f 50%, var(--window-border) 75%);
       background-size: 200% 100%;
       animation: skeleton-shimmer 1.5s infinite;
     }
@@ -478,7 +489,7 @@
     .skeleton-line {
       height: 16px;
       border-radius: 4px;
-      background: linear-gradient(90deg, var(--window-border) 25%, #4a4a4a 50%, var(--window-border) 75%);
+      background: linear-gradient(90deg, var(--window-border) 25%, #26303f 50%, var(--window-border) 75%);
       background-size: 200% 100%;
       animation: skeleton-shimmer 1.5s infinite;
     }
@@ -538,14 +549,14 @@
     }
 
     .message.user .message-avatar {
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      background: linear-gradient(135deg, #2b3648 0%, #3a4a63 100%);
       color: white;
       font-weight: 600;
       font-size: 12px;
     }
 
     .message.claude .message-avatar {
-      background: linear-gradient(135deg, var(--claude-orange) 0%, #c56644 100%);
+      background: linear-gradient(135deg, var(--claude-orange) 0%, #e85555 100%);
       color: white;
       font-weight: 600;
       font-size: 12px;
@@ -558,10 +569,10 @@
 
     .message-sender {
       font-weight: 600;
-      font-size: 14px;
+      font-size: 16px;
     }
 
-    .message.user .message-sender { color: #a5b4fc; }
+    .message.user .message-sender { color: #b8c2d0; }
     .message.claude .message-sender { color: var(--claude-orange); }
 
     .message-time {
@@ -572,7 +583,7 @@
     .message-content {
       padding: 16px;
       border-radius: 12px;
-      font-size: 15px;
+      font-size: 18px;
       line-height: 1.6;
     }
 
@@ -606,7 +617,7 @@
     }
 
     .tool-header:hover {
-      background: #2a2a2a;
+      background: #161c28;
     }
 
     .tool-icon {
@@ -615,7 +626,7 @@
 
     .tool-name {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 15px;
       color: var(--link-color);
       font-weight: 500;
     }
@@ -692,7 +703,7 @@
 
     .tool-params {
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 15px;
       color: var(--code-text);
       background: var(--code-bg);
       padding: 12px;
@@ -701,7 +712,7 @@
     }
 
     .tool-result {
-      font-size: 13px;
+      font-size: 15px;
       color: var(--text-secondary);
     }
 
@@ -730,7 +741,7 @@
     }
 
     .result-user {
-      color: #f0abfc;
+      color: #f5a3a3;
       font-weight: 500;
     }
 
@@ -815,8 +826,8 @@
       align-items: center;
       gap: 6px;
       padding: 10px 16px;
-      background: rgba(218, 119, 86, 0.15);
-      border: 1px solid rgba(218, 119, 86, 0.3);
+      background: rgba(255, 107, 107, 0.14);
+      border: 1px solid rgba(255, 107, 107, 0.32);
       border-radius: 20px;
       color: var(--claude-orange);
       cursor: pointer;
@@ -827,7 +838,7 @@
     }
 
     .tools-button:hover {
-      background: rgba(218, 119, 86, 0.25);
+      background: rgba(255, 107, 107, 0.24);
     }
 
     .tools-button .icon {
@@ -1136,7 +1147,21 @@
        Production Polish - Title, Captions, Transitions, Closing
        ═══════════════════════════════════════════════════════════════ */
 
-    /* Title Card */
+    /* Title Card — poster-language cover (near-black + corner glows) */
+    .title-card, .closing-card {
+      background:
+        radial-gradient(64% 52% at 16% 4%, rgba(255, 107, 107, 0.10), transparent 60%),
+        radial-gradient(64% 52% at 84% 6%, rgba(78, 205, 196, 0.10), transparent 60%),
+        linear-gradient(180deg, #0e1119 0%, #0b0e14 60%, #07090e 100%);
+    }
+    .title-card::before, .closing-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--coral) 0%, var(--coral) 32%, var(--teal) 68%, var(--teal) 100%);
+      opacity: 0.9;
+    }
     .title-card {
       position: absolute;
       inset: 0;
@@ -1145,7 +1170,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: var(--window-bg);
+      text-align: center;
+      padding: 0 40px;
       z-index: var(--z-modal);
       opacity: 0;
       visibility: hidden;
@@ -1162,16 +1188,27 @@
     }
 
     .title-card h1 {
+      font-family: var(--font-heading);
       color: var(--text-warm);
-      letter-spacing: 0.08em;
-      font-weight: 300;
-      font-size: 28px;
-      margin: 16px 0 8px;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      font-size: clamp(34px, 5.4vw, 58px);
+      line-height: 1.04;
+      margin: 20px 0 14px;
     }
+    .title-card h1 .accent-time { color: var(--coral); }
+    .title-card .chan { color: var(--teal); font-weight: 600; }
 
     .title-card .title-logo { width: 56px; height: 56px; border-radius: 12px; }
     .title-card .title-tagline { color: var(--text-secondary); font-size: 16px; }
     .title-card .title-version { color: var(--text-muted); font-size: 13px; margin-top: 24px; }
+
+    /* Hero line gets a touch of scale on reveal (tasteful, not garnish) */
+    @keyframes titleHeroReveal {
+      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .title-card.visible h1.title-line { animation: titleHeroReveal 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
     /* Staggered reveal — each line fades in with a beat */
     .title-card .title-line {
@@ -1201,7 +1238,7 @@
       color: var(--text-primary);
       padding: 10px 24px;
       border-radius: 20px;
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 500;
       letter-spacing: 0.01em;
       opacity: 0;
@@ -1227,7 +1264,7 @@
       opacity: 0;
     }
 
-    /* Closing Card */
+    /* Closing Card — the poster payoff (47 → 0) */
     .closing-card {
       position: absolute;
       inset: 0;
@@ -1236,7 +1273,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: var(--window-bg);
+      text-align: center;
+      padding: 0 40px;
       z-index: var(--z-modal);
       opacity: 0;
       visibility: hidden;
@@ -1252,12 +1290,42 @@
       transition: opacity 0.5s ease, visibility 0s linear 0s;
     }
 
+    /* 47 → 0 hero — mirrors docs/images/demo-poster.png */
+    .closing-tally {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(16px, 3vw, 40px);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      font-size: clamp(60px, 11vw, 132px);
+      margin-bottom: 22px;
+    }
+    .closing-tally .from { color: var(--coral); }
+    .closing-tally .to { color: var(--teal); }
+    .closing-tally .arrow {
+      color: var(--text-muted);
+      font-size: 0.52em;
+      transform: translateY(-0.06em);
+    }
+    .closing-card.visible .closing-tally .from { animation: tallyPop 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+    .closing-card.visible .closing-tally .arrow { animation: tallyPop 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both; }
+    .closing-card.visible .closing-tally .to { animation: tallyPop 0.72s cubic-bezier(0.34, 1.56, 0.64, 1) 0.62s both; }
+    @keyframes tallyPop {
+      from { opacity: 0; transform: translateY(0.14em) scale(0.7); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     .closing-check { font-size: 48px; margin-bottom: 16px; }
 
     .closing-card h2 {
+      font-family: var(--font-heading);
       color: var(--text-warm);
-      font-weight: 400;
-      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      font-size: clamp(22px, 3vw, 30px);
       margin-bottom: 8px;
     }
 
@@ -1268,11 +1336,13 @@
     }
 
     .closing-links code {
-      background: var(--code-bg);
+      background: rgba(78, 205, 196, 0.08);
       color: var(--code-text);
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 14px;
+      padding: 14px 26px;
+      border-radius: 10px;
+      border: 1px solid rgba(78, 205, 196, 0.35);
+      box-shadow: 0 0 0 1px rgba(78, 205, 196, 0.06), 0 10px 30px -18px rgba(78, 205, 196, 0.5);
+      font-size: 15px;
       font-family: "SF Mono", "Menlo", monospace;
     }
 
@@ -1399,10 +1469,10 @@
       <div class="title-line" style="margin-bottom: 20px;">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="" style="width: 44px; height: 44px; border-radius: 10px;">
       </div>
-      <h1 class="title-line" style="font-size: 30px; margin-bottom: 12px; letter-spacing: -0.01em;">It's Monday, 9:07 AM.</h1>
-      <p class="title-line" style="font-size: 18px; color: var(--text-secondary); line-height: 1.6;">A jammed printer. Nobody knows the PIN.<br>The guy who did left six months ago.</p>
-      <p class="title-line" style="margin-top: 24px; font-size: 16px; color: var(--claude-orange); font-weight: 500;">His message is still in #facilities.</p>
-      <p class="title-line title-version" style="margin-top: 16px; font-size: 12px; color: var(--text-muted);">Slack MCP Server · No OAuth · One command</p>
+      <h1 class="title-line">It's Monday,<br><span class="accent-time">9:07 AM.</span></h1>
+      <p class="title-line" style="font-size: 19px; color: var(--text-secondary); line-height: 1.6; max-width: 30ch;">A jammed printer. Nobody knows the PIN.<br>The guy who did left six months ago.</p>
+      <p class="title-line" style="margin-top: 26px; font-size: 18px; color: var(--text-primary); font-weight: 500;">His message is still in <span class="chan">#facilities</span>.</p>
+      <p class="title-line title-version" style="margin-top: 20px; font-size: 13px; color: var(--text-muted); letter-spacing: 0.01em;">Slack MCP Server &nbsp;·&nbsp; No OAuth &nbsp;·&nbsp; One command</p>
     </div>
 
     <!-- Scenario Caption Overlay -->
@@ -1410,9 +1480,13 @@
 
     <!-- Closing Card (auto-play only) -->
     <div class="closing-card" id="closingCard">
-      <div class="closing-check" style="font-size: 56px; font-weight: 700; font-family: var(--font-heading); letter-spacing: -0.03em; margin-bottom: 4px; color: var(--text-warm);">0 unreads.</div>
-      <h2 style="font-size: 22px; font-weight: 400; margin-bottom: 16px;">You never opened Slack.</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 28px;">The printer PIN is 4729.</p>
+      <div class="closing-tally" aria-label="47 unreads to 0">
+        <span class="from">47</span>
+        <span class="arrow" aria-hidden="true">→</span>
+        <span class="to">0</span>
+      </div>
+      <h2 style="margin-bottom: 12px;">You never opened Slack.</h2>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 28px;">47 unreads, cleared. And the printer PIN is 4729.</p>
       <div class="closing-links">
         <code>npx -y @jtalk22/slack-mcp --setup</code>
       </div>
