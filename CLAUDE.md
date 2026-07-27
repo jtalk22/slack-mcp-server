@@ -90,3 +90,20 @@ lib/
 
 The repo includes `.claude/settings.json` for local MCP server registration.
 Tokens load from `~/.slack-mcp-tokens.json` or `SLACK_TOKEN`/`SLACK_COOKIE` env vars.
+
+## Gotchas
+
+- **Branch names must not contain "claude"** (or other AI-tool markers). The
+  attribution guardrail scans commit messages; `gh pr update-branch` writes
+  "Merge branch 'main' into <branch>", so a marker in the branch name fails CI
+  on the merge commit. Rebase instead of merge-updating if it happens.
+- **Public pages are generated.** Never edit root `index.html` or `public/*.html`
+  directly — edit `templates/public-pages/*.tpl` + `lib/public-pages.js`, run
+  `node scripts/generate-public-pages.js`, commit templates and outputs together.
+- **README claims are CI-gated.** `check-public-surface-integrity.js` greps for
+  literal "21 tools", "12 read-only", "4 write-path"; `check-public-language.sh`
+  bans hype words. Run both before pushing copy changes.
+- **Demo video is reproducible.** `scripts/record-demo.js` re-captures the whole
+  demo deterministically (webm master → renditions). Chapter `data-t` values in
+  `demo-video.html.tpl` and `.vtt` cue times are hand-mapped to real scene
+  boundaries — re-verify both against extracted frames after any re-capture.
