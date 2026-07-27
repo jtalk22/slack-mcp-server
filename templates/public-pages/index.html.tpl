@@ -25,15 +25,15 @@
     :root {
       --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
       --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-      --bg-1: #091433;
-      --bg-2: #10214f;
-      --panel: rgba(11, 27, 67, 0.82);
-      --panel-border: rgba(130, 161, 225, 0.35);
-      --text: #edf3ff;
-      --muted: #afc0e4;
-      --accent: #da7756;
-      --button-bg: rgba(18, 57, 121, 0.75);
-      --button-border: rgba(134, 161, 224, 0.45);
+      --bg-1: #0b0e14;
+      --bg-2: #12161f;
+      --panel: rgba(17, 20, 27, 0.85);
+      --panel-border: rgba(255, 255, 255, 0.14);
+      --text: #f0f3f7;
+      --muted: #9aa6b6;
+      --accent: #ff6b6b;
+      --button-bg: rgba(28, 32, 42, 0.8);
+      --button-border: rgba(255, 255, 255, 0.22);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,8 +43,8 @@
       color: var(--text);
       min-height: 100vh;
       background:
-        radial-gradient(900px 460px at 10% 0%, #2b4d95 0%, transparent 58%),
-        radial-gradient(1020px 500px at 100% 100%, #114584 0%, transparent 64%),
+        radial-gradient(900px 460px at 10% 0%, #1a222e 0%, transparent 58%),
+        radial-gradient(1020px 500px at 100% 100%, #0f2d31 0%, transparent 64%),
         linear-gradient(145deg, var(--bg-1), var(--bg-2));
       padding: 22px 16px 26px;
     }
@@ -54,14 +54,14 @@
       margin: 0 auto;
       border: 1px solid var(--panel-border);
       border-radius: 18px;
-      background: linear-gradient(160deg, var(--panel), rgba(8, 20, 55, 0.92));
+      background: linear-gradient(160deg, var(--panel), rgba(12, 15, 21, 0.92));
       box-shadow: 0 24px 46px rgba(0, 0, 0, 0.32);
       overflow: hidden;
     }
 
     .hero {
       padding: 22px 24px 16px;
-      border-bottom: 1px solid rgba(141, 167, 226, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .hero h1 {
@@ -88,7 +88,7 @@
 
     .cta-row a {
       text-decoration: none;
-      color: #e9f4ff;
+      color: #eef2f6;
       border: 1px solid var(--button-border);
       border-radius: 999px;
       padding: 7px 12px;
@@ -100,14 +100,14 @@
     .cta-row a strong { color: var(--accent); }
 
     .verify {
-      background: #091c4c;
-      border: 1px solid rgba(128, 157, 217, 0.4);
+      background: #10141c;
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 12px;
       padding: 11px 13px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: clamp(0.8rem, 1.05vw, 0.96rem);
       line-height: 1.45;
-      color: #dce9ff;
+      color: #dbe3ea;
       overflow-x: auto;
       white-space: pre;
     }
@@ -120,9 +120,9 @@
     }
 
     .snapshot-card {
-      border: 1px solid rgba(133, 160, 222, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 14px;
-      background: rgba(8, 20, 55, 0.82);
+      background: rgba(14, 17, 24, 0.82);
       padding: 14px 15px;
       min-height: 120px;
     }
@@ -132,7 +132,7 @@
       font-size: 0.74rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #8fa9da;
+      color: #8d99a9;
       margin-bottom: 8px;
       font-weight: 600;
     }
@@ -142,7 +142,7 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 1.05rem;
       font-weight: 700;
-      color: #edf3ff;
+      color: #f0f3f7;
       margin-bottom: 8px;
       line-height: 1.3;
     }
@@ -156,7 +156,7 @@
 
     .snapshot-note a,
     .snapshot-value a {
-      color: #9ac3ff;
+      color: #4ecdc4;
     }
 
     .decision-grid {
@@ -167,22 +167,22 @@
     }
 
     .decision-card {
-      border: 1px solid rgba(133, 160, 222, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 14px;
-      background: rgba(8, 20, 55, 0.82);
+      background: rgba(14, 17, 24, 0.82);
       padding: 16px;
       min-height: 220px;
     }
 
     .decision-card.accent {
-      border-color: rgba(240, 194, 70, 0.38);
-      box-shadow: inset 0 0 0 1px rgba(240, 194, 70, 0.1);
+      border-color: rgba(78, 205, 196, 0.38);
+      box-shadow: inset 0 0 0 1px rgba(78, 205, 196, 0.1);
     }
 
     .decision-label {
       display: inline-block;
       margin-bottom: 8px;
-      color: #8fa9da;
+      color: #8d99a9;
       font-size: 0.74rem;
       font-weight: 700;
       letter-spacing: 0.08em;
@@ -213,7 +213,7 @@
     }
 
     .decision-links a {
-      color: #9ac3ff;
+      color: #4ecdc4;
     }
 
     .stage {
@@ -221,11 +221,11 @@
     }
 
     .video-shell {
-      border: 1px solid rgba(133, 160, 222, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 14px;
       overflow: hidden;
       position: relative;
-      background: #081334;
+      background: #0a0d13;
       min-height: 280px;
     }
 
@@ -233,7 +233,7 @@
       display: block;
       width: 100%;
       height: auto;
-      background: #050b1f;
+      background: #07090d;
     }
 
     .video-controls {
@@ -248,9 +248,9 @@
 
     .video-controls button,
     .video-controls a {
-      border: 1px solid rgba(135, 163, 225, 0.55);
-      background: rgba(9, 30, 74, 0.88);
-      color: #e8f2ff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(14, 17, 24, 0.88);
+      color: #eef2f6;
       border-radius: 10px;
       padding: 7px 11px;
       text-decoration: none;
@@ -262,12 +262,12 @@
     .video-status {
       margin-left: auto;
       margin-top: 8px;
-      color: #9fb6e3;
+      color: #93a0af;
       font-size: 0.83rem;
     }
 
     .footer {
-      border-top: 1px solid rgba(141, 167, 226, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
       padding: 12px 24px 16px;
       font-size: 0.88rem;
       color: var(--muted);
@@ -277,7 +277,7 @@
       flex-wrap: wrap;
     }
 
-    .footer a { color: #9ac3ff; }
+    .footer a { color: #4ecdc4; }
 
     @media (max-width: 760px) {
       body { padding: 10px; }
@@ -300,7 +300,7 @@
       <h1>Slack MCP &mdash; without the broken OAuth</h1>
       <p>Slack's official MCP server is OAuth-first and may require app registration, admin approval, or client compatibility workarounds. This one uses your browser session instead. No app, no admin, no friction. {{SELF_HOSTED_TOOL_COUNT}} tools, one command.</p>
       <div class="cta-row">
-        <a href="{{GITHUB_PAGES_ROOT}}/public/demo-slack-mcp.html" style="background:rgba(218,119,86,0.18);border-color:rgba(218,119,86,0.45)"><strong style="color:#da7756">Watch the Demo</strong></a>
+        <a href="{{GITHUB_PAGES_ROOT}}/public/demo-slack-mcp.html" style="background:rgba(255,107,107,0.16);border-color:rgba(255,107,107,0.45)"><strong style="color:#ff6b6b">Watch the Demo</strong></a>
         <a href="{{SETUP_URL}}"><strong>Setup Guide</strong></a>
         <a href="{{GITHUB_REPO_URL}}"><strong>GitHub</strong></a>
         <a href="{{NPM_URL}}"><strong>npm</strong></a>
@@ -338,9 +338,9 @@
 
     <section class="stage">
       <div class="video-shell">
-        <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-slack-mcp-mobile-poster.png" aria-label="Slack MCP demo autoplay">
-          <source src="docs/videos/demo-slack-mcp-mobile-20s.mp4" type="video/mp4">
-          <track kind="captions" src="docs/videos/demo-slack-mcp-mobile-20s.vtt" srclang="en" label="English captions" default>
+        <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-poster.png" aria-label="Slack MCP demo autoplay">
+          <source src="docs/videos/demo-slack-mcp-hq.mp4" type="video/mp4">
+          <track kind="captions" src="docs/videos/demo-slack-mcp.vtt" srclang="en" label="English captions" default>
         </video>
         <div class="video-controls">
           <button type="button" id="playBtn" aria-label="Play Slack MCP demo video">Play</button>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jtalk22.github.io/slack-mcp-server/sitemap.xml
