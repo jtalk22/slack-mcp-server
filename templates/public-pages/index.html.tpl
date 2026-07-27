@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Slack MCP Server - Install in 30 Seconds</title>
+  <title>Slack MCP Server — Slack for your AI agent, no OAuth</title>
   <meta name="description" content="{{SELF_HOSTED_TOOL_COUNT}} Slack tools for any MCP client. No OAuth, no admin approval. One command setup.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:type" content="website">
