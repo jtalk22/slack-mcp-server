@@ -86,7 +86,7 @@ If your workspace's acceptable-use policy forbids unofficial clients, respect it
 <div align="center">
 
 <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-  <img src="docs/images/watch-it-run.gif" width="800" alt="Real session: the agent calls slack_conversations_unreads, pulls channel history, and writes the morning briefing">
+  <img src="docs/images/watch-it-run.gif" width="900" alt="Real session: the agent calls slack_conversations_unreads, pulls channel history, and writes the morning briefing">
 </a>
 
 <p><sub>A real session at 2× — unread counts → history pull → the briefing. <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">Full 3:24 with chapters →</a></sub></p>
