@@ -1,8 +1,8 @@
 # Setup Guide
 
-## Hosted (Coming Soon)
+## Hosted (Optional)
 
-A hosted version with permanent OAuth tokens, semantic search, and AI summaries is in development at [mcp.revasserlabs.com](https://mcp.revasserlabs.com). The current release is self-hosted only — continue below.
+A hosted version with permanent OAuth tokens, semantic search, and AI summaries is live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) — free tier, no card. Everything below is the self-hosted path, which is complete on its own.
 
 ---
 

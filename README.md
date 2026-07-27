@@ -248,7 +248,7 @@ Full walkthrough — including the optional keep-tokens-fresh LaunchAgent — in
 
 ## The 21 tools
 
-Every write-path tool carries an [MCP destructive annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations) so clients can gate it.
+Every workspace write-path tool carries an [MCP destructive annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations) so clients can gate it.
 
 | Tool | Description | Safety |
 | ---- | ----------- | ------ |
