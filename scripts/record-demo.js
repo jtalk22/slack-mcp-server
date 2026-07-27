@@ -10,7 +10,7 @@
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { mkdirSync, existsSync, copyFileSync, statSync, readdirSync, unlinkSync, rmSync } from 'fs';
+import { mkdirSync, existsSync, copyFileSync, statSync, readdirSync, unlinkSync, rmSync, writeFileSync } from 'fs';
 import { spawnSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,7 +55,10 @@ async function recordDemo() {
   }
 
   console.log('🚀 Launching browser...');
-  const browser = await chromium.launch({ headless: true });
+  // PLAYWRIGHT_CHROMIUM_EXECUTABLE: point at a system Chromium when the
+  // Playwright-managed download isn't available (CI images, sandboxes).
+  const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || undefined;
+  const browser = await chromium.launch({ headless: true, executablePath });
   const contextOpts = {
     viewport: CONFIG.viewport,
     colorScheme: 'dark',
@@ -113,19 +116,28 @@ async function recordDemo() {
   console.log('▶️  Scenarios running...');
   console.log();
 
-  // PNG frame capture loop (--png-sequence mode only)
+  // Frame capture loop (--png-sequence mode only)
   // Sequential: await each screenshot before starting the next.
   // setInterval doesn't work — screenshots take ~100-200ms at 2x DPI,
   // so 33ms intervals cause overlapping captures that pile up.
+  //
+  // Each frame records its wall-clock timestamp. Capture rate is whatever
+  // the machine manages (~6-15fps); stitching uses the real durations, so
+  // the output plays at true speed instead of time-compressing the demo.
+  // JPEG q95 at 2x is used instead of PNG: ~3x faster capture (higher
+  // effective fps), and after lanczos downscale + x264 the difference is
+  // invisible.
   let frameCount = 0;
   let captureRunning = false;
+  const frameTimes = [];
   if (pngSequenceMode) {
     captureRunning = true;
     (async () => {
       while (captureRunning) {
         try {
-          const framePath = join(framesDir, `frame-${String(frameCount).padStart(5, '0')}.png`);
-          await page.screenshot({ path: framePath, type: 'png' });
+          const framePath = join(framesDir, `frame-${String(frameCount).padStart(5, '0')}.jpg`);
+          await page.screenshot({ path: framePath, type: 'jpeg', quality: 95 });
+          frameTimes.push(Date.now());
           frameCount++;
         } catch (_) { break; } // page closing
       }
@@ -156,12 +168,11 @@ async function recordDemo() {
     { timeout: CONFIG.maxDemoTimeout },
   );
   clearInterval(poller);
-  captureRunning = false; // signal PNG capture loop to stop
   console.log();
   console.log('🎬 Closing card visible.');
-  if (pngSequenceMode) console.log(`   Captured ${frameCount} frames`);
 
-  // Wait for closing card to fade out
+  // Wait for closing card to fade out — keep capturing through it so the
+  // closing shot actually lands in the recording.
   await page.waitForFunction(
     () => {
       const el = document.getElementById('closingCard');
@@ -171,31 +182,44 @@ async function recordDemo() {
     { timeout: 60000 },
   );
   await page.waitForTimeout(600);
+  captureRunning = false; // signal frame capture loop to stop
+  if (pngSequenceMode) console.log(`   Captured ${frameCount} frames`);
 
   // ── Save video ──────────────────────────────────────────────
+  const mp4Output = canonicalOutput.replace(/\.webm$/, '.mp4');
   if (pngSequenceMode) {
-    console.log('💾 Stitching PNG frames with FFmpeg...');
+    console.log('💾 Stitching frames with FFmpeg (real-time durations)...');
     await context.close();
     await browser.close();
 
-    const hqOutput = canonicalOutput.replace(/\.webm$/, '-hq.mp4');
-    const enc = spawnSync('ffmpeg', [
-      '-y', '-framerate', '30',
-      '-i', join(framesDir, 'frame-%05d.png'),
-      '-vf', 'scale=1280:800:flags=lanczos',
-      '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
-      '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-      hqOutput,
-    ], { stdio: 'inherit' });
-
-    if (enc.status === 0) {
-      const hqSize = (statSync(hqOutput).size / 1048576).toFixed(1);
-      console.log(`   HQ MP4: ${hqSize} MB (${frameCount} frames @ 30fps)`);
-      // Also copy as the standard MP4
-      copyFileSync(hqOutput, canonicalOutput.replace(/\.webm$/, '.mp4'));
-    } else {
-      console.warn('   ⚠️  FFmpeg stitch failed');
+    // ffconcat with per-frame durations from the capture timestamps, so
+    // playback speed matches the live demo regardless of capture fps.
+    const concatLines = ['ffconcat version 1.0'];
+    for (let i = 0; i < frameCount; i++) {
+      const next = i + 1 < frameCount ? frameTimes[i + 1] : frameTimes[i] + 500;
+      concatLines.push(`file 'frame-${String(i).padStart(5, '0')}.jpg'`);
+      concatLines.push(`duration ${((next - frameTimes[i]) / 1000).toFixed(4)}`);
     }
+    const concatPath = join(framesDir, 'frames.ffconcat');
+    writeFileSync(concatPath, concatLines.join('\n') + '\n');
+
+    // fps=30 resamples the variable-duration frames to constant 30fps
+    // (duplicated frames cost ~nothing in x264/vp9).
+    const FILTERS = 'scale=1280:800:flags=lanczos,fps=30';
+    const encode = (label, args, out) => {
+      const r = spawnSync('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', concatPath, ...args, out], { stdio: 'inherit' });
+      if (r.status === 0) {
+        console.log(`   ${label}: ${(statSync(out).size / 1048576).toFixed(1)} MB`);
+        return true;
+      }
+      console.warn(`   ⚠️  ${label} encode failed`);
+      return false;
+    };
+
+    const hqOutput = canonicalOutput.replace(/\.webm$/, '-hq.mp4');
+    encode('HQ MP4 (crf 16)', ['-vf', FILTERS, '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-movflags', '+faststart'], hqOutput);
+    encode('MP4 (crf 18)', ['-vf', FILTERS, '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', '-movflags', '+faststart'], mp4Output);
+    encode('WebM (vp9 crf 32)', ['-vf', FILTERS, '-c:v', 'libvpx-vp9', '-crf', '32', '-b:v', '0', '-row-mt', '1', '-cpu-used', '4', '-pix_fmt', 'yuv420p'], canonicalOutput);
 
     // Clean up frames
     console.log('🧹 Cleaning up frames...');
@@ -208,30 +232,29 @@ async function recordDemo() {
 
     const videoPath = await video.path();
     copyFileSync(videoPath, canonicalOutput);
-  }
 
-  // ── Encode H.264 MP4 from WebM ──────────────────────────────
-  // Playwright records VP8 WebM (~9MB). Re-encode to H.264 MP4
-  // for universal browser support and ~85% smaller file size.
-  const mp4Output = canonicalOutput.replace(/\.webm$/, '.mp4');
-  const ffprobe = spawnSync('ffmpeg', ['-version'], { stdio: 'ignore' });
-  if (ffprobe.status === 0) {
-    console.log('🎞️  Encoding H.264 MP4...');
-    const enc = spawnSync('ffmpeg', [
-      '-y', '-i', canonicalOutput,
-      '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
-      '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-      mp4Output,
-    ], { stdio: 'inherit' });
-    if (enc.status === 0) {
-      const webmSize = (statSync(canonicalOutput).size / 1048576).toFixed(1);
-      const mp4Size = (statSync(mp4Output).size / 1048576).toFixed(1);
-      console.log(`   WebM: ${webmSize} MB → MP4: ${mp4Size} MB`);
+    // ── Encode H.264 MP4 from WebM ────────────────────────────
+    // Playwright records VP8 WebM (~9MB). Re-encode to H.264 MP4
+    // for universal browser support and ~85% smaller file size.
+    const ffprobe = spawnSync('ffmpeg', ['-version'], { stdio: 'ignore' });
+    if (ffprobe.status === 0) {
+      console.log('🎞️  Encoding H.264 MP4...');
+      const enc = spawnSync('ffmpeg', [
+        '-y', '-i', canonicalOutput,
+        '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
+        '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+        mp4Output,
+      ], { stdio: 'inherit' });
+      if (enc.status === 0) {
+        const webmSize = (statSync(canonicalOutput).size / 1048576).toFixed(1);
+        const mp4Size = (statSync(mp4Output).size / 1048576).toFixed(1);
+        console.log(`   WebM: ${webmSize} MB → MP4: ${mp4Size} MB`);
+      } else {
+        console.warn('   ⚠️  H.264 encode failed — WebM still available');
+      }
     } else {
-      console.warn('   ⚠️  H.264 encode failed — WebM still available');
+      console.log('ℹ️  FFmpeg not found — skipping H.264 encode (WebM only)');
     }
-  } else {
-    console.log('ℹ️  FFmpeg not found — skipping H.264 encode (WebM only)');
   }
 
   console.log();
@@ -241,8 +264,8 @@ async function recordDemo() {
   console.log();
   console.log(`📹 Video: ${canonicalOutput}`);
   if (existsSync(mp4Output)) console.log(`📹 MP4:   ${mp4Output}`);
-  if (archiveOutput) {
-    copyFileSync(videoPath, timestampedOutput);
+  if (archiveOutput && existsSync(canonicalOutput)) {
+    copyFileSync(canonicalOutput, timestampedOutput);
     console.log(`🗂️  Archive: ${timestampedOutput}`);
   }
 }

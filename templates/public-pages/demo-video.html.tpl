@@ -34,10 +34,10 @@
     "name": "Slack MCP Server — Monday Morning Demo",
     "description": "Watch an AI handle 47 unread Slack messages without opening Slack. {{SELF_HOSTED_TOOL_COUNT}} tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
     "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
-    "uploadDate": "2026-03-30",
+    "uploadDate": "2026-07-26",
     "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp.mp4",
     "embedUrl": "{{GITHUB_PAGES_ROOT}}/public/demo-video.html",
-    "duration": "PT3M33S",
+    "duration": "PT3M24S",
     "author": {
       "@type": "Person",
       "name": "James Lambert",
@@ -255,12 +255,12 @@
     </div>
 
     <div class="chapters" id="chapters" aria-label="Video chapters">
-      <button type="button" class="chapter" data-t="0">0:00 What it is</button>
-      <button type="button" class="chapter" data-t="12">0:12 Morning triage</button>
-      <button type="button" class="chapter" data-t="35">0:35 Search &amp; threads</button>
-      <button type="button" class="chapter" data-t="70">1:10 Replies &amp; reactions</button>
-      <button type="button" class="chapter" data-t="115">1:55 Workflow profiles</button>
-      <button type="button" class="chapter" data-t="165">2:45 Self-host vs hosted</button>
+      <button type="button" class="chapter" data-t="0">0:00 Morning triage</button>
+      <button type="button" class="chapter" data-t="36">0:36 Printer-PIN search</button>
+      <button type="button" class="chapter" data-t="67">1:07 What was decided</button>
+      <button type="button" class="chapter" data-t="92">1:32 Reply in-thread</button>
+      <button type="button" class="chapter" data-t="151">2:31 Close the loops</button>
+      <button type="button" class="chapter" data-t="178">2:58 Export &amp; wrap</button>
     </div>
 
     <div class="controls">
@@ -275,7 +275,7 @@
 
   <script>
     const video = document.getElementById('demo');
-    const HIGHLIGHT_START_SECONDS = 2;
+    const HIGHLIGHT_START_SECONDS = 4;
 
     function playFromHighlight() {
       if (video.duration && video.duration > HIGHLIGHT_START_SECONDS + 1) {

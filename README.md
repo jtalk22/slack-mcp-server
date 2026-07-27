@@ -30,7 +30,7 @@ npx -y @jtalk22/slack-mcp --setup
   <img src="docs/images/demo-poster.png" width="800" alt="Watch the demo: 47 unread Slack messages become one morning briefing — without opening Slack">
 </a>
 
-<p><sub><b><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ Watch the full 3:31 demo — with chapters</a></b> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive demo</a> · <a href="docs/SETUP.md">setup guide</a></sub></p>
+<p><sub><b><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ Watch the full 3:24 demo — with chapters</a></b> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive demo</a> · <a href="docs/SETUP.md">setup guide</a></sub></p>
 
 </div>
 
@@ -87,7 +87,7 @@ If your workspace's acceptable-use policy forbids unofficial clients, respect it
   <img src="docs/images/watch-it-run.gif" width="800" alt="Real session: the agent calls slack_conversations_unreads, pulls channel history, and writes the morning briefing">
 </a>
 
-<p><sub>A real session at 2× — unread counts → history pull → the briefing. <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">Full 3:31 with chapters →</a></sub></p>
+<p><sub>A real session at 2× — unread counts → history pull → the briefing. <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">Full 3:24 with chapters →</a></sub></p>
 
 </div>
 
@@ -252,7 +252,7 @@ Every write-path tool carries an [MCP destructive annotation](https://modelconte
 
 | Tool | Description | Safety |
 | ---- | ----------- | ------ |
-| **Read the workspace — 12 tools** | | |
+| **Read the workspace — 12 read-only tools** | | |
 | `slack_health_check` | Verify token validity and workspace info | read-only |
 | `slack_token_status` | Token age, health, and cache stats | read-only |
 | `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome | read-only\* |
@@ -265,7 +265,7 @@ Every write-path tool carries an [MCP destructive annotation](https://modelconte
 | `slack_list_users` | List workspace users (paginated, 500+) | read-only |
 | `slack_users_search` | Search users by name, display name, or email | read-only |
 | `slack_conversations_unreads` | Get channels/DMs with unread messages | read-only |
-| **Act in the workspace — 4 tools, all annotated destructive** | | |
+| **Act in the workspace — 4 write-path tools, all annotated destructive** | | |
 | `slack_send_message` | Send a message to any conversation | **destructive** |
 | `slack_add_reaction` | Add an emoji reaction to a message | **destructive** |
 | `slack_remove_reaction` | Remove an emoji reaction from a message | **destructive** |

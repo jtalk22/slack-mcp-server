@@ -1,6 +1,6 @@
 {
   "version": "4.1.0",
-  "generated": "2026-03-31",
+  "generated": "2026-07-26",
   "assets": [
     {
       "id": "demo-slack-mcp-full",
@@ -10,16 +10,16 @@
       "role": "full-demo",
       "width": 1280,
       "height": 800,
-      "duration_s": 211,
+      "duration_s": 204,
       "fps": 30,
-      "bitrate_kbps": 538,
+      "bitrate_kbps": 44,
       "codec": "h264",
       "crf": 18,
-      "size_bytes": 14194516,
-      "ffmpeg_filter": "eq=contrast=1.12,unsharp=5:5:0.8:3:3:0.4,vignette=PI/5",
-      "trim_start_s": 2.0,
+      "size_bytes": 1133056,
+      "ffmpeg_filter": null,
+      "trim_start_s": 0,
       "source_asset_id": null,
-      "notes": "7-scenario Monday Morning demo. Color graded, sharpened, vignette. First 2s trimmed (stale badge)."
+      "notes": "7-scenario Monday Morning demo incl. closing card. Re-recorded 2026-07-26 from public/demo-slack-mcp.html via scripts/record-demo.js --png-sequence: 2x-Retina frames, real-time stitch, no grading pass (the old contrast/unsharp/vignette chain is what made the dark UI look muddy)."
     },
     {
       "id": "demo-slack-mcp-webm",
@@ -29,16 +29,16 @@
       "role": "web-fallback",
       "width": 1280,
       "height": 800,
-      "duration_s": 211,
+      "duration_s": 204,
       "fps": 30,
-      "bitrate_kbps": 176,
+      "bitrate_kbps": 52,
       "codec": "vp9",
-      "crf": null,
-      "size_bytes": 4658605,
-      "ffmpeg_filter": "eq=contrast=1.12,unsharp=5:5:0.8:3:3:0.4,vignette=PI/5",
-      "trim_start_s": 2.0,
-      "source_asset_id": "demo-slack-mcp-full",
-      "notes": "VP9 fallback for browsers without H.264 support."
+      "crf": 32,
+      "size_bytes": 1321010,
+      "ffmpeg_filter": null,
+      "trim_start_s": 0,
+      "source_asset_id": "demo-slack-mcp-hq",
+      "notes": "VP9 fallback for browsers without H.264 support. Encoded from the captured frames at crf 32 (was a 176kbps bitrate-starved re-encode)."
     },
     {
       "id": "demo-slack-mcp-gif",
@@ -48,35 +48,54 @@
       "role": "readme-fallback",
       "width": 540,
       "height": null,
-      "duration_s": 145,
+      "duration_s": 204,
       "fps": 5,
       "bitrate_kbps": null,
       "codec": "gif",
       "crf": null,
-      "size_bytes": 12213298,
-      "ffmpeg_filter": "fps=5,scale=540:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse",
-      "trim_start_s": 2.0,
-      "source_asset_id": "demo-slack-mcp-full",
-      "notes": "README inline fallback. Reduced FPS and width for size."
+      "size_bytes": 752343,
+      "ffmpeg_filter": "fps=5,scale=540:-2:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=sierra2_4a",
+      "trim_start_s": 0,
+      "source_asset_id": "demo-slack-mcp-hq",
+      "notes": "README inline fallback. Diff-based palette on the clean master: 0.75 MB vs the old 12.2 MB of vignette dithering noise."
+    },
+    {
+      "id": "hero-demo-gif",
+      "filename": "hero-demo.gif",
+      "path": "docs/images/hero-demo.gif",
+      "format": "gif",
+      "role": "readme-hero",
+      "width": 800,
+      "height": 500,
+      "duration_s": 28,
+      "fps": 10,
+      "bitrate_kbps": null,
+      "codec": "gif",
+      "crf": null,
+      "size_bytes": 248349,
+      "ffmpeg_filter": "scripts/build-hero-gif.js --seg1 8:22 --seg2 197:3 (triage scenario grafted to closing card + 3s hold, diff palette)",
+      "trim_start_s": null,
+      "source_asset_id": "demo-slack-mcp-hq",
+      "notes": "README hero. True 8:5 aspect (800x500) \u2014 the previous 800x450 was stretched to 16:9 and cut from the graded master, which is where the mud came from."
     },
     {
       "id": "demo-slack-mcp-hq",
       "filename": "demo-slack-mcp-hq.mp4",
       "path": "docs/videos/demo-slack-mcp-hq.mp4",
       "format": "mp4",
-      "role": "hq-cut",
+      "role": "hq-master",
       "width": 1280,
       "height": 800,
-      "duration_s": 33,
+      "duration_s": 204,
       "fps": 30,
-      "bitrate_kbps": 603,
+      "bitrate_kbps": 48,
       "codec": "h264",
-      "crf": 18,
-      "size_bytes": 2489827,
-      "ffmpeg_filter": "eq=contrast=1.12,unsharp=5:5:0.8:3:3:0.4,vignette=PI/5",
-      "trim_start_s": 2.0,
+      "crf": 16,
+      "size_bytes": 1224833,
+      "ffmpeg_filter": null,
+      "trim_start_s": 0,
       "source_asset_id": "demo-slack-mcp-full",
-      "notes": "Best single-scenario cut (printer PIN scene). For social/embed where full demo is too long."
+      "notes": "Full-length crf 16 master \u2014 the cut source for the hero GIF and mobile clip. Re-recorded 2026-07-26 from public/demo-slack-mcp.html via scripts/record-demo.js --png-sequence: 2x-Retina frames, real-time stitch, no grading pass (the old contrast/unsharp/vignette chain is what made the dark UI look muddy)."
     },
     {
       "id": "demo-slack-mcp-mobile",
@@ -88,14 +107,14 @@
       "height": 1920,
       "duration_s": 20,
       "fps": 30,
-      "bitrate_kbps": 951,
+      "bitrate_kbps": 58,
       "codec": "h264",
       "crf": 18,
-      "size_bytes": 2378958,
-      "ffmpeg_filter": "eq=contrast=1.12,unsharp=5:5:0.8:3:3:0.4,vignette=PI/5,scale=1080:1920",
-      "trim_start_s": 2.0,
-      "source_asset_id": "demo-slack-mcp-full",
-      "notes": "Portrait 9:16 for OG/Twitter card and landing page hero autoplay."
+      "size_bytes": 144881,
+      "ffmpeg_filter": "blurred 9:16 letterbox composite (scripts/build-mobile-demo.js), no grading",
+      "trim_start_s": 8,
+      "source_asset_id": "demo-slack-mcp-hq",
+      "notes": "Portrait 9:16 for OG/Twitter card and landing page hero autoplay. 20s window from t=8s: unread census -> history pull."
     },
     {
       "id": "demo-slack-mcp-mobile-poster",
@@ -110,10 +129,10 @@
       "bitrate_kbps": null,
       "codec": null,
       "crf": null,
-      "size_bytes": 68014,
+      "size_bytes": 43352,
       "ffmpeg_filter": null,
       "trim_start_s": null,
-      "source_asset_id": "demo-slack-mcp-mobile",
+      "source_asset_id": "demo-slack-mcp-hq",
       "notes": "Poster frame for <video> element. Extracted from mobile hero."
     },
     {
@@ -171,7 +190,7 @@
       "ffmpeg_filter": null,
       "trim_start_s": null,
       "source_asset_id": null,
-      "notes": "OAuth comparison diagram. Dark theme, IBM Plex Sans + Space Grotesk. Attribution: @jtalk22/slack-mcp (no version — goes stale)."
+      "notes": "OAuth comparison diagram. Dark theme, IBM Plex Sans + Space Grotesk. Attribution: @jtalk22/slack-mcp (no version \u2014 goes stale)."
     }
   ]
 }

@@ -1,19 +1,19 @@
 WEBVTT
 
-00:00.000 --> 00:12.000
-Slack MCP lets an AI client review Slack messages through your browser session instead of a workspace OAuth app.
+00:00.000 --> 00:36.000
+Morning triage: the agent reads unread counts and channel history, then writes one prioritized briefing.
 
-00:12.000 --> 00:35.000
-The demo shows morning triage: finding unread conversations, summarizing priorities, and surfacing actions.
+00:36.000 --> 01:07.000
+Workspace search: the agent digs a printer admin PIN out of a five-month-old #facilities post.
 
-00:35.000 --> 01:10.000
-Slack search and conversation tools help locate decisions, threads, channels, and people from the MCP client.
+01:07.000 --> 01:32.000
+Decision recall: what was decided about the Postgres 17 migration, answered from #engineering history.
 
-01:10.000 --> 01:55.000
-Read and write tools support replies, reactions, and mark-as-read actions while preserving local operator control.
+01:32.000 --> 02:31.000
+Write paths: the agent reads the incident thread for context, then posts a tagged, threaded update.
 
-01:55.000 --> 02:45.000
-Workflow profiles capture recurring channel sets and priority people for handoffs, incident rooms, launches, and inbox triage.
+02:31.000 --> 02:58.000
+Closing loops: a reaction lands on the resolution message and #incidents is marked as read.
 
-02:45.000 --> 03:33.000
-Self-host the open-source server for 21 tools, or use the hosted tier when you want managed AI workflows and retention.
+02:58.000 --> 03:24.000
+Export: the last 24 hours with threads saved for the post-mortem — ending the morning at 0 unreads.
