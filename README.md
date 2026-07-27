@@ -9,6 +9,7 @@
   <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dw/@jtalk22/slack-mcp" alt="npm weekly downloads"></a>
   <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://registry.modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP_Registry-listed-blue" alt="MCP Registry"></a>
+  <a href="#provenance-dont-take-my-word-for-it"><img src="https://img.shields.io/badge/provenance-signed-4ecdc4?logo=npm&logoColor=white" alt="npm provenance signed"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT"></a>
   <a href="https://github.com/jtalk22/slack-mcp-server"><img src="https://img.shields.io/github/stars/jtalk22/slack-mcp-server?style=social" alt="GitHub stars"></a>
 </p>
@@ -449,6 +450,16 @@ More in [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
 - Fail-closed config: an unrecognized storage mode kills the server at startup instead of guessing.
 - The web server binds to localhost only; API keys use `crypto.randomBytes`.
 - Full policy: [SECURITY.md](SECURITY.md).
+
+### Provenance: don't take my word for it
+
+You're about to hand a package your live Slack cookie. Fair to want proof of what it is. Every release publishes straight from CI with [npm provenance](https://docs.npmjs.com/generating-provenance-statements): the tarball on npm is signed and traces to this repo's exact commit and GitHub Actions run — no hand-uploaded build in the path. Verify it in one command, before you trust it with anything:
+
+```bash
+npm audit signatures
+```
+
+A green line means the code you install is the code you can read here. If it ever isn't, that command says so.
 
 ## Docs
 
