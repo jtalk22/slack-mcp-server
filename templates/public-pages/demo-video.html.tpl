@@ -34,10 +34,10 @@
     "name": "Slack MCP Server — Monday Morning Demo",
     "description": "Watch an AI handle 47 unread Slack messages without opening Slack. {{SELF_HOSTED_TOOL_COUNT}} tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
     "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
-    "uploadDate": "2026-03-30",
+    "uploadDate": "2026-07-26",
     "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp.mp4",
     "embedUrl": "{{GITHUB_PAGES_ROOT}}/public/demo-video.html",
-    "duration": "PT3M33S",
+    "duration": "PT3M24S",
     "author": {
       "@type": "Person",
       "name": "James Lambert",
@@ -141,6 +141,32 @@
       display: block;
       border-radius: 12px;
     }
+    .chapters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem;
+    }
+    .chapter {
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      color: #d8efff;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .chapter:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .chapter.active {
+      background: rgba(78, 205, 196, 0.16);
+      border-color: #4ecdc4;
+      color: #4ecdc4;
+    }
     .controls {
       display: flex;
       justify-content: center;
@@ -228,6 +254,15 @@
       </video>
     </div>
 
+    <div class="chapters" id="chapters" aria-label="Video chapters">
+      <button type="button" class="chapter" data-t="0">0:00 Morning triage</button>
+      <button type="button" class="chapter" data-t="36">0:36 Printer-PIN search</button>
+      <button type="button" class="chapter" data-t="67">1:07 What was decided</button>
+      <button type="button" class="chapter" data-t="92">1:32 Reply in-thread</button>
+      <button type="button" class="chapter" data-t="151">2:31 Close the loops</button>
+      <button type="button" class="chapter" data-t="178">2:58 Export &amp; wrap</button>
+    </div>
+
     <div class="controls">
       <button class="btn btn-primary" onclick="togglePlay()" aria-label="Play or pause the full Slack MCP demo video">Play / Pause</button>
       <button class="btn btn-secondary" onclick="restart()" aria-label="Restart the full Slack MCP demo video">Restart</button>
@@ -240,7 +275,7 @@
 
   <script>
     const video = document.getElementById('demo');
-    const HIGHLIGHT_START_SECONDS = 2;
+    const HIGHLIGHT_START_SECONDS = 4;
 
     function playFromHighlight() {
       if (video.duration && video.duration > HIGHLIGHT_START_SECONDS + 1) {
@@ -274,6 +309,28 @@
     video.addEventListener('ended', () => {
       video.currentTime = HIGHLIGHT_START_SECONDS;
       video.play();
+    });
+
+    // Chapters: one delegated click listener seeks + plays
+    const chapters = document.getElementById('chapters');
+    const chapterButtons = Array.from(chapters.querySelectorAll('.chapter'));
+
+    chapters.addEventListener('click', (event) => {
+      const button = event.target.closest('.chapter');
+      if (!button) return;
+      video.currentTime = Number(button.dataset.t);
+      video.play();
+    });
+
+    // Active-state tracking follows playback position
+    video.addEventListener('timeupdate', () => {
+      let active = chapterButtons[0];
+      for (const button of chapterButtons) {
+        if (video.currentTime >= Number(button.dataset.t)) active = button;
+      }
+      for (const button of chapterButtons) {
+        button.classList.toggle('active', button === active);
+      }
     });
   </script>
 </body>
