@@ -340,7 +340,7 @@
       <div class="video-shell">
         <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-poster.png" aria-label="Slack MCP demo autoplay">
           <source src="docs/videos/demo-slack-mcp-hq.mp4" type="video/mp4">
-          <track kind="captions" src="docs/videos/demo-slack-mcp.vtt" srclang="en" label="English captions" default>
+          <track kind="captions" src="docs/videos/demo-slack-mcp.vtt" srclang="en" label="English captions">
         </video>
         <div class="video-controls">
           <button type="button" id="playBtn" aria-label="Play Slack MCP demo video">Play</button>
