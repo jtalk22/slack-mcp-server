@@ -1,10 +1,10 @@
+[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&color=cb3837)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![npm weekly downloads](https://img.shields.io/npm/dw/@jtalk22/slack-mcp?style=flat-square&label=downloads&color=555)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-3b82f6?style=flat-square)](https://registry.modelcontextprotocol.io)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-4ecdc4?style=flat-square&logo=npm&logoColor=white)](#provenance-dont-take-my-word-for-it)
+
 <div align="center">
 
 <h1>Slack MCP Server</h1>
 
 <h3>Slack for your AI agent — no OAuth, no admin, no app to register.</h3>
-
-[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&color=cb3837)](https://www.npmjs.com/package/@jtalk22/slack-mcp) [![npm weekly downloads](https://img.shields.io/npm/dw/@jtalk22/slack-mcp?style=flat-square&label=downloads&color=555)](https://www.npmjs.com/package/@jtalk22/slack-mcp) [![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml) [![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-3b82f6?style=flat-square)](https://registry.modelcontextprotocol.io) [![npm provenance signed](https://img.shields.io/badge/provenance-signed-4ecdc4?style=flat-square&logo=npm&logoColor=white)](#provenance-dont-take-my-word-for-it)
 
 <p>
   <kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd>
