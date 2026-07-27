@@ -5,13 +5,7 @@
 <h3>Slack for your AI agent — no OAuth, no admin, no app to register.</h3>
 
 <p>
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&color=cb3837" alt="npm version"></a>
-  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dw/@jtalk22/slack-mcp?style=flat-square&label=downloads&color=555" alt="npm weekly downloads"></a>
-  <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI" alt="CI"></a>
-  <a href="https://registry.modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP_Registry-listed-3b82f6?style=flat-square" alt="MCP Registry"></a>
-  <a href="#provenance-dont-take-my-word-for-it"><img src="https://img.shields.io/badge/provenance-signed-4ecdc4?style=flat-square&logo=npm&logoColor=white" alt="npm provenance signed"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT"></a>
-  <a href="https://github.com/jtalk22/slack-mcp-server"><img src="https://img.shields.io/github/stars/jtalk22/slack-mcp-server?style=flat-square&logo=github&logoColor=white&color=444" alt="GitHub stars"></a>
+<a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&color=cb3837" alt="npm version"></a> <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dw/@jtalk22/slack-mcp?style=flat-square&label=downloads&color=555" alt="npm weekly downloads"></a> <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI" alt="CI"></a> <a href="https://registry.modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP_Registry-listed-3b82f6?style=flat-square" alt="MCP Registry"></a> <a href="#provenance-dont-take-my-word-for-it"><img src="https://img.shields.io/badge/provenance-signed-4ecdc4?style=flat-square&logo=npm&logoColor=white" alt="npm provenance signed"></a>
 </p>
 
 <p>
