@@ -6,6 +6,7 @@
 
 <p>
   <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/v/@jtalk22/slack-mcp" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp"><img src="https://img.shields.io/npm/dw/@jtalk22/slack-mcp" alt="npm weekly downloads"></a>
   <a href="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml"><img src="https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://registry.modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP_Registry-listed-blue" alt="MCP Registry"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT"></a>
@@ -301,6 +302,8 @@ npx -y @jtalk22/slack-mcp --apply-template oncall-handoff --channels C012345,C06
 ```
 
 `oncall-handoff` · `support-triage` · `exec-monday` · `sprint-tracker` · `customer-feedback` · `incident-room` — plain JSON profiles you can read and edit. The primitives (`slack_workflow_save`, `slack_workflows`) are **free forever in OSS**; only the AI summarization runs on the hosted brain.
+
+Copy-paste prompt recipes — summarize a channel, search for decisions, export a thread — live in [docs/USE_CASE_RECIPES.md](docs/USE_CASE_RECIPES.md).
 
 ---
 
