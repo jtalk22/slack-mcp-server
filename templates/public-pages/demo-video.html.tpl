@@ -34,7 +34,7 @@
     "name": "Slack MCP Server — Monday Morning Demo",
     "description": "Watch an AI handle 47 unread Slack messages without opening Slack. {{SELF_HOSTED_TOOL_COUNT}} tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
     "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
-    "uploadDate": "2026-07-26",
+    "uploadDate": "2026-07-28",
     "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp.mp4",
     "embedUrl": "{{GITHUB_PAGES_ROOT}}/public/demo-video.html",
     "duration": "PT3M24S",
@@ -256,11 +256,12 @@
 
     <div class="chapters" id="chapters" aria-label="Video chapters">
       <button type="button" class="chapter" data-t="0">0:00 Morning triage</button>
-      <button type="button" class="chapter" data-t="36">0:36 Printer-PIN search</button>
-      <button type="button" class="chapter" data-t="67">1:07 What was decided</button>
-      <button type="button" class="chapter" data-t="92">1:32 Reply in-thread</button>
-      <button type="button" class="chapter" data-t="151">2:31 Close the loops</button>
-      <button type="button" class="chapter" data-t="178">2:58 Export &amp; wrap</button>
+      <button type="button" class="chapter" data-t="48">0:48 Printer-PIN search</button>
+      <button type="button" class="chapter" data-t="68">1:08 What was decided</button>
+      <button type="button" class="chapter" data-t="94">1:34 Reply in-thread</button>
+      <button type="button" class="chapter" data-t="118">1:58 Who's Alex Torres</button>
+      <button type="button" class="chapter" data-t="150">2:30 Close the loops</button>
+      <button type="button" class="chapter" data-t="174">2:54 Export &amp; wrap</button>
     </div>
 
     <div class="controls">
