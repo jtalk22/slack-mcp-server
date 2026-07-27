@@ -27,10 +27,10 @@ npx -y @jtalk22/slack-mcp --setup
 <div align="center">
 
 <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-  <img src="docs/images/hero-demo.gif" width="800" alt="Demo: an AI agent triages 47 unread Slack messages into one morning briefing — unread counts, history pull, then the summary">
+  <img src="docs/images/demo-poster.png" width="800" alt="Watch the demo: 47 unread Slack messages become one morning briefing — without opening Slack">
 </a>
 
-<p><sub>26 seconds of the real thing · <b><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ full 3:31 demo with chapters</a></b> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive demo</a> · <a href="docs/SETUP.md">setup guide</a></sub></p>
+<p><sub><b><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ Watch the full 3:24 demo — with chapters</a></b> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive demo</a> · <a href="docs/SETUP.md">setup guide</a></sub></p>
 
 </div>
 
@@ -76,6 +76,20 @@ What it does <i>not</i> do: it does not evade compliance exports, DLP, or retent
 
 If your workspace's acceptable-use policy forbids unofficial clients, respect it — the OAuth-based <a href="https://mcp.revasserlabs.com">hosted version</a> exists for exactly that case.
 </details>
+
+---
+
+## Watch it run
+
+<div align="center">
+
+<a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
+  <img src="docs/images/watch-it-run.gif" width="800" alt="Real session: the agent calls slack_conversations_unreads, pulls channel history, and writes the morning briefing">
+</a>
+
+<p><sub>A real session at 2× — unread counts → history pull → the briefing. <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">Full 3:24 with chapters →</a></sub></p>
+
+</div>
 
 ---
 
@@ -234,10 +248,11 @@ Full walkthrough — including the optional keep-tokens-fresh LaunchAgent — in
 
 ## The 21 tools
 
-**21 tools** — **12 read-only** Slack, **4 write-path** Slack (every one carrying an [MCP destructive annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations) so clients can gate them), **2** workflow-profile primitives, **3** hosted-brain stubs.
+Every workspace write-path tool carries an [MCP destructive annotation](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#annotations) so clients can gate it.
 
 | Tool | Description | Safety |
 | ---- | ----------- | ------ |
+| **Read the workspace — 12 read-only tools** | | |
 | `slack_health_check` | Verify token validity and workspace info | read-only |
 | `slack_token_status` | Token age, health, and cache stats | read-only |
 | `slack_refresh_tokens` | Auto-extract fresh tokens from Chrome | read-only\* |
@@ -250,12 +265,15 @@ Full walkthrough — including the optional keep-tokens-fresh LaunchAgent — in
 | `slack_list_users` | List workspace users (paginated, 500+) | read-only |
 | `slack_users_search` | Search users by name, display name, or email | read-only |
 | `slack_conversations_unreads` | Get channels/DMs with unread messages | read-only |
+| **Act in the workspace — 4 write-path tools, all annotated destructive** | | |
 | `slack_send_message` | Send a message to any conversation | **destructive** |
 | `slack_add_reaction` | Add an emoji reaction to a message | **destructive** |
 | `slack_remove_reaction` | Remove an emoji reaction from a message | **destructive** |
 | `slack_conversations_mark` | Mark a conversation as read | **destructive** |
+| **Workflow profiles — 2 tools, local JSON** | | |
 | `slack_workflow_save` | Save a workflow profile to `~/.slack-mcp-workflows.json` | local-write |
 | `slack_workflows` | List saved workflow profiles | read-only |
+| **Hosted-brain stubs — 3 tools** | | |
 | `slack_smart_search` | Semantic search across indexed channels | hosted-stub† |
 | `slack_catch_me_up` | AI-summarized digest of unreads + priority threads | hosted-stub† |
 | `slack_triage` | Prioritized action queue across channels | hosted-stub† |
@@ -309,7 +327,9 @@ With the flag, the real content appears:
 }
 ```
 
-Output shape only — no extra permissions. `blocks` can be large, so it's opt-in per call to keep client context lean. For the full developer payload inside `metadata`, also set `include_all_metadata: true`. Slack's search API doesn't return rich fields on matches, so `slack_search_messages` finds the hit and you read full content with `slack_conversations_history` or `slack_get_thread`.
+Output shape only — no extra permissions. `blocks` can be large, so it's opt-in per call to keep client context lean; for the full developer payload inside `metadata`, also set `include_all_metadata: true`.
+
+One caveat: Slack's search API doesn't return rich fields on matches — `slack_search_messages` finds the hit, then `slack_conversations_history` or `slack_get_thread` reads the full content.
 
 Added in 4.4.0 · patch by [@rvandam](https://github.com/rvandam) (#143).
 
@@ -326,7 +346,7 @@ Session tokens (`xoxc-` + `xoxd-`) come from your browser. The server resolves t
 
 Tokens expire; the server notices before you do — proactive health monitoring, automatic refresh on macOS, warnings as tokens age out. File writes are atomic (temp → `chmod` → rename) and concurrent refreshes are mutex-locked, so nothing corrupts and no two writers clobber each other.
 
-Chrome extraction diagnoses itself: every failure names its cause — `keychain_timeout`, `no_slack_cookie_row`, `cookie_decrypt_failed`, and more, per profile — instead of one opaque error. The Safe Storage key is looked up once per run and cached (no Keychain prompt storms), with the lookup timeout tunable via `SLACK_MCP_KEYCHAIN_TIMEOUT_MS` for slow Keychains.
+Chrome extraction diagnoses itself: every failure names its cause — `keychain_timeout`, `no_slack_cookie_row`, `cookie_decrypt_failed`, and more, per profile — instead of one opaque error. The full failure-code table (and the Keychain timeout tunable) is in [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
 
 ### Storage backends
 
@@ -339,10 +359,10 @@ On macOS, `--setup` asks where credentials should live and remembers the answer 
 | Mode | Behavior |
 | ---- | -------- |
 | `auto` (default) | Token file + Keychain, exactly as above. |
-| `keychain-only` | **macOS Keychain only — no plaintext credential ever touches disk.** Setup, refresh, and auto-refresh all keep working; an existing token file is migrated into the Keychain and removed only after both entries verify by read-back. Every failure is loud and structured — an unwritable Keychain reports `keychain_write_failed`, a leftover file that won't delete reports `plaintext_removal_failed` with the exact cleanup command. Never a silent fallback to plaintext. |
+| `keychain-only` | **macOS Keychain only — no plaintext credential ever touches disk.** File→Keychain migration verified by read-back; every failure loud and structured, never a silent fallback to plaintext. |
 | `file` | Token file only — the Keychain is never touched. No Keychain prompts; ideal for shared machines and CI. |
 
-In `keychain-only` mode, non-secret bookkeeping (token timestamp, auto-heal telemetry) lives in `~/.slack-mcp-meta.json`, so `slack_token_status` still reports age and shows the active backend under `storage`. One honest trade-off: background refresh can't write to a *locked* Keychain — when that happens the freshly extracted tokens are held in memory (reported as `storage.unpersisted_fresh_tokens`) so the session keeps working, the failure lands in telemetry, and the next cycle retries. An unrecognized mode fails the server at startup rather than quietly downgrading to plaintext. Token-file and metadata writes are serialized across processes with a lock file, so a LaunchAgent refresh and a running server can't corrupt each other's state.
+One honest trade-off in `keychain-only` mode: background refresh can't write to a *locked* Keychain — fresh tokens are held in memory (`storage.unpersisted_fresh_tokens`) so the session keeps working, and the next cycle retries. An unrecognized mode fails the server at startup rather than quietly downgrading to plaintext, and all token-file and metadata writes are serialized across processes with a lock file.
 
 ---
 
@@ -383,7 +403,7 @@ Set each one up once: `npx -y @jtalk22/slack-mcp --setup --profile work`. When t
 
 ## Hosted (optional — the OSS package is complete without it)
 
-Everything above is free, MIT-licensed, and runs entirely on your machine. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) exists for exactly two things the OSS package deliberately doesn't do: **AI summarization** (`smart_search`, `catch_me_up`, `triage`) and **permanent OAuth** (no 2-week token rotation). If you don't want either, you never need it.
+Everything above is free, MIT-licensed, and runs entirely on your machine. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) exists for exactly two things the OSS package deliberately doesn't do: **AI summarization** (`smart_search`, `catch_me_up`, `triage`) and **permanent OAuth** (no 2-week token rotation). If you don't want either, you never need it. The OSS server is complete; hosted earns its keep when the workflow has to run tomorrow — on a schedule, without a token to babysit.
 
 | Tier | Price | What it adds |
 | ---- | ----- | ------------ |
@@ -392,6 +412,8 @@ Everything above is free, MIT-licensed, and runs entirely on your machine. The h
 | **Pro** | $19/mo or $190/yr | Unlimited requests (fair use) · unlimited AI tool calls · permanent OAuth · 2 workspaces · email support. |
 | **Team** | $49/mo or $490/yr flat | Everything in Pro + shared workflow profiles · 5 workspaces · 24h support. |
 | **Safeguard** | $199/mo — waitlist | Agent approval gates · scheduled catch-up DM · workspace memory. *(In development, waitlist only.)* |
+
+<sub>Live pricing: [mcp.revasserlabs.com/pricing](https://mcp.revasserlabs.com/pricing)</sub>
 
 ### Self-hosted HTTP mode
 
