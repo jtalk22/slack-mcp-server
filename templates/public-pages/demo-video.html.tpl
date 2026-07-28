@@ -67,7 +67,12 @@
     }
     body {
       font-family: var(--font-body);
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      /* Poster ground — near-black with faint coral (left) + teal (right) corner glows */
+      background:
+        radial-gradient(58% 46% at 14% 0%, rgba(255, 107, 107, 0.07), transparent 62%),
+        radial-gradient(58% 46% at 86% 0%, rgba(78, 205, 196, 0.07), transparent 62%),
+        linear-gradient(180deg, #0e1119 0%, #0b0e14 58%, #07090e 100%);
+      background-attachment: fixed;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -80,7 +85,7 @@
       width: 100%;
     }
     h1 {
-      color: #ffffff;
+      color: #f0f3f7;
       font-size: 1.75rem;
       font-weight: 600;
       text-align: center;
@@ -89,15 +94,15 @@
       letter-spacing: -0.02em;
     }
     .subtitle {
-      color: #94a3b8;
+      color: #8d99a9;
       text-align: center;
       margin-bottom: 1.5rem;
       font-size: 1rem;
     }
     .cta-strip {
       margin: 0 auto 1rem;
-      background: rgba(15, 52, 96, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(18, 22, 31, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 12px;
       padding: 10px 14px;
       display: flex;
@@ -113,9 +118,9 @@
       flex-wrap: wrap;
     }
     .cta-strip .links a {
-      color: #d8efff;
+      color: #dfe6ee;
       text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 999px;
       padding: 4px 8px;
     }
@@ -123,10 +128,10 @@
       background: rgba(255, 255, 255, 0.08);
     }
     .cta-strip .note {
-      color: rgba(255, 255, 255, 0.82);
+      color: rgba(255, 255, 255, 0.78);
     }
     .cta-strip .note a {
-      color: #9ee7ff;
+      color: #7fe0d6;
       text-decoration: underline;
     }
     .video-wrapper {
@@ -134,12 +139,21 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      background: #0f0f1a;
+      background: #0b0e14;
     }
     video {
       width: 100%;
       display: block;
       border-radius: 12px;
+    }
+    /* Captions — tasteful lower subtitle, not a wall. Semi-opaque near-black box,
+       reduced size so an active cue never covers the demo's own input bar. */
+    video::cue {
+      font-size: 62%;
+      line-height: 1.35;
+      background-color: rgba(11, 14, 20, 0.82);
+      color: #f0f3f7;
+      font-family: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
     }
     .chapters {
       display: flex;
@@ -151,9 +165,9 @@
     .chapter {
       font-family: var(--font-body);
       font-size: 0.8125rem;
-      color: #d8efff;
+      color: #dfe6ee;
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 999px;
       padding: 5px 12px;
       cursor: pointer;
@@ -184,7 +198,7 @@
     }
     .btn-primary {
       background: #4ecdc4;
-      color: #1a1a2e;
+      color: #07090e;
     }
     .btn-primary:hover {
       background: #5eead4;
@@ -192,7 +206,7 @@
     }
     .btn-secondary {
       background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
+      color: #f0f3f7;
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .btn-secondary:hover {
@@ -203,12 +217,12 @@
       text-align: center;
     }
     .back-link a {
-      color: #94a3b8;
+      color: #8d99a9;
       text-decoration: none;
       font-size: 0.875rem;
     }
     .back-link a:hover {
-      color: #ffffff;
+      color: #f0f3f7;
     }
 
     @media (max-width: 640px) {

@@ -29,19 +29,20 @@
     :root {
       --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
       --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-      --bg-primary: #0f0f1a;
-      --bg-secondary: #1a1a2e;
-      --bg-tertiary: #16213e;
-      --bg-input: #0f3460;
+      /* Poster canon — near-black grounds, coral emphasis, teal system/tool */
+      --bg-primary: #0b0e14;
+      --bg-secondary: #12161f;
+      --bg-tertiary: #0e121a;
+      --bg-input: #1a2130;
       --accent: #4ecdc4;
       --accent-hover: #45b7aa;
       --accent-glow: rgba(78, 205, 196, 0.3);
-      --danger: #e94560;
-      --claude-orange: #da7756;
-      --claude-bg: #2d2a24;
-      --text-primary: #ffffff;
-      --text-secondary: rgba(255, 255, 255, 0.7);
-      --text-muted: rgba(255, 255, 255, 0.5);
+      --danger: #ff6b6b;
+      --claude-orange: #ff6b6b;
+      --claude-bg: #12161f;
+      --text-primary: #f0f3f7;
+      --text-secondary: rgba(240, 243, 247, 0.7);
+      --text-muted: rgba(240, 243, 247, 0.5);
       --border-radius: 12px;
       --transition: all 0.2s ease;
     }
@@ -56,10 +57,12 @@
       line-height: 1.5;
     }
 
-    /* Preview Banner */
+    /* Preview Banner — flat brand near-black bar with the poster's coral→teal top rule */
     .preview-banner {
-      background: linear-gradient(135deg, var(--danger), #ff8c00);
-      color: white;
+      background: #12161f;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, #ff6b6b 0%, #ff6b6b 34%, #4ecdc4 66%, #4ecdc4 100%) 1;
+      color: #f0f3f7;
       padding: 12px 20px;
       text-align: center;
       font-size: 14px;
@@ -69,7 +72,7 @@
       z-index: 100;
     }
     .preview-banner code {
-      background: rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.1);
       padding: 2px 8px;
       border-radius: 4px;
       font-family: monospace;
@@ -79,8 +82,8 @@
       text-decoration: underline;
     }
     .cta-strip {
-      background: rgba(15, 52, 96, 0.9);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(18, 22, 31, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding: 10px 16px;
       display: flex;
       justify-content: space-between;
@@ -95,7 +98,7 @@
       flex-wrap: wrap;
     }
     .cta-links a {
-      color: #d8efff;
+      color: #dfe6ee;
       text-decoration: none;
       padding: 4px 8px;
       border: 1px solid rgba(255, 255, 255, 0.25);
@@ -108,7 +111,7 @@
       color: rgba(255, 255, 255, 0.75);
     }
     .cta-note a {
-      color: #9ee7ff;
+      color: #7fe0d6;
       text-decoration: underline;
     }
 
@@ -140,7 +143,7 @@
     .claude-logo {
       width: 36px;
       height: 36px;
-      background: linear-gradient(135deg, var(--claude-orange), #c4694a);
+      background: linear-gradient(135deg, var(--claude-orange), #e85555);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -174,7 +177,7 @@
       transition: var(--transition);
     }
     .reset-btn:hover {
-      background: rgba(233, 69, 96, 0.2);
+      background: rgba(255, 107, 107, 0.2);
       border-color: var(--danger);
       color: var(--danger);
     }
@@ -422,7 +425,7 @@
     }
 
     .conversation-item.active {
-      background: linear-gradient(135deg, var(--accent), #3b82f6);
+      background: linear-gradient(135deg, var(--accent), #2f9d94);
     }
 
     .conversation-item.active .conv-name,
@@ -453,8 +456,8 @@
       flex-shrink: 0;
     }
 
-    .avatar.dm { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
-    .avatar.channel { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+    .avatar.dm { background: rgba(255, 107, 107, 0.16); color: #ff6b6b; }
+    .avatar.channel { background: rgba(78, 205, 196, 0.16); color: #4ecdc4; }
 
     .conv-info { flex: 1; min-width: 0; }
     .conv-name { font-weight: 500; font-size: 14px; }
@@ -501,7 +504,7 @@
     .mobile-scenario-rail {
       display: none;
       padding: 14px 16px;
-      background: rgba(15, 52, 96, 0.55);
+      background: rgba(18, 22, 31, 0.6);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -606,7 +609,7 @@
       background: rgba(0,0,0,0.3);
       padding: 2px 6px;
       border-radius: 4px;
-      color: #f472b6;
+      color: #7fe0d6;
       font-family: monospace;
     }
 
@@ -637,7 +640,7 @@
       justify-content: center;
       font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      background: linear-gradient(135deg, #ff6b6b, #e85555);
     }
 
     .user-card h4 {
@@ -744,7 +747,7 @@
 <body>
   <!-- Preview Banner -->
   <div class="preview-banner">
-    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or try <a href="{{CANONICAL_SITE_URL}}" style="color:#f0c246;font-weight:600">Hosted</a> — free tier (no card) live; Pro $19/mo unlocks unlimited AI tools and permanent OAuth.
+    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or try <a href="{{CANONICAL_SITE_URL}}" style="color:#7fe0d6;font-weight:600">Hosted</a> — free tier (no card) live; Pro $19/mo unlocks unlimited AI tools and permanent OAuth.
   </div>
   <div class="cta-strip">
     <div class="cta-links">
@@ -968,11 +971,12 @@
     }
 
     function getColor(initials) {
+      // Brand tints only — coral / teal alternation (poster canon)
       const colors = [
-        '#8b5cf6, #ec4899',
-        '#3b82f6, #06b6d4',
-        '#f59e0b, #ef4444',
-        '#10b981, #3b82f6'
+        '#ff6b6b, #e85555',
+        '#4ecdc4, #3aa89f',
+        '#ff8a8a, #ff6b6b',
+        '#4ecdc4, #2f9d94'
       ];
       return colors[initials.charCodeAt(0) % colors.length];
     }
