@@ -71,23 +71,6 @@ What it does <i>not</i> do: it does not evade compliance exports, DLP, or retent
 If your workspace's acceptable-use policy forbids unofficial clients, respect it — the OAuth-based <a href="https://mcp.revasserlabs.com">hosted version</a> exists for exactly that case.
 </details>
 
-<details>
-<summary><b>How is this different from korotovsky/slack-mcp-server?</b></summary>
-<br>
-
-Fair question, and worth answering plainly — the session-token trick isn't unique to this project. <a href="https://github.com/korotovsky/slack-mcp-server">korotovsky/slack-mcp-server</a> is the established one: written in Go, larger, with a broader surface (Apps, GovSlack, Group DMs, smart history fetch). If maximum feature coverage is what you want, it's a genuinely good tool — use it.
-
-This project makes a different bet — <b>zero-friction setup and a managed escape hatch</b>:
-
-<ul>
-<li><b>Tokens extract themselves.</b> korotovsky has you obtain the <code>xoxc-</code> / <code>xoxd-</code> pair by hand and paste them into env vars. On macOS, this server reads the token from Chrome's on-disk LevelDB and decrypts the cookie straight out of Chrome's own cookie store — <a href="#how-the-chrome-extraction-works">how it works</a>. Point it at your browser; there's no cookie to copy.</li>
-<li><b>A managed OAuth option.</b> Both servers use tokens locally; only this one has a hosted counterpart at <a href="https://mcp.revasserlabs.com">mcp.revasserlabs.com</a> that runs the same tools OAuth-backed — for workspaces where an unofficial client is off the table, or when you're done re-pasting tokens every two weeks.</li>
-<li><b>Credential hygiene as a mode.</b> <code>keychain-only</code> keeps zero plaintext on disk, verified by read-back, with loud structured failures instead of a silent fallback.</li>
-</ul>
-
-Same core idea, optimized for the first five minutes and the long-run upkeep rather than raw surface area.
-</details>
-
 ---
 
 ## Watch it run
