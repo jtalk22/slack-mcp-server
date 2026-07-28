@@ -408,7 +408,7 @@ Set each one up once: `npx -y @jtalk22/slack-mcp --setup --profile work`. When t
 
 ## Hosted (optional — the OSS package is complete without it)
 
-Everything above is free, MIT-licensed, and runs entirely on your machine. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) exists for exactly two things the OSS package deliberately doesn't do: **AI summarization** (`smart_search`, `catch_me_up`, `triage`) and **permanent OAuth** (no 2-week token rotation). If you don't want either, you never need it. The OSS server is complete; hosted earns its keep when the workflow has to run tomorrow — on a schedule, without a token to babysit.
+Everything above is free, MIT-licensed, and runs entirely on your machine. The hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) exists for exactly two things the OSS package deliberately doesn't do: **AI summarization** (`smart_search`, `catch_me_up`, `triage`, plus a hosted-native fourth tool `slack_workflow_brief` that renders a saved profile into a contract-validated brief) and **permanent OAuth** (no 2-week token rotation). If you don't want either, you never need it. The OSS server is complete; hosted earns its keep when the workflow has to run tomorrow — on a schedule, without a token to babysit.
 
 | Tier | Price | What it adds |
 | ---- | ----- | ------------ |
