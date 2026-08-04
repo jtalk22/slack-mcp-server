@@ -238,6 +238,8 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 
 Full walkthrough — including the optional keep-tokens-fresh LaunchAgent — in **[docs/SETUP.md](docs/SETUP.md)**.
 
+Rather skip local token setup entirely? The optional **[hosted tier](https://mcp.revasserlabs.com)** runs the same tool surface with permanent OAuth — no token rotation — and a free tier with no card. Details in [Hosted](#hosted-optional--the-oss-package-is-complete-without-it) below; the OSS package stays complete without it.
+
 ---
 
 ## The 21 tools
