@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.1] - 2026-08-04
+
+### Shelf Repair — the discovery surfaces catch up to the product
+
+No runtime changes to the stdio server. This release refreshes every surface a
+new user meets before their first `npx`: the hosted-eval worker, the MCP
+registry metadata, and the demo pages.
+
+### Changed
+- **Hosted-eval worker reaches tool parity + the upgrade path** (`workers/mcp-worker.js`) —
+  the Smithery/hosted-eval worker now exposes 19 tools: the full 16-tool Slack
+  read/write surface plus the 3 discoverable hosted upgrade stubs
+  (`slack_smart_search`, `slack_catch_me_up`, `slack_triage`) with the same
+  `tool_requires_hosted` payload the stdio server returns. Deployed to a fresh
+  script name (`slack-mcp-oss`); `compatibility_date` bumped 2024-01-01 → 2026-08-01.
+- **MCP registry description no longer reads as paid-only** (`server.json`) —
+  "Free OSS + hosted tier from $19/mo" was being mirrored by downstream
+  directories as "no free tier or trial available" for the hosted remote.
+  Now: free OSS AND a hosted free tier, stated separately.
+- **Smithery listing copy refreshed** (`smithery.yaml` + live listing) — stale
+  "$9/mo Pro" corrected to $19/mo; description leads with session-tokens-not-OAuth
+  and names the hosted tier.
+- **Interactive demo no longer opens on a secrets-mining frame**
+  (`public/demo.html`) — "Find the API Key — search DMs for sensitive
+  information" reframed as self-directed retrieval and demoted to last;
+  List Channels leads.
+- **README surfaces the hosted option at the install decision point** — one
+  compact pointer after the Install walkthrough; the candor framing stays.
+
 ## [4.6.0] - 2026-07-22
 
 ### Workspace Profiles + Chrome Extraction Overhaul

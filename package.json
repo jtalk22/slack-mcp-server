@@ -1,8 +1,8 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "4.6.0",
-  "description": "Slack MCP without OAuth — 21 tools, session-based, local-first. Free OSS + hosted tier from $19/mo.",
+  "version": "4.6.1",
+  "description": "Slack MCP without OAuth — 21 tools, session-based. Free OSS; hosted has a free tier, Pro $19/mo.",
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/jtalk22"
