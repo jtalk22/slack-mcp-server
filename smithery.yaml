@@ -1,7 +1,8 @@
 # Smithery configuration for slack-mcp-server
 # https://smithery.ai/docs/build/project-config/smithery-yaml
-# Slack MCP — free OSS or hosted (free tier + $9/mo Pro). 21 tools:
-# read/write Slack + workflow profile primitives + AI brain via hosted upgrade.
+# Slack MCP — session tokens, not OAuth: no app to register, no admin approval.
+# 21 tools: Slack read/write + workflow-profile primitives + discoverable AI
+# upgrade stubs (hosted tier at mcp.revasserlabs.com — free tier, $19/mo Pro).
 
 startCommand:
   type: stdio

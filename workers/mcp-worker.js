@@ -234,8 +234,61 @@ const TOOLS = [
       required: ["query"]
     },
     annotations: { title: "Search Users", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_smart_search",
+    description: "Semantic + lexical hybrid search across your indexed Slack history. Returns ranked results with relevance scores, channel context, thread context, and matched terms. Hosted-only (requires Vectorize + Workers AI). Free tier ships 25 AI tool calls/month (shared across the hosted AI tools); upgrade to Pro $19/mo for unlimited at mcp.revasserlabs.com/pricing.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        query: { type: "string", description: "Natural language or keyword query (semantic + lexical hybrid)" },
+        channel_ids: { type: "array", items: { type: "string" }, description: "Optional — restrict search to these channel IDs" },
+        days_back: { type: "number", description: "Optional — restrict search to the last N days (max 90 on Pro+, 7 on Free)" },
+        limit: { type: "number", description: "Maximum results to return (default 10, max 50)" }
+      },
+      required: ["query"]
+    },
+    annotations: { title: "Smart Search (hosted)", readOnlyHint: true, idempotentHint: true, openWorldHint: true }
+  },
+  {
+    name: "slack_catch_me_up",
+    description: "Run a structured catch-up against a saved workflow profile. Returns structured JSON per the profile's workflow_kind: support_inbox returns {open_threads, ack_lag, owner_gaps, escalations, next_actions}; incident_room returns {incident_summary, timeline, open_risks, owner_gaps, next_actions}; exec_brief returns {summary, decisions, risks, asks, action_items}; product_launch_watch returns {launch_signals, feedback_themes, blockers, metrics, next_actions}; custom returns {summary, highlights, open_questions, next_actions}. Hosted-only. Free tier ships 25 AI tool calls/month (shared across the hosted AI tools); Pro $19/mo unlocks unlimited.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        profile_name: { type: "string", description: "Name of a workflow profile saved via slack_workflow_save" },
+        since: { type: "string", description: "Optional ISO8601 timestamp — only consider Slack messages newer than this. Default: 24 hours ago for daily-cadence profiles, 7 days for weekly." }
+      },
+      required: ["profile_name"]
+    },
+    annotations: { title: "Catch Me Up (hosted)", readOnlyHint: true, idempotentHint: false, openWorldHint: true }
+  },
+  {
+    name: "slack_triage",
+    description: "Classify and route Slack threads against a workflow profile. Returns triage decisions per thread: priority (low|medium|high|urgent), suggested owner, escalation flag, time-sensitivity, and a routing recommendation. Hosted-only. Free tier ships 25 AI tool calls/month (shared across the hosted AI tools); Pro $19/mo unlocks unlimited.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        profile_name: { type: "string", description: "Name of a workflow profile saved via slack_workflow_save" },
+        channel_ids: { type: "array", items: { type: "string" }, description: "Optional — restrict triage to these channels (defaults to profile's channels)" },
+        thread_ts: { type: "string", description: "Optional — triage a specific thread instead of the full inbox" }
+      },
+      required: ["profile_name"]
+    },
+    annotations: { title: "Triage (hosted)", readOnlyHint: true, idempotentHint: false, openWorldHint: true }
   }
 ];
+
+// Mirrors HOSTED_UPGRADE_PAYLOAD in lib/handlers.js — the worker is a
+// standalone file with no lib/ imports, so the payload is inlined.
+const HOSTED_UPGRADE_PAYLOAD = {
+  error: "tool_requires_hosted",
+  message: "This tool needs hosted mode (Vectorize + Workers AI). Get free monthly credits at mcp.revasserlabs.com — no card required.",
+  signup_url: "https://mcp.revasserlabs.com/signup",
+  upgrade_url: "https://mcp.revasserlabs.com/pricing",
+  free_tier_quota: "2,000 requests/mo + 25 AI tool calls/mo (no card)",
+  pro_value_prop: "Pro $19/mo unlocks unlimited requests and AI tool calls, permanent OAuth (no token rotation).",
+};
 
 // Slack API methods that require form-encoded params instead of JSON.
 const FORM_ENCODED_METHODS = new Set([
@@ -551,6 +604,19 @@ async function handleToolCall(name, args, env, queryParams) {
           users: matches.slice(0, limit)
         }, null, 2) }] };
       }
+      case "slack_smart_search":
+      case "slack_catch_me_up":
+      case "slack_triage":
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              ...HOSTED_UPGRADE_PAYLOAD,
+              requested: { tool: name, args: args || {} }
+            }, null, 2)
+          }],
+          isError: true
+        };
       default:
         return {
           content: [{
