@@ -7,39 +7,39 @@
       "path": "docs/videos/slack-mcp-proof-42s.mp4",
       "role": "primary-proof",
       "format": "mp4",
-      "size_bytes": 7527912,
+      "size_bytes": 7409800,
       "width": 1920,
       "height": 1080,
       "duration_s": 42,
       "fps": 25,
       "codec": "h264",
-      "bitrate_kbps": 1434
+      "bitrate_kbps": 1411
     },
     {
       "id": "proof-desktop-webm",
       "path": "docs/videos/slack-mcp-proof-42s.webm",
       "role": "primary-proof-fallback",
       "format": "webm",
-      "size_bytes": 4279881,
+      "size_bytes": 4150458,
       "width": 1920,
       "height": 1080,
       "duration_s": 42,
       "fps": 25,
       "codec": "vp8",
-      "bitrate_kbps": 815
+      "bitrate_kbps": 791
     },
     {
       "id": "proof-vertical-mp4",
       "path": "docs/videos/slack-mcp-proof-20s-vertical.mp4",
       "role": "mobile-proof",
       "format": "mp4",
-      "size_bytes": 2398063,
+      "size_bytes": 2380355,
       "width": 1080,
       "height": 1920,
       "duration_s": 20,
       "fps": 25,
       "codec": "h264",
-      "bitrate_kbps": 959
+      "bitrate_kbps": 952
     },
     {
       "id": "proof-desktop-captions",
@@ -101,7 +101,7 @@
       "path": "docs/images/demo-poster.png",
       "role": "readme-poster",
       "format": "png",
-      "size_bytes": 284822,
+      "size_bytes": 219437,
       "width": 1280,
       "height": 720
     },
@@ -110,7 +110,7 @@
       "path": "docs/images/social-preview-v3.png",
       "role": "social-preview",
       "format": "png",
-      "size_bytes": 106131,
+      "size_bytes": 101641,
       "width": 1280,
       "height": 640
     },

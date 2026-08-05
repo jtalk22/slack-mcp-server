@@ -23,6 +23,12 @@ workflows into a clearer install story and a legible proof experience.
   timeline produces a large-type desktop trailer, a recomposed mobile version,
   WebVTT captions, the README poster, and the GitHub social preview. The full
   3:24 walkthrough remains available as secondary proof.
+- **Own-estate design system** — every public page, both proof videos, the
+  poster, the social preview, and the access-path diagram now run on a single
+  token system: Nyght Serif display, Roobert body, Roobert Mono labels, and an
+  ink/bone/vermilion/amber palette. Self-hosted subset webfonts (~48 KB total)
+  replace the previous stock pairing and the demo page's Google Fonts CDN
+  dependency.
 - **One accurate flagship diagram** — preserves the historical split-screen
   energy while replacing stale claims about Slack's official MCP with a current
   integration-path versus session-path comparison.

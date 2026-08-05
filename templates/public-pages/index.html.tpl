@@ -19,23 +19,25 @@
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <style>
-    @font-face { font-family: "Space Grotesk"; src: url("public/fonts/space-grotesk-500.woff2") format("woff2"); font-display: swap; }
-    @font-face { font-family: "IBM Plex Sans"; src: url("public/fonts/ibm-plex-sans-400.woff2") format("woff2"); font-display: swap; font-weight: 400; }
-    @font-face { font-family: "IBM Plex Sans"; src: url("public/fonts/ibm-plex-sans-600.woff2") format("woff2"); font-display: swap; font-weight: 600; }
+    @font-face { font-family: "Nyght Serif"; src: url("public/fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500; }
+    @font-face { font-family: "Nyght Serif"; src: url("public/fonts/nyght-serif-medium-italic.woff2") format("woff2"); font-display: swap; font-weight: 500; font-style: italic; }
+    @font-face { font-family: "Roobert"; src: url("public/fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400; }
+    @font-face { font-family: "Roobert"; src: url("public/fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
+    @font-face { font-family: "Roobert Mono"; src: url("public/fonts/roobert-mono.woff2") format("woff2"); font-display: swap; font-weight: 400 600; }
 
     :root {
       color-scheme: dark;
-      --ground: #090c13;
-      --surface: #111620;
-      --surface-2: #151b26;
-      --rule: #2b3341;
-      --paper: #f2eee6;
-      --muted: #9aa3b2;
-      --coral: #ff6b6b;
-      --teal: #4ecdc4;
-      --display: "Space Grotesk", "Arial Narrow", sans-serif;
-      --body: "IBM Plex Sans", system-ui, sans-serif;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --ground: #0b0b0c;
+      --surface: #131315;
+      --surface-2: #18181b;
+      --rule: #2b2b30;
+      --paper: #eeebe3;
+      --muted: #9a978e;
+      --stamp: #e5482f;
+      --signal: #ffb224;
+      --display: "Nyght Serif", Georgia, "Times New Roman", serif;
+      --body: "Roobert", system-ui, sans-serif;
+      --mono: "Roobert Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
     * { box-sizing: border-box; }
@@ -54,11 +56,11 @@
       border-bottom: 1px solid var(--rule);
     }
     .brand { font-family: var(--display); font-size: 15px; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
-    .brand span { color: var(--teal); }
+    .brand span { color: var(--signal); }
     .nav { display: flex; gap: 22px; align-items: center; }
     .nav a { color: var(--muted); font-size: 14px; text-decoration: none; }
     .nav a:hover { color: var(--paper); }
-    .nav .nav-cta { color: var(--paper); border-bottom: 1px solid var(--coral); padding-bottom: 3px; }
+    .nav .nav-cta { color: var(--paper); border-bottom: 1px solid var(--stamp); padding-bottom: 3px; }
 
     .hero {
       min-height: calc(100svh - 70px);
@@ -68,24 +70,25 @@
       align-items: center;
       padding-block: clamp(44px, 6vw, 92px);
     }
-    .eyebrow { margin: 0 0 20px; color: var(--coral); font-family: var(--mono); font-size: 12px; letter-spacing: .15em; text-transform: uppercase; }
-    h1 { margin: 0; font-family: var(--display); font-size: clamp(52px, 6.5vw, 100px); font-weight: 500; letter-spacing: -.055em; line-height: .93; max-width: 760px; }
-    .hero-deck { margin: 28px 0 0; max-width: 690px; color: #c2c9d3; font-size: clamp(17px, 1.4vw, 21px); line-height: 1.55; }
+    .eyebrow { margin: 0 0 20px; color: var(--stamp); font-family: var(--mono); font-size: 12px; letter-spacing: .15em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: var(--display); font-size: clamp(50px, 6.2vw, 96px); font-weight: 500; letter-spacing: -.015em; line-height: .99; max-width: 780px; }
+    h1 em { font-style: italic; color: var(--signal); }
+    .hero-deck { margin: 28px 0 0; max-width: 690px; color: #c6c3ba; font-size: clamp(17px, 1.4vw, 21px); line-height: 1.55; }
     .hero-deck strong { color: var(--paper); font-weight: 600; }
     .command-row { margin-top: 34px; display: flex; align-items: stretch; max-width: 700px; }
-    .command { min-width: 0; flex: 1; background: var(--surface); border: 1px solid var(--rule); padding: 17px 20px; color: var(--teal); font-family: var(--mono); font-size: clamp(13px, 1.2vw, 16px); overflow-x: auto; white-space: nowrap; }
-    .copy { border: 1px solid var(--teal); background: var(--teal); color: #061113; padding: 0 22px; font-weight: 600; cursor: pointer; }
-    .copy:hover { background: #6adbd3; }
+    .command { min-width: 0; flex: 1; background: var(--surface); border: 1px solid var(--rule); padding: 17px 20px; color: var(--signal); font-family: var(--mono); font-size: clamp(13px, 1.2vw, 16px); overflow-x: auto; white-space: nowrap; }
+    .copy { border: 1px solid var(--signal); background: var(--signal); color: #131208; padding: 0 22px; font-weight: 600; cursor: pointer; }
+    .copy:hover { background: #ffc24d; }
     .hero-actions { display: flex; gap: 18px; align-items: center; margin-top: 22px; flex-wrap: wrap; }
     .button { display: inline-flex; align-items: center; justify-content: center; min-height: 45px; padding: 0 18px; border: 1px solid var(--paper); text-decoration: none; font-weight: 600; font-size: 14px; }
-    .button.primary { background: var(--paper); color: #10131a; }
+    .button.primary { background: var(--paper); color: #121212; }
     .text-link { color: var(--muted); font-size: 14px; text-decoration-color: var(--rule); text-underline-offset: 5px; }
-    .client-rail { margin-top: 32px; color: #7f8998; font-family: var(--mono); font-size: 11px; line-height: 1.8; text-transform: uppercase; letter-spacing: .05em; }
+    .client-rail { margin-top: 32px; color: #87847b; font-family: var(--mono); font-size: 11px; line-height: 1.8; text-transform: uppercase; letter-spacing: .05em; }
 
-    .proof { position: relative; border: 1px solid #35404f; background: #080b11; overflow: hidden; }
+    .proof { position: relative; border: 1px solid #38383e; background: #0a0a0b; overflow: hidden; }
     .proof::before { content: "LIVE PROOF / 00:42"; display: block; position: absolute; z-index: 2; top: 15px; left: 17px; color: var(--paper); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; }
     .proof::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.025); }
-    .proof video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #080b11; }
+    .proof video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #0a0a0b; }
     .proof-caption { display: flex; justify-content: space-between; gap: 18px; align-items: baseline; padding: 17px 18px; border-top: 1px solid var(--rule); }
     .proof-caption strong { font-family: var(--display); font-size: clamp(16px, 1.4vw, 21px); }
     .proof-caption span { color: var(--muted); font-family: var(--mono); font-size: 11px; text-align: right; }
@@ -94,28 +97,28 @@
     .trust-inner { min-height: 72px; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; }
     .trust a { min-height: 72px; display: flex; flex-direction: column; justify-content: center; padding: 0 18px; text-decoration: none; border-right: 1px solid var(--rule); }
     .trust a:first-child { border-left: 1px solid var(--rule); }
-    .trust small { color: #768190; font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
+    .trust small { color: #838078; font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
     .trust strong { margin-top: 5px; font-size: 13px; font-weight: 600; }
-    .trust strong.teal { color: var(--teal); }
+    .trust strong.signal { color: var(--signal); }
 
     section { border-bottom: 1px solid var(--rule); }
     .section-grid { display: grid; grid-template-columns: 300px 1fr; gap: clamp(48px, 8vw, 140px); padding-block: clamp(80px, 10vw, 150px); }
-    .section-index { color: var(--coral); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; }
+    .section-index { color: var(--stamp); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; }
     .section-label { margin: 13px 0 0; font-family: var(--display); font-size: 19px; font-weight: 500; }
-    .section-copy h2 { margin: 0; max-width: 920px; font-family: var(--display); font-size: clamp(38px, 5vw, 74px); font-weight: 500; line-height: 1; letter-spacing: -.045em; }
-    .section-copy > p { max-width: 820px; margin: 26px 0 0; color: #adb6c3; font-size: 18px; line-height: 1.65; }
+    .section-copy h2 { margin: 0; max-width: 920px; font-family: var(--display); font-size: clamp(38px, 5vw, 74px); font-weight: 500; line-height: 1.05; letter-spacing: -.012em; }
+    .section-copy > p { max-width: 820px; margin: 26px 0 0; color: #b1aea5; font-size: 18px; line-height: 1.65; }
 
     .outcome-flow { margin-top: 54px; display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--rule); }
     .outcome { min-height: 190px; padding: 27px 20px; border-right: 1px solid var(--rule); }
     .outcome:last-child { border-right: 0; }
     .outcome .number { display: block; color: var(--paper); font-family: var(--display); font-size: clamp(50px, 5vw, 78px); line-height: 1; }
-    .outcome:nth-child(3) .number { color: var(--teal); }
-    .outcome:nth-child(4) .number { color: var(--coral); }
+    .outcome:nth-child(3) .number { color: var(--signal); }
+    .outcome:nth-child(4) .number { color: var(--stamp); }
     .outcome p { margin: 18px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
 
     .systems { margin-top: 58px; border-top: 1px solid var(--rule); }
     .system { display: grid; grid-template-columns: 60px minmax(180px, .7fr) 1.3fr; gap: 25px; padding: 27px 0; border-bottom: 1px solid var(--rule); align-items: start; }
-    .system .id { color: var(--teal); font-family: var(--mono); font-size: 11px; }
+    .system .id { color: var(--signal); font-family: var(--mono); font-size: 11px; }
     .system h3 { margin: 0; font-family: var(--display); font-size: 23px; font-weight: 500; }
     .system p { margin: 0; color: var(--muted); line-height: 1.65; }
 
@@ -123,16 +126,16 @@
     .decision { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule); }
     .path { padding: clamp(28px, 4vw, 54px); }
     .path + .path { border-left: 1px solid var(--rule); }
-    .path small { color: var(--coral); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; }
-    .path:nth-child(2) small { color: var(--teal); }
+    .path small { color: var(--stamp); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; }
+    .path:nth-child(2) small { color: var(--signal); }
     .path h3 { margin: 14px 0 0; font-family: var(--display); font-size: clamp(27px, 3vw, 42px); font-weight: 500; }
     .path p { color: var(--muted); line-height: 1.65; }
     .path a { display: inline-block; margin-top: 12px; text-underline-offset: 5px; }
 
     .final { min-height: 70vh; display: flex; align-items: center; text-align: center; }
     .final-inner { width: 100%; padding-block: 100px; }
-    .final h2 { margin: 0 auto; max-width: 1000px; font-family: var(--display); font-size: clamp(48px, 8vw, 116px); line-height: .92; letter-spacing: -.06em; font-weight: 500; }
-    .final h2 span { color: var(--teal); }
+    .final h2 { margin: 0 auto; max-width: 1000px; font-family: var(--display); font-size: clamp(46px, 7.5vw, 110px); line-height: .99; letter-spacing: -.015em; font-weight: 500; }
+    .final h2 span { color: var(--signal); }
     .final .command-row { margin-inline: auto; }
 
     footer { padding-block: 35px 50px; color: var(--muted); font-size: 13px; }
@@ -204,7 +207,7 @@
       <div class="frame hero">
         <div class="hero-copy">
           <p class="eyebrow reveal">Slack’s operating layer for AI agents</p>
-          <h1 class="reveal">Ask what happened.<br>Get receipts.<br>Close the loop.</h1>
+          <h1 class="reveal">Ask what happened.<br><em>Get receipts.</em><br>Close the loop.</h1>
           <p class="hero-deck reveal">Turn Slack from an interruption stream into searchable operating memory and approved action. Run the <strong>{{SELF_HOSTED_TOOL_COUNT}}-tool surface available today</strong> locally with no app/admin queue, or move recurring work to hosted permanent OAuth, indexing, and schedules.</p>
           <div class="command-row reveal" aria-label="Install command">
             <code class="command">npx -y @jtalk22/slack-mcp --setup</code>
@@ -233,8 +236,8 @@
         <div class="frame trust-inner">
           <a href="{{NPM_URL}}"><small>npm</small><strong id="npmVersion">latest release</strong></a>
           <a href="{{NPM_URL}}"><small>distribution</small><strong id="npmDownloads">total downloads</strong></a>
-          <a href="{{GITHUB_REPO_URL}}/actions/workflows/ci.yml"><small>build</small><strong class="teal">CI verified</strong></a>
-          <a href="{{GITHUB_REPO_URL}}#provenance-dont-take-my-word-for-it"><small>supply chain</small><strong class="teal">provenance signed</strong></a>
+          <a href="{{GITHUB_REPO_URL}}/actions/workflows/ci.yml"><small>build</small><strong class="signal">CI verified</strong></a>
+          <a href="{{GITHUB_REPO_URL}}#provenance-dont-take-my-word-for-it"><small>supply chain</small><strong class="signal">provenance signed</strong></a>
           <a href="https://registry.modelcontextprotocol.io"><small>discovery</small><strong>MCP Registry</strong></a>
         </div>
       </aside>

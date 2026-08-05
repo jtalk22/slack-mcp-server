@@ -22,27 +22,27 @@
 
   <!-- SEO -->
   <meta name="description" content="Interactive Slack MCP demo: 21 self-hosted tools for channels, DMs, search, threads, unread triage, and actions.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
+    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500 700; }
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400 500; }
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
     :root {
-      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
-      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-      /* Poster canon — near-black grounds, coral emphasis, teal system/tool */
-      --bg-primary: #0b0e14;
-      --bg-secondary: #12161f;
-      --bg-tertiary: #0e121a;
-      --bg-input: #1a2130;
-      --accent: #4ecdc4;
-      --accent-hover: #45b7aa;
-      --accent-glow: rgba(78, 205, 196, 0.3);
-      --danger: #ff6b6b;
-      --claude-orange: #ff6b6b;
-      --claude-bg: #12161f;
-      --text-primary: #f0f3f7;
-      --text-secondary: rgba(240, 243, 247, 0.7);
-      --text-muted: rgba(240, 243, 247, 0.5);
+      --font-heading: "Nyght Serif", Georgia, serif;
+      --font-body: "Roobert", "Segoe UI", system-ui, sans-serif;
+      /* Poster canon — near-black grounds, vermilion emphasis, amber system/tool */
+      --bg-primary: #0b0b0c;
+      --bg-secondary: #141416;
+      --bg-tertiary: #101012;
+      --bg-input: #1a1a1e;
+      --accent: #ffb224;
+      --accent-hover: #e09b13;
+      --accent-glow: rgba(255, 178, 36, 0.3);
+      --danger: #e5482f;
+      --claude-orange: #e5482f;
+      --claude-bg: #141416;
+      --text-primary: #f0efe9;
+      --text-secondary: rgba(240, 239, 233, 0.7);
+      --text-muted: rgba(240, 239, 233, 0.5);
       --border-radius: 12px;
       --transition: all 0.2s ease;
     }
@@ -59,10 +59,10 @@
 
     /* Preview Banner — flat brand near-black bar with the poster's coral→teal top rule */
     .preview-banner {
-      background: #12161f;
+      background: #141416;
       border-top: 3px solid transparent;
-      border-image: linear-gradient(90deg, #ff6b6b 0%, #ff6b6b 34%, #4ecdc4 66%, #4ecdc4 100%) 1;
-      color: #f0f3f7;
+      border-image: linear-gradient(90deg, #e5482f 0%, #e5482f 34%, #ffb224 66%, #ffb224 100%) 1;
+      color: #f0efe9;
       padding: 12px 20px;
       text-align: center;
       font-size: 14px;
@@ -143,7 +143,7 @@
     .claude-logo {
       width: 36px;
       height: 36px;
-      background: linear-gradient(135deg, var(--claude-orange), #e85555);
+      background: linear-gradient(135deg, var(--claude-orange), #c73a20);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -177,7 +177,7 @@
       transition: var(--transition);
     }
     .reset-btn:hover {
-      background: rgba(255, 107, 107, 0.2);
+      background: rgba(229, 72, 47, 0.2);
       border-color: var(--danger);
       color: var(--danger);
     }
@@ -228,8 +228,8 @@
 
     /* Tool call styling */
     .tool-call {
-      background: rgba(78, 205, 196, 0.1);
-      border: 1px solid rgba(78, 205, 196, 0.3);
+      background: rgba(255, 178, 36, 0.1);
+      border: 1px solid rgba(255, 178, 36, 0.3);
       border-radius: 8px;
       padding: 12px;
       margin: 10px 0;
@@ -308,7 +308,7 @@
     }
 
     .scenario-btn:hover {
-      background: rgba(78, 205, 196, 0.1);
+      background: rgba(255, 178, 36, 0.1);
       border-color: var(--accent);
     }
 
@@ -425,7 +425,7 @@
     }
 
     .conversation-item.active {
-      background: linear-gradient(135deg, var(--accent), #2f9d94);
+      background: linear-gradient(135deg, var(--accent), #c2820f);
     }
 
     .conversation-item.active .conv-name,
@@ -434,7 +434,7 @@
     }
 
     .conversation-item.highlight {
-      background: rgba(78, 205, 196, 0.2);
+      background: rgba(255, 178, 36, 0.2);
       border: 1px solid var(--accent);
       animation: pulse-highlight 1s ease-in-out;
     }
@@ -456,8 +456,8 @@
       flex-shrink: 0;
     }
 
-    .avatar.dm { background: rgba(255, 107, 107, 0.16); color: #ff6b6b; }
-    .avatar.channel { background: rgba(78, 205, 196, 0.16); color: #4ecdc4; }
+    .avatar.dm { background: rgba(229, 72, 47, 0.16); color: #e5482f; }
+    .avatar.channel { background: rgba(255, 178, 36, 0.16); color: #ffb224; }
 
     .conv-info { flex: 1; min-width: 0; }
     .conv-name { font-weight: 500; font-size: 14px; }
@@ -551,7 +551,7 @@
 
     .mobile-scenario-btn:hover {
       border-color: var(--accent);
-      background: rgba(78, 205, 196, 0.15);
+      background: rgba(255, 178, 36, 0.15);
     }
 
     .mobile-scenario-btn .icon {
@@ -584,8 +584,8 @@
     }
 
     .message.highlight {
-      background: rgba(78, 205, 196, 0.15);
-      border: 1px solid rgba(78, 205, 196, 0.4);
+      background: rgba(255, 178, 36, 0.15);
+      border: 1px solid rgba(255, 178, 36, 0.4);
     }
 
     .message-avatar {
@@ -640,7 +640,7 @@
       justify-content: center;
       font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, #ff6b6b, #e85555);
+      background: linear-gradient(135deg, #e5482f, #c73a20);
     }
 
     .user-card h4 {
@@ -751,7 +751,7 @@
   </div>
   <div class="cta-strip">
     <div class="cta-links">
-<a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(255,107,107,0.18);border-color:rgba(255,107,107,0.45);color:#ff6b6b">Hosted</a>
+<a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(229,72,47,0.18);border-color:rgba(229,72,47,0.45);color:#e5482f">Hosted</a>
       <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" target="_blank" rel="noopener noreferrer">npm Install</a>
       <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md" target="_blank" rel="noopener noreferrer">Setup Guide</a>
     </div>
@@ -975,10 +975,10 @@
     function getColor(initials) {
       // Brand tints only — coral / teal alternation (poster canon)
       const colors = [
-        '#ff6b6b, #e85555',
-        '#4ecdc4, #3aa89f',
-        '#ff8a8a, #ff6b6b',
-        '#4ecdc4, #2f9d94'
+        '#e5482f, #c73a20',
+        '#ffb224, #d99417',
+        '#ef6a4a, #e5482f',
+        '#ffb224, #c2820f'
       ];
       return colors[initials.charCodeAt(0) % colors.length];
     }
