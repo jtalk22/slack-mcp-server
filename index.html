@@ -15,7 +15,7 @@
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack’s operating layer for AI agents">
-  <meta name="twitter:description" content="Ask what happened. Find the decision. Close the loop—locally or through permanent hosted OAuth.">
+  <meta name="twitter:description" content="Ask what happened. Get receipts. Close the loop—locally or through permanent hosted OAuth.">
   <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
   <link rel="icon" href="https://jtalk22.github.io/slack-mcp-server/docs/assets/icon-512.png" type="image/png">
   <style>
@@ -324,9 +324,13 @@
 
     document.querySelectorAll('[data-copy]').forEach((button) => {
       button.addEventListener('click', async () => {
-        await navigator.clipboard.writeText(button.dataset.copy);
         const previous = button.textContent;
-        button.textContent = 'Copied';
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy);
+          button.textContent = 'Copied';
+        } catch {
+          button.textContent = 'Copy failed';
+        }
         setTimeout(() => { button.textContent = previous; }, 1400);
       });
     });

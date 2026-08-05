@@ -8,7 +8,7 @@
 
 <h1>Slack MCP Server</h1>
 
-<h2>Ask what happened. Find the decision. Close the loop.</h2>
+<h2>Ask what happened. Get receipts. Close the loop.</h2>
 
 <p>Turn Slack from an interruption stream into searchable operating memory and approved action. The open-source local path ships <strong>21 tools today</strong> through the browser session you already have—no Slack app, scope review, or admin queue. Hosted adds permanent OAuth, indexing, scheduled intelligence, and team continuity when the workflow must run without you.</p>
 
@@ -196,13 +196,13 @@ On macOS, setup can extract from Chrome and persist the selected storage backend
 
 ## 21 tools: read, act, automate
 
-### Read the workspace — 12 read-only tools
+### 12 read-only Slack operations
 
 | Tool | Purpose |
 |---|---|
 | `slack_health_check` | Verify credentials and workspace identity |
 | `slack_token_status` | Inspect credential age, health, cache, profile, and storage state |
-| `slack_refresh_tokens` | Extract a fresh browser session on macOS* |
+| `slack_refresh_tokens` | Refresh local credentials from the browser session on macOS*—reads Slack, writes only local state |
 | `slack_list_conversations` | List channels and DMs |
 | `slack_conversations_history` | Read channel or DM history with optional rich fields |
 | `slack_get_full_conversation` | Export complete history and threads |

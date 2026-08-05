@@ -42,6 +42,8 @@
     .scene.active .rise { animation: rise .72s cubic-bezier(.16,.82,.26,1) both; }
     .scene.active .rise:nth-child(2) { animation-delay: .08s; }
     .scene.active .rise:nth-child(3) { animation-delay: .16s; }
+    /* Still captures (?still=poster|final) must be end-state, never mid-animation */
+    html[data-still] .scene, html[data-still] .scene.active .rise { animation: none; transition: none; }
     @keyframes rise { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     .kicker { margin: 0; font: 600 clamp(10px, .72vw, 14px)/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
     .display { margin: 0; font-family: var(--display); font-weight: 500; letter-spacing: -.015em; line-height: .94; }
@@ -345,9 +347,11 @@
     }
 
     if (still === 'final') {
+      document.documentElement.dataset.still = '1';
       render(marks.at(-1) - 1);
       document.body.classList.add('reel-complete');
     } else if (still === 'poster') {
+      document.documentElement.dataset.still = '1';
       render(1400);
       document.body.classList.add('reel-complete');
     } else {

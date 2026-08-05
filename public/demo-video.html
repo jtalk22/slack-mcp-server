@@ -127,19 +127,25 @@
       chapters.classList.toggle('visible', mode === 'full');
       video.pause();
       video.innerHTML = '';
-      const source = document.createElement('source');
-      source.type = 'video/mp4';
-      source.src = mode === 'trailer'
-        ? (isMobile ? '../docs/videos/slack-mcp-proof-20s-vertical.mp4' : '../docs/videos/slack-mcp-proof-42s.mp4')
-        : '../docs/videos/demo-slack-mcp.mp4';
-      video.append(source);
+      const sources = mode === 'trailer'
+        ? (isMobile
+            ? [['../docs/videos/slack-mcp-proof-20s-vertical.mp4', 'video/mp4']]
+            : [['../docs/videos/slack-mcp-proof-42s.mp4', 'video/mp4'], ['../docs/videos/slack-mcp-proof-42s.webm', 'video/webm']])
+        : [['../docs/videos/demo-slack-mcp.mp4', 'video/mp4'], ['../docs/videos/demo-slack-mcp.webm', 'video/webm']];
+      for (const [src, type] of sources) {
+        const source = document.createElement('source');
+        source.src = src; source.type = type;
+        video.append(source);
+      }
       const track = document.createElement('track');
       track.kind = 'captions';
       track.src = mode === 'trailer'
         ? (isMobile ? '../docs/videos/slack-mcp-proof-20s-vertical.vtt' : '../docs/videos/slack-mcp-proof-42s.vtt')
         : '../docs/videos/demo-slack-mcp.vtt';
       track.srclang = 'en'; track.label = 'English captions'; track.default = true;
+      track.addEventListener('load', () => { track.track.mode = 'showing'; });
       video.append(track);
+      if (track.track) track.track.mode = 'showing';
       duration.textContent = mode === 'trailer' ? (isMobile ? 'MOBILE CUT / 00:20' : 'TRAILER / 00:42') : 'WALKTHROUGH / 03:24';
       note.textContent = mode === 'trailer' ? 'Dry humor. Real tool names. Large enough to read.' : 'Seven chapters. Full tool-call sequence and outcomes.';
       video.load();
@@ -148,7 +154,11 @@
 
     trailerMode.addEventListener('click', () => setMode('trailer'));
     fullMode.addEventListener('click', () => setMode('full'));
-    chapters.addEventListener('click', (event) => { const button = event.target.closest('[data-t]'); if (!button) return; if (mode !== 'full') setMode('full'); video.currentTime = Number(button.dataset.t); video.play(); });
+    function seekTo(seconds) {
+      if (video.readyState >= 1) { video.currentTime = seconds; video.play().catch(() => {}); return; }
+      video.addEventListener('loadedmetadata', () => { video.currentTime = seconds; video.play().catch(() => {}); }, { once: true });
+    }
+    chapters.addEventListener('click', (event) => { const button = event.target.closest('[data-t]'); if (!button) return; if (mode !== 'full') setMode('full'); seekTo(Number(button.dataset.t)); });
     video.addEventListener('ended', () => { if (mode === 'trailer') { video.currentTime = 0; video.play(); } });
     if (isMobile) {
       trailerMode.textContent = '20s proof';

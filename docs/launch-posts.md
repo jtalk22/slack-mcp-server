@@ -151,7 +151,7 @@ Do not publish “20k+ downloads” until the public npm API crosses 20,000.
 **Say:**
 
 - “Slack’s operating layer for AI agents.”
-- “Ask what happened. Find the decision. Close the approved loop.”
+- “Ask what happened. Get receipts. Close the loop.”
 - “No Slack app or admin queue on the local path.”
 - “The current local surface ships 21 tools today.”
 - “Local gives control now; hosted gives unattended continuity.”

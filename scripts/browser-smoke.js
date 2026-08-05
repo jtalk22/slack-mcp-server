@@ -260,7 +260,7 @@ async function runLocal() {
 
     await checkRoot(page, `${server.url}/`);
     const toolCount = PUBLIC_METADATA.selfHostedToolCount;
-    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Ask what happened\. Find the decision\. Close the loop\./i, "share note");
+    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Ask what happened\. Get receipts\. Close the loop\./i, "share note");
     await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Use Slack interactively for free; move unattended work to hosted/i, "demo video note");
     await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", new RegExp(`free local path ships the current ${toolCount}-tool surface`, "i"), "demo note");
     await checkStaticPage(page, `${server.url}/public/demo-slack-mcp.html`, ".note", new RegExp(`free local path ships the current ${toolCount}-tool surface`, "i"), "demo claude note");
@@ -294,7 +294,7 @@ async function runLive() {
         }
 
         await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { expectedNpm });
-        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Ask what happened\. Find the decision\. Close the loop\./i, "live share note");
+        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Ask what happened\. Get receipts\. Close the loop\./i, "live share note");
         const normalizedErrors = normalizeErrors(errors);
         if (normalizedErrors.length > 0) {
           throw new Error(normalizedErrors.join("\n"));

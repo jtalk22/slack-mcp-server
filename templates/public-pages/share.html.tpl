@@ -7,7 +7,7 @@
   <meta name="description" content="Slack’s operating layer for AI agents: local browser-session control or hosted permanent OAuth for recurring workflows.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Slack MCP Server — Ask what happened. Find the decision. Close the loop.">
+  <meta property="og:title" content="Slack MCP Server — Ask what happened. Get receipts. Close the loop.">
   <meta property="og:description" content="The free local path ships {{SELF_HOSTED_TOOL_COUNT}} tools today. Hosted adds permanent OAuth, indexing, schedules, and team continuity.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">

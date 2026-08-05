@@ -109,8 +109,8 @@
       "path": "docs/images/demo-poster.png",
       "role": "readme-poster",
       "format": "png",
-      "size_bytes": 219437,
-      "sha256": "d35779c3162fc152e2afeafca5e1fc58e3d9cfec91fa1d2fd1bd4fd3b3af0857",
+      "size_bytes": 209550,
+      "sha256": "3603c3851ca7ab3419c87ceb3d64f76d4fe5e6246109ab6bceeabb018e54cf72",
       "width": 1280,
       "height": 720
     },
@@ -119,8 +119,8 @@
       "path": "docs/images/social-preview-v3.png",
       "role": "social-preview",
       "format": "png",
-      "size_bytes": 101641,
-      "sha256": "1f41fb686e686257fc00550591a2a2699b3578dfdea1b42fb80503c1473c72d1",
+      "size_bytes": 85735,
+      "sha256": "6130666dd8ff72e87b4334f7d3f61cb1270209a5fa4a347b604a8e41b10e3c77",
       "width": 1280,
       "height": 640
     },
