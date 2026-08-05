@@ -126,6 +126,7 @@ function main() {
     "public/share.html",
     "public/demo.html",
     "public/demo-video.html",
+    "public/proof-reel.html",
     "public/demo-slack-mcp.html",
   ]) {
     const versions = semverLiterals(read(marketingPath));
@@ -149,8 +150,44 @@ function main() {
   check(
     results,
     "README session auth",
-    readme.includes("Session-based auth") || readme.includes("session tokens") || readme.includes("Session tokens"),
+    /session-based auth|session tokens|browser-session credentials|browser session/i.test(readme),
     "README should describe session-based authentication approach"
+  );
+  check(
+    results,
+    "README category thesis",
+    readme.includes("SLACK’S OPERATING LAYER FOR AI AGENTS") &&
+      readme.includes("Built past the demo") &&
+      readme.includes("Two ways into Slack") &&
+      readme.includes("Hosted when it must drive itself"),
+    "README must carry the category thesis, systems proof, and local/hosted value split"
+  );
+  check(
+    results,
+    "README download proof",
+    readme.includes("img.shields.io/npm/dt/%40jtalk22%2Fslack-mcp"),
+    "README must use the dynamic cumulative npm download badge"
+  );
+
+  const cliHelpResult = runNode(["src/cli.js", "--help"]);
+  check(
+    results,
+    "CLI client-neutral help",
+    cliHelpResult.status === 0 &&
+      cliHelpResult.stdout.includes("21 tools for any stdio MCP client") &&
+      !cliHelpResult.stdout.includes("Full Slack access for Claude"),
+    cliHelpResult.stdout || cliHelpResult.stderr || "no output"
+  );
+
+  const proofReel = read("public/proof-reel.html");
+  check(
+    results,
+    "Proof reel contract",
+    proofReel.includes("47 unread") &&
+      proofReel.includes("slack_conversations_unreads") &&
+      proofReel.includes("slack_conversations_mark") &&
+      proofReel.includes("reel-complete"),
+    "proof reel must show the outcome, real tool names, and deterministic completion state"
   );
 
   const docsIndex = read("docs/INDEX.md");

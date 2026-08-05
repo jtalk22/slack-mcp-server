@@ -1,158 +1,104 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Two ways into Slack</title>
+  <desc id="desc">The official integration path uses workspace policy, OAuth, and a managed remote MCP. Slack MCP Server uses one-command local Chrome session extraction, a Keychain-backed credential lifecycle, and 21 tools over stdio.</desc>
   <defs>
-    <!-- Background gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a1a2e"/>
-      <stop offset="100%" style="stop-color:#16213e"/>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111522"/>
+      <stop offset="1" stop-color="#0a0d15"/>
     </linearGradient>
-
-    <!-- Box gradient (left/muted) -->
-    <linearGradient id="boxGradMuted" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#2a2a3a"/>
-      <stop offset="100%" style="stop-color:#1e1e2e"/>
+    <linearGradient id="session" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#251d0c"/>
+      <stop offset="1" stop-color="#16323a"/>
     </linearGradient>
-
-    <!-- Box gradient (right/orange) -->
-    <linearGradient id="boxGradOrange" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#4ecdc4"/>
-      <stop offset="100%" style="stop-color:#45b7aa"/>
-    </linearGradient>
-
-    <!-- Box gradient (right/orange subtle) -->
-    <linearGradient id="boxGradOrangeSoft" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#2e2235"/>
-      <stop offset="100%" style="stop-color:#1e1e2e"/>
-    </linearGradient>
-
-    <!-- Orange glow filter -->
-    <filter id="glowOrange" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.306  0 0 0 0 0.804  0 0 0 0 0.769  0 0 0 0.35 0" result="glow"/>
-      <feMerge>
-        <feMergeNode in="glow"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <filter id="tealGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-
-    <!-- Subtle shadow for depth -->
-    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
-    </filter>
-
-    <!-- Arrows -->
-    <marker id="arrowMuted" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#777777"/>
+    <marker id="arrowMuted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6f6c64"/>
     </marker>
-    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L7,3 z" fill="#4ecdc4"/>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffb224"/>
     </marker>
+    <style>
+      .display { font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif; font-weight: 700; letter-spacing: 2px; }
+      .body { font-family: "Helvetica Neue", Arial, sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .step { fill: #161619; stroke: #55534d; stroke-width: 1.5; }
+      .step-right { fill: url(#session); stroke: #ffb224; stroke-width: 1.7; }
+      .muted { fill: #94918a; }
+      .paper { fill: #eeebe3; }
+      .teal { fill: #ffb224; }
+      .coral { fill: #e5482f; }
+    </style>
   </defs>
 
-  <!-- Background -->
-  <rect width="900" height="440" fill="url(#bgGrad)" rx="12"/>
+  <rect width="1280" height="720" rx="28" fill="url(#ground)"/>
+  <path d="M640 64 V602" stroke="#242428" stroke-width="1" stroke-dasharray="4 10"/>
 
-  <!-- ═══════════ LEFT SIDE: OAuth ═══════════ -->
-  <rect x="25" y="40" width="400" height="360" rx="12" fill="rgba(255,255,255,0.025)" stroke="#555555" stroke-width="1" filter="url(#shadow)"/>
-  <text x="225" y="72" text-anchor="middle" fill="#999999" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="0.05em">OFFICIAL SLACK API (OAUTH)</text>
+  <text x="64" y="66" class="display paper" font-size="19">TWO WAYS INTO SLACK</text>
+  <text x="1216" y="66" class="mono muted" font-size="13" text-anchor="end">SAME IDENTITY · DIFFERENT GATE</text>
 
-  <!-- Step 1: Create App -->
-  <text x="62" y="106" fill="#666666" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700">1</text>
-  <rect x="75" y="90" width="125" height="42" rx="8" fill="url(#boxGradMuted)" stroke="#555555" stroke-width="1"/>
-  <text x="137" y="116" text-anchor="middle" fill="#d0d0d0" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12">Create App</text>
+  <rect x="54" y="96" width="548" height="506" rx="22" fill="#121622" stroke="#3a3a40" stroke-width="1.5"/>
+  <rect x="678" y="96" width="548" height="506" rx="22" fill="#10202b" stroke="#ffb224" stroke-width="2"/>
 
-  <!-- Arrow right -->
-  <line x1="205" y1="111" x2="222" y2="111" stroke="#777777" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+  <text x="328" y="140" class="display muted" font-size="18" text-anchor="middle">THE INTEGRATION PATH</text>
+  <text x="952" y="140" class="display teal" font-size="18" text-anchor="middle">THE SESSION PATH</text>
+  <text x="328" y="166" class="body muted" font-size="13" text-anchor="middle">Slack-managed remote MCP</text>
+  <text x="952" y="166" class="body paper" font-size="13" text-anchor="middle">Slack MCP Server · local stdio</text>
 
-  <!-- Step 2: Request Scopes -->
-  <text x="239" y="106" fill="#666666" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700">2</text>
-  <rect x="252" y="90" width="125" height="42" rx="8" fill="url(#boxGradMuted)" stroke="#555555" stroke-width="1"/>
-  <text x="314" y="116" text-anchor="middle" fill="#d0d0d0" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12">Request Scopes</text>
+  <g>
+    <text x="93" y="211" class="mono muted" font-size="13">01</text>
+    <rect x="124" y="185" width="408" height="58" rx="11" class="step"/>
+    <text x="328" y="219" class="body paper" font-size="16" text-anchor="middle">Workspace integration policy</text>
+    <path d="M328 244 V265" stroke="#6f6c64" stroke-width="2" marker-end="url(#arrowMuted)"/>
 
-  <!-- Arrow down from Request Scopes -->
-  <line x1="314" y1="137" x2="314" y2="158" stroke="#777777" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
+    <text x="93" y="303" class="mono muted" font-size="13">02</text>
+    <rect x="124" y="277" width="408" height="58" rx="11" class="step"/>
+    <text x="328" y="311" class="body paper" font-size="16" text-anchor="middle">OAuth consent</text>
+    <path d="M328 336 V357" stroke="#6f6c64" stroke-width="2" marker-end="url(#arrowMuted)"/>
 
-  <!-- Step 3: Admin Approval -->
-  <text x="240" y="180" fill="#666666" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700">3</text>
-  <rect x="253" y="166" width="130" height="42" rx="8" fill="url(#boxGradMuted)" stroke="#888888" stroke-width="1"/>
-  <text x="318" y="184" text-anchor="middle" fill="#ffffff" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12" font-weight="600">Admin Approval?</text>
-  <text x="318" y="200" text-anchor="middle" fill="#999999" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="9">Workspace admin must approve</text>
+    <text x="93" y="395" class="mono muted" font-size="13">03</text>
+    <rect x="124" y="369" width="408" height="58" rx="11" class="step"/>
+    <text x="328" y="403" class="body paper" font-size="16" text-anchor="middle">Managed remote MCP</text>
+    <path d="M328 428 V449" stroke="#6f6c64" stroke-width="2" marker-end="url(#arrowMuted)"/>
 
-  <!-- Arrow down-left from Admin to User Auth -->
-  <path d="M 253 187 L 210 187 L 210 228" stroke="#777777" stroke-width="1.5" fill="none" marker-end="url(#arrowMuted)"/>
-
-  <!-- Step 4: User Authorization -->
-  <text x="78" y="248" fill="#666666" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700">4</text>
-  <rect x="91" y="232" width="145" height="42" rx="8" fill="url(#boxGradMuted)" stroke="#555555" stroke-width="1"/>
-  <text x="163" y="258" text-anchor="middle" fill="#d0d0d0" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12">User Authorization</text>
-
-  <!-- Arrow right -->
-  <line x1="241" y1="253" x2="265" y2="253" stroke="#777777" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
-
-  <!-- Step 5: Limited Access -->
-  <text x="275" y="248" fill="#666666" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700">5</text>
-  <rect x="275" y="232" width="125" height="42" rx="8" fill="url(#boxGradMuted)" stroke="#555555" stroke-width="1"/>
-  <text x="337" y="258" text-anchor="middle" fill="#d0d0d0" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12">Limited Access</text>
-
-  <!-- Arrow down to result -->
-  <line x1="225" y1="278" x2="225" y2="310" stroke="#777777" stroke-width="1.5" marker-end="url(#arrowMuted)"/>
-
-  <!-- Result box (left) with red X -->
-  <rect x="55" y="316" width="340" height="60" rx="8" fill="rgba(255,107,107,0.06)" stroke="#555555" stroke-width="1" stroke-dasharray="5,3"/>
-  <!-- Red X icon — SVG path, precisely centered -->
-  <circle cx="84" cy="346" r="12" fill="rgba(255,107,107,0.15)" stroke="#ff6b6b" stroke-width="1.5"/>
-  <g transform="translate(84,346)">
-    <line x1="-5" y1="-5" x2="5" y2="5" stroke="#ff6b6b" stroke-width="2.5" stroke-linecap="round"/>
-    <line x1="5" y1="-5" x2="-5" y2="5" stroke="#ff6b6b" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="93" y="487" class="mono muted" font-size="13">04</text>
+    <rect x="124" y="461" width="408" height="58" rx="11" class="step"/>
+    <text x="328" y="495" class="body paper" font-size="16" text-anchor="middle">Supported client integration</text>
   </g>
-  <text x="250" y="340" text-anchor="middle" fill="#c0c0c0" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12">No DMs without per-conversation consent</text>
-  <text x="250" y="360" text-anchor="middle" fill="#999999" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="11">Broken with several MCP clients</text>
 
-  <!-- ═══════════ RIGHT SIDE: Chrome DB Decryption ═══════════ -->
-  <rect x="475" y="40" width="400" height="360" rx="12" fill="rgba(78,205,196,0.05)" stroke="#4ecdc4" stroke-width="1.5" filter="url(#shadow)"/>
-  <text x="675" y="72" text-anchor="middle" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="14" font-weight="600" letter-spacing="0.05em">CHROME DB DECRYPTION</text>
+  <g>
+    <text x="717" y="211" class="mono teal" font-size="13">01</text>
+    <rect x="748" y="185" width="408" height="58" rx="11" class="step-right"/>
+    <text x="952" y="220" class="mono paper" font-size="16" text-anchor="middle">npx --setup</text>
+    <path d="M952 244 V265" stroke="#ffb224" stroke-width="2" marker-end="url(#arrowTeal)"/>
 
-  <!-- Step 1: Slack in Chrome -->
-  <text x="555" y="106" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">1</text>
-  <rect x="568" y="90" width="210" height="42" rx="8" fill="url(#boxGradOrangeSoft)" stroke="#4ecdc4" stroke-width="1" opacity="0.9"/>
-  <text x="673" y="116" text-anchor="middle" fill="#e6e6e6" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5">Slack Open in Chrome</text>
+    <text x="717" y="303" class="mono teal" font-size="13">02</text>
+    <rect x="748" y="277" width="408" height="58" rx="11" class="step-right"/>
+    <text x="952" y="303" class="body paper" font-size="16" text-anchor="middle">Chrome session decrypted locally</text>
+    <text x="952" y="323" class="mono teal" font-size="11" text-anchor="middle">LEVELDB + SQLITE + KEYCHAIN</text>
+    <path d="M952 336 V357" stroke="#ffb224" stroke-width="2" marker-end="url(#arrowTeal)"/>
 
-  <!-- Arrow down -->
-  <line x1="673" y1="137" x2="673" y2="162" stroke="#4ecdc4" stroke-width="2" marker-end="url(#arrowOrange)"/>
+    <text x="717" y="395" class="mono teal" font-size="13">03</text>
+    <rect x="748" y="369" width="408" height="58" rx="11" class="step-right"/>
+    <text x="952" y="395" class="body paper" font-size="16" text-anchor="middle">Keychain-backed credential lifecycle</text>
+    <text x="952" y="415" class="mono teal" font-size="11" text-anchor="middle">HEALTH + REFRESH + PROFILE ISOLATION</text>
+    <path d="M952 428 V449" stroke="#ffb224" stroke-width="2" marker-end="url(#arrowTeal)"/>
 
-  <!-- Step 2: Chrome DB Decrypt (highlighted) -->
-  <text x="555" y="182" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">2</text>
-  <rect x="568" y="168" width="210" height="52" rx="8" fill="url(#boxGradOrange)" filter="url(#glowOrange)"/>
-  <text x="673" y="192" text-anchor="middle" fill="#ffffff" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="13" font-weight="600">Chrome DB Decrypt</text>
-  <text x="673" y="208" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="9.5">PBKDF2 + AES-128-CBC</text>
-
-  <!-- Arrow down -->
-  <line x1="673" y1="224" x2="673" y2="250" stroke="#4ecdc4" stroke-width="2" marker-end="url(#arrowOrange)"/>
-
-  <!-- Step 3: Session Token artifact -->
-  <text x="555" y="270" fill="#4ecdc4" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="11" font-weight="700" opacity="0.7">3</text>
-  <rect x="568" y="256" width="210" height="52" rx="8" fill="rgba(78,205,196,0.12)" stroke="#4ecdc4" stroke-width="1"/>
-  <text x="673" y="280" text-anchor="middle" fill="#ffffff" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="14" font-weight="700">Session Token</text>
-  <text x="673" y="298" text-anchor="middle" fill="rgba(78,205,196,0.85)" font-family="'IBM Plex Mono', 'SF Mono', Menlo, monospace" font-size="10" letter-spacing="0.04em">xoxc + xoxd pair</text>
-
-  <!-- Arrow down to result -->
-  <line x1="673" y1="312" x2="673" y2="324" stroke="#4ecdc4" stroke-width="2" marker-end="url(#arrowOrange)"/>
-
-  <!-- Result box (right) with green checkmark -->
-  <rect x="505" y="330" width="340" height="56" rx="8" fill="rgba(78,205,196,0.06)" stroke="#4ecdc4" stroke-width="1.5" filter="url(#glowOrange)"/>
-  <!-- Green check icon — SVG path, precisely centered -->
-  <circle cx="534" cy="358" r="12" fill="rgba(78,205,196,0.15)" stroke="#4ecdc4" stroke-width="1.5"/>
-  <g transform="translate(534,358)">
-    <polyline points="-5,0 -1.5,4 6,-5" fill="none" stroke="#4ecdc4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="717" y="487" class="mono teal" font-size="13">04</text>
+    <rect x="748" y="461" width="408" height="58" rx="11" class="step-right" filter="url(#tealGlow)"/>
+    <text x="952" y="488" class="display paper" font-size="17" text-anchor="middle">21 TOOLS · LOCAL STDIO</text>
+    <text x="952" y="509" class="body teal" font-size="12" text-anchor="middle">DMs · SEARCH · THREADS · ACTIONS · WORKFLOWS</text>
   </g>
-  <text x="690" y="352" text-anchor="middle" fill="#eeeeee" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="12.5" font-weight="500">Your DMs, Channels, Search, History</text>
-  <text x="690" y="370" text-anchor="middle" fill="#4ecdc4" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="11">Same access as your browser session</text>
 
-  <!-- ═══════════ VS DIVIDER ═══════════ -->
-  <line x1="450" y1="50" x2="450" y2="198" stroke="#3a3a3a" stroke-width="0.5" stroke-dasharray="3,5"/>
-  <circle cx="450" cy="220" r="22" fill="#1a1a2e" stroke="#3a3a3a" stroke-width="1.5"/>
-  <text x="450" y="225" text-anchor="middle" fill="#b0b0b0" font-family="'Space Grotesk', 'Segoe UI', sans-serif" font-size="13" font-weight="600">vs</text>
-  <line x1="450" y1="242" x2="450" y2="390" stroke="#3a3a3a" stroke-width="0.5" stroke-dasharray="3,5"/>
+  <rect x="124" y="544" width="408" height="32" rx="16" fill="#1a1a1d"/>
+  <text x="328" y="565" class="mono muted" font-size="11" text-anchor="middle">PERMANENT OAUTH · ORGANIZATION GOVERNANCE</text>
+  <rect x="748" y="544" width="408" height="32" rx="16" fill="#17343a" stroke="#ffb224" stroke-width="1"/>
+  <text x="952" y="565" class="mono teal" font-size="11" text-anchor="middle">NO SLACK APP · ANY STDIO MCP CLIENT</text>
 
-  <!-- Bottom attribution -->
-  <text x="450" y="425" text-anchor="middle" fill="#9fb0cf" font-family="'IBM Plex Sans', 'Segoe UI', sans-serif" font-size="9" letter-spacing="0.04em">@jtalk22/slack-mcp · github.com/jtalk22/slack-mcp-server</text>
+  <rect x="54" y="626" width="1172" height="54" rx="14" fill="#161619" stroke="#323237"/>
+  <text x="80" y="659" class="display coral" font-size="14">NEED PERMANENCE LATER?</text>
+  <text x="308" y="659" class="body paper" font-size="14">Keep the product surface and move to hosted OAuth, indexed search, and scheduled workflow briefs.</text>
+  <text x="1198" y="659" class="mono teal" font-size="12" text-anchor="end">@jtalk22/slack-mcp</text>
 </svg>

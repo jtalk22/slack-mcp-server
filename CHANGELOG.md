@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.2] - 2026-08-05
+
+### The public surface catches up to the system underneath
+
+No MCP tool contracts changed. This release turns the project's browser-session
+engine, credential lifecycle, full-fidelity reads, guarded actions, and typed
+workflows into a clearer install story and a legible proof experience.
+
+### Changed
+
+- **Category-defining public position** — the README, package metadata, CLI
+  help, setup guide, compatibility matrix, registry metadata, and landing page
+  now lead with the admin-free local path instead of a generic tool count or
+  hosted pricing.
+- **42-second proof reel + 20-second vertical cut** — one repo-owned HTML
+  timeline produces a large-type desktop trailer, a recomposed mobile version,
+  WebVTT captions, the README poster, and the GitHub social preview. The full
+  3:24 walkthrough remains available as secondary proof.
+- **Own-estate design system** — every public page, both proof videos, the
+  poster, the social preview, and the access-path diagram now run on a single
+  token system: Nyght Serif display, Roobert body, Roobert Mono labels, and an
+  ink/bone/vermilion/amber palette. Self-hosted subset webfonts (~48 KB total)
+  replace the previous stock pairing and the demo page's Google Fonts CDN
+  dependency.
+- **One accurate flagship diagram** — preserves the historical split-screen
+  energy while replacing stale claims about Slack's official MCP with a current
+  integration-path versus session-path comparison.
+- **Generated media manifest** — `scripts/media-manifest.js` derives duration,
+  dimensions, codecs, frame rate, bitrate, file sizes, caption counts, and image
+  dimensions from the actual assets; CI and release preflight now reject drift.
+- **Install UX** — `npx --setup` remains primary, the global-install path is
+  documented, every supported client has a configuration recipe, and setup
+  completion ends with restart plus `slack_health_check`.
+- **Runtime posture** — Node 22/24 are recommended; v4 keeps Node 20
+  compatibility, while CI verifies Node 20, 22, 24, and 26.
+
+### Fixed
+
+- **Dependabot false-red runs** — auto-merge requires both a Dependabot-authored
+  PR and a Dependabot workflow actor, so maintainer branch updates skip instead
+  of failing strict commit verification. The ineffective Actions self-approval
+  step is gone and the policy has a regression verifier.
+- **Root dependency advisory** — the supported MCP SDK dependency graph now
+  resolves `@hono/node-server` 2.1.0; root and browser-worker audits are clean.
+
 ## [4.6.1] - 2026-08-04
 
 ### Shelf Repair — the discovery surfaces catch up to the product

@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="@jtalk22">
   <title>Slack MCP Server — Claude Desktop Demo</title>
-  <meta name="description" content="No OAuth. No admin. {{SELF_HOSTED_TOOL_COUNT}} Slack tools for any MCP client. Works with Claude, Cursor, Copilot, Gemini. One command setup.">
+  <meta name="description" content="No Slack app. No admin queue. {{SELF_HOSTED_TOOL_COUNT}} Slack tools for Claude, Cursor, Copilot, Gemini, and any stdio MCP client.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/demo-slack-mcp.html">
 
   <!-- Open Graph -->
@@ -31,83 +31,59 @@
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
 
   <!-- Theme -->
-  <meta name="theme-color" content="#0b0e14">
+  <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" href="../docs/assets/icon-512.png" type="image/png">
   <style>
     /* Self-hosted fonts — no CDN, instant load */
-    @font-face {
-      font-family: "Space Grotesk";
-      font-style: normal;
-      font-weight: 500 700;
-      font-display: swap;
-      src: url("../public/fonts/space-grotesk-500.woff2") format("woff2");
-    }
-    @font-face {
-      font-family: "IBM Plex Sans";
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url("../public/fonts/ibm-plex-sans-400.woff2") format("woff2");
-    }
-    @font-face {
-      font-family: "IBM Plex Sans";
-      font-style: normal;
-      font-weight: 500;
-      font-display: swap;
-      src: url("../public/fonts/ibm-plex-sans-500.woff2") format("woff2");
-    }
-    @font-face {
-      font-family: "IBM Plex Sans";
-      font-style: normal;
-      font-weight: 600;
-      font-display: swap;
-      src: url("../public/fonts/ibm-plex-sans-600.woff2") format("woff2");
-    }
+    @font-face { font-family: "Nyght Serif"; font-style: normal; font-weight: 500 700; font-display: swap; src: url("../public/fonts/nyght-serif-medium.woff2") format("woff2"); }
+    @font-face { font-family: "Roobert"; font-style: normal; font-weight: 400 500; font-display: swap; src: url("../public/fonts/roobert-regular.woff2") format("woff2"); }
+    @font-face { font-family: "Roobert"; font-style: normal; font-weight: 600; font-display: swap; src: url("../public/fonts/roobert-semibold.woff2") format("woff2"); }
+    @font-face { font-family: "Roobert Mono"; font-style: normal; font-weight: 400 600; font-display: swap; src: url("../public/fonts/roobert-mono.woff2") format("woff2"); }
 
     /* ═══════════════════════════════════════════════════════════════
-       Palette — poster canon (near-black · coral · teal)
+       Palette — poster canon (near-black · vermilion · amber)
        Harmonized with docs/images/demo-poster.png. Teal = system/tool/
        success register; coral = brand/emphasis. --claude-orange keeps its
        name (many refs) but now carries the poster coral.
        ═══════════════════════════════════════════════════════════════ */
     :root {
-      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
-      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-      --font-mono: "SF Mono", "Menlo", "Monaco", monospace;
+      --font-heading: "Nyght Serif", Georgia, serif;
+      --font-body: "Roobert", "Segoe UI", system-ui, sans-serif;
+      --font-mono: "Roobert Mono", "SF Mono", "Menlo", monospace;
 
       /* Poster triad */
-      --coral: #ff6b6b;
-      --teal: #4ecdc4;
+      --coral: #e5482f;
+      --teal: #ffb224;
 
       /* Window chrome */
-      --window-bg: #0b0e14;
-      --window-chrome: #12161f;
-      --window-border: #1f2633;
+      --window-bg: #0b0b0c;
+      --window-chrome: #141416;
+      --window-border: #26262c;
       --traffic-red: #ff5f57;
       --traffic-yellow: #febc2e;
       --traffic-green: #28c840;
 
       /* Messages */
-      --user-bubble-bg: #1a2130;
-      --claude-bubble-bg: #12161f;
-      --claude-orange: #ff6b6b;
+      --user-bubble-bg: #1a1a1e;
+      --claude-bubble-bg: #141416;
+      --claude-orange: #e5482f;
 
       /* Tool calls */
-      --tool-box-bg: #0e121a;
-      --tool-box-border: #1f2633;
-      --tool-header-bg: #141926;
-      --tool-name-color: #8d99a9;
+      --tool-box-bg: #101012;
+      --tool-box-border: #26262c;
+      --tool-header-bg: #17171b;
+      --tool-name-color: #96938a;
 
       /* Text */
-      --text-primary: #f0f3f7;
+      --text-primary: #f0efe9;
       --text-secondary: #a7b2c0;
-      --text-muted: #8d99a9;
+      --text-muted: #96938a;
 
       /* Accents */
-      --link-color: #4ecdc4;
-      --code-bg: #12161f;
-      --code-text: #f0f3f7;
-      --success-color: #4ecdc4;
+      --link-color: #ffb224;
+      --code-bg: #141416;
+      --code-text: #f0efe9;
+      --success-color: #ffb224;
       --warning-color: #f2b950;
 
       /* Brand DNA (subliminal) */
@@ -138,9 +114,9 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       background:
-        radial-gradient(58% 46% at 14% 0%, rgba(255, 107, 107, 0.07), transparent 62%),
-        radial-gradient(58% 46% at 86% 0%, rgba(78, 205, 196, 0.07), transparent 62%),
-        linear-gradient(180deg, #0e1119 0%, #0b0e14 58%, #07090e 100%);
+        radial-gradient(58% 46% at 14% 0%, rgba(229, 72, 47, 0.07), transparent 62%),
+        radial-gradient(58% 46% at 86% 0%, rgba(255, 178, 36, 0.07), transparent 62%),
+        linear-gradient(180deg, #0e1119 0%, #0b0b0c 58%, #07090e 100%);
       background-attachment: fixed;
       min-height: 100vh;
       display: flex;
@@ -221,7 +197,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 107, 107, 0.16);
+      background: rgba(229, 72, 47, 0.16);
       color: var(--claude-orange);
       padding: 4px 10px;
       border-radius: 12px;
@@ -264,7 +240,7 @@
     }
 
     .scenario-btn.active {
-      background: rgba(255, 107, 107, 0.16);
+      background: rgba(229, 72, 47, 0.16);
       border-color: var(--claude-orange);
       color: var(--claude-orange);
     }
@@ -274,8 +250,8 @@
     }
 
     @keyframes pulse-border {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
-      50% { box-shadow: 0 0 0 4px rgba(255, 107, 107, 0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(229, 72, 47, 0.4); }
+      50% { box-shadow: 0 0 0 4px rgba(229, 72, 47, 0); }
     }
 
     .scenario-btn .icon {
@@ -556,7 +532,7 @@
     }
 
     .message.claude .message-avatar {
-      background: linear-gradient(135deg, var(--claude-orange) 0%, #e85555 100%);
+      background: linear-gradient(135deg, var(--claude-orange) 0%, #c73a20 100%);
       color: white;
       font-weight: 600;
       font-size: 12px;
@@ -826,8 +802,8 @@
       align-items: center;
       gap: 6px;
       padding: 10px 16px;
-      background: rgba(255, 107, 107, 0.14);
-      border: 1px solid rgba(255, 107, 107, 0.32);
+      background: rgba(229, 72, 47, 0.14);
+      border: 1px solid rgba(229, 72, 47, 0.32);
       border-radius: 20px;
       color: var(--claude-orange);
       cursor: pointer;
@@ -838,7 +814,7 @@
     }
 
     .tools-button:hover {
-      background: rgba(255, 107, 107, 0.24);
+      background: rgba(229, 72, 47, 0.24);
     }
 
     .tools-button .icon {
@@ -1150,9 +1126,9 @@
     /* Title Card — poster-language cover (near-black + corner glows) */
     .title-card, .closing-card {
       background:
-        radial-gradient(64% 52% at 16% 4%, rgba(255, 107, 107, 0.10), transparent 60%),
-        radial-gradient(64% 52% at 84% 6%, rgba(78, 205, 196, 0.10), transparent 60%),
-        linear-gradient(180deg, #0e1119 0%, #0b0e14 60%, #07090e 100%);
+        radial-gradient(64% 52% at 16% 4%, rgba(229, 72, 47, 0.10), transparent 60%),
+        radial-gradient(64% 52% at 84% 6%, rgba(255, 178, 36, 0.10), transparent 60%),
+        linear-gradient(180deg, #0e1119 0%, #0b0b0c 60%, #07090e 100%);
     }
     .title-card::before, .closing-card::before {
       content: '';
@@ -1336,12 +1312,12 @@
     }
 
     .closing-links code {
-      background: rgba(78, 205, 196, 0.08);
+      background: rgba(255, 178, 36, 0.08);
       color: var(--code-text);
       padding: 14px 26px;
       border-radius: 10px;
-      border: 1px solid rgba(78, 205, 196, 0.35);
-      box-shadow: 0 0 0 1px rgba(78, 205, 196, 0.06), 0 10px 30px -18px rgba(78, 205, 196, 0.5);
+      border: 1px solid rgba(255, 178, 36, 0.35);
+      box-shadow: 0 0 0 1px rgba(255, 178, 36, 0.06), 0 10px 30px -18px rgba(255, 178, 36, 0.5);
       font-size: 15px;
       font-family: "SF Mono", "Menlo", monospace;
     }

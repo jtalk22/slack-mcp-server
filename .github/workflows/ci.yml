@@ -71,6 +71,9 @@ jobs:
       - name: Check generated public pages
         run: node scripts/verify-generated-public-pages.js
 
+      - name: Check media manifest
+        run: node scripts/media-manifest.js --check
+
       - name: Check attribution guardrail regression
         run: node scripts/verify-attribution-guardrail.js
 

@@ -3,472 +3,348 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Slack MCP Server — Slack for your AI agent, no OAuth</title>
-  <meta name="description" content="{{SELF_HOSTED_TOOL_COUNT}} Slack tools for any MCP client. No OAuth, no admin approval. One command setup.">
+  <title>Slack MCP Server — Slack’s operating layer for AI agents</title>
+  <meta name="description" content="Slack’s operating layer for AI agents: searchable workspace memory, approved actions, and typed workflows—local without an app/admin queue or hosted with permanent OAuth.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta property="og:description" content="Give your AI agent full Slack access. {{SELF_HOSTED_TOOL_COUNT}} tools for search, threads, DMs, reactions. Works with any MCP client. One command: npx -y @jtalk22/slack-mcp --setup">
+  <meta property="og:title" content="Slack MCP Server — Ask what happened. Get receipts. Close the loop.">
+  <meta property="og:description" content="Run locally without an app/admin queue, or hosted with permanent OAuth, indexing, schedules, and team continuity.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta name="twitter:description" content="Give your AI agent full Slack access. {{SELF_HOSTED_TOOL_COUNT}} tools. Works with any MCP client. One command setup.">
+  <meta name="twitter:title" content="Slack’s operating layer for AI agents">
+  <meta name="twitter:description" content="Ask what happened. Get receipts. Close the loop—locally or through permanent hosted OAuth.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
+    @font-face { font-family: "Nyght Serif"; src: url("public/fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500; }
+    @font-face { font-family: "Nyght Serif"; src: url("public/fonts/nyght-serif-medium-italic.woff2") format("woff2"); font-display: swap; font-weight: 500; font-style: italic; }
+    @font-face { font-family: "Roobert"; src: url("public/fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400; }
+    @font-face { font-family: "Roobert"; src: url("public/fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
+    @font-face { font-family: "Roobert Mono"; src: url("public/fonts/roobert-mono.woff2") format("woff2"); font-display: swap; font-weight: 400 600; }
+
     :root {
-      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
-      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-      --bg-1: #0b0e14;
-      --bg-2: #12161f;
-      --panel: rgba(17, 20, 27, 0.85);
-      --panel-border: rgba(255, 255, 255, 0.14);
-      --text: #f0f3f7;
-      --muted: #9aa6b6;
-      --accent: #ff6b6b;
-      --button-bg: rgba(28, 32, 42, 0.8);
-      --button-border: rgba(255, 255, 255, 0.22);
+      color-scheme: dark;
+      --ground: #0b0b0c;
+      --surface: #131315;
+      --surface-2: #18181b;
+      --rule: #2b2b30;
+      --paper: #eeebe3;
+      --muted: #9a978e;
+      --stamp: #e5482f;
+      --signal: #ffb224;
+      --display: "Nyght Serif", Georgia, "Times New Roman", serif;
+      --body: "Roobert", system-ui, sans-serif;
+      --mono: "Roobert Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--ground); color: var(--paper); font-family: var(--body); }
+    a { color: inherit; }
+    button { font: inherit; }
+    .page { min-height: 100vh; overflow: hidden; }
+    .frame { width: min(1440px, 100%); margin: 0 auto; padding-inline: clamp(20px, 4vw, 72px); }
 
-    body {
-      font-family: var(--font-body);
-      color: var(--text);
-      min-height: 100vh;
-      background:
-        radial-gradient(900px 460px at 10% 0%, #1a222e 0%, transparent 58%),
-        radial-gradient(1020px 500px at 100% 100%, #0f2d31 0%, transparent 64%),
-        linear-gradient(145deg, var(--bg-1), var(--bg-2));
-      padding: 22px 16px 26px;
+    .site-header {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--rule);
     }
-
-    .shell {
-      max-width: 1160px;
-      margin: 0 auto;
-      border: 1px solid var(--panel-border);
-      border-radius: 18px;
-      background: linear-gradient(160deg, var(--panel), rgba(12, 15, 21, 0.92));
-      box-shadow: 0 24px 46px rgba(0, 0, 0, 0.32);
-      overflow: hidden;
-    }
+    .brand { font-family: var(--display); font-size: 15px; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
+    .brand span { color: var(--signal); }
+    .nav { display: flex; gap: 22px; align-items: center; }
+    .nav a { color: var(--muted); font-size: 14px; text-decoration: none; }
+    .nav a:hover { color: var(--paper); }
+    .nav .nav-cta { color: var(--paper); border-bottom: 1px solid var(--stamp); padding-bottom: 3px; }
 
     .hero {
-      padding: 22px 24px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .hero h1 {
-      font-family: var(--font-heading);
-      letter-spacing: -0.02em;
-      font-size: clamp(1.95rem, 3.6vw, 2.85rem);
-      line-height: 1.04;
-      margin-bottom: 8px;
-    }
-
-    .hero p {
-      color: var(--muted);
-      font-size: clamp(0.96rem, 1.35vw, 1.14rem);
-      max-width: 940px;
-      margin-bottom: 12px;
-    }
-
-    .cta-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    .cta-row a {
-      text-decoration: none;
-      color: #eef2f6;
-      border: 1px solid var(--button-border);
-      border-radius: 999px;
-      padding: 7px 12px;
-      background: var(--button-bg);
-      font-size: 0.91rem;
-      font-weight: 600;
-    }
-
-    .cta-row a strong { color: var(--accent); }
-
-    .verify {
-      background: #10141c;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 12px;
-      padding: 11px 13px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: clamp(0.8rem, 1.05vw, 0.96rem);
-      line-height: 1.45;
-      color: #dbe3ea;
-      overflow-x: auto;
-      white-space: pre;
-    }
-
-    .snapshot-grid {
+      min-height: calc(100svh - 70px);
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 4px;
-    }
-
-    .snapshot-card {
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      border-radius: 14px;
-      background: rgba(14, 17, 24, 0.82);
-      padding: 14px 15px;
-      min-height: 120px;
-    }
-
-    .snapshot-label {
-      display: block;
-      font-size: 0.74rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #8d99a9;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-
-    .snapshot-value {
-      display: block;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #f0f3f7;
-      margin-bottom: 8px;
-      line-height: 1.3;
-    }
-
-    .snapshot-note {
-      display: block;
-      color: var(--muted);
-      font-size: 0.84rem;
-      line-height: 1.45;
-    }
-
-    .snapshot-note a,
-    .snapshot-value a {
-      color: #4ecdc4;
-    }
-
-    .decision-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      max-width: 600px;
-      gap: 12px;
-    }
-
-    .decision-card {
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      border-radius: 14px;
-      background: rgba(14, 17, 24, 0.82);
-      padding: 16px;
-      min-height: 220px;
-    }
-
-    .decision-card.accent {
-      border-color: rgba(78, 205, 196, 0.38);
-      box-shadow: inset 0 0 0 1px rgba(78, 205, 196, 0.1);
-    }
-
-    .decision-label {
-      display: inline-block;
-      margin-bottom: 8px;
-      color: #8d99a9;
-      font-size: 0.74rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .decision-card h2 {
-      font-family: var(--font-heading);
-      font-size: 1.05rem;
-      line-height: 1.2;
-      margin-bottom: 8px;
-    }
-
-    .decision-card p,
-    .decision-card li {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.48;
-    }
-
-    .decision-card ul {
-      padding-left: 18px;
-      margin: 10px 0 0;
-    }
-
-    .decision-links {
-      margin-top: 12px;
-    }
-
-    .decision-links a {
-      color: #4ecdc4;
-    }
-
-    .stage {
-      padding: 16px 24px 20px;
-    }
-
-    .video-shell {
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      border-radius: 14px;
-      overflow: hidden;
-      position: relative;
-      background: #0a0d13;
-      min-height: 280px;
-    }
-
-    video {
-      display: block;
-      width: 100%;
-      height: auto;
-      background: #07090d;
-    }
-
-    .video-controls {
-      position: absolute;
-      left: 12px;
-      bottom: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      grid-template-columns: minmax(0, .88fr) minmax(520px, 1.12fr);
+      gap: clamp(34px, 5vw, 88px);
       align-items: center;
+      padding-block: clamp(44px, 6vw, 92px);
+    }
+    .eyebrow { margin: 0 0 20px; color: var(--stamp); font-family: var(--mono); font-size: 12px; letter-spacing: .15em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: var(--display); font-size: clamp(50px, 6.2vw, 96px); font-weight: 500; letter-spacing: -.015em; line-height: .99; max-width: 780px; }
+    h1 em { font-style: italic; color: var(--signal); }
+    .hero-deck { margin: 28px 0 0; max-width: 690px; color: #c6c3ba; font-size: clamp(17px, 1.4vw, 21px); line-height: 1.55; }
+    .hero-deck strong { color: var(--paper); font-weight: 600; }
+    .command-row { margin-top: 34px; display: flex; align-items: stretch; max-width: 700px; }
+    .command { min-width: 0; flex: 1; background: var(--surface); border: 1px solid var(--rule); padding: 17px 20px; color: var(--signal); font-family: var(--mono); font-size: clamp(13px, 1.2vw, 16px); overflow-x: auto; white-space: nowrap; }
+    .copy { border: 1px solid var(--signal); background: var(--signal); color: #131208; padding: 0 22px; font-weight: 600; cursor: pointer; }
+    .copy:hover { background: #ffc24d; }
+    .hero-actions { display: flex; gap: 18px; align-items: center; margin-top: 22px; flex-wrap: wrap; }
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 45px; padding: 0 18px; border: 1px solid var(--paper); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .button.primary { background: var(--paper); color: #121212; }
+    .text-link { color: var(--muted); font-size: 14px; text-decoration-color: var(--rule); text-underline-offset: 5px; }
+    .client-rail { margin-top: 32px; color: #87847b; font-family: var(--mono); font-size: 11px; line-height: 1.8; text-transform: uppercase; letter-spacing: .05em; }
+
+    .proof { position: relative; border: 1px solid #38383e; background: #0a0a0b; overflow: hidden; }
+    .proof::before { content: "LIVE PROOF / 00:42"; display: block; position: absolute; z-index: 2; top: 15px; left: 17px; color: var(--paper); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; }
+    .proof::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.025); }
+    .proof video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #0a0a0b; }
+    .proof-caption { display: flex; justify-content: space-between; gap: 18px; align-items: baseline; padding: 17px 18px; border-top: 1px solid var(--rule); }
+    .proof-caption strong { font-family: var(--display); font-size: clamp(16px, 1.4vw, 21px); }
+    .proof-caption span { color: var(--muted); font-family: var(--mono); font-size: 11px; text-align: right; }
+
+    .trust { border-block: 1px solid var(--rule); }
+    .trust-inner { min-height: 72px; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; }
+    .trust a { min-height: 72px; display: flex; flex-direction: column; justify-content: center; padding: 0 18px; text-decoration: none; border-right: 1px solid var(--rule); }
+    .trust a:first-child { border-left: 1px solid var(--rule); }
+    .trust small { color: #838078; font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
+    .trust strong { margin-top: 5px; font-size: 13px; font-weight: 600; }
+    .trust strong.signal { color: var(--signal); }
+
+    section { border-bottom: 1px solid var(--rule); }
+    .section-grid { display: grid; grid-template-columns: 300px 1fr; gap: clamp(48px, 8vw, 140px); padding-block: clamp(80px, 10vw, 150px); }
+    .section-index { color: var(--stamp); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; }
+    .section-label { margin: 13px 0 0; font-family: var(--display); font-size: 19px; font-weight: 500; }
+    .section-copy h2 { margin: 0; max-width: 920px; font-family: var(--display); font-size: clamp(38px, 5vw, 74px); font-weight: 500; line-height: 1.05; letter-spacing: -.012em; }
+    .section-copy > p { max-width: 820px; margin: 26px 0 0; color: #b1aea5; font-size: 18px; line-height: 1.65; }
+
+    .outcome-flow { margin-top: 54px; display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--rule); }
+    .outcome { min-height: 190px; padding: 27px 20px; border-right: 1px solid var(--rule); }
+    .outcome:last-child { border-right: 0; }
+    .outcome .number { display: block; color: var(--paper); font-family: var(--display); font-size: clamp(50px, 5vw, 78px); line-height: 1; }
+    .outcome:nth-child(3) .number { color: var(--signal); }
+    .outcome:nth-child(4) .number { color: var(--stamp); }
+    .outcome p { margin: 18px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    .systems { margin-top: 58px; border-top: 1px solid var(--rule); }
+    .system { display: grid; grid-template-columns: 60px minmax(180px, .7fr) 1.3fr; gap: 25px; padding: 27px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+    .system .id { color: var(--signal); font-family: var(--mono); font-size: 11px; }
+    .system h3 { margin: 0; font-family: var(--display); font-size: 23px; font-weight: 500; }
+    .system p { margin: 0; color: var(--muted); line-height: 1.65; }
+
+    .diagram { margin-top: 52px; width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 22px; }
+    .decision { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule); }
+    .path { padding: clamp(28px, 4vw, 54px); }
+    .path + .path { border-left: 1px solid var(--rule); }
+    .path small { color: var(--stamp); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; }
+    .path:nth-child(2) small { color: var(--signal); }
+    .path h3 { margin: 14px 0 0; font-family: var(--display); font-size: clamp(27px, 3vw, 42px); font-weight: 500; }
+    .path p { color: var(--muted); line-height: 1.65; }
+    .path a { display: inline-block; margin-top: 12px; text-underline-offset: 5px; }
+
+    .final { min-height: 70vh; display: flex; align-items: center; text-align: center; }
+    .final-inner { width: 100%; padding-block: 100px; }
+    .final h2 { margin: 0 auto; max-width: 1000px; font-family: var(--display); font-size: clamp(46px, 7.5vw, 110px); line-height: .99; letter-spacing: -.015em; font-weight: 500; }
+    .final h2 span { color: var(--signal); }
+    .final .command-row { margin-inline: auto; }
+
+    footer { padding-block: 35px 50px; color: var(--muted); font-size: 13px; }
+    .footer-row { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .footer-row nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    .footer-row a { text-underline-offset: 4px; }
+
+    .reveal { opacity: 0; transform: translateY(18px); animation: reveal .65s ease forwards; }
+    .hero-copy .reveal:nth-child(2) { animation-delay: .08s; }
+    .hero-copy .reveal:nth-child(3) { animation-delay: .16s; }
+    .hero-copy .reveal:nth-child(4) { animation-delay: .24s; }
+    .proof.reveal { animation-delay: .2s; }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1040px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-copy { max-width: 850px; }
+      .proof { max-width: 900px; }
+      .section-grid { grid-template-columns: 190px 1fr; }
+      .trust-inner { grid-template-columns: repeat(3, 1fr); }
+      .trust a:nth-child(4) { border-left: 1px solid var(--rule); }
     }
 
-    .video-controls button,
-    .video-controls a {
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(14, 17, 24, 0.88);
-      color: #eef2f6;
-      border-radius: 10px;
-      padding: 7px 11px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
+    @media (max-width: 700px) {
+      .site-header { height: 58px; }
+      .nav a:not(.nav-cta) { display: none; }
+      .hero { min-height: auto; padding-block: 42px 55px; gap: 36px; }
+      h1 { font-size: clamp(48px, 15vw, 68px); }
+      .hero-deck { font-size: 17px; }
+      .command-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+      .command { padding: 14px 13px; font-size: 11px; }
+      .copy { padding-inline: 14px; }
+      .proof video { aspect-ratio: 9 / 16; }
+      .proof-caption { display: block; }
+      .proof-caption span { display: block; margin-top: 6px; text-align: left; }
+      .trust-inner { grid-template-columns: 1fr 1fr; }
+      .trust a, .trust a:first-child, .trust a:nth-child(4) { border-left: 0; border-right: 1px solid var(--rule); }
+      .section-grid { grid-template-columns: 1fr; gap: 35px; padding-block: 76px; }
+      .outcome-flow { grid-template-columns: 1fr 1fr; }
+      .outcome:nth-child(2) { border-right: 0; }
+      .outcome:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
+      .system { grid-template-columns: 36px 1fr; }
+      .system p { grid-column: 2; }
+      .decision { grid-template-columns: 1fr; }
+      .path + .path { border-left: 0; border-top: 1px solid var(--rule); }
+      .final { min-height: auto; }
+      .final h2 { font-size: clamp(54px, 16vw, 82px); }
     }
 
-    .video-status {
-      margin-left: auto;
-      margin-top: 8px;
-      color: #93a0af;
-      font-size: 0.83rem;
-    }
-
-    .footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 12px 24px 16px;
-      font-size: 0.88rem;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .footer a { color: #4ecdc4; }
-
-    @media (max-width: 760px) {
-      body { padding: 10px; }
-      .hero, .stage, .footer { padding-left: 12px; padding-right: 12px; }
-      .snapshot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .decision-grid { grid-template-columns: 1fr; }
-      .video-shell { min-height: 200px; }
-      .video-controls { left: 8px; bottom: 8px; }
-      .video-controls button,
-      .video-controls a { padding: 6px 9px; font-size: 0.8rem; }
-    }
-    @media (max-width: 560px) {
-      .snapshot-grid { grid-template-columns: 1fr; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; animation: none; }
     }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <section class="hero">
-      <h1>Slack MCP &mdash; without the broken OAuth</h1>
-      <p>Slack's official MCP server is OAuth-first and may require app registration, admin approval, or client compatibility workarounds. This one uses your browser session instead. No app, no admin, no friction. {{SELF_HOSTED_TOOL_COUNT}} tools, one command.</p>
-      <div class="cta-row">
-        <a href="{{GITHUB_PAGES_ROOT}}/public/demo-slack-mcp.html" style="background:rgba(255,107,107,0.16);border-color:rgba(255,107,107,0.45)"><strong style="color:#ff6b6b">Watch the Demo</strong></a>
-        <a href="{{SETUP_URL}}"><strong>Setup Guide</strong></a>
-        <a href="{{GITHUB_REPO_URL}}"><strong>GitHub</strong></a>
-        <a href="{{NPM_URL}}"><strong>npm</strong></a>
-        <a href="{{CANONICAL_SITE_URL}}"><strong>Hosted</strong></a>
+  <div class="page">
+    <header class="frame site-header">
+      <a class="brand" href="{{GITHUB_REPO_URL}}">Slack MCP <span>/ local</span></a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#proof">Proof</a>
+        <a href="#systems">Systems</a>
+        <a href="#paths">Paths</a>
+        <a class="nav-cta" href="{{SETUP_URL}}">Install</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="frame hero">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Slack’s operating layer for AI agents</p>
+          <h1 class="reveal">Ask what happened.<br><em>Get receipts.</em><br>Close the loop.</h1>
+          <p class="hero-deck reveal">Turn Slack from an interruption stream into searchable operating memory and approved action. Run the <strong>{{SELF_HOSTED_TOOL_COUNT}}-tool surface available today</strong> locally with no app/admin queue, or move recurring work to hosted permanent OAuth, indexing, and schedules.</p>
+          <div class="command-row reveal" aria-label="Install command">
+            <code class="command">npx -y @jtalk22/slack-mcp --setup</code>
+            <button class="copy" type="button" data-copy="npx -y @jtalk22/slack-mcp --setup">Copy</button>
+          </div>
+          <div class="hero-actions reveal">
+            <a class="button primary" href="{{SETUP_URL}}">Install locally</a>
+            <a class="text-link" href="public/demo-video.html">Watch the 42-second proof →</a>
+          </div>
+          <p class="client-rail reveal">Claude Code · Claude Desktop · Cursor · Copilot · Windsurf · Gemini CLI · Codex CLI · any stdio MCP client</p>
+        </div>
+
+        <a class="proof reveal" href="public/demo-video.html" aria-label="Watch the 42-second Slack MCP proof reel">
+          <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-poster.png">
+            <source src="docs/videos/slack-mcp-proof-42s.mp4" type="video/mp4">
+            <source src="docs/videos/slack-mcp-proof-42s.webm" type="video/webm">
+          </video>
+          <div class="proof-caption">
+            <strong>Monday, 9:07. Slack has already formed opinions.</strong>
+            <span>47 → 1 → 0 AFTER APPROVAL</span>
+          </div>
+        </a>
       </div>
-      <div class="verify">npx -y @jtalk22/slack-mcp --setup</div>
-    </section>
 
-    <section class="stage" style="padding-top:0">
-      <div class="snapshot-grid" aria-label="Current distribution snapshot">
-        <div class="snapshot-card">
-          <span class="snapshot-label">npm latest</span>
-          <strong class="snapshot-value" id="npmLatest">Loading...</strong>
-          <span class="snapshot-note" id="npmLatestNote">Registry dist-tag for <code>@jtalk22/slack-mcp</code>.</span>
+      <aside class="trust" aria-label="Project trust signals">
+        <div class="frame trust-inner">
+          <a href="{{NPM_URL}}"><small>npm</small><strong id="npmVersion">latest release</strong></a>
+          <a href="{{NPM_URL}}"><small>distribution</small><strong id="npmDownloads">total downloads</strong></a>
+          <a href="{{GITHUB_REPO_URL}}/actions/workflows/ci.yml"><small>build</small><strong class="signal">CI verified</strong></a>
+          <a href="{{GITHUB_REPO_URL}}#provenance-dont-take-my-word-for-it"><small>supply chain</small><strong class="signal">provenance signed</strong></a>
+          <a href="https://registry.modelcontextprotocol.io"><small>discovery</small><strong>MCP Registry</strong></a>
         </div>
-        <div class="snapshot-card">
-          <span class="snapshot-label">GitHub release</span>
-          <strong class="snapshot-value" id="releaseTag">Loading...</strong>
-          <span class="snapshot-note" id="releaseTagNote">Latest tagged release from GitHub.</span>
+      </aside>
+
+      <section id="proof">
+        <div class="frame section-grid">
+          <div><span class="section-index">01 / OUTCOME</span><p class="section-label">What blew up overnight?</p></div>
+          <div class="section-copy">
+            <h2>Slack noise goes in. A prioritized operating brief comes out.</h2>
+            <p>The agent inventories unread channels and DMs, retrieves the history that matters, finds buried details, and closes approved loops through real Slack tool calls.</p>
+            <div class="outcome-flow" aria-label="47 unread messages become one brief without opening Slack">
+              <div class="outcome"><span class="number">47</span><p>unread messages competing for attention</p></div>
+              <div class="outcome"><span class="number">4</span><p>conversations with work that actually matters</p></div>
+              <div class="outcome"><span class="number">1</span><p>prioritized brief with owners, risks, and next actions</p></div>
+              <div class="outcome"><span class="number">0</span><p>Slack tabs required to understand the morning</p></div>
+            </div>
+          </div>
         </div>
-        <div class="snapshot-card">
-          <span class="snapshot-label">Hosted status</span>
-          <strong class="snapshot-value" id="cloudHealth">Checking...</strong>
-          <span class="snapshot-note" id="cloudHealthNote">Reads the hosted <code>/status</code> endpoint and degrades to a raw status link only if cross-origin access is unavailable.</span>
+      </section>
+
+      <section id="systems">
+        <div class="frame section-grid">
+          <div><span class="section-index">02 / SYSTEMS</span><p class="section-label">Built past the demo.</p></div>
+          <div class="section-copy">
+            <h2>The difficult part is not another chat tool. It is the operating layer underneath.</h2>
+            <p>The local path combines browser-session extraction, a real credential lifecycle, full-fidelity Slack reads, guarded action tools, and automation-ready output.</p>
+            <div class="systems">
+              <article class="system"><span class="id">01</span><h3>Browser-session engine</h3><p>Chrome LevelDB, cookie SQLite + WAL, macOS Keychain, PBKDF2, and AES decryption—locally, with structured failure codes.</p></article>
+              <article class="system"><span class="id">02</span><h3>Credential lifecycle</h3><p>Keychain-only storage, owner-only files, atomic writes, cross-process locks, health monitoring, refresh, and isolated workspace profiles.</p></article>
+              <article class="system"><span class="id">03</span><h3>Full-fidelity reads</h3><p>DMs, channels, search, complete histories, threads, unread state, users, blocks, attachments, files, reactions, and metadata.</p></article>
+              <article class="system"><span class="id">04</span><h3>Approved action</h3><p>Replies, reactions, and read-state changes with MCP destructive annotations so the client can gate workspace writes.</p></article>
+              <article class="system"><span class="id">05</span><h3>Typed workflows</h3><p>Incident, executive, support, launch, and custom profiles that turn Slack into contract-shaped JSON rather than prompt-shaped glue.</p></article>
+            </div>
+          </div>
         </div>
-        <div class="snapshot-card">
-          <span class="snapshot-label">Operator links</span>
-          <strong class="snapshot-value"><a href="{{RELEASE_HEALTH_URL}}">Release health</a></strong>
-          <span class="snapshot-note"><a href="{{VERSION_PARITY_URL}}">Version parity</a> · <a href="{{RUNBOOK_URL}}">Runbook</a></span>
+      </section>
+
+      <section id="paths">
+        <div class="frame section-grid">
+          <div><span class="section-index">03 / ACCESS</span><p class="section-label">Same workspace. Different gate.</p></div>
+          <div class="section-copy">
+            <h2>Slack already knows who you are.</h2>
+            <p>The official path is a managed remote integration governed by workspace policy. The local path starts from the browser session you already have; the hosted path turns the same operating jobs into durable, unattended workflows.</p>
+            <img class="diagram" src="docs/images/diagram-oauth-comparison.svg" alt="Two paths into Slack: a managed integration path and the local browser-session path">
+            <div class="decision">
+              <article class="path"><small>LOCAL / MIT / FREE</small><h3>Move now.</h3><p>One-command setup, existing browser permissions, the full current tool surface, and the runtime on your machine. Best for interactive, operator-driven work.</p><a href="{{SETUP_URL}}">Run local setup →</a></article>
+              <article class="path"><small>HOSTED / PERMANENT OAUTH</small><h3>Run unattended.</h3><p>Indexed retrieval, AI triage, scheduled briefs, shared profiles, managed workspaces, and no browser-session rotation.</p><a href="{{CANONICAL_SITE_URL}}">See hosted →</a></article>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <section class="final">
+        <div class="frame final-inner">
+          <p class="eyebrow">If you can read it in Slack, your agent can work from it.</p>
+          <h2>Make Slack useful.<br><span>Without living in it.</span></h2>
+          <div class="command-row">
+            <code class="command">npx -y @jtalk22/slack-mcp --setup</code>
+            <button class="copy" type="button" data-copy="npx -y @jtalk22/slack-mcp --setup">Copy</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="frame">
+      <div class="footer-row">
+        <span>MIT · not affiliated with Slack Technologies, Inc.</span>
+        <nav aria-label="Footer links"><a href="{{GITHUB_REPO_URL}}">GitHub</a><a href="{{NPM_URL}}">npm</a><a href="{{SETUP_URL}}">Setup</a><a href="{{CANONICAL_SITE_URL}}">Hosted</a><a href="mailto:{{SUPPORT_EMAIL}}">Support</a></nav>
       </div>
-    </section>
-
-{{ROOT_DECISION_PANEL}}
-
-    <section class="stage">
-      <div class="video-shell">
-        <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-poster.png" aria-label="Slack MCP demo autoplay">
-          <source src="docs/videos/demo-slack-mcp-hq.mp4" type="video/mp4">
-          <track kind="captions" src="docs/videos/demo-slack-mcp.vtt" srclang="en" label="English captions">
-        </video>
-        <div class="video-controls">
-          <button type="button" id="playBtn" aria-label="Play Slack MCP demo video">Play</button>
-          <button type="button" id="pauseBtn" aria-label="Pause Slack MCP demo video">Pause</button>
-          <a href="public/demo-slack-mcp.html">Interactive Demo</a>
-          <a href="public/demo-video.html">Video Demo</a>
-        </div>
-      </div>
-      <div class="video-status" id="videoStatus">Autoplay check in progress...</div>
-    </section>
-
-    <footer class="footer">
-      <span><a href="{{GITHUB_REPO_URL}}">GitHub</a> · <a href="{{NPM_URL}}">npm</a> · <a href="{{CANONICAL_SITE_URL}}">Hosted</a> · <a href="mailto:{{SUPPORT_EMAIL}}">{{SUPPORT_EMAIL}}</a></span>
-      <span>MIT License · <a href="https://github.com/sponsors/jtalk22">Sponsor</a></span>
     </footer>
-  </main>
+  </div>
 
   <script>
-    const video = document.getElementById('heroVideo');
-    const statusEl = document.getElementById('videoStatus');
-    const playBtn = document.getElementById('playBtn');
-    const pauseBtn = document.getElementById('pauseBtn');
-    const npmLatestEl = document.getElementById('npmLatest');
-    const npmLatestNoteEl = document.getElementById('npmLatestNote');
-    const releaseTagEl = document.getElementById('releaseTag');
-    const releaseTagNoteEl = document.getElementById('releaseTagNote');
-    const cloudHealthEl = document.getElementById('cloudHealth');
-    const cloudHealthNoteEl = document.getElementById('cloudHealthNote');
+    const DESKTOP_VIDEO = 'docs/videos/slack-mcp-proof-42s.mp4';
+    const MOBILE_VIDEO = 'docs/videos/slack-mcp-proof-20s-vertical.mp4';
+    const heroVideo = document.getElementById('heroVideo');
 
-    async function ensureAutoplay() {
-      try {
-        await video.play();
-        statusEl.textContent = 'Autoplay active (muted).';
-      } catch {
-        statusEl.textContent = 'Autoplay blocked by browser policy. Use Play to start.';
-      }
+    if (window.matchMedia('(max-width: 700px)').matches) {
+      heroVideo.querySelectorAll('source').forEach((source) => source.remove());
+      heroVideo.src = MOBILE_VIDEO;
+      heroVideo.load();
+      heroVideo.play().catch(() => {});
     }
 
-    playBtn.addEventListener('click', async () => {
-      try {
-        await video.play();
-        statusEl.textContent = 'Playback active.';
-      } catch {
-        statusEl.textContent = 'Playback blocked. Check browser media settings.';
-      }
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const previous = button.textContent;
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy);
+          button.textContent = 'Copied';
+        } catch {
+          button.textContent = 'Copy failed';
+        }
+        setTimeout(() => { button.textContent = previous; }, 1400);
+      });
     });
 
-    pauseBtn.addEventListener('click', () => {
-      video.pause();
-      statusEl.textContent = 'Playback paused.';
-    });
+    fetch('https://registry.npmjs.org/@jtalk22%2Fslack-mcp/latest')
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error('npm unavailable')))
+      .then((data) => { document.getElementById('npmVersion').textContent = `v${data.version}`; })
+      .catch(() => {});
 
-    async function loadDistributionSnapshot() {
-      const npmPromise = fetch('https://registry.npmjs.org/@jtalk22/slack-mcp/latest')
-        .then((res) => {
-          if (!res.ok) throw new Error(`npm registry returned ${res.status}`);
-          return res.json();
-        })
-        .then((data) => {
-          npmLatestEl.textContent = `v${data.version}`;
-          npmLatestNoteEl.textContent = `Published package: ${data.name}`;
-        })
-        .catch((error) => {
-          npmLatestEl.textContent = 'Unavailable';
-          npmLatestNoteEl.textContent = `Registry lookup failed: ${error.message}`;
-        });
-
-      const releasePromise = fetch('https://api.github.com/repos/jtalk22/slack-mcp-server/releases/latest')
-        .then((res) => {
-          if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
-          return res.json();
-        })
-        .then((data) => {
-          releaseTagEl.textContent = data.tag_name || 'Unknown';
-          const publishedAt = data.published_at
-            ? new Date(data.published_at).toLocaleDateString()
-            : 'date unavailable';
-          releaseTagNoteEl.textContent = `GitHub Release published ${publishedAt}.`;
-        })
-        .catch((error) => {
-          releaseTagEl.textContent = 'Unavailable';
-          releaseTagNoteEl.textContent = `GitHub release lookup failed: ${error.message}`;
-        });
-
-      const cloudPromise = fetch('{{CLOUD_STATUS_URL}}', {
-        headers: { accept: 'application/json' }
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error(`Hosted status returned ${res.status}`);
-          return res.json();
-        })
-        .then((data) => {
-          cloudHealthEl.textContent = data.status || 'ok';
-          const hostedVersion = data.version ? `v${data.version}` : 'version unavailable';
-          // Hosted /status emits tools:{free,paid,total} (v5 shape); accept the
-          // legacy {standard,ai_compound} keys too so neither side can strand the tile.
-          const toolCounts = data.tools || {};
-          const standardTools = typeof toolCounts.free === 'number' ? toolCounts.free
-            : (typeof toolCounts.standard === 'number' ? toolCounts.standard : 'Unavailable');
-          const aiTools = typeof toolCounts.paid === 'number' ? toolCounts.paid
-            : (typeof toolCounts.ai_compound === 'number' ? toolCounts.ai_compound : 'Unavailable');
-          const remoteDocsUrl = data.docs && typeof data.docs.docs_url === 'string' ? data.docs.docs_url : '';
-          const docsUrl = remoteDocsUrl.startsWith('https://') ? remoteDocsUrl : '{{CLOUD_DOCS_URL}}';
-          // Remote /status fields are untrusted input: build the note from
-          // text nodes + setAttribute — never innerHTML string interpolation.
-          cloudHealthNoteEl.textContent = '';
-          cloudHealthNoteEl.append(`${hostedVersion} · ${standardTools} managed tools + ${aiTools} AI workflows. OSS has {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools; `);
-          const docsLink = document.createElement('a');
-          docsLink.setAttribute('href', docsUrl);
-          docsLink.textContent = 'Hosted docs';
-          cloudHealthNoteEl.append(docsLink);
-        })
-        .catch((error) => {
-          cloudHealthEl.textContent = 'Status available';
-          cloudHealthNoteEl.textContent = '';
-          cloudHealthNoteEl.append(`Cross-origin status lookup unavailable: ${error.message}. Use `);
-          const statusLink = document.createElement('a');
-          statusLink.setAttribute('href', '{{CLOUD_STATUS_URL}}');
-          statusLink.textContent = 'raw status JSON';
-          cloudHealthNoteEl.append(statusLink);
-          cloudHealthNoteEl.append('.');
-        });
-
-      await Promise.allSettled([npmPromise, releasePromise, cloudPromise]);
-    }
-
-    ensureAutoplay();
-    loadDistributionSnapshot();
+    const downloadEnd = new Date().toISOString().slice(0, 10);
+    fetch(`https://api.npmjs.org/downloads/point/2026-01-03:${downloadEnd}/%40jtalk22%2Fslack-mcp`)
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error('downloads unavailable')))
+      .then((data) => { document.getElementById('npmDownloads').textContent = `${new Intl.NumberFormat('en').format(data.downloads)} downloads since Jan`; })
+      .catch(() => {});
   </script>
 </body>
 </html>

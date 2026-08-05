@@ -1,10 +1,10 @@
 {
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "name": "slack-mcp-server",
-  "description": "Slack MCP without OAuth — 21 tools, session-based. Free OSS; hosted has a free tier, Pro $19/mo.",
+  "description": "Slack’s operating layer for AI agents: DMs, search, full threads, unread triage, actions, and workflows—local browser-session auth or hosted permanent OAuth.",
   "repository": "https://github.com/jtalk22/slack-mcp-server",
   "homepage": "https://mcp.revasserlabs.com",
-  "version": "4.6.1",
+  "version": "4.6.2",
   "license": "MIT",
   "maintainers": [
     "jtalk22"

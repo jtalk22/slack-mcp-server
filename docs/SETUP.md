@@ -1,115 +1,69 @@
 # Setup Guide
 
-## Hosted (Optional)
+Turn the Slack browser session you already have into 21 tools for any stdio MCP client.
 
-A hosted version with permanent OAuth tokens, semantic search, and AI summaries is live at [mcp.revasserlabs.com](https://mcp.revasserlabs.com) — free tier, no card. Everything below is the self-hosted path, which is complete on its own.
+## Fast path
 
----
+**Node 22 or 24 recommended. Node 20 remains supported for the v4 line.**
 
-## Self-Hosted Setup
+On macOS, sign into Slack in Chrome once, then run:
 
-### Prerequisites
+```bash
+npx -y @jtalk22/slack-mcp --setup
+```
 
-- Node.js 20+
-- Google Chrome (for token extraction on macOS)
-- macOS (for Keychain storage - other platforms use file storage only)
+The wizard:
 
-### 1. Install via npm
+1. asks where credentials should live;
+2. extracts the current Chrome Slack session locally;
+3. validates the Slack identity and workspace;
+4. persists the selected storage mode;
+5. prints the next client-configuration step.
+
+Chrome does not need to stay open after the session exists on disk. No DevTools or clipboard step is required for the normal macOS path.
+
+Prefer a persistent global command:
 
 ```bash
 npm install -g @jtalk22/slack-mcp
-# or use npx (no install):
-npx -y @jtalk22/slack-mcp --version
+slack-mcp --setup
 ```
 
-### 1b. Or Clone the Repository
+## Verify the CLI
 
 ```bash
-git clone https://github.com/jtalk22/slack-mcp-server.git
-cd slack-mcp-server
-npm install
-```
-
-### 2. Verify Installation
-
-```bash
-tmpdir="$(mktemp -d)"
-cd "$tmpdir"
 npx -y @jtalk22/slack-mcp --version
 npx -y @jtalk22/slack-mcp --help
 npx -y @jtalk22/slack-mcp --doctor
 ```
 
-Expected:
-- `--version` and `--help` succeed.
-- `--doctor` exits with one clear status:
-  - `0` ready
-  - `1` missing credentials
-  - `2` invalid/expired credentials
-  - `3` connectivity/runtime issue
-- `--status` is read-only and never performs Chrome extraction.
+`--doctor` exits with one classified result:
 
-### 3. Get Slack Tokens
+- `0`: ready;
+- `1`: credentials missing;
+- `2`: credentials invalid or expired;
+- `3`: network or runtime failure.
 
-**Option A: Setup Wizard**
+`--status` is read-only and does not trigger Chrome extraction.
 
-1. Open Chrome
-2. Navigate to https://app.slack.com and log in
-3. Run:
-   ```bash
-   npx -y @jtalk22/slack-mcp --setup
-   ```
+## Pick your client
 
-**Option B: Automatic Extraction (repo clone workflow)**
-
-```bash
-npm run tokens:auto
-```
-
-**Option C: Manual Extraction**
-
-1. Open https://app.slack.com in Chrome
-2. Press F12 to open DevTools
-3. Go to **Application** → **Cookies** → **https://app.slack.com**
-4. Find the cookie named `d` and copy its value (starts with `xoxd-`)
-5. Go to **Console** and paste:
-   ```javascript
-   JSON.parse(localStorage.localConfig_v2).teams[Object.keys(JSON.parse(localStorage.localConfig_v2).teams)[0]].token
-   ```
-6. Copy the result (starts with `xoxc-`)
-7. Run:
-   ```bash
-   npm run tokens:refresh
-   ```
-   And paste both values when prompted.
-
-### 4. Configure Claude Desktop
-
-**macOS:** Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows:** Edit `%APPDATA%\Claude\claude_desktop_config.json`
+Every local client starts the same stdio command:
 
 ```json
 {
-  "mcpServers": {
-    "slack": {
-      "command": "npx",
-      "args": ["-y", "@jtalk22/slack-mcp"]
-    }
-  }
+  "command": "npx",
+  "args": ["-y", "@jtalk22/slack-mcp"]
 }
 ```
 
-Fully restart Claude Desktop (Cmd+Q on macOS, then reopen).
-
-**Verify it's working:** Check `~/Library/Logs/Claude/mcp-server-slack.log` (macOS)
-
-### 5. Configure Claude Code (CLI)
+### Claude Code
 
 ```bash
-claude mcp add slack npx -y @jtalk22/slack-mcp
+claude mcp add slack -- npx -y @jtalk22/slack-mcp
 ```
 
-Or manually edit `~/.claude.json`:
+Or add to `~/.claude.json`:
 
 ```json
 {
@@ -123,62 +77,198 @@ Or manually edit `~/.claude.json`:
 }
 ```
 
-Claude Code reads tokens from `~/.slack-mcp-tokens.json` automatically.
+### Claude Desktop
 
-### Optional: Keychain-Only Credential Storage (macOS)
+Configuration file:
 
-By default, tokens are written to `~/.slack-mcp-tokens.json` (chmod 600) with the macOS Keychain as an encrypted backup. If you don't want plaintext credentials on disk at all, pick **Keychain only** when `--setup` asks where to store tokens — the choice is remembered (in `~/.slack-mcp-meta.json`), so the server, the CLI, and any LaunchAgent all follow it automatically. Already set up? Re-run `npx -y @jtalk22/slack-mcp --setup` and pick option 2; your existing token file is imported into the Keychain, then deleted once both entries verify by read-back. If that deletion ever fails (e.g. a permissions problem), nothing is silent about it: the operation reports `plaintext_removal_failed` with the exact `rm` command to run, and the file is flagged as `plaintext_file_present` in `slack_token_status` until it is gone.
-
-In this mode credentials live exclusively in the macOS Keychain. `--setup`, `slack_refresh_tokens`, and automatic refresh all work unchanged, and non-secret bookkeeping (token timestamp, auto-heal telemetry) moves to `~/.slack-mcp-meta.json` so `slack_token_status` age reporting keeps working.
-
-The `SLACK_MCP_TOKEN_STORAGE` env var overrides the setup choice when set (`auto`, `keychain-only`, or `file`) — useful for forcing a mode per client config:
-
-```json
-"env": {
-  "SLACK_MCP_TOKEN_STORAGE": "keychain-only"
-}
-```
-
-Two things to know:
-
-- The Keychain must be unlocked for writes. A background refresh against a locked Keychain fails with a clear error and retries on the next cycle — your existing Keychain credentials are untouched.
-- Unrecognized mode values fail at startup with a clear error rather than silently falling back to plaintext.
-
-`SLACK_MCP_TOKEN_STORAGE=file` is the third mode: token file only, Keychain never touched (no Keychain prompts — useful on shared machines and in CI).
-
-### Optional: Multiple Workspaces (Profiles)
-
-Set `SLACK_MCP_PROFILE=<name>` (or pass `--profile <name>` to any CLI command) to give a server instance its own credential namespace — `~/.slack-mcp-tokens-<name>.json`, `~/.slack-mcp-meta-<name>.json`, and a per-profile Keychain service. Two MCP client entries with different profiles run side-by-side without sharing or overwriting each other's tokens:
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
-    "slack-work":     { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"], "env": { "SLACK_MCP_PROFILE": "work" } },
-    "slack-personal": { "command": "npx", "args": ["-y", "@jtalk22/slack-mcp"], "env": { "SLACK_MCP_PROFILE": "personal" } }
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
   }
 }
 ```
 
-Run `--setup --profile work` once per profile. If each workspace lives in a different Chrome profile, also set `SLACK_MCP_CHROME_PROFILE` per entry so extraction reads the right browser profile. Profile names are 1-32 characters (letters, digits, `-`, `_`); anything else fails at startup rather than silently writing to the default namespace.
+### Cursor
 
-### 6. Restart Claude
+Add to `.cursor/mcp.json`:
 
-The Slack tools will now be available in both Claude Desktop and Claude Code.
-
-## Verification
-
-In Claude Code, try:
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
+  }
+}
 ```
+
+### GitHub Copilot in VS Code
+
+Add to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
+  }
+}
+```
+
+### Windsurf
+
+Add to `~/.codeium/windsurf/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
+  }
+}
+```
+
+### Gemini CLI
+
+Add to `~/.gemini/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
+  }
+}
+```
+
+### Codex CLI
+
+```bash
+codex mcp add slack -- npx -y @jtalk22/slack-mcp
+```
+
+Or add to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.slack]
+command = "npx"
+args = ["-y", "@jtalk22/slack-mcp"]
+```
+
+### Any other stdio MCP client
+
+Point the client's stdio MCP configuration at:
+
+```text
+npx -y @jtalk22/slack-mcp
+```
+
+On Windows or Linux, pass `SLACK_TOKEN` and `SLACK_COOKIE` through the client's environment configuration because macOS Chrome/Keychain extraction is unavailable.
+
+## Restart and prove the connection
+
+Fully restart the client after adding its MCP configuration. MCP clients commonly snapshot tool lists at startup.
+
+Then ask the agent to run:
+
+```text
 slack_health_check
 ```
 
-You should see your username and team name.
+A returned workspace and username means the server is live.
 
-## Keep Tokens Fresh While Claude Is Closed (macOS, Optional)
+Useful follow-ups:
 
-The MCP server auto-refreshes tokens every 4 hours while Claude is running. But if you keep Claude closed for a couple weeks, tokens expire silently — your next session opens with `invalid_auth`.
+```text
+slack_token_status
+slack_list_conversations
+slack_conversations_unreads
+```
 
-A LaunchAgent fixes this. It runs token refresh twice a day regardless of whether Claude is open, as long as Chrome is running with a Slack tab somewhere.
+## Storage modes
+
+The macOS setup wizard remembers the selected backend in `~/.slack-mcp-meta.json`. `SLACK_MCP_TOKEN_STORAGE` can override it per client or process.
+
+### `auto` — default
+
+- owner-only token file;
+- macOS Keychain backup;
+- automatic local refresh.
+
+### `keychain-only`
+
+- credentials live exclusively in the macOS Keychain;
+- no plaintext credential file is written;
+- file-to-Keychain migration is verified by read-back before the old file is removed;
+- a failed Keychain write never silently falls back to plaintext.
+
+Choose **Keychain only** during setup, or configure:
+
+```json
+{
+  "env": {
+    "SLACK_MCP_TOKEN_STORAGE": "keychain-only"
+  }
+}
+```
+
+If a background refresh cannot write to a locked Keychain, the fresh credentials stay available in process memory and persistence is retried later. Existing Keychain entries remain untouched.
+
+### `file`
+
+- owner-only token file;
+- Keychain is never accessed;
+- useful for CI or machines where Keychain prompts are undesirable.
+
+An unknown storage mode fails at startup rather than guessing.
+
+## Multiple workspaces
+
+Use a profile to isolate every credential and metadata surface:
+
+```json
+{
+  "mcpServers": {
+    "slack-work": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"],
+      "env": { "SLACK_MCP_PROFILE": "work" }
+    },
+    "slack-personal": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"],
+      "env": { "SLACK_MCP_PROFILE": "personal" }
+    }
+  }
+}
+```
+
+Set up each profile once:
+
+```bash
+npx -y @jtalk22/slack-mcp --setup --profile work
+npx -y @jtalk22/slack-mcp --setup --profile personal
+```
+
+When workspaces live in different Chrome profiles, add `SLACK_MCP_CHROME_PROFILE` to each entry. Profile names accept 1–32 letters, numbers, hyphens, and underscores; invalid names fail closed.
+
+## Keep credentials fresh during long idle periods
+
+The MCP server checks credential health and can refresh while it is running. An optional macOS LaunchAgent can refresh twice daily even when the MCP client is closed.
 
 Create `~/Library/LaunchAgents/com.yourname.slack-token-refresh.plist`:
 
@@ -189,14 +279,6 @@ Create `~/Library/LaunchAgents/com.yourname.slack-token-refresh.plist`:
 <dict>
     <key>Label</key>
     <string>com.yourname.slack-token-refresh</string>
-    <!-- The storage mode chosen in the setup wizard is followed automatically.
-         To force one for this agent only, uncomment this block:
-    <key>EnvironmentVariables</key>
-    <dict>
-        <key>SLACK_MCP_TOKEN_STORAGE</key>
-        <string>keychain-only</string>
-    </dict>
-    -->
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
@@ -220,36 +302,57 @@ Load it:
 launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.yourname.slack-token-refresh.plist
 ```
 
-Check it ran:
+The refresh process follows the storage mode selected during setup. Users of Homebrew Node can replace the `nvm` wrapper with explicit `/opt/homebrew/bin/node` and `/opt/homebrew/bin/npx` paths.
+
+## Manual credentials
+
+Manual extraction remains available when automatic macOS extraction is not applicable:
+
+1. retrieve your own `xoxc-` session token and `xoxd-` `d` cookie from the signed-in Slack browser session;
+2. pass them as `SLACK_TOKEN` and `SLACK_COOKIE` through the MCP client's environment configuration;
+3. never paste them into an issue, prompt, log, or checked-in file.
+
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for extraction failure codes and recovery actions.
+
+## Docker and HTTP
 
 ```bash
-tail /tmp/slack-token-refresh.log
+docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 ```
 
-**Why the `bash -c` wrapper:** LaunchAgents start without a TTY, so a bare `node` won't be on PATH if you use nvm. The wrapper sources `nvm.sh` first, then runs the refresher. (If you installed node via Homebrew, replace the whole inner command with `/opt/homebrew/bin/node /opt/homebrew/bin/npx -y @jtalk22/slack-mcp --refresh-tokens`.)
+The package also includes local HTTP and self-hosted deployment modes. See [DEPLOYMENT-MODES.md](DEPLOYMENT-MODES.md) for transport, authentication, and allowed-origin configuration.
 
-**Trade-off:** Chrome must be running for extraction to succeed. If it's not, the LaunchAgent logs "Failed to extract" and tokens stay where they are — which is fine for another 12 hours.
+## Hosted alternative
+
+The self-hosted server is complete. Hosted is the continuation path when the workflow must run without browser-session rotation:
+
+- permanent OAuth;
+- indexed search;
+- scheduled and contract-validated briefs;
+- shared workspace profiles.
+
+[Hosted free tier and live pricing →](https://mcp.revasserlabs.com/pricing)
 
 ## Troubleshooting
 
-### "No credentials found"
+### Missing credentials
 
-Run `npx -y @jtalk22/slack-mcp --doctor` to confirm diagnostic code, then `npx -y @jtalk22/slack-mcp --setup` with Slack open in Chrome.
+```bash
+npx -y @jtalk22/slack-mcp --doctor
+npx -y @jtalk22/slack-mcp --setup
+```
 
-### "invalid_auth" Error
+### `invalid_auth`
 
-Tokens have expired. Run `npx -y @jtalk22/slack-mcp --doctor` and follow the suggested next action.
+The Slack session rotated or was revoked. Re-run setup or call `slack_refresh_tokens` on macOS.
 
-### MCP Server Not Loading
+### Client does not show the tools
 
-1. Check `~/.claude.json` syntax
-2. Verify JSON syntax in your client's MCP config
-3. Restart Claude Code
+1. validate the client's MCP configuration syntax;
+2. confirm `npx -y @jtalk22/slack-mcp --version` works in a normal shell;
+3. fully quit and restart the client;
+4. run `slack_health_check` again.
 
-### Chrome Extraction Fails
+### Chrome extraction fails
 
-Make sure:
-- Chrome is running (not just in dock)
-- You have a Slack tab open (not the desktop app)
-- You're logged into Slack in that tab
-- In Chrome menu, enable `View > Developer > Allow JavaScript from Apple Events`
+Run `--doctor` and use the structured extraction code. The failure table and exact next actions live in [TROUBLESHOOTING.md](TROUBLESHOOTING.md).

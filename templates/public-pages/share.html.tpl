@@ -4,30 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server</title>
-  <meta name="description" content="No OAuth. No admin. {{SELF_HOSTED_TOOL_COUNT}} Slack tools for Claude, Cursor, Copilot, Gemini, and any MCP client. One command: npx -y @jtalk22/slack-mcp --setup">
+  <meta name="description" content="Slack’s operating layer for AI agents: local browser-session control or hosted permanent OAuth for recurring workflows.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta property="og:description" content="OAuth-free Slack MCP using your browser session. {{SELF_HOSTED_TOOL_COUNT}} tools, works with Claude, Cursor, Copilot, Gemini.">
+  <meta property="og:title" content="Slack MCP Server — Ask what happened. Get receipts. Close the loop.">
+  <meta property="og:description" content="The free local path ships {{SELF_HOSTED_TOOL_COUNT}} tools today. Hosted adds permanent OAuth, indexing, schedules, and team continuity.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta name="twitter:description" content="{{SELF_HOSTED_TOOL_COUNT}} tools for Claude, Cursor, Copilot, Gemini. npx -y @jtalk22/slack-mcp --setup">
+  <meta name="twitter:title" content="Slack’s operating layer for AI agents">
+  <meta name="twitter:description" content="Local control now. Hosted continuity when the workflow must run without you.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <style>
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400; }
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
     :root {
-      --bg-1: #0b1436;
-      --bg-2: #0e1d49;
-      --line: rgba(131, 161, 224, 0.36);
-      --text: #edf4ff;
-      --muted: #b4c4e8;
-      --link-bg: rgba(17, 57, 120, 0.7);
-      --link-bg-hover: rgba(22, 71, 148, 0.85);
-      --accent: #54d8cf;
+      --bg-1: #0b0b0c;
+      --bg-2: #17130a;
+      --line: rgba(238, 235, 227, 0.22);
+      --text: #eeebe3;
+      --muted: #b3b0a7;
+      --link-bg: rgba(46, 40, 26, 0.7);
+      --link-bg-hover: rgba(64, 54, 32, 0.85);
+      --accent: #ffb224;
     }
     * { box-sizing: border-box; }
     body {
@@ -35,10 +37,10 @@
       min-height: 100vh;
       color: var(--text);
       background:
-        radial-gradient(900px 430px at 12% 0%, #2b4f98 0%, transparent 60%),
-        radial-gradient(980px 480px at 100% 100%, #124b8c 0%, transparent 64%),
+        radial-gradient(900px 430px at 12% 0%, rgba(229,72,47,.28) 0%, transparent 60%),
+        radial-gradient(980px 480px at 100% 100%, rgba(255,178,36,.2) 0%, transparent 64%),
         linear-gradient(145deg, var(--bg-1), var(--bg-2));
-      font-family: "Space Grotesk", "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+      font-family: "Roobert", "Segoe UI", Arial, sans-serif;
       display: grid;
       place-items: center;
       padding: 20px;
@@ -47,7 +49,7 @@
       width: min(980px, 100%);
       border: 1px solid var(--line);
       border-radius: 16px;
-      background: linear-gradient(165deg, rgba(17, 41, 92, 0.72), rgba(10, 22, 56, 0.9));
+      background: linear-gradient(165deg, rgba(30, 27, 19, 0.72), rgba(13, 12, 9, 0.9));
       box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
       padding: 16px;
     }

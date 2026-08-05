@@ -159,7 +159,14 @@ function npmPackSnapshot() {
 
   try {
     const parsed = JSON.parse(result.stdout);
-    const entry = Array.isArray(parsed) ? parsed[0] : parsed;
+    const entry = Array.isArray(parsed)
+      ? parsed[0]
+      : (parsed && typeof parsed === "object" && !("files" in parsed)
+          ? Object.values(parsed)[0]
+          : parsed);
+    if (!entry || typeof entry !== "object") {
+      throw new Error("npm pack output did not contain a package entry");
+    }
     const fileCount = Array.isArray(entry.files) ? entry.files.length : 0;
     const details = `package size ${entry.size} bytes, unpacked ${entry.unpackedSize} bytes, files ${fileCount}`;
     return { ok: true, details, output: result.stdout };
@@ -241,6 +248,7 @@ function main() {
     publicLanguageStep(),
     markerScanStep(),
     runNodeStep("Generated public pages", "scripts/verify-generated-public-pages.js"),
+    runNodeStep("Media manifest", "scripts/media-manifest.js", ["--check"]),
     runNodeStep("Public surface integrity", "scripts/check-public-surface-integrity.js"),
     runNodeStep("Core verification", "scripts/verify-core.js"),
     runNodeStep("Web verification", "scripts/verify-web.js"),

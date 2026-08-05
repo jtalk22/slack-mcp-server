@@ -1,352 +1,169 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slack MCP Server — Video Demo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What blew up overnight? — Slack MCP proof</title>
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
-  <meta name="description" content="OAuth-free Slack MCP using your browser session. {{SELF_HOSTED_TOOL_COUNT}} tools, one command, no app registration.">
+  <meta name="description" content="Watch 47 unread Slack messages become one prioritized briefing through real Slack MCP tool calls.">
   <meta property="og:type" content="video.other">
-  <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta property="og:description" content="{{SELF_HOSTED_TOOL_COUNT}} tools for search, threads, DMs, reactions, and more. Works with Claude, Cursor, Copilot, Gemini. One command: npx -y @jtalk22/slack-mcp --setup">
+  <meta property="og:title" content="It’s Monday, 9:07 AM. What blew up overnight?">
+  <meta property="og:description" content="{{SELF_HOSTED_TOOL_COUNT}} Slack tools. One local command. No Slack app or admin queue.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
-  <meta property="og:video" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp-mobile-20s.mp4">
-  <meta property="og:video:secure_url" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp-mobile-20s.mp4">
+  <meta property="og:video" content="{{GITHUB_PAGES_ROOT}}/docs/videos/slack-mcp-proof-42s.mp4">
+  <meta property="og:video:secure_url" content="{{GITHUB_PAGES_ROOT}}/docs/videos/slack-mcp-proof-42s.mp4">
   <meta property="og:video:type" content="video/mp4">
-  <meta property="og:video:width" content="1080">
-  <meta property="og:video:height" content="1920">
+  <meta property="og:video:width" content="1920">
+  <meta property="og:video:height" content="1080">
   <meta name="twitter:card" content="player">
-  <meta name="twitter:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta name="twitter:description" content="{{SELF_HOSTED_TOOL_COUNT}} tools. Works with Claude, Cursor, Copilot, Gemini. One command setup.">
+  <meta name="twitter:title" content="What blew up overnight? — Slack MCP">
+  <meta name="twitter:description" content="A database, a lying runbook, a five-month printer mystery, and 21 real Slack tools.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta name="twitter:player" content="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
   <meta name="twitter:player:width" content="1280">
-  <meta name="twitter:player:height" content="800">
-  <meta name="twitter:player:stream" content="{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp-mobile-20s.mp4">
+  <meta name="twitter:player:height" content="720">
+  <meta name="twitter:player:stream" content="{{GITHUB_PAGES_ROOT}}/docs/videos/slack-mcp-proof-42s.mp4">
   <meta name="twitter:player:stream:content_type" content="video/mp4">
+  <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "VideoObject",
-    "name": "Slack MCP Server — Monday Morning Demo",
-    "description": "Watch an AI handle 47 unread Slack messages without opening Slack. {{SELF_HOSTED_TOOL_COUNT}} tools, one command, no OAuth. Works with Claude, Cursor, Copilot, Gemini.",
+    "name": "What blew up overnight? — Slack MCP proof reel",
+    "description": "Watch 47 unread Slack messages become one prioritized briefing through Slack MCP tools.",
     "thumbnailUrl": "{{SOCIAL_IMAGE_URL}}",
-    "uploadDate": "2026-07-28",
-    "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/demo-slack-mcp.mp4",
+    "uploadDate": "2026-08-05",
+    "contentUrl": "{{GITHUB_PAGES_ROOT}}/docs/videos/slack-mcp-proof-42s.mp4",
     "embedUrl": "{{GITHUB_PAGES_ROOT}}/public/demo-video.html",
-    "duration": "PT3M24S",
-    "author": {
-      "@type": "Person",
-      "name": "James Lambert",
-      "url": "https://github.com/jtalk22"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Revasser",
-      "url": "https://mcp.revasserlabs.com"
-    }
+    "duration": "PT42S",
+    "author": { "@type": "Person", "name": "James Lambert", "url": "https://github.com/jtalk22" },
+    "publisher": { "@type": "Organization", "name": "Revasser", "url": "https://mcp.revasserlabs.com" }
   }
   </script>
-  <link rel="icon" href="{{ICON_URL}}" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --font-heading: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
-      --font-body: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: var(--font-body);
-      /* Poster ground — near-black with faint coral (left) + teal (right) corner glows */
-      background:
-        radial-gradient(58% 46% at 14% 0%, rgba(255, 107, 107, 0.07), transparent 62%),
-        radial-gradient(58% 46% at 86% 0%, rgba(78, 205, 196, 0.07), transparent 62%),
-        linear-gradient(180deg, #0e1119 0%, #0b0e14 58%, #07090e 100%);
-      background-attachment: fixed;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-    .container {
-      max-width: 900px;
-      width: 100%;
-    }
-    h1 {
-      color: #f0f3f7;
-      font-size: 1.75rem;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 0.5rem;
-      font-family: var(--font-heading);
-      letter-spacing: -0.02em;
-    }
-    .subtitle {
-      color: #8d99a9;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
-    }
-    .cta-strip {
-      margin: 0 auto 1rem;
-      background: rgba(18, 22, 31, 0.82);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 12px;
-      padding: 10px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 0.8125rem;
-    }
-    .cta-strip .links {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .cta-strip .links a {
-      color: #dfe6ee;
-      text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 999px;
-      padding: 4px 8px;
-    }
-    .cta-strip .links a:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-    .cta-strip .note {
-      color: rgba(255, 255, 255, 0.78);
-    }
-    .cta-strip .note a {
-      color: #7fe0d6;
-      text-decoration: underline;
-    }
-    .video-wrapper {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      background: #0b0e14;
-    }
-    video {
-      width: 100%;
-      display: block;
-      border-radius: 12px;
-    }
-    /* Captions — tasteful lower subtitle, not a wall. Semi-opaque near-black box,
-       reduced size so an active cue never covers the demo's own input bar. */
-    video::cue {
-      font-size: 62%;
-      line-height: 1.35;
-      background-color: rgba(11, 14, 20, 0.82);
-      color: #f0f3f7;
-      font-family: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-    }
-    .chapters {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 1rem;
-    }
-    .chapter {
-      font-family: var(--font-body);
-      font-size: 0.8125rem;
-      color: #dfe6ee;
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 999px;
-      padding: 5px 12px;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-    .chapter:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-    .chapter.active {
-      background: rgba(78, 205, 196, 0.16);
-      border-color: #4ecdc4;
-      color: #4ecdc4;
-    }
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      border: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-primary {
-      background: #4ecdc4;
-      color: #07090e;
-    }
-    .btn-primary:hover {
-      background: #5eead4;
-      transform: translateY(-1px);
-    }
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: #f0f3f7;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-    .back-link {
-      margin-top: 2rem;
-      text-align: center;
-    }
-    .back-link a {
-      color: #8d99a9;
-      text-decoration: none;
-      font-size: 0.875rem;
-    }
-    .back-link a:hover {
-      color: #f0f3f7;
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 1rem 0.75rem;
-      }
-
-      .cta-strip .links {
-        width: 100%;
-      }
-
-      .controls {
-        gap: 0.75rem;
-      }
-
-      .btn {
-        flex: 1;
-        min-width: 0;
-        padding: 0.72rem 0.95rem;
-      }
+    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500; }
+    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium-italic.woff2") format("woff2"); font-display: swap; font-weight: 500; font-style: italic; }
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400; }
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
+    @font-face { font-family: "Roobert Mono"; src: url("fonts/roobert-mono.woff2") format("woff2"); font-display: swap; font-weight: 400 600; }
+    :root { color-scheme: dark; --ground:#0b0b0c; --surface:#131315; --rule:#2f2f34; --paper:#eeebe3; --muted:#98958c; --stamp:#e5482f; --signal:#ffb224; --display:"Nyght Serif",Georgia,"Times New Roman",serif; --body:"Roobert",system-ui,sans-serif; --mono:"Roobert Mono",ui-monospace,SFMono-Regular,Menlo,monospace; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--ground); color: var(--paper); font-family: var(--body); }
+    a { color: inherit; }
+    .frame { width: min(1280px, calc(100% - 40px)); margin: 0 auto; }
+    header { min-height: 68px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--rule); }
+    .brand { display:flex; align-items:center; gap:10px; font-family:var(--mono); letter-spacing:.09em; text-transform:uppercase; text-decoration:none; font-size:12px; }
+    .brand img { width:30px; height:30px; border-radius:7px; }
+    .brand span { color:var(--signal); }
+    header nav { display:flex; gap:20px; color:var(--muted); font-size:13px; }
+    main { padding-block: clamp(42px, 6vw, 82px) 70px; }
+    .intro { display:grid; grid-template-columns: 1fr auto; gap:30px; align-items:end; margin-bottom:30px; }
+    .eyebrow { margin:0 0 14px; color:var(--stamp); font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { margin:0; font-family:var(--display); font-size:clamp(48px,7.5vw,104px); font-weight:400; font-style:italic; letter-spacing:-.06em; line-height:.9; }
+    .intro p:last-child { margin:20px 0 0; max-width:720px; color:#b9c1cc; font-size:18px; line-height:1.55; }
+    .duration { color:var(--signal); font-family:var(--mono); font-size:14px; text-align:right; }
+    .video-shell { border:1px solid var(--rule); background:#070a10; }
+    video { display:block; width:100%; aspect-ratio:16/9; background:#070a10; }
+    video::cue { font-family:var(--body); font-size:70%; background:rgba(8,11,17,.9); color:var(--paper); }
+    .mode-bar { display:flex; justify-content:space-between; gap:18px; padding:16px 18px; border-top:1px solid var(--rule); align-items:center; }
+    .modes { display:flex; gap:8px; }
+    .mode { border:1px solid var(--rule); background:transparent; color:var(--muted); padding:9px 13px; cursor:pointer; font-family:var(--mono); font-size:11px; }
+    .mode.active { color:var(--signal); border-color:var(--signal); background:#1d1607; }
+    .mode-note { color:var(--muted); font-size:13px; text-align:right; }
+    .chapters { display:none; grid-template-columns:repeat(7,1fr); border-inline:1px solid var(--rule); border-bottom:1px solid var(--rule); }
+    .chapters.visible { display:grid; }
+    .chapter { min-height:66px; border:0; border-right:1px solid var(--rule); background:var(--surface); color:var(--muted); padding:11px; text-align:left; cursor:pointer; font-family:var(--mono); font-size:10px; line-height:1.4; }
+    .chapter:last-child { border-right:0; }
+    .chapter:hover,.chapter.active { color:var(--paper); background:#17202a; }
+    .chapter.active { box-shadow:inset 0 -2px var(--signal); }
+    .below { margin-top:32px; display:grid; grid-template-columns:1fr auto; gap:34px; align-items:start; }
+    .note { margin:0; max-width:760px; color:var(--muted); line-height:1.65; }
+    .note strong { color:var(--paper); }
+    .install { display:flex; align-items:stretch; }
+    .install code { padding:14px 16px; border:1px solid var(--signal); color:var(--signal); background:#1d1607; font-family:var(--mono); font-size:12px; white-space:nowrap; }
+    .install a { display:flex; align-items:center; padding:0 16px; background:var(--signal); color:#161003; font-weight:600; text-decoration:none; font-size:13px; }
+    footer { margin-top:64px; padding-top:25px; border-top:1px solid var(--rule); color:var(--muted); display:flex; justify-content:space-between; gap:20px; font-size:12px; }
+    @media(max-width:760px){
+      .frame{width:min(100% - 24px,1280px)} header nav a:not(:last-child){display:none}.intro{grid-template-columns:1fr}.duration{text-align:left}.video-shell video{aspect-ratio:9/16;object-fit:cover}.mode-bar{align-items:flex-start;flex-direction:column}.mode-note{text-align:left}.chapters.visible{grid-template-columns:1fr 1fr}.chapter:nth-child(even){border-right:0}.below{grid-template-columns:1fr}.install{overflow-x:auto}.install code{font-size:10px}footer{flex-direction:column}h1{font-size:clamp(55px,18vw,86px)}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Slack MCP Server</h1>
-    <p class="subtitle">No OAuth. No admin approval. {{SELF_HOSTED_TOOL_COUNT}} tools for Claude, Cursor, Copilot, Gemini, and any MCP client. <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;font-size:0.875rem">npx -y @jtalk22/slack-mcp --setup</code></p>
-    <div class="cta-strip">
-      <div class="links">
-{{DEMO_LINKS}}
-      </div>
-      <div class="note">
-        {{DEMO_NOTE}}
-      </div>
-    </div>
-
-    <div class="video-wrapper">
-      <video id="demo" poster="../docs/images/demo-poster.png" playsinline autoplay muted loop>
-        <source src="../docs/videos/demo-slack-mcp.mp4" type="video/mp4">
-        <source src="../docs/videos/demo-slack-mcp.webm" type="video/webm">
-        <track kind="captions" src="../docs/videos/demo-slack-mcp.vtt" srclang="en" label="English captions" default>
+  <header class="frame"><a class="brand" href="{{GITHUB_PAGES_ROOT}}/"><img src="../docs/assets/icon.svg" alt="">Slack MCP <span>/ proof</span></a><nav><a href="{{GITHUB_REPO_URL}}">GitHub</a><a href="{{NPM_URL}}">npm</a><a href="{{SETUP_URL}}">Install</a></nav></header>
+  <main class="frame">
+    <div class="intro"><div><p class="eyebrow">Monday / 09:07 / 47 unread</p><h1>What blew up<br>overnight?</h1><p>A database outage, a runbook with a creative relationship to truth, and a printer PIN buried five months deep in <code>#facilities</code>—handled through the shipped Slack tool surface.</p></div><div class="duration" id="duration">TRAILER / 00:42</div></div>
+    <div class="video-shell">
+      <video id="demo" poster="../docs/images/demo-poster.png" playsinline autoplay muted controls>
+        <source src="../docs/videos/slack-mcp-proof-42s.mp4" type="video/mp4">
+        <source src="../docs/videos/slack-mcp-proof-42s.webm" type="video/webm">
+        <track kind="captions" src="../docs/videos/slack-mcp-proof-42s.vtt" srclang="en" label="English captions" default>
         Your browser does not support the video tag.
       </video>
+      <div class="mode-bar"><div class="modes"><button class="mode active" id="trailerMode" type="button">42s proof</button><button class="mode" id="fullMode" type="button">Full 3:24 walkthrough</button></div><div class="mode-note" id="modeNote">Dry humor. Real tool names. Large enough to read.</div></div>
     </div>
-
-    <div class="chapters" id="chapters" aria-label="Video chapters">
-      <button type="button" class="chapter" data-t="0">0:00 Morning triage</button>
-      <button type="button" class="chapter" data-t="48">0:48 Printer-PIN search</button>
-      <button type="button" class="chapter" data-t="68">1:08 What was decided</button>
-      <button type="button" class="chapter" data-t="94">1:34 Reply in-thread</button>
-      <button type="button" class="chapter" data-t="118">1:58 Who's Alex Torres</button>
-      <button type="button" class="chapter" data-t="150">2:30 Close the loops</button>
-      <button type="button" class="chapter" data-t="174">2:54 Export &amp; wrap</button>
+    <div class="chapters" id="chapters" aria-label="Full walkthrough chapters">
+      <button type="button" class="chapter" data-t="0">00:00<br>Morning triage</button><button type="button" class="chapter" data-t="48">00:48<br>Search</button><button type="button" class="chapter" data-t="68">01:08<br>Decision</button><button type="button" class="chapter" data-t="94">01:34<br>Reply</button><button type="button" class="chapter" data-t="118">01:58<br>People</button><button type="button" class="chapter" data-t="150">02:30<br>Close loops</button><button type="button" class="chapter" data-t="174">02:54<br>Export</button>
     </div>
-
-    <div class="controls">
-      <button class="btn btn-primary" onclick="togglePlay()" aria-label="Play or pause the full Slack MCP demo video">Play / Pause</button>
-      <button class="btn btn-secondary" onclick="restart()" aria-label="Restart the full Slack MCP demo video">Restart</button>
-    </div>
-
-    <div class="back-link">
-      {{DEMO_FOOTER_LINKS}}
-    </div>
-  </div>
-
+    <div class="below"><p class="note"><strong>Use Slack interactively for free; move unattended work to hosted.</strong> The local path ships {{SELF_HOSTED_TOOL_COUNT}} tools today for DMs, search, full threads, unread triage, actions, exports, and workflows—without a Slack app or admin queue. Hosted adds permanent OAuth, indexed retrieval, scheduled intelligence, and team continuity.</p><div class="install"><code>npx -y @jtalk22/slack-mcp --setup</code><a href="{{SETUP_URL}}">Install</a></div></div>
+    <footer><span>Interactive demo uses simulated data. The tools and contracts are the shipped public surface.</span><span>{{DEMO_FOOTER_LINKS}}</span></footer>
+  </main>
   <script>
     const video = document.getElementById('demo');
-    const HIGHLIGHT_START_SECONDS = 4;
-
-    function playFromHighlight() {
-      if (video.duration && video.duration > HIGHLIGHT_START_SECONDS + 1) {
-        video.currentTime = HIGHLIGHT_START_SECONDS;
-      }
-      return video.play();
-    }
-
-    // Autoplay with 1 second delay
-    setTimeout(() => {
-      playFromHighlight().catch(() => {
-        // Autoplay blocked, user will need to click
-        console.log('Autoplay blocked, click to play');
-      });
-    }, 1000);
-
-    function togglePlay() {
-      if (video.paused) {
-        video.play();
-      } else {
-        video.pause();
-      }
-    }
-
-    function restart() {
-      video.currentTime = 0;
-      video.play();
-    }
-
-    // Loop the video
-    video.addEventListener('ended', () => {
-      video.currentTime = HIGHLIGHT_START_SECONDS;
-      video.play();
-    });
-
-    // Chapters: one delegated click listener seeks + plays
+    const trailerMode = document.getElementById('trailerMode');
+    const fullMode = document.getElementById('fullMode');
     const chapters = document.getElementById('chapters');
-    const chapterButtons = Array.from(chapters.querySelectorAll('.chapter'));
+    const duration = document.getElementById('duration');
+    const note = document.getElementById('modeNote');
+    const isMobile = window.matchMedia('(max-width: 760px)').matches;
+    let mode = 'trailer';
 
-    chapters.addEventListener('click', (event) => {
-      const button = event.target.closest('.chapter');
-      if (!button) return;
-      video.currentTime = Number(button.dataset.t);
-      video.play();
-    });
+    function setMode(next) {
+      mode = next;
+      trailerMode.classList.toggle('active', mode === 'trailer');
+      fullMode.classList.toggle('active', mode === 'full');
+      chapters.classList.toggle('visible', mode === 'full');
+      video.pause();
+      video.innerHTML = '';
+      const sources = mode === 'trailer'
+        ? (isMobile
+            ? [['../docs/videos/slack-mcp-proof-20s-vertical.mp4', 'video/mp4']]
+            : [['../docs/videos/slack-mcp-proof-42s.mp4', 'video/mp4'], ['../docs/videos/slack-mcp-proof-42s.webm', 'video/webm']])
+        : [['../docs/videos/demo-slack-mcp.mp4', 'video/mp4'], ['../docs/videos/demo-slack-mcp.webm', 'video/webm']];
+      for (const [src, type] of sources) {
+        const source = document.createElement('source');
+        source.src = src; source.type = type;
+        video.append(source);
+      }
+      const track = document.createElement('track');
+      track.kind = 'captions';
+      track.src = mode === 'trailer'
+        ? (isMobile ? '../docs/videos/slack-mcp-proof-20s-vertical.vtt' : '../docs/videos/slack-mcp-proof-42s.vtt')
+        : '../docs/videos/demo-slack-mcp.vtt';
+      track.srclang = 'en'; track.label = 'English captions'; track.default = true;
+      track.addEventListener('load', () => { track.track.mode = 'showing'; });
+      video.append(track);
+      if (track.track) track.track.mode = 'showing';
+      duration.textContent = mode === 'trailer' ? (isMobile ? 'MOBILE CUT / 00:20' : 'TRAILER / 00:42') : 'WALKTHROUGH / 03:24';
+      note.textContent = mode === 'trailer' ? 'Dry humor. Real tool names. Large enough to read.' : 'Seven chapters. Full tool-call sequence and outcomes.';
+      video.load();
+      video.play().catch(() => {});
+    }
 
-    // Active-state tracking follows playback position
-    video.addEventListener('timeupdate', () => {
-      let active = chapterButtons[0];
-      for (const button of chapterButtons) {
-        if (video.currentTime >= Number(button.dataset.t)) active = button;
-      }
-      for (const button of chapterButtons) {
-        button.classList.toggle('active', button === active);
-      }
-    });
+    trailerMode.addEventListener('click', () => setMode('trailer'));
+    fullMode.addEventListener('click', () => setMode('full'));
+    function seekTo(seconds) {
+      if (video.readyState >= 1) { video.currentTime = seconds; video.play().catch(() => {}); return; }
+      video.addEventListener('loadedmetadata', () => { video.currentTime = seconds; video.play().catch(() => {}); }, { once: true });
+    }
+    chapters.addEventListener('click', (event) => { const button = event.target.closest('[data-t]'); if (!button) return; if (mode !== 'full') setMode('full'); seekTo(Number(button.dataset.t)); });
+    video.addEventListener('ended', () => { if (mode === 'trailer') { video.currentTime = 0; video.play(); } });
+    if (isMobile) {
+      trailerMode.textContent = '20s proof';
+      setMode('trailer');
+    }
   </script>
 </body>
 </html>
