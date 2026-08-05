@@ -12,7 +12,12 @@ jobs:
   auto-merge:
     name: Auto-Merge Safe Updates
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    # The PR author stays dependabot[bot] after a maintainer pushes to its branch.
+    # Require the event actor too so unsigned maintainer commits skip this job
+    # instead of failing Dependabot's intentionally strict signature check.
+    if: |
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.actor == 'dependabot[bot]'
     steps:
       - name: Dependabot metadata
         id: metadata
@@ -22,18 +27,14 @@ jobs:
 
       - name: Auto-merge patch updates
         if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
-        run: |
-          gh pr review --approve "$PR_URL" --body "Auto-approved: patch dependency update" || echo "::notice::Approval skipped"
-          gh pr merge --auto --squash "$PR_URL"
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ github.token }}
 
       - name: Auto-merge GitHub Actions updates
         if: steps.metadata.outputs.package-ecosystem == 'github-actions'
-        run: |
-          gh pr review --approve "$PR_URL" --body "Auto-approved: GitHub Actions update" || echo "::notice::Approval skipped"
-          gh pr merge --auto --squash "$PR_URL"
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ github.token }}
@@ -42,20 +43,20 @@ jobs:
         if: |
           steps.metadata.outputs.update-type == 'version-update:semver-minor' &&
           steps.metadata.outputs.dependency-type == 'direct:development'
-        run: |
-          gh pr review --approve "$PR_URL" --body "Auto-approved: minor development dependency update" || echo "::notice::Approval skipped"
-          gh pr merge --auto --squash "$PR_URL"
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ github.token }}
 
       - name: Summary
         run: |
-          echo "## Dependabot Auto-Merge" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Field | Value |" >> "$GITHUB_STEP_SUMMARY"
-          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Package | ${{ steps.metadata.outputs.dependency-names }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Update type | ${{ steps.metadata.outputs.update-type }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Ecosystem | ${{ steps.metadata.outputs.package-ecosystem }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Dependency type | ${{ steps.metadata.outputs.dependency-type }} |" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## Dependabot Auto-Merge"
+            echo ""
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Package | ${{ steps.metadata.outputs.dependency-names }} |"
+            echo "| Update type | ${{ steps.metadata.outputs.update-type }} |"
+            echo "| Ecosystem | ${{ steps.metadata.outputs.package-ecosystem }} |"
+            echo "| Dependency type | ${{ steps.metadata.outputs.dependency-type }} |"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -38,6 +38,7 @@
     "bookmarklet": "node scripts/generate-bookmarklet.js",
     "cf:browser": "node scripts/cloudflare-browser-tool.js",
     "verify:attribution-guardrail": "node scripts/verify-attribution-guardrail.js",
+    "verify:dependabot-auto-merge": "node scripts/verify-dependabot-auto-merge.js",
     "verify:public-pages": "node scripts/verify-generated-public-pages.js",
     "verify:version-parity": "node scripts/check-version-parity.js",
     "verify:public-surface": "node scripts/check-public-surface-integrity.js",
