@@ -8,6 +8,7 @@
       "role": "primary-proof",
       "format": "mp4",
       "size_bytes": 7409800,
+      "sha256": "a74d0c10e577e4714c5a6938f0bc403a52b4e161e7b1e72ae802f1609aa50345",
       "width": 1920,
       "height": 1080,
       "duration_s": 42,
@@ -21,6 +22,7 @@
       "role": "primary-proof-fallback",
       "format": "webm",
       "size_bytes": 4150458,
+      "sha256": "a85a8bf5d823015eed158dfeb71029135fc7a74b095b43a705745188be0560e5",
       "width": 1920,
       "height": 1080,
       "duration_s": 42,
@@ -34,6 +36,7 @@
       "role": "mobile-proof",
       "format": "mp4",
       "size_bytes": 2380355,
+      "sha256": "97123fc02b780eeb4aaa172dc841c41e47f952ba5d9cd634fc258f103d95c544",
       "width": 1080,
       "height": 1920,
       "duration_s": 20,
@@ -47,6 +50,7 @@
       "role": "primary-proof-captions",
       "format": "vtt",
       "size_bytes": 867,
+      "sha256": "ae609faec49f2407dfb9f7d14df0a3a548a4ce2d5478b65e5110405a649b02d4",
       "cues": 7
     },
     {
@@ -55,6 +59,7 @@
       "role": "mobile-proof-captions",
       "format": "vtt",
       "size_bytes": 620,
+      "sha256": "5990f0602efe2f3c57ca8189426e5957d2dedc3a431c06a2dc1fd44d59019d28",
       "cues": 6
     },
     {
@@ -63,6 +68,7 @@
       "role": "full-walkthrough",
       "format": "mp4",
       "size_bytes": 2415532,
+      "sha256": "e259150ff0d8e3b724ce372fc218d9f2103e875b807fea33a26a24e2a1adb8ab",
       "width": 1920,
       "height": 1200,
       "duration_s": 204.8,
@@ -76,6 +82,7 @@
       "role": "full-walkthrough-fallback",
       "format": "webm",
       "size_bytes": 2941758,
+      "sha256": "34a607b2997b36ce4e543ece23e8574d776e8be5b9600f9d5fe3dbe38a76b3db",
       "width": 1920,
       "height": 1200,
       "duration_s": 204.8,
@@ -89,6 +96,7 @@
       "role": "full-walkthrough-master",
       "format": "mp4",
       "size_bytes": 2624602,
+      "sha256": "a699f9d6831819882c273bb9a3e0f37f453227964fd4db7965458c191127005d",
       "width": 1920,
       "height": 1200,
       "duration_s": 204.8,
@@ -102,6 +110,7 @@
       "role": "readme-poster",
       "format": "png",
       "size_bytes": 219437,
+      "sha256": "d35779c3162fc152e2afeafca5e1fc58e3d9cfec91fa1d2fd1bd4fd3b3af0857",
       "width": 1280,
       "height": 720
     },
@@ -111,6 +120,7 @@
       "role": "social-preview",
       "format": "png",
       "size_bytes": 101641,
+      "sha256": "1f41fb686e686257fc00550591a2a2699b3578dfdea1b42fb80503c1473c72d1",
       "width": 1280,
       "height": 640
     },
@@ -120,6 +130,7 @@
       "role": "readme-diagram",
       "format": "svg",
       "size_bytes": 6939,
+      "sha256": "6949cec628a3b01dfd3a2b37d7e84b8a9978db41f2818989bbdce8a4a7ee4aa0",
       "width": 1280,
       "height": 720
     }

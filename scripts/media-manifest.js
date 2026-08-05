@@ -2,6 +2,7 @@
 
 import { readFileSync, statSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,6 +23,14 @@ const ASSETS = [
   ["social-preview", "docs/images/social-preview-v3.png", "social-preview"],
   ["access-path-diagram", "docs/images/diagram-oauth-comparison.svg", "readme-diagram"],
 ];
+
+function sha256(path) {
+  return createHash("sha256").update(readFileSync(path)).digest("hex");
+}
+
+function hasFfprobe() {
+  return spawnSync("ffprobe", ["-version"], { encoding: "utf8" }).status === 0;
+}
 
 function videoMetadata(path) {
   const result = spawnSync("ffprobe", [
@@ -82,21 +91,59 @@ function buildManifest() {
         role,
         format: extension,
         size_bytes: statSync(absolutePath).size,
+        sha256: sha256(absolutePath),
         ...metadata,
       };
     }),
   };
 }
 
-const expected = `${JSON.stringify(buildManifest(), null, 2)}\n`;
-if (CHECK) {
-  const current = readFileSync(MANIFEST_PATH, "utf8");
-  if (current !== expected) {
-    console.error("Media manifest drift detected. Run npm run build:media-manifest.");
-    process.exit(1);
+// Byte-level verification that needs no external binaries. The stored ffprobe
+// metadata was derived from these exact bytes at write time, so a sha256 match
+// pins it transitively — a CI runner without ffmpeg can still prove integrity.
+function checkBytes() {
+  const manifest = JSON.parse(readFileSync(MANIFEST_PATH, "utf8"));
+  const entries = new Map((manifest.assets || []).map((asset) => [asset.path, asset]));
+  const failures = [];
+  for (const [id, relativePath] of ASSETS) {
+    const entry = entries.get(relativePath);
+    if (!entry) { failures.push(`${relativePath}: missing from manifest`); continue; }
+    entries.delete(relativePath);
+    if (entry.id !== id) failures.push(`${relativePath}: id drift (${entry.id} != ${id})`);
+    const absolutePath = resolve(ROOT, relativePath);
+    let size, digest;
+    try {
+      size = statSync(absolutePath).size;
+      digest = sha256(absolutePath);
+    } catch {
+      failures.push(`${relativePath}: file missing from checkout`);
+      continue;
+    }
+    if (entry.size_bytes !== size) failures.push(`${relativePath}: size drift (${entry.size_bytes} != ${size})`);
+    if (entry.sha256 !== digest) failures.push(`${relativePath}: sha256 drift`);
   }
-  console.log("Media manifest matches the current assets.");
+  for (const stale of entries.keys()) failures.push(`${stale}: in manifest but not in the asset list`);
+  return failures;
+}
+
+if (CHECK) {
+  if (hasFfprobe()) {
+    const expected = `${JSON.stringify(buildManifest(), null, 2)}\n`;
+    const current = readFileSync(MANIFEST_PATH, "utf8");
+    if (current !== expected) {
+      console.error("Media manifest drift detected. Run npm run build:media-manifest.");
+      process.exit(1);
+    }
+    console.log("Media manifest matches the current assets.");
+  } else {
+    const failures = checkBytes();
+    if (failures.length > 0) {
+      console.error(`Media manifest drift detected:\n${failures.map((line) => `  - ${line}`).join("\n")}`);
+      process.exit(1);
+    }
+    console.log("Media manifest bytes verified (ffprobe unavailable; metadata pinned by sha256).");
+  }
 } else {
-  writeFileSync(MANIFEST_PATH, expected, "utf8");
+  writeFileSync(MANIFEST_PATH, `${JSON.stringify(buildManifest(), null, 2)}\n`, "utf8");
   console.log(`Wrote ${MANIFEST_PATH}`);
 }
