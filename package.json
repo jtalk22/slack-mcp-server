@@ -1,8 +1,8 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "4.6.1",
-  "description": "Slack MCP without OAuth — 21 tools, session-based. Free OSS; hosted has a free tier, Pro $19/mo.",
+  "version": "4.6.2",
+  "description": "Slack’s operating layer for AI agents: DMs, search, full threads, unread triage, actions, and workflows—local browser-session auth or hosted permanent OAuth.",
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/jtalk22"
@@ -29,11 +29,13 @@
     "tokens:auto": "node scripts/token-cli.js auto",
     "tokens:clear": "node scripts/token-cli.js clear",
     "screenshot": "node scripts/capture-screenshots.js",
-    "build:social-preview": "node scripts/build-social-preview.js",
+    "build:social-preview": "node scripts/record-proof-reel.js --posters",
     "build:public-pages": "node scripts/generate-public-pages.js",
     "build:demo-mobile": "node scripts/build-mobile-demo.js",
     "build:demo-mobile:gif": "node scripts/build-mobile-demo.js --gif",
     "record-demo": "node scripts/record-demo.js",
+    "record-proof": "node scripts/record-proof-reel.js",
+    "build:media-manifest": "node scripts/media-manifest.js",
     "social-preview:update": "node scripts/update-github-social-preview.js --headed",
     "bookmarklet": "node scripts/generate-bookmarklet.js",
     "cf:browser": "node scripts/cloudflare-browser-tool.js",
@@ -42,6 +44,7 @@
     "verify:public-pages": "node scripts/verify-generated-public-pages.js",
     "verify:version-parity": "node scripts/check-version-parity.js",
     "verify:public-surface": "node scripts/check-public-surface-integrity.js",
+    "verify:media-manifest": "node scripts/media-manifest.js --check",
     "verify:release-dry-run": "node scripts/release-preflight.js",
     "smoke:browser": "node scripts/browser-smoke.js",
     "smoke:browser:live": "node scripts/browser-smoke.js --mode live"

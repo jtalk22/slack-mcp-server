@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server</title>
-  <meta name="description" content="No OAuth. No admin. {{SELF_HOSTED_TOOL_COUNT}} Slack tools for Claude, Cursor, Copilot, Gemini, and any MCP client. One command: npx -y @jtalk22/slack-mcp --setup">
+  <meta name="description" content="Slack’s operating layer for AI agents: local browser-session control or hosted permanent OAuth for recurring workflows.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta property="og:description" content="OAuth-free Slack MCP using your browser session. {{SELF_HOSTED_TOOL_COUNT}} tools, works with Claude, Cursor, Copilot, Gemini.">
+  <meta property="og:title" content="Slack MCP Server — Ask what happened. Find the decision. Close the loop.">
+  <meta property="og:description" content="The free local path ships {{SELF_HOSTED_TOOL_COUNT}} tools today. Hosted adds permanent OAuth, indexing, schedules, and team continuity.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/share.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack MCP Server — No OAuth, no admin, just your browser session">
-  <meta name="twitter:description" content="{{SELF_HOSTED_TOOL_COUNT}} tools for Claude, Cursor, Copilot, Gemini. npx -y @jtalk22/slack-mcp --setup">
+  <meta name="twitter:title" content="Slack’s operating layer for AI agents">
+  <meta name="twitter:description" content="Local control now. Hosted continuity when the workflow must run without you.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
   <style>

@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="@jtalk22">
   <title>Slack MCP Server — Claude Desktop Demo</title>
-  <meta name="description" content="No OAuth. No admin. {{SELF_HOSTED_TOOL_COUNT}} Slack tools for any MCP client. Works with Claude, Cursor, Copilot, Gemini. One command setup.">
+  <meta name="description" content="No Slack app. No admin queue. {{SELF_HOSTED_TOOL_COUNT}} Slack tools for Claude, Cursor, Copilot, Gemini, and any stdio MCP client.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/demo-slack-mcp.html">
 
   <!-- Open Graph -->

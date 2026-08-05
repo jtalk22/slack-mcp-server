@@ -10,18 +10,18 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/demo.html">
   <meta property="og:title" content="Slack MCP Server — Interactive Demo">
-  <meta property="og:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
+  <meta property="og:description" content="Give any stdio MCP agent useful Slack access. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, DMs, search, threads, unread triage, and actions.">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Slack MCP Server — Interactive Demo">
-  <meta name="twitter:description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search.">
+  <meta name="twitter:description" content="{{SELF_HOSTED_TOOL_COUNT}} self-hosted Slack tools for any stdio MCP client. No Slack app or admin queue.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
 
   <!-- SEO -->
-  <meta name="description" content="Give Claude your Slack. {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, search, replies, reactions, unread triage, and user search. Interactive demo.">
+  <meta name="description" content="Interactive Slack MCP demo: {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, DMs, search, threads, unread triage, and actions.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">

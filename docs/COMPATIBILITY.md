@@ -1,19 +1,49 @@
 # Compatibility Matrix
 
-Use this matrix to choose a known working client/runtime path before rollout.
+The local package is a stdio MCP server. Client support is classified by the evidence maintained in this repository rather than by logo availability.
 
-| Client | Mode | Token path | Status | Quick verify command |
-|---|---|---|---|---|
-| Claude Desktop (macOS) | `stdio` | `~/.slack-mcp-tokens.json` via `--setup` auto-extract | Supported | `npx -y @jtalk22/slack-mcp --setup && npx -y @jtalk22/slack-mcp --status` |
-| Claude Desktop (Windows) | `stdio` | `env` (`SLACK_TOKEN`, `SLACK_COOKIE`) in config | Supported | `npx -y @jtalk22/slack-mcp --status` |
-| Claude Desktop (Linux) | `stdio` | `env` or token file via guided setup | Supported | `npx -y @jtalk22/slack-mcp --status` |
-| Claude Code CLI | `stdio` | `~/.slack-mcp-tokens.json` or `env` | Supported | `npx -y @jtalk22/slack-mcp --version && npx -y @jtalk22/slack-mcp --status` |
-| Local Browser UI | `web` | token file or `env` | Supported | `npx -y @jtalk22/slack-mcp web` |
-| Hosted Node Runtime | `http` | `env` in host runtime | Supported with operator controls | `node src/server-http.js` then `curl -s http://localhost:8080/health` |
-| Cloudflare Worker / Smithery transport | `worker` | runtime env/query handoff per deployment config | Supported with deployment validation | `wrangler deploy --config workers/wrangler.toml` and verify `/health` |
+| Client | Transport | Configuration | Evidence level |
+|---|---|---|---|
+| Claude Desktop | stdio | Desktop MCP JSON | Verified |
+| Claude Code | stdio | `claude mcp add` or `~/.claude.json` | Documented |
+| Cursor | stdio | `.cursor/mcp.json` | Documented |
+| GitHub Copilot in VS Code | stdio | `.vscode/mcp.json` | Documented |
+| Windsurf | stdio | `~/.codeium/windsurf/mcp_config.json` | Documented |
+| Gemini CLI | stdio | `~/.gemini/settings.json` | Documented |
+| Codex CLI | stdio | `codex mcp add` or `~/.codex/config.toml` | Documented |
+| Other stdio MCP clients | stdio | command + args | Protocol-compatible |
+| Local browser UI | local web | `npx -y @jtalk22/slack-mcp web` | Verified |
+| Self-hosted HTTP | Streamable HTTP | `node src/server-http.js` | Verified with operator configuration |
+| Hosted | Streamable HTTP | OAuth connection | Managed service |
 
-## Notes
+## Runtime support
 
-1. Runtime baseline is Node 20+.
-2. `--doctor` is the fastest first check when setup status is unknown.
-3. For hosted/team deployment, use [DEPLOYMENT-MODES.md](DEPLOYMENT-MODES.md) before production rollout.
+| Runtime | Posture |
+|---|---|
+| Node 20 | Supported for the v4 line; upstream end-of-life |
+| Node 22 | Recommended and CI-tested |
+| Node 24 | Recommended and CI-tested |
+| Node 26 | CI-tested current release line |
+
+## Credential support
+
+| Platform | Automatic local extraction | Storage |
+|---|---|---|
+| macOS + Chrome | Yes | `auto`, `keychain-only`, or `file` |
+| Windows | No | environment or file |
+| Linux | No | environment or file |
+| Docker/CI | No | mounted file or environment |
+
+## Verification contract
+
+For every client:
+
+1. `npx -y @jtalk22/slack-mcp --version` succeeds in the same environment the client launches.
+2. The MCP configuration starts `npx -y @jtalk22/slack-mcp` through stdio.
+3. The client is fully restarted after configuration.
+4. `slack_health_check` returns the expected Slack workspace and user.
+5. `slack_list_conversations` returns readable workspace data.
+
+A new named client should not be promoted in the README hero until a configuration recipe and working receipt exist.
+
+See [SETUP.md](SETUP.md) for copy-paste configurations and [DEPLOYMENT-MODES.md](DEPLOYMENT-MODES.md) for web, HTTP, Docker, and hosted transports.

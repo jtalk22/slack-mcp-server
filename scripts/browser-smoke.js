@@ -35,6 +35,7 @@ const retryDelayMs = Number(argValue("--retry-delay-ms", "10000"));
 //     every retry so npm-publish propagation is covered by the retry budget.
 const strictVersion = process.argv.includes("--strict-version");
 const expectTagOverride = argValue("--expect-tag", null);
+const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || undefined;
 
 const MIME_TYPES = {
   ".css": "text/css; charset=utf-8",
@@ -209,41 +210,28 @@ function literalPattern(value) {
   return new RegExp(`^${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
 }
 
-async function checkRoot(page, url, { allowHostedStatusFallback = false, expectedNpm = `v${RELEASE_VERSION}`, expectedTag = `v${RELEASE_VERSION}` } = {}) {
+async function checkRoot(page, url, { expectedNpm = `v${RELEASE_VERSION}` } = {}) {
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
   await page.waitForFunction(() => {
-    const npm = document.querySelector("#npmLatest")?.textContent?.trim();
-    const release = document.querySelector("#releaseTag")?.textContent?.trim();
-    const cloud = document.querySelector("#cloudHealth")?.textContent?.trim();
-    return Boolean(npm && npm !== "Loading..." && release && release !== "Loading..." && cloud && cloud !== "Checking...");
+    const npm = document.querySelector("#npmVersion")?.textContent?.trim();
+    return Boolean(npm && npm !== "latest release");
   }, { timeout: 30000 });
 
   const snapshot = await page.evaluate(() => ({
-    npm: document.querySelector("#npmLatest")?.textContent?.trim() || "",
-    release: document.querySelector("#releaseTag")?.textContent?.trim() || "",
-    cloud: document.querySelector("#cloudHealth")?.textContent?.trim() || "",
-    cloudNote: document.querySelector("#cloudHealthNote")?.textContent?.trim() || "",
-    decision: document.querySelector(".decision-grid")?.textContent?.trim() || "",
+    npm: document.querySelector("#npmVersion")?.textContent?.trim() || "",
+    hero: document.querySelector(".hero-copy")?.textContent?.trim() || "",
+    systems: document.querySelector("#systems")?.textContent?.trim() || "",
+    paths: document.querySelector("#paths")?.textContent?.trim() || "",
+    command: document.querySelector(".command")?.textContent?.trim() || "",
   }));
 
-  assertText(snapshot.npm, literalPattern(expectedNpm), "#npmLatest");
-  assertText(snapshot.release, literalPattern(expectedTag), "#releaseTag");
-  assertText(snapshot.decision, new RegExp(`${PUBLIC_METADATA.selfHostedToolCount} tools and full operator control`, "i"), "decision guide");
-
-  if (/^ok$/i.test(snapshot.cloud)) {
-    assertText(snapshot.cloudNote, /15 managed tools/i, "#cloudHealthNote");
-    assertText(snapshot.cloudNote, /3 AI workflows/i, "#cloudHealthNote");
-    assertText(snapshot.cloudNote, /21 self-hosted tools/i, "#cloudHealthNote");
-    return { cloudState: "ok" };
-  }
-
-  if (allowHostedStatusFallback && /^(Open \/status|Status available)$/i.test(snapshot.cloud)) {
-    assertText(snapshot.cloudNote, /raw status JSON/i, "#cloudHealthNote");
-    assertText(snapshot.cloudNote, /Cross-origin status lookup unavailable/i, "#cloudHealthNote");
-    return { cloudState: "fallback" };
-  }
-
-  throw new Error(`#cloudHealth did not match /^ok$/i${allowHostedStatusFallback ? " or documented fallback" : ""}: ${snapshot.cloud}`);
+  assertText(snapshot.npm, literalPattern(expectedNpm), "#npmVersion");
+  assertText(snapshot.hero, /Ask what happened\.[\s\S]*Get receipts\.[\s\S]*Close the loop\./i, "hero thesis");
+  assertText(snapshot.hero, new RegExp(`${PUBLIC_METADATA.selfHostedToolCount}[- ]tool`, "i"), "hero tool count");
+  assertText(snapshot.systems, /Browser-session engine/i, "systems proof");
+  assertText(snapshot.paths, /Move now\.[\s\S]*Run unattended\./i, "local-hosted decision");
+  assertText(snapshot.command, /npx -y @jtalk22\/slack-mcp --setup/, "install command");
+  return { pageState: "ok" };
 }
 
 async function checkStaticPage(page, url, selector, pattern, label) {
@@ -253,14 +241,14 @@ async function checkStaticPage(page, url, selector, pattern, label) {
 }
 
 async function runLocal() {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, executablePath });
   const server = await startStaticServer();
 
   try {
     const page = await browser.newPage();
     const errors = await collectErrors(page);
 
-    await page.route("https://registry.npmjs.org/@jtalk22/slack-mcp/latest", async (route) => {
+    await page.route(/https:\/\/registry\.npmjs\.org\/@jtalk22(?:%2F|\/)slack-mcp\/latest/i, async (route) => {
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(npmFixture()) });
     });
     await page.route("https://api.github.com/repos/jtalk22/slack-mcp-server/releases/latest", async (route) => {
@@ -272,10 +260,10 @@ async function runLocal() {
 
     await checkRoot(page, `${server.url}/`);
     const toolCount = PUBLIC_METADATA.selfHostedToolCount;
-    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Hosted free tier \(no card\) live/i, "share note");
-    await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", new RegExp(`Self-host free for ${toolCount} tools`, "i"), "demo video note");
-    await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", new RegExp(`Self-host free for ${toolCount} tools`, "i"), "demo note");
-    await checkStaticPage(page, `${server.url}/public/demo-slack-mcp.html`, ".note", new RegExp(`Self-host free for ${toolCount} tools`, "i"), "demo claude note");
+    await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Ask what happened\. Find the decision\. Close the loop\./i, "share note");
+    await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Use Slack interactively for free; move unattended work to hosted/i, "demo video note");
+    await checkStaticPage(page, `${server.url}/public/demo.html`, ".cta-note", new RegExp(`free local path ships the current ${toolCount}-tool surface`, "i"), "demo note");
+    await checkStaticPage(page, `${server.url}/public/demo-slack-mcp.html`, ".note", new RegExp(`free local path ships the current ${toolCount}-tool surface`, "i"), "demo claude note");
 
     if (errors.length > 0) {
       throw new Error(errors.join("\n"));
@@ -287,7 +275,7 @@ async function runLocal() {
 }
 
 async function runLive() {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, executablePath });
 
   try {
     for (let attempt = 1; attempt <= retries; attempt += 1) {
@@ -305,12 +293,9 @@ async function runLive() {
           console.log(`note: package version v${RELEASE_VERSION} is ahead of the latest release ${expectedTag} — expected merge→release window; asserting the page against live upstream truth.`);
         }
 
-        // The public page explicitly supports a raw-status fallback when cross-origin
-        // fetches to the hosted site are blocked. GitHub-hosted runners can hit that
-        // path even when the public site is rendering correctly for real users.
-        const snapshot = await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { allowHostedStatusFallback: true, expectedNpm, expectedTag });
-        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Hosted free tier \(no card\) live/i, "live share note");
-        const normalizedErrors = normalizeErrors(errors, { allowHostedStatusFallback: snapshot.cloudState === "fallback" });
+        await checkRoot(page, `${liveBaseUrl.replace(/\/$/, "")}/`, { expectedNpm });
+        await checkStaticPage(page, `${liveBaseUrl.replace(/\/$/, "")}/public/share.html`, ".note", /Ask what happened\. Find the decision\. Close the loop\./i, "live share note");
+        const normalizedErrors = normalizeErrors(errors);
         if (normalizedErrors.length > 0) {
           throw new Error(normalizedErrors.join("\n"));
         }

@@ -588,7 +588,7 @@ async function runDoctor() {
 async function showHelp() {
   print(`${colors.bold}slack-mcp-server v${VERSION}${colors.reset}`);
   print();
-  print("Full Slack access for Claude via MCP.");
+  print("Turn your existing Slack browser session into 21 tools for any stdio MCP client.");
   print();
   print(`${colors.bold}Usage:${colors.reset}`);
   print("  npx -y @jtalk22/slack-mcp             Start MCP server (stdio)");
@@ -684,7 +684,8 @@ async function main() {
       print("Next steps:");
       print("  • Verify: npx -y @jtalk22/slack-mcp --status");
       print("  • Start server: npx -y @jtalk22/slack-mcp");
-      print("  • Or add to Claude Desktop config");
+      print("  • Choose your client: https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md");
+      print("  • Restart the client, then run slack_health_check");
       print();
       print(`${colors.dim}Want permanent tokens, semantic search, and workflow continuity?${colors.reset}`);
       print(`${colors.dim}Hosted tier: https://mcp.revasserlabs.com — $19/mo Pro, 25 free AI calls/mo.${colors.reset}`);
