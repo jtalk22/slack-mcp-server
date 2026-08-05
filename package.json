@@ -2,7 +2,7 @@
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
   "version": "4.6.2",
-  "description": "Slack’s operating layer for AI agents: DMs, search, full threads, unread triage, actions, and workflows—local browser-session auth or hosted permanent OAuth.",
+  "description": "Slack for AI agents: DMs, search, threads, triage, actions - browser-session or hosted OAuth.",
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/jtalk22"
