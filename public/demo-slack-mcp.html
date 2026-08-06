@@ -2031,7 +2031,10 @@
       container.classList.remove('fading');
 
       const scenario = scenarios[scenarioId];
-      const now = new Date();
+      // Narrative clock: the story opens Monday 9:07 AM; each scenario advances
+      // two minutes. Deterministic recordings, on-script timestamps.
+      window.__narrativeStep = (window.__narrativeStep ?? -1) + 1;
+      const now = new Date(2026, 0, 5, 9, 7 + window.__narrativeStep * 2);
       const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 
       // 1. User message appears
