@@ -4,7 +4,7 @@ This is a copy bank, not canonical product documentation. Recheck live pricing, 
 
 ## The positioning in one sentence
 
-Slack’s operating layer for AI agents: ask what happened, recover the decision, and close the approved loop—locally through the browser session you already have or hosted through permanent OAuth.
+Slack’s operating layer for AI agents: ask what happened, get the receipts, and close the approved loop—locally through the browser session you already have or hosted through permanent OAuth.
 
 ## The audience split
 
