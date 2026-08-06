@@ -86,7 +86,6 @@
     .client-rail { margin-top: 32px; color: #87847b; font-family: var(--mono); font-size: 11px; line-height: 1.8; text-transform: uppercase; letter-spacing: .05em; }
 
     .proof { position: relative; border: 1px solid #38383e; background: #0a0a0b; overflow: hidden; }
-    .proof::before { content: "LIVE PROOF / 00:42"; display: block; position: absolute; z-index: 2; top: 15px; left: 17px; color: var(--paper); font-family: var(--mono); font-size: 10px; letter-spacing: .12em; }
     .proof::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.025); }
     .proof video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #0a0a0b; }
     .proof-caption { display: flex; justify-content: space-between; gap: 18px; align-items: baseline; padding: 17px 18px; border-top: 1px solid var(--rule); }
@@ -221,7 +220,7 @@
         </div>
 
         <a class="proof reveal" href="public/demo-video.html" aria-label="Watch the 42-second Slack MCP proof reel">
-          <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="docs/images/demo-poster.png">
+          <video id="heroVideo" autoplay muted playsinline preload="metadata" poster="docs/images/demo-poster.png">
             <source src="docs/videos/slack-mcp-proof-42s.mp4" type="video/mp4">
             <source src="docs/videos/slack-mcp-proof-42s.webm" type="video/webm">
           </video>
