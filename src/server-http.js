@@ -14,7 +14,7 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import { TOOLS } from "../lib/tools.js";
+import { getActiveToolProfile } from "../lib/tools.js";
 import { TOOL_HANDLERS } from "../lib/handlers.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
 import { isAuthDeath, lifeboatResponse } from "../lib/lifeboat.js";
@@ -66,6 +66,11 @@ function applyCors(req, res) {
   return allowOrigin;
 }
 
+// Resolve the advertised tool surface once (SLACK_MCP_TOOLS narrows it; default
+// is the full surface). Handlers stay fully wired regardless.
+const ACTIVE_TOOLS = getActiveToolProfile();
+if (ACTIVE_TOOLS.warning) console.warn(`Tool profile: ${ACTIVE_TOOLS.warning}`);
+
 // Create MCP server
 const server = new Server(
   { name: SERVER_NAME, version: SERVER_VERSION },
@@ -74,7 +79,7 @@ const server = new Server(
 
 // Register tool list handler
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: TOOLS
+  tools: ACTIVE_TOOLS.tools
 }));
 
 // Register tool call handler
@@ -202,6 +207,7 @@ const httpServer = http.createServer(async (req, res) => {
 httpServer.listen(PORT, () => {
   console.log(`${SERVER_NAME} v${SERVER_VERSION} HTTP server running on port ${PORT}`);
   console.log(`MCP endpoint: http://localhost:${PORT}/mcp`);
+  console.log(`Tool profile: ${ACTIVE_TOOLS.profile} (${ACTIVE_TOOLS.tools.length} tools, source: ${ACTIVE_TOOLS.source})`);
   if (HTTP_INSECURE) {
     console.warn("WARNING: SLACK_MCP_HTTP_INSECURE=1 enabled. /mcp is unauthenticated and CORS is wildcard.");
   } else {

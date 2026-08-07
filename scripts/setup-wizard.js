@@ -603,6 +603,16 @@ async function showHelp() {
   print("  keep credentials in a separate namespace per workspace — e.g.");
   print("  --setup --profile work, then a second server with --profile personal.");
   print();
+  print(`${colors.bold}Trim the surface:${colors.reset}`);
+  print("  --tools essentials (or SLACK_MCP_TOOLS=essentials) advertises the six");
+  print("  core tools to cut per-turn schema cost; 'read' advertises read-only");
+  print("  tools; 'all' is the default. Every handler stays callable either way.");
+  print();
+  print(`${colors.bold}Request pacing:${colors.reset}`);
+  print("  Outbound Slack calls are paced by default. Tune with");
+  print("  SLACK_MCP_MIN_REQUEST_INTERVAL_MS (default 350, 0 disables) and");
+  print("  SLACK_MCP_MAX_CONCURRENCY (default 3).");
+  print();
   print(`${colors.bold}npm scripts:${colors.reset}`);
   print("  npm start              Start MCP server");
   print("  npm run web            Start REST API + Web UI (port 3000)");
