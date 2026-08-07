@@ -34,6 +34,35 @@ test("spaces request starts by at least minIntervalMs even under concurrency", a
   }
 });
 
+test("an event-loop stall does not bunch the queued starts", async () => {
+  // Reserving nominal wake times lets several sleeps expire together after a
+  // stall and fire at once — the exact burst pacing exists to prevent, and
+  // synchronous PBKDF2 during Chrome token extraction can stall this long.
+  // Spacing must be measured against ACTUAL previous starts.
+  const interval = 50;
+  const pacer = createRequestPacer({ minIntervalMs: interval, maxConcurrency: Infinity });
+  const starts = [];
+  const runs = Array.from({ length: 4 }, () => pacer(async () => { starts.push(Date.now()); }));
+
+  // Let every task claim its place and begin waiting BEFORE the stall — that
+  // ordering is what reproduces the bug. Stalling first would simply delay all
+  // four equally and prove nothing.
+  await new Promise((resolve) => setImmediate(resolve));
+
+  // Now stall past several pending wake times, so their timers all come due at
+  // once. Nominal-time reservation fires them together here; actual-time gating
+  // re-spaces them.
+  const blockUntil = Date.now() + interval * 3.5;
+  while (Date.now() < blockUntil) { /* deliberate synchronous stall */ }
+
+  await Promise.all(runs);
+  starts.sort((a, b) => a - b);
+  for (let i = 1; i < starts.length; i++) {
+    const gap = starts[i] - starts[i - 1];
+    assert.ok(gap >= interval - 8, `start ${i} came ${gap}ms after the previous (need ~>=${interval}ms)`);
+  }
+});
+
 test("interval of 0 disables spacing (near-instant)", async () => {
   const pacer = createRequestPacer({ minIntervalMs: 0, maxConcurrency: Infinity });
   const t0 = Date.now();
