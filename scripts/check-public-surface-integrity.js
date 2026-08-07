@@ -210,6 +210,23 @@ function main() {
     unknownProfileNames.length === 0 ? "no rotted names" : unknownProfileNames.join(", ")
   );
 
+  // A script the public docs invite people to run must actually ship in the
+  // package. The token-cost claim is only as good as the reader's ability to
+  // reproduce it from what they installed.
+  const publishedScripts = (packageJson.files || []).filter((entry) => entry.startsWith("scripts/"));
+  const docInvitedScripts = Array.from(
+    new Set(Array.from(readme.matchAll(/scripts\/([a-z0-9-]+\.js)/g), (match) => `scripts/${match[1]}`))
+  );
+  const unshippedInvited = docInvitedScripts.filter((path) => !publishedScripts.includes(path));
+  check(
+    results,
+    "README-invited scripts ship in the package",
+    unshippedInvited.length === 0,
+    unshippedInvited.length === 0
+      ? `${docInvitedScripts.length} referenced, all in files[]`
+      : `not published: ${unshippedInvited.join(", ")}`
+  );
+
   const cliHelpResult = runNode(["src/cli.js", "--help"]);
   check(
     results,
