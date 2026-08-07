@@ -28,7 +28,7 @@ import {
 import { loadTokensReadOnly } from "../lib/token-store.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
 import { checkTokenHealth } from "../lib/slack-client.js";
-import { TOOLS } from "../lib/tools.js";
+import { getActiveToolProfile } from "../lib/tools.js";
 import {
   TOOL_HANDLERS,
   handleHealthCheck,
@@ -101,6 +101,11 @@ const RESOURCES = [
   }
 ];
 
+// Resolve the advertised tool surface once per process. SLACK_MCP_TOOLS (or
+// --tools=…) can narrow it to cut per-turn schema cost; the default is the full
+// surface. Handlers stay fully wired regardless of what is advertised.
+const ACTIVE_TOOLS = getActiveToolProfile();
+
 // Initialize server
 const server = new Server(
   { name: SERVER_NAME, version: SERVER_VERSION },
@@ -109,7 +114,7 @@ const server = new Server(
 
 // Register tool list handler
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: TOOLS
+  tools: ACTIVE_TOOLS.tools
 }));
 
 // Register prompts handlers
@@ -303,6 +308,13 @@ async function main() {
   process.on("SIGHUP", () => shutdown("SIGHUP"));
   process.stdin.on("end", () => shutdown("stdin end (MCP client disconnected)"));
   process.stdin.on("error", (err) => shutdown(`stdin error: ${err?.message || err}`));
+
+  // Surface which tool profile is active so a narrowed surface is never a
+  // silent surprise (and a mistyped SLACK_MCP_TOOLS says so out loud).
+  if (ACTIVE_TOOLS.warning) console.error(`Tool profile: ${ACTIVE_TOOLS.warning}`);
+  console.error(
+    `Tool profile: ${ACTIVE_TOOLS.profile} (${ACTIVE_TOOLS.tools.length} tools, source: ${ACTIVE_TOOLS.source})`
+  );
 
   // Start server
   const transport = new StdioServerTransport();

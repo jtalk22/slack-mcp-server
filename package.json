@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "4.7.0",
+  "version": "4.8.0",
   "description": "Slack for AI agents: DMs, search, threads, triage, actions - browser-session or hosted OAuth.",
   "funding": {
     "type": "github",
@@ -44,6 +44,7 @@
     "verify:public-pages": "node scripts/verify-generated-public-pages.js",
     "verify:version-parity": "node scripts/check-version-parity.js",
     "verify:public-surface": "node scripts/check-public-surface-integrity.js",
+    "measure:tools": "node scripts/measure-tool-schema.js",
     "verify:media-manifest": "node scripts/media-manifest.js --check",
     "verify:release-dry-run": "node scripts/release-preflight.js",
     "smoke:browser": "node scripts/browser-smoke.js",

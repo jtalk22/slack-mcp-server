@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.8.0] - 2026-08-07
+
+### Tool profiles and request pacing
+
+No MCP tool contracts changed. This release addresses the two running costs of
+a browser-session Slack server: the tool schema a client carries on every turn,
+and the request velocity that Slack's session-anomaly detection watches.
+
+### Added
+
+- **Tool profiles (`SLACK_MCP_TOOLS` / `--tools`)** — advertise a smaller slice
+  of the surface to cut per-turn tool-schema cost. `essentials` ships the six
+  core tools (unread, history, search, thread, user lookup, send) at roughly
+  985 estimated tokens of schema, down from about 3,600 for all 21; `read`
+  advertises the read-only tools (~2,559); `all` remains the default, so
+  existing installs are unchanged. A custom comma-separated allow-list is also
+  accepted. Filtering narrows only the advertised `tools/list` — every handler
+  stays callable. `scripts/measure-tool-schema.js` (`npm run measure:tools`)
+  reproduces the numbers (a ~4-chars/token estimate, labelled as one). Files:
+  `lib/tools.js`, `src/server.js`, `src/server-http.js`, `src/cli.js`,
+  `scripts/setup-wizard.js`, `scripts/measure-tool-schema.js`.
+- **Conservative request pacing, on by default** — outbound Slack calls are
+  spaced by a minimum inter-request-start interval and capped in concurrency to
+  stay under session-anomaly burst thresholds (most relevant on Enterprise
+  Grid). Tunable via `SLACK_MCP_MIN_REQUEST_INTERVAL_MS` (default 350; 0
+  disables) and `SLACK_MCP_MAX_CONCURRENCY` (default 3). No tool-contract
+  change. Files: `lib/slack-client.js`.
+
+### Changed
+
+- **README** — new "Grid, credentials, and caching" section documents the
+  Enterprise Grid session-anomaly risk and the pacing that mitigates it, the
+  credential extraction path (Chrome LevelDB token, cookie SQLite database,
+  Keychain Safe Storage, local PBKDF2 + AES-128-CBC decryption, local-only
+  writes), its similarity to the access pattern credential stealers use, and
+  the contents of the one user-name cache. The local/hosted split now states
+  the boundary: local never contacts us, hosted never receives a browser
+  cookie. Tool-profile and pacing configuration documented in README and CLI
+  help.
+
 ## [4.7.0] - 2026-08-07
 
 ### The OS comes back
