@@ -1,4 +1,4 @@
-# Slack MCP v4.6.2 — launch and distribution kit
+# Slack MCP — launch and distribution kit
 
 This is a copy bank, not canonical product documentation. Recheck live pricing, version, and download numbers immediately before publishing.
 

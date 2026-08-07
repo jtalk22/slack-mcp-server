@@ -120,6 +120,31 @@ jobs:
           echo "npm version $VERSION not visible after 10 attempts" >&2
           exit 1
 
+      - name: Verify live npm description matches package.json
+        if: steps.npm_check.outputs.already_published != 'true'
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          # npm metadata is immutable per version; a stale description on the live
+          # surface can only heal on the next publish. Catch the mismatch NOW,
+          # while this run can still be diagnosed, instead of months later.
+          EXPECTED="$(jq -r '.description' package.json)"
+          for i in $(seq 1 10); do
+            LIVE="$(npm view "@jtalk22/slack-mcp@$VERSION" description 2>/dev/null || true)"
+            if [[ "$LIVE" == "$EXPECTED" ]]; then
+              echo "Live npm description matches package.json."
+              exit 0
+            fi
+            echo "Live description not settled yet (attempt $i/10); waiting 15s..."
+            sleep 15
+          done
+          echo "Live npm description does not match package.json after 10 attempts." >&2
+          echo "expected: $EXPECTED" >&2
+          echo "live:     $LIVE" >&2
+          exit 1
+
       - name: Publish to MCP registry
         if: steps.registry_check.outputs.already_published != 'true'
         shell: bash
