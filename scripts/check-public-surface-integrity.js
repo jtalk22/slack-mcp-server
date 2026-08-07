@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { PUBLIC_METADATA, RELEASE_VERSION } from "../lib/public-metadata.js";
+import { DESIGN_TOKENS } from "../lib/public-pages.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -178,6 +179,37 @@ function main() {
       !cliHelpResult.stdout.includes("Full Slack access for Claude"),
     cliHelpResult.stdout || cliHelpResult.stderr || "no output"
   );
+
+  // One design-token vocabulary: the shared :root block from lib/public-pages.js
+  // must appear byte-identical on every generated page.
+  for (const pagePath of [
+    "index.html",
+    "public/share.html",
+    "public/demo.html",
+    "public/demo-video.html",
+    "public/proof-reel.html",
+    "public/demo-slack-mcp.html",
+  ]) {
+    check(
+      results,
+      `${pagePath} canonical design tokens`,
+      read(pagePath).includes(DESIGN_TOKENS),
+      "expected the shared :root vocabulary emitted by {{DESIGN_TOKENS}}"
+    );
+  }
+
+  // Retired token names must not re-enter the templates.
+  const fossilTokens = ["--teal", "--coral", "--ground", "--bg-primary", "--accent", "--claude-orange"];
+  for (const templateName of readdirSync(join(ROOT, "templates", "public-pages"))) {
+    const templateSource = read(join("templates", "public-pages", templateName));
+    const fossilsFound = fossilTokens.filter((token) => templateSource.includes(token));
+    check(
+      results,
+      `templates/public-pages/${templateName} fossil-token free`,
+      fossilsFound.length === 0,
+      fossilsFound.length === 0 ? "no retired token names" : fossilsFound.join(", ")
+    );
+  }
 
   const proofReel = read("public/proof-reel.html");
   check(

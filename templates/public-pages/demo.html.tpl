@@ -23,26 +23,21 @@
   <!-- SEO -->
   <meta name="description" content="Interactive Slack MCP demo: {{SELF_HOSTED_TOOL_COUNT}} self-hosted tools for channels, DMs, search, threads, unread triage, and actions.">
   <style>
-    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500 700; }
-    @font-face { font-family: "Roobert"; src: url("fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400 500; }
-    @font-face { font-family: "Roobert"; src: url("fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
+    {{FONT_FACES}}
+    {{DESIGN_TOKENS}}
     :root {
-      --font-heading: "Nyght Serif", Georgia, serif;
-      --font-body: "Roobert", "Segoe UI", system-ui, sans-serif;
-      /* Poster canon — near-black grounds, vermilion emphasis, amber system/tool */
-      --bg-primary: #0b0b0c;
-      --bg-secondary: #141416;
-      --bg-tertiary: #101012;
-      --bg-input: #1a1a1e;
-      --accent: #ffb224;
-      --accent-hover: #e09b13;
-      --accent-glow: rgba(255, 178, 36, 0.3);
-      --danger: #e5482f;
-      --claude-orange: #e5482f;
-      --claude-bg: #141416;
-      --text-primary: #f0efe9;
-      --text-secondary: rgba(240, 239, 233, 0.7);
-      --text-muted: rgba(240, 239, 233, 0.5);
+      /* window-role map — local aliases onto the shared vocabulary */
+      --font-heading: var(--body);
+      --font-body: var(--body);
+      --window-bg: var(--ink);
+      --panel: var(--surface);
+      --panel-2: #101012;
+      --input-bg: #1a1a1e;
+      --signal-hover: #e09b13;
+      --signal-glow: rgba(255, 178, 36, 0.3);
+      --text-primary: var(--paper);
+      --text-secondary: rgba(238, 235, 227, 0.72);
+      --text-muted: rgba(238, 235, 227, 0.5);
       --border-radius: 12px;
       --transition: all 0.2s ease;
     }
@@ -51,13 +46,13 @@
 
     body {
       font-family: var(--font-body);
-      background: var(--bg-primary);
+      background: var(--window-bg);
       color: var(--text-primary);
       min-height: 100vh;
       line-height: 1.5;
     }
 
-    /* Preview Banner — flat brand near-black bar with the poster's coral→teal top rule */
+    /* Preview Banner — flat near-black bar with the estate's vermilion→amber top rule */
     .preview-banner {
       background: #141416;
       border-top: 3px solid transparent;
@@ -82,7 +77,7 @@
       text-decoration: underline;
     }
     .cta-strip {
-      background: rgba(18, 22, 31, 0.92);
+      background: rgba(19, 19, 21, 0.92);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding: 10px 16px;
       display: flex;
@@ -98,7 +93,7 @@
       flex-wrap: wrap;
     }
     .cta-links a {
-      color: #dfe6ee;
+      color: var(--paper);
       text-decoration: none;
       padding: 4px 8px;
       border: 1px solid rgba(255, 255, 255, 0.25);
@@ -111,7 +106,7 @@
       color: rgba(255, 255, 255, 0.75);
     }
     .cta-note a {
-      color: #7fe0d6;
+      color: var(--sys-blue);
       text-decoration: underline;
     }
 
@@ -125,7 +120,7 @@
 
     /* ========== LEFT PANEL: CLAUDE CHAT ========== */
     .claude-panel {
-      background: var(--claude-bg);
+      background: var(--panel);
       border-right: 1px solid rgba(255,255,255,0.1);
       display: flex;
       flex-direction: column;
@@ -143,7 +138,7 @@
     .claude-logo {
       width: 36px;
       height: 36px;
-      background: linear-gradient(135deg, var(--claude-orange), #c73a20);
+      background: linear-gradient(135deg, var(--clay), #b85f41);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -178,8 +173,8 @@
     }
     .reset-btn:hover {
       background: rgba(229, 72, 47, 0.2);
-      border-color: var(--danger);
-      color: var(--danger);
+      border-color: var(--stamp);
+      color: var(--stamp);
     }
 
     .claude-chat {
@@ -204,7 +199,7 @@
     }
 
     .chat-message.user .bubble {
-      background: var(--bg-input);
+      background: var(--input-bg);
       display: inline-block;
       text-align: left;
     }
@@ -238,7 +233,7 @@
     }
 
     .tool-call .tool-name {
-      color: var(--accent);
+      color: var(--signal);
       font-weight: 600;
     }
 
@@ -257,7 +252,7 @@
     .typing-indicator span {
       width: 8px;
       height: 8px;
-      background: var(--claude-orange);
+      background: var(--clay);
       border-radius: 50%;
       animation: bounce 1.4s infinite ease-in-out;
     }
@@ -309,7 +304,7 @@
 
     .scenario-btn:hover {
       background: rgba(255, 178, 36, 0.1);
-      border-color: var(--accent);
+      border-color: var(--signal);
     }
 
     .scenario-btn:disabled {
@@ -337,7 +332,7 @@
 
     /* ========== RIGHT PANEL: SLACK DASHBOARD ========== */
     .dashboard-panel {
-      background: var(--bg-primary);
+      background: var(--window-bg);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -349,7 +344,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--bg-secondary);
+      background: var(--panel);
     }
 
     .dashboard-title {
@@ -365,8 +360,8 @@
     }
 
     .status-badge {
-      background: rgba(34, 197, 94, 0.2);
-      color: #22c55e;
+      background: rgba(40, 200, 64, 0.15);
+      color: var(--sys-green);
       padding: 4px 12px;
       border-radius: 20px;
       font-size: 12px;
@@ -382,7 +377,7 @@
 
     /* Sidebar */
     .sidebar {
-      background: var(--bg-secondary);
+      background: var(--panel);
       border-right: 1px solid rgba(255,255,255,0.05);
       display: flex;
       flex-direction: column;
@@ -425,23 +420,23 @@
     }
 
     .conversation-item.active {
-      background: linear-gradient(135deg, var(--accent), #c2820f);
+      background: linear-gradient(135deg, var(--signal), #c2820f);
     }
 
     .conversation-item.active .conv-name,
     .conversation-item.active .conv-preview {
-      color: var(--bg-primary);
+      color: var(--window-bg);
     }
 
     .conversation-item.highlight {
       background: rgba(255, 178, 36, 0.2);
-      border: 1px solid var(--accent);
+      border: 1px solid var(--signal);
       animation: pulse-highlight 1s ease-in-out;
     }
 
     @keyframes pulse-highlight {
-      0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
-      50% { box-shadow: 0 0 20px 5px var(--accent-glow); }
+      0%, 100% { box-shadow: 0 0 0 0 var(--signal-glow); }
+      50% { box-shadow: 0 0 20px 5px var(--signal-glow); }
     }
 
     .avatar {
@@ -465,7 +460,7 @@
 
     /* Main Content Area */
     .main-area {
-      background: var(--bg-tertiary);
+      background: var(--panel-2);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -491,7 +486,7 @@
     .online-dot {
       width: 8px;
       height: 8px;
-      background: #22c55e;
+      background: var(--sys-green);
       border-radius: 50%;
     }
 
@@ -504,7 +499,7 @@
     .mobile-scenario-rail {
       display: none;
       padding: 14px 16px;
-      background: rgba(18, 22, 31, 0.6);
+      background: rgba(19, 19, 21, 0.6);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -550,7 +545,7 @@
     }
 
     .mobile-scenario-btn:hover {
-      border-color: var(--accent);
+      border-color: var(--signal);
       background: rgba(255, 178, 36, 0.15);
     }
 
@@ -601,7 +596,7 @@
 
     .message-content { flex: 1; }
     .message-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
-    .message-user { font-weight: 600; font-size: 14px; color: var(--accent); }
+    .message-user { font-weight: 600; font-size: 14px; color: var(--signal); }
     .message-time { font-size: 12px; color: var(--text-muted); }
     .message-text { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
 
@@ -609,13 +604,13 @@
       background: rgba(0,0,0,0.3);
       padding: 2px 6px;
       border-radius: 4px;
-      color: #7fe0d6;
+      color: var(--sys-blue);
       font-family: monospace;
     }
 
     /* User Profile Card */
     .user-card {
-      background: var(--bg-secondary);
+      background: var(--panel);
       border-radius: 12px;
       padding: 24px;
       text-align: center;
@@ -640,7 +635,7 @@
       justify-content: center;
       font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, #e5482f, #c73a20);
+      background: linear-gradient(135deg, var(--clay), #b85f41);
     }
 
     .user-card h4 {
@@ -669,7 +664,7 @@
     .user-card .stat-value {
       font-size: 20px;
       font-weight: 700;
-      color: var(--accent);
+      color: var(--signal);
     }
 
     .user-card .stat-label {
@@ -747,7 +742,7 @@
 <body>
   <!-- Preview Banner -->
   <div class="preview-banner">
-    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or try <a href="{{CANONICAL_SITE_URL}}" style="color:#7fe0d6;font-weight:600">Hosted</a> — free tier (no card) live; Pro $19/mo unlocks unlimited AI tools and permanent OAuth.
+    INTERACTIVE DEMO — simulated data. Run <code>npm run web</code> for your live workspace, or try <a href="{{CANONICAL_SITE_URL}}" style="color:var(--sys-blue);font-weight:600">Hosted</a> — free tier (no card) live; Pro $19/mo unlocks unlimited AI tools and permanent OAuth.
   </div>
   <div class="cta-strip">
     <div class="cta-links">
@@ -971,7 +966,7 @@
     }
 
     function getColor(initials) {
-      // Brand tints only — coral / teal alternation (poster canon)
+      // Brand tints only — vermilion / amber alternation (estate vocabulary)
       const colors = [
         '#e5482f, #c73a20',
         '#ffb224, #d99417',

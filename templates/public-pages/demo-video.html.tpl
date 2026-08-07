@@ -44,14 +44,10 @@
   }
   </script>
   <style>
-    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500; }
-    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium-italic.woff2") format("woff2"); font-display: swap; font-weight: 500; font-style: italic; }
-    @font-face { font-family: "Roobert"; src: url("fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400; }
-    @font-face { font-family: "Roobert"; src: url("fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
-    @font-face { font-family: "Roobert Mono"; src: url("fonts/roobert-mono.woff2") format("woff2"); font-display: swap; font-weight: 400 600; }
-    :root { color-scheme: dark; --ground:#0b0b0c; --surface:#131315; --rule:#2f2f34; --paper:#eeebe3; --muted:#98958c; --stamp:#e5482f; --signal:#ffb224; --display:"Nyght Serif",Georgia,"Times New Roman",serif; --body:"Roobert",system-ui,sans-serif; --mono:"Roobert Mono",ui-monospace,SFMono-Regular,Menlo,monospace; }
+    {{FONT_FACES}}
+    {{DESIGN_TOKENS}}
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; background: var(--ground); color: var(--paper); font-family: var(--body); }
+    body { margin: 0; min-height: 100vh; background: var(--ink); color: var(--paper); font-family: var(--body); }
     a { color: inherit; }
     .frame { width: min(1280px, calc(100% - 40px)); margin: 0 auto; }
     header { min-height: 68px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--rule); }
@@ -62,12 +58,12 @@
     main { padding-block: clamp(42px, 6vw, 82px) 70px; }
     .intro { display:grid; grid-template-columns: 1fr auto; gap:30px; align-items:end; margin-bottom:30px; }
     .eyebrow { margin:0 0 14px; color:var(--stamp); font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
-    h1 { margin:0; font-family:var(--display); font-size:clamp(48px,7.5vw,104px); font-weight:400; font-style:italic; letter-spacing:-.06em; line-height:.9; }
-    .intro p:last-child { margin:20px 0 0; max-width:720px; color:#b9c1cc; font-size:18px; line-height:1.55; }
+    h1 { margin:0; font-family:var(--body); font-size:clamp(34px,4.5vw,56px); font-weight:600; letter-spacing:-.02em; line-height:1.02; }
+    .intro p:last-child { margin:20px 0 0; max-width:720px; color:#c6c3ba; font-size:18px; line-height:1.55; }
     .duration { color:var(--signal); font-family:var(--mono); font-size:14px; text-align:right; }
-    .video-shell { border:1px solid var(--rule); background:#070a10; }
-    video { display:block; width:100%; aspect-ratio:16/9; background:#070a10; }
-    video::cue { font-family:var(--body); font-size:70%; background:rgba(8,11,17,.9); color:var(--paper); }
+    .video-shell { border:1px solid var(--rule); background:var(--ink); }
+    video { display:block; width:100%; aspect-ratio:16/9; background:var(--ink); }
+    video::cue { font-family:var(--body); font-size:70%; background:rgba(11,11,12,.9); color:var(--paper); }
     .mode-bar { display:flex; justify-content:space-between; gap:18px; padding:16px 18px; border-top:1px solid var(--rule); align-items:center; }
     .modes { display:flex; gap:8px; }
     .mode { border:1px solid var(--rule); background:transparent; color:var(--muted); padding:9px 13px; cursor:pointer; font-family:var(--mono); font-size:11px; }
@@ -77,7 +73,7 @@
     .chapters.visible { display:grid; }
     .chapter { min-height:66px; border:0; border-right:1px solid var(--rule); background:var(--surface); color:var(--muted); padding:11px; text-align:left; cursor:pointer; font-family:var(--mono); font-size:10px; line-height:1.4; }
     .chapter:last-child { border-right:0; }
-    .chapter:hover,.chapter.active { color:var(--paper); background:#17202a; }
+    .chapter:hover,.chapter.active { color:var(--paper); background:var(--surface-2); }
     .chapter.active { box-shadow:inset 0 -2px var(--signal); }
     .below { margin-top:32px; display:grid; grid-template-columns:1fr auto; gap:34px; align-items:start; }
     .note { margin:0; max-width:760px; color:var(--muted); line-height:1.65; }
@@ -87,7 +83,7 @@
     .install a { display:flex; align-items:center; padding:0 16px; background:var(--signal); color:#161003; font-weight:600; text-decoration:none; font-size:13px; }
     footer { margin-top:64px; padding-top:25px; border-top:1px solid var(--rule); color:var(--muted); display:flex; justify-content:space-between; gap:20px; font-size:12px; }
     @media(max-width:760px){
-      .frame{width:min(100% - 24px,1280px)} header nav a:not(:last-child){display:none}.intro{grid-template-columns:1fr}.duration{text-align:left}.video-shell video{aspect-ratio:9/16;object-fit:cover}.mode-bar{align-items:flex-start;flex-direction:column}.mode-note{text-align:left}.chapters.visible{grid-template-columns:1fr 1fr}.chapter:nth-child(even){border-right:0}.below{grid-template-columns:1fr}.install{overflow-x:auto}.install code{font-size:10px}footer{flex-direction:column}h1{font-size:clamp(55px,18vw,86px)}
+      .frame{width:min(100% - 24px,1280px)} header nav a:not(:last-child){display:none}.intro{grid-template-columns:1fr}.duration{text-align:left}.video-shell video{aspect-ratio:9/16;object-fit:cover}.mode-bar{align-items:flex-start;flex-direction:column}.mode-note{text-align:left}.chapters.visible{grid-template-columns:1fr 1fr}.chapter:nth-child(even){border-right:0}.below{grid-template-columns:1fr}.install{overflow-x:auto}.install code{font-size:10px}footer{flex-direction:column}h1{font-size:clamp(32px,9vw,56px)}
     }
   </style>
 </head>
