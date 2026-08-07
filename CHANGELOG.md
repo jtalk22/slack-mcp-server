@@ -19,7 +19,8 @@ and the request velocity that Slack's session-anomaly detection watches.
   of the surface to cut per-turn tool-schema cost. `essentials` ships the six
   core tools (unread, history, search, thread, user lookup, send) at roughly
   985 estimated tokens of schema, down from about 3,600 for all 21; `read`
-  advertises the read-only tools (~2,559); `all` remains the default, so
+  advertises the 12 read-only Slack operations (~1,690); `all` remains the
+  default, so
   existing installs are unchanged. A custom comma-separated allow-list is also
   accepted. Filtering narrows only the advertised `tools/list` — every handler
   stays callable. `scripts/measure-tool-schema.js` (`npm run measure:tools`)
