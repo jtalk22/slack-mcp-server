@@ -35,59 +35,76 @@
   <link rel="icon" href="../docs/assets/icon-512.png" type="image/png">
   <style>
     /* Self-hosted fonts — no CDN, instant load */
-    @font-face { font-family: "Nyght Serif"; font-style: normal; font-weight: 500 700; font-display: swap; src: url("../public/fonts/nyght-serif-medium.woff2") format("woff2"); }
-    @font-face { font-family: "Roobert"; font-style: normal; font-weight: 400 500; font-display: swap; src: url("../public/fonts/roobert-regular.woff2") format("woff2"); }
-    @font-face { font-family: "Roobert"; font-style: normal; font-weight: 600; font-display: swap; src: url("../public/fonts/roobert-semibold.woff2") format("woff2"); }
-    @font-face { font-family: "Roobert Mono"; font-style: normal; font-weight: 400 600; font-display: swap; src: url("../public/fonts/roobert-mono.woff2") format("woff2"); }
-
-    /* ═══════════════════════════════════════════════════════════════
-       Palette — poster canon (near-black · vermilion · amber)
-       Harmonized with docs/images/demo-poster.png. Teal = system/tool/
-       success register; coral = brand/emphasis. --claude-orange keeps its
-       name (many refs) but now carries the poster coral.
-       ═══════════════════════════════════════════════════════════════ */
+    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500; }
+    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium-italic.woff2") format("woff2"); font-display: swap; font-weight: 500; font-style: italic; }
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400; }
+    @font-face { font-family: "Roobert"; src: url("fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
+    @font-face { font-family: "Roobert Mono"; src: url("fonts/roobert-mono.woff2") format("woff2"); font-display: swap; font-weight: 400 600; }
     :root {
-      --font-heading: "Nyght Serif", Georgia, serif;
-      --font-body: "Roobert", "Segoe UI", system-ui, sans-serif;
-      --font-mono: "Roobert Mono", "SF Mono", "Menlo", monospace;
-
-      /* Poster triad */
-      --coral: #e5482f;
-      --teal: #ffb224;
-
-      /* Window chrome */
-      --window-bg: #0b0b0c;
-      --window-chrome: #141416;
-      --window-border: #26262c;
+      color-scheme: dark;
+      /* estate — outside the window */
+      --ink: #0b0b0c;
+      --surface: #131315;
+      --surface-2: #18181b;
+      --rule: #2b2b30;
+      --paper: #eeebe3;
+      --paper-2: #e3e0d6;
+      --muted: #9a978e;
+      --stamp: #e5482f;
+      --signal: #ffb224;
+      --desk-1: #1a1a2e;
+      --desk-2: #16213e;
+      --desk-3: #0f3460;
+      /* system register — inside app chrome only */
+      --sys-green: #28c840;
+      --sys-blue: #6eb5ff;
+      --clay: #da7756;
       --traffic-red: #ff5f57;
       --traffic-yellow: #febc2e;
       --traffic-green: #28c840;
+      /* type */
+      --display: "Nyght Serif", Georgia, "Times New Roman", serif;
+      --body: "Roobert", system-ui, sans-serif;
+      --mono: "Roobert Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       Window-role map — local aliases onto the shared vocabulary.
+       Inside the app-window fiction the SYSTEM register applies:
+       sys-green success, sys-blue links, clay assistant accent,
+       real traffic lights. Estate ink/paper carry the ground.
+       ═══════════════════════════════════════════════════════════════ */
+    :root {
+      --font-heading: var(--body);
+      --font-body: var(--body);
+      --font-mono: var(--mono);
+
+      /* Window chrome */
+      --window-bg: var(--ink);
+      --window-chrome: var(--surface);
+      --window-border: #26262c;
 
       /* Messages */
       --user-bubble-bg: #1a1a1e;
-      --claude-bubble-bg: #141416;
-      --claude-orange: #e5482f;
+      --claude-bubble-bg: var(--surface);
 
       /* Tool calls */
       --tool-box-bg: #101012;
       --tool-box-border: #26262c;
       --tool-header-bg: #17171b;
-      --tool-name-color: #96938a;
+      --tool-name-color: var(--muted);
 
       /* Text */
-      --text-primary: #f0efe9;
-      --text-secondary: #a7b2c0;
-      --text-muted: #96938a;
+      --text-primary: var(--paper);
+      --text-secondary: #b5b2a9;
+      --text-muted: var(--muted);
 
       /* Accents */
-      --link-color: #ffb224;
-      --code-bg: #141416;
-      --code-text: #f0efe9;
-      --success-color: #ffb224;
-      --warning-color: #f2b950;
-
-      /* Brand DNA (subliminal) */
-      --text-warm: #eef1f6;
+      --link-color: var(--sys-blue);
+      --code-bg: var(--surface);
+      --code-text: var(--paper);
+      --success-color: var(--sys-green);
+      --warning-color: var(--signal);
 
       /* Shadows */
       --shadow-lg: 0 30px 60px -18px rgba(0, 0, 0, 0.72);
@@ -113,10 +130,7 @@
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      background:
-        radial-gradient(58% 46% at 14% 0%, rgba(229, 72, 47, 0.07), transparent 62%),
-        radial-gradient(58% 46% at 86% 0%, rgba(255, 178, 36, 0.07), transparent 62%),
-        linear-gradient(180deg, #0e1119 0%, #0b0b0c 58%, #07090e 100%);
+      background: linear-gradient(135deg, var(--desk-1), var(--desk-2), var(--desk-3));
       background-attachment: fixed;
       min-height: 100vh;
       display: flex;
@@ -159,7 +173,7 @@
       width: 100%;
       max-width: 960px;
       margin-bottom: 14px;
-      background: rgba(18, 22, 31, 0.82);
+      background: rgba(19, 19, 21, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px;
       padding: 10px 12px;
@@ -176,7 +190,7 @@
       flex-wrap: wrap;
     }
     .cta-strip .links a {
-      color: #dfe6ee;
+      color: var(--paper);
       text-decoration: none;
       border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 999px;
@@ -186,10 +200,10 @@
       background: rgba(255, 255, 255, 0.08);
     }
     .cta-strip .note {
-      color: rgba(255, 255, 255, 0.78);
+      color: var(--text-secondary);
     }
     .cta-strip .note a {
-      color: #7fe0d6;
+      color: var(--sys-blue);
       text-decoration: underline;
     }
 
@@ -197,8 +211,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(229, 72, 47, 0.16);
-      color: var(--claude-orange);
+      background: rgba(218, 119, 86, 0.14);
+      color: var(--clay);
       padding: 4px 10px;
       border-radius: 12px;
       font-size: 12px;
@@ -240,9 +254,9 @@
     }
 
     .scenario-btn.active {
-      background: rgba(229, 72, 47, 0.16);
-      border-color: var(--claude-orange);
-      color: var(--claude-orange);
+      background: rgba(218, 119, 86, 0.14);
+      border-color: var(--clay);
+      color: var(--clay);
     }
 
     .scenario-btn.playing {
@@ -250,8 +264,8 @@
     }
 
     @keyframes pulse-border {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(229, 72, 47, 0.4); }
-      50% { box-shadow: 0 0 0 4px rgba(229, 72, 47, 0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(218, 119, 86, 0.4); }
+      50% { box-shadow: 0 0 0 4px rgba(218, 119, 86, 0); }
     }
 
     .scenario-btn .icon {
@@ -450,7 +464,7 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: linear-gradient(90deg, var(--window-border) 25%, #26303f 50%, var(--window-border) 75%);
+      background: linear-gradient(90deg, var(--window-border) 25%, #2e2e34 50%, var(--window-border) 75%);
       background-size: 200% 100%;
       animation: skeleton-shimmer 1.5s infinite;
     }
@@ -465,7 +479,7 @@
     .skeleton-line {
       height: 16px;
       border-radius: 4px;
-      background: linear-gradient(90deg, var(--window-border) 25%, #26303f 50%, var(--window-border) 75%);
+      background: linear-gradient(90deg, var(--window-border) 25%, #2e2e34 50%, var(--window-border) 75%);
       background-size: 200% 100%;
       animation: skeleton-shimmer 1.5s infinite;
     }
@@ -525,14 +539,14 @@
     }
 
     .message.user .message-avatar {
-      background: linear-gradient(135deg, #2b3648 0%, #3a4a63 100%);
+      background: linear-gradient(135deg, #2a2a2e 0%, #3c3c42 100%);
       color: white;
       font-weight: 600;
       font-size: 12px;
     }
 
     .message.claude .message-avatar {
-      background: linear-gradient(135deg, var(--claude-orange) 0%, #c73a20 100%);
+      background: linear-gradient(135deg, var(--clay) 0%, #b85f41 100%);
       color: white;
       font-weight: 600;
       font-size: 12px;
@@ -548,8 +562,8 @@
       font-size: 16px;
     }
 
-    .message.user .message-sender { color: #b8c2d0; }
-    .message.claude .message-sender { color: var(--claude-orange); }
+    .message.user .message-sender { color: var(--text-secondary); }
+    .message.claude .message-sender { color: var(--clay); }
 
     .message-time {
       color: var(--text-muted);
@@ -593,7 +607,7 @@
     }
 
     .tool-header:hover {
-      background: #161c28;
+      background: #1a1a1e;
     }
 
     .tool-icon {
@@ -661,7 +675,7 @@
     }
 
     .tool-call.expanded {
-      border-left: 3px solid var(--claude-orange);
+      border-left: 3px solid var(--clay);
     }
 
     .tool-section {
@@ -704,7 +718,7 @@
 
     .tool-result .result-item:hover {
       background: rgba(255, 255, 255, 0.03);
-      border-left-color: var(--claude-orange);
+      border-left-color: var(--clay);
     }
 
     .tool-result .result-item:last-child {
@@ -717,7 +731,7 @@
     }
 
     .result-user {
-      color: #f5a3a3;
+      color: #e0a68f;
       font-weight: 500;
     }
 
@@ -764,7 +778,7 @@
       display: inline-block;
       width: 2px;
       height: 1em;
-      background: var(--claude-orange);
+      background: var(--clay);
       margin-left: 1px;
       animation: cursor-blink 0.8s ease-in-out infinite;
       vertical-align: text-bottom;
@@ -802,10 +816,10 @@
       align-items: center;
       gap: 6px;
       padding: 10px 16px;
-      background: rgba(229, 72, 47, 0.14);
-      border: 1px solid rgba(229, 72, 47, 0.32);
+      background: rgba(218, 119, 86, 0.12);
+      border: 1px solid rgba(218, 119, 86, 0.35);
       border-radius: 20px;
-      color: var(--claude-orange);
+      color: var(--clay);
       cursor: pointer;
       transition: all 0.2s;
       font-size: 13px;
@@ -814,7 +828,7 @@
     }
 
     .tools-button:hover {
-      background: rgba(229, 72, 47, 0.24);
+      background: rgba(218, 119, 86, 0.22);
     }
 
     .tools-button .icon {
@@ -1123,21 +1137,19 @@
        Production Polish - Title, Captions, Transitions, Closing
        ═══════════════════════════════════════════════════════════════ */
 
-    /* Title Card — poster-language cover (near-black + corner glows) */
+    /* Title / closing cards — flat ink covers; one accent rule each */
     .title-card, .closing-card {
-      background:
-        radial-gradient(64% 52% at 16% 4%, rgba(229, 72, 47, 0.10), transparent 60%),
-        radial-gradient(64% 52% at 84% 6%, rgba(255, 178, 36, 0.10), transparent 60%),
-        linear-gradient(180deg, #0e1119 0%, #0b0b0c 60%, #07090e 100%);
+      background: var(--ink);
     }
     .title-card::before, .closing-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--coral) 0%, var(--coral) 32%, var(--teal) 68%, var(--teal) 100%);
       opacity: 0.9;
     }
+    .title-card::before { background: var(--stamp); }
+    .closing-card::before { background: var(--sys-green); }
     .title-card {
       position: absolute;
       inset: 0;
@@ -1165,15 +1177,15 @@
 
     .title-card h1 {
       font-family: var(--font-heading);
-      color: var(--text-warm);
+      color: var(--text-primary);
       letter-spacing: -0.02em;
       font-weight: 600;
       font-size: clamp(34px, 5.4vw, 58px);
       line-height: 1.04;
       margin: 20px 0 14px;
     }
-    .title-card h1 .accent-time { color: var(--coral); }
-    .title-card .chan { color: var(--teal); font-weight: 600; }
+    .title-card h1 .accent-time { color: var(--stamp); }
+    .title-card .chan { color: var(--signal); font-weight: 600; }
 
     .title-card .title-logo { width: 56px; height: 56px; border-radius: 12px; }
     .title-card .title-tagline { color: var(--text-secondary); font-size: 16px; }
@@ -1272,15 +1284,15 @@
       align-items: center;
       justify-content: center;
       gap: clamp(16px, 3vw, 40px);
-      font-family: var(--font-heading);
-      font-weight: 700;
+      font-family: var(--font-mono);
+      font-weight: 600;
       letter-spacing: -0.04em;
       line-height: 1;
-      font-size: clamp(60px, 11vw, 132px);
+      font-size: clamp(60px, 10vw, 120px);
       margin-bottom: 22px;
     }
-    .closing-tally .from { color: var(--coral); }
-    .closing-tally .to { color: var(--teal); }
+    .closing-tally .from { color: var(--stamp); }
+    .closing-tally .to { color: var(--sys-green); }
     .closing-tally .arrow {
       color: var(--text-muted);
       font-size: 0.52em;
@@ -1298,7 +1310,7 @@
 
     .closing-card h2 {
       font-family: var(--font-heading);
-      color: var(--text-warm);
+      color: var(--text-primary);
       font-weight: 500;
       letter-spacing: -0.01em;
       font-size: clamp(22px, 3vw, 30px);
@@ -1319,7 +1331,7 @@
       border: 1px solid rgba(255, 178, 36, 0.35);
       box-shadow: 0 0 0 1px rgba(255, 178, 36, 0.06), 0 10px 30px -18px rgba(255, 178, 36, 0.5);
       font-size: 15px;
-      font-family: "SF Mono", "Menlo", monospace;
+      font-family: var(--font-mono);
     }
 
     .closing-github {
@@ -1333,11 +1345,11 @@
       position: absolute;
       bottom: 16px;
       right: 20px;
-      color: var(--text-warm);
+      color: var(--text-primary);
       opacity: 0.15;
       font-size: 14px;
-      font-weight: 300;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+      font-weight: 400;
+      font-family: var(--font-body);
     }
 
     .closing-card.visible .easter-egg {
@@ -1354,7 +1366,7 @@
 <body>
   <div class="cta-strip">
     <div class="links">
-<a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(229,72,47,0.18);border-color:rgba(229,72,47,0.45);color:#e5482f">Hosted</a>
+<a href="https://mcp.revasserlabs.com" target="_blank" rel="noopener noreferrer" style="background:rgba(229,72,47,0.18);border-color:rgba(229,72,47,0.45);color:var(--stamp)">Hosted</a>
       <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" target="_blank" rel="noopener noreferrer">npm Install</a>
       <a href="https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md" target="_blank" rel="noopener noreferrer">Setup Guide</a>
     </div>
@@ -1443,7 +1455,7 @@
     <!-- Title Card (auto-play only) — staggered reveal -->
     <div class="title-card" id="titleCard">
       <div class="title-line" style="margin-bottom: 20px;">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRBMTU0QiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMzRDExNDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8IS0tIEJhY2tncm91bmQgcm91bmRlZCBzcXVhcmUgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI5NiIgcnk9Ijk2IiBmaWxsPSJ1cmwoI2JnKSIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gU2xhY2stY29sb3JlZCBjb25uZWN0aW9uIGRvdHMgKHJlcHJlc2VudGluZyBNQ1AgYnJpZGdlKSAtLT4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiMzNkM1RjAiLz4KICA8Y2lyY2xlIGN4PSI5MiIgY3k9IjQyMCIgcj0iMjgiIGZpbGw9IiMyRUI2N0QiLz4KICA8Y2lyY2xlIGN4PSI0MjAiIGN5PSI0MjAiIHI9IjI4IiBmaWxsPSIjRUNCMjJFIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSI5MiIgcj0iMjgiIGZpbGw9IiNFMDFFNUEiLz4KPC9zdmc+Cg==" alt="" style="width: 44px; height: 44px; border-radius: 10px;">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPCEtLSBJbmsgZ3JvdW5kIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iOTYiIHJ5PSI5NiIgZmlsbD0iIzBiMGIwYyIvPgoKICA8IS0tIFN0eWxpemVkIGhhc2h0YWcvY2hhbm5lbCBzeW1ib2wgaW4gcGFwZXIgLS0+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWVlYmUzIiBzdHJva2Utd2lkdGg9IjM2IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPCEtLSBWZXJ0aWNhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxODAiIHkxPSIxNDAiIHgyPSIxNjAiIHkyPSIzNzIiLz4KICAgIDxsaW5lIHgxPSIzNTIiIHkxPSIxNDAiIHgyPSIzMzIiIHkyPSIzNzIiLz4KICAgIDwhLS0gSG9yaXpvbnRhbCBsaW5lcyAtLT4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIyMDAiIHgyPSIzOTIiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIxMjAiIHkxPSIzMTIiIHgyPSIzOTIiIHkyPSIzMTIiLz4KICA8L2c+CgogIDwhLS0gTm90aWZpY2F0aW9uIGJhZGdlIC0tPgogIDxjaXJjbGUgY3g9IjQwOCIgY3k9IjEwNCIgcj0iMzQiIGZpbGw9IiNlNTQ4MmYiLz4KPC9zdmc+Cg==" alt="" style="width: 44px; height: 44px; border-radius: 10px;">
       </div>
       <h1 class="title-line">It's Monday,<br><span class="accent-time">9:07 AM.</span></h1>
       <p class="title-line" style="font-size: 19px; color: var(--text-secondary); line-height: 1.6; max-width: 30ch;">A jammed printer. Nobody knows the PIN.<br>The guy who did left six months ago.</p>

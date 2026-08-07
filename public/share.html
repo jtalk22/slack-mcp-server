@@ -19,37 +19,54 @@
   <meta name="twitter:image" content="https://jtalk22.github.io/slack-mcp-server/docs/images/social-preview-v3.png">
   <link rel="icon" href="https://jtalk22.github.io/slack-mcp-server/docs/assets/icon-512.png" type="image/png">
   <style>
+    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium.woff2") format("woff2"); font-display: swap; font-weight: 500; }
+    @font-face { font-family: "Nyght Serif"; src: url("fonts/nyght-serif-medium-italic.woff2") format("woff2"); font-display: swap; font-weight: 500; font-style: italic; }
     @font-face { font-family: "Roobert"; src: url("fonts/roobert-regular.woff2") format("woff2"); font-display: swap; font-weight: 400; }
     @font-face { font-family: "Roobert"; src: url("fonts/roobert-semibold.woff2") format("woff2"); font-display: swap; font-weight: 600; }
+    @font-face { font-family: "Roobert Mono"; src: url("fonts/roobert-mono.woff2") format("woff2"); font-display: swap; font-weight: 400 600; }
     :root {
-      --bg-1: #0b0b0c;
-      --bg-2: #17130a;
-      --line: rgba(238, 235, 227, 0.22);
-      --text: #eeebe3;
-      --muted: #b3b0a7;
-      --link-bg: rgba(46, 40, 26, 0.7);
-      --link-bg-hover: rgba(64, 54, 32, 0.85);
-      --accent: #ffb224;
+      color-scheme: dark;
+      /* estate — outside the window */
+      --ink: #0b0b0c;
+      --surface: #131315;
+      --surface-2: #18181b;
+      --rule: #2b2b30;
+      --paper: #eeebe3;
+      --paper-2: #e3e0d6;
+      --muted: #9a978e;
+      --stamp: #e5482f;
+      --signal: #ffb224;
+      --desk-1: #1a1a2e;
+      --desk-2: #16213e;
+      --desk-3: #0f3460;
+      /* system register — inside app chrome only */
+      --sys-green: #28c840;
+      --sys-blue: #6eb5ff;
+      --clay: #da7756;
+      --traffic-red: #ff5f57;
+      --traffic-yellow: #febc2e;
+      --traffic-green: #28c840;
+      /* type */
+      --display: "Nyght Serif", Georgia, "Times New Roman", serif;
+      --body: "Roobert", system-ui, sans-serif;
+      --mono: "Roobert Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(900px 430px at 12% 0%, rgba(229,72,47,.28) 0%, transparent 60%),
-        radial-gradient(980px 480px at 100% 100%, rgba(255,178,36,.2) 0%, transparent 64%),
-        linear-gradient(145deg, var(--bg-1), var(--bg-2));
-      font-family: "Roobert", "Segoe UI", Arial, sans-serif;
+      color: var(--paper);
+      background: var(--ink);
+      font-family: var(--body);
       display: grid;
       place-items: center;
       padding: 20px;
     }
     .wrap {
       width: min(980px, 100%);
-      border: 1px solid var(--line);
+      border: 1px solid var(--rule);
       border-radius: 16px;
-      background: linear-gradient(165deg, rgba(30, 27, 19, 0.72), rgba(13, 12, 9, 0.9));
+      background: var(--surface);
       box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
       padding: 16px;
     }
@@ -58,6 +75,7 @@
       line-height: 1.08;
       letter-spacing: -0.02em;
       font-size: clamp(30px, 5vw, 48px);
+      font-weight: 600;
     }
     .sub {
       margin: 8px 0 14px;
@@ -65,11 +83,12 @@
       font-size: clamp(16px, 2.4vw, 22px);
       line-height: 1.25;
     }
+    .sub a { color: var(--signal); }
     .preview {
       display: block;
       border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(135, 163, 225, 0.4);
+      border: 1px solid var(--rule);
       text-decoration: none;
       margin-bottom: 14px;
     }
@@ -86,21 +105,22 @@
     .links a {
       display: inline-block;
       text-decoration: none;
-      border: 1px solid rgba(131, 161, 224, 0.5);
+      border: 1px solid var(--rule);
       border-radius: 10px;
       padding: 9px 12px;
-      color: var(--text);
-      background: var(--link-bg);
+      color: var(--paper);
+      background: var(--surface-2);
       font-weight: 600;
       font-size: 14px;
     }
-    .links a:hover { background: var(--link-bg-hover); }
+    .links a:hover { background: #232329; }
     .note {
-      color: #9fb4de;
+      color: var(--muted);
       font-size: 13px;
       line-height: 1.45;
     }
-    .note strong { color: var(--accent); }
+    .note a { color: var(--signal); }
+    .note strong { color: var(--paper); }
     @media (max-width: 640px) {
       body { padding: 10px; }
       .wrap { padding: 12px; }
@@ -123,7 +143,7 @@
       <a href="https://jtalk22.github.io/slack-mcp-server/" rel="noopener">Autoplay Demo Landing</a>
       <a href="https://jtalk22.github.io/slack-mcp-server/docs/videos/slack-mcp-proof-20s-vertical.mp4" rel="noopener">20s Mobile Clip</a>
       <a href="https://www.npmjs.com/package/@jtalk22/slack-mcp" rel="noopener">npm Package</a>
-      <a href="https://mcp.revasserlabs.com" rel="noopener" style="background:rgba(255,178,36,0.18);border-color:rgba(255,178,36,0.45);color:#ffb224">Hosted</a>
+      <a href="https://mcp.revasserlabs.com" rel="noopener" style="background:rgba(255,178,36,0.18);border-color:rgba(255,178,36,0.45);color:var(--signal)">Hosted</a>
     </div>
 
     <p class="note"><strong>Ask what happened. Get receipts. Close the loop.</strong> The free local path gives you the current 21-tool surface without an app/admin queue. <a href="https://mcp.revasserlabs.com">Hosted</a> adds permanent OAuth, indexing, scheduled intelligence, and team continuity when the workflow must run without you.</p>

@@ -2,48 +2,34 @@
   <title id="title">Two ways into Slack</title>
   <desc id="desc">The official integration path uses workspace policy, OAuth, and a managed remote MCP. Slack MCP Server uses one-command local Chrome session extraction, a Keychain-backed credential lifecycle, and 21 tools over stdio.</desc>
   <defs>
-    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#111522"/>
-      <stop offset="1" stop-color="#0a0d15"/>
-    </linearGradient>
-    <linearGradient id="session" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#251d0c"/>
-      <stop offset="1" stop-color="#16323a"/>
-    </linearGradient>
-    <filter id="tealGlow" x="-40%" y="-40%" width="180%" height="180%">
-      <feGaussianBlur stdDeviation="8" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
     <marker id="arrowMuted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#6f6c64"/>
     </marker>
-    <marker id="arrowTeal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffb224"/>
+    <marker id="arrowPaper" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#eeebe3"/>
     </marker>
     <style>
-      .display { font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif; font-weight: 700; letter-spacing: 2px; }
-      .body { font-family: "Helvetica Neue", Arial, sans-serif; }
       .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-      .step { fill: #161619; stroke: #55534d; stroke-width: 1.5; }
-      .step-right { fill: url(#session); stroke: #ffb224; stroke-width: 1.7; }
-      .muted { fill: #94918a; }
+      .body { font-family: "Helvetica Neue", Arial, sans-serif; }
+      .step { fill: #131315; stroke: #2b2b30; stroke-width: 1.5; }
+      .step-right { fill: #131315; stroke: #eeebe3; stroke-width: 1.4; }
+      .muted { fill: #9a978e; }
       .paper { fill: #eeebe3; }
-      .teal { fill: #ffb224; }
-      .coral { fill: #e5482f; }
+      .stamp { fill: #e5482f; }
     </style>
   </defs>
 
-  <rect width="1280" height="720" rx="28" fill="url(#ground)"/>
-  <path d="M640 64 V602" stroke="#242428" stroke-width="1" stroke-dasharray="4 10"/>
+  <rect width="1280" height="720" rx="28" fill="#0b0b0c"/>
+  <path d="M640 64 V602" stroke="#2b2b30" stroke-width="1" stroke-dasharray="4 10"/>
 
-  <text x="64" y="66" class="display paper" font-size="19">TWO WAYS INTO SLACK</text>
+  <text x="64" y="66" class="mono paper" font-size="18" letter-spacing="2">TWO WAYS INTO SLACK</text>
   <text x="1216" y="66" class="mono muted" font-size="13" text-anchor="end">SAME IDENTITY · DIFFERENT GATE</text>
 
-  <rect x="54" y="96" width="548" height="506" rx="22" fill="#121622" stroke="#3a3a40" stroke-width="1.5"/>
-  <rect x="678" y="96" width="548" height="506" rx="22" fill="#10202b" stroke="#ffb224" stroke-width="2"/>
+  <rect x="54" y="96" width="548" height="506" rx="22" fill="#0f0f11" stroke="#2b2b30" stroke-width="1.5"/>
+  <rect x="678" y="96" width="548" height="506" rx="22" fill="#0f0f11" stroke="#eeebe3" stroke-width="1.6"/>
 
-  <text x="328" y="140" class="display muted" font-size="18" text-anchor="middle">THE INTEGRATION PATH</text>
-  <text x="952" y="140" class="display teal" font-size="18" text-anchor="middle">THE SESSION PATH</text>
+  <text x="328" y="140" class="mono muted" font-size="17" letter-spacing="2" text-anchor="middle">THE INTEGRATION PATH</text>
+  <text x="952" y="140" class="mono paper" font-size="17" letter-spacing="2" text-anchor="middle">THE SESSION PATH</text>
   <text x="328" y="166" class="body muted" font-size="13" text-anchor="middle">Slack-managed remote MCP</text>
   <text x="952" y="166" class="body paper" font-size="13" text-anchor="middle">Slack MCP Server · local stdio</text>
 
@@ -69,36 +55,36 @@
   </g>
 
   <g>
-    <text x="717" y="211" class="mono teal" font-size="13">01</text>
+    <text x="717" y="211" class="mono paper" font-size="13">01</text>
     <rect x="748" y="185" width="408" height="58" rx="11" class="step-right"/>
     <text x="952" y="220" class="mono paper" font-size="16" text-anchor="middle">npx --setup</text>
-    <path d="M952 244 V265" stroke="#ffb224" stroke-width="2" marker-end="url(#arrowTeal)"/>
+    <path d="M952 244 V265" stroke="#eeebe3" stroke-width="2" marker-end="url(#arrowPaper)"/>
 
-    <text x="717" y="303" class="mono teal" font-size="13">02</text>
+    <text x="717" y="303" class="mono paper" font-size="13">02</text>
     <rect x="748" y="277" width="408" height="58" rx="11" class="step-right"/>
     <text x="952" y="303" class="body paper" font-size="16" text-anchor="middle">Chrome session decrypted locally</text>
-    <text x="952" y="323" class="mono teal" font-size="11" text-anchor="middle">LEVELDB + SQLITE + KEYCHAIN</text>
-    <path d="M952 336 V357" stroke="#ffb224" stroke-width="2" marker-end="url(#arrowTeal)"/>
+    <text x="952" y="323" class="mono muted" font-size="11" text-anchor="middle">LEVELDB + SQLITE + KEYCHAIN</text>
+    <path d="M952 336 V357" stroke="#eeebe3" stroke-width="2" marker-end="url(#arrowPaper)"/>
 
-    <text x="717" y="395" class="mono teal" font-size="13">03</text>
+    <text x="717" y="395" class="mono paper" font-size="13">03</text>
     <rect x="748" y="369" width="408" height="58" rx="11" class="step-right"/>
     <text x="952" y="395" class="body paper" font-size="16" text-anchor="middle">Keychain-backed credential lifecycle</text>
-    <text x="952" y="415" class="mono teal" font-size="11" text-anchor="middle">HEALTH + REFRESH + PROFILE ISOLATION</text>
-    <path d="M952 428 V449" stroke="#ffb224" stroke-width="2" marker-end="url(#arrowTeal)"/>
+    <text x="952" y="415" class="mono muted" font-size="11" text-anchor="middle">HEALTH + REFRESH + PROFILE ISOLATION</text>
+    <path d="M952 428 V449" stroke="#eeebe3" stroke-width="2" marker-end="url(#arrowPaper)"/>
 
-    <text x="717" y="487" class="mono teal" font-size="13">04</text>
-    <rect x="748" y="461" width="408" height="58" rx="11" class="step-right" filter="url(#tealGlow)"/>
-    <text x="952" y="488" class="display paper" font-size="17" text-anchor="middle">21 TOOLS · LOCAL STDIO</text>
-    <text x="952" y="509" class="body teal" font-size="12" text-anchor="middle">DMs · SEARCH · THREADS · ACTIONS · WORKFLOWS</text>
+    <text x="717" y="487" class="mono paper" font-size="13">04</text>
+    <rect x="748" y="461" width="408" height="58" rx="11" class="step-right"/>
+    <text x="952" y="488" class="mono paper" font-size="16" letter-spacing="1" text-anchor="middle">21 TOOLS · LOCAL STDIO</text>
+    <text x="952" y="509" class="mono muted" font-size="11" text-anchor="middle">DMS · SEARCH · THREADS · ACTIONS · WORKFLOWS</text>
   </g>
 
-  <rect x="124" y="544" width="408" height="32" rx="16" fill="#1a1a1d"/>
+  <rect x="124" y="544" width="408" height="32" rx="16" fill="#131315"/>
   <text x="328" y="565" class="mono muted" font-size="11" text-anchor="middle">PERMANENT OAUTH · ORGANIZATION GOVERNANCE</text>
-  <rect x="748" y="544" width="408" height="32" rx="16" fill="#17343a" stroke="#ffb224" stroke-width="1"/>
-  <text x="952" y="565" class="mono teal" font-size="11" text-anchor="middle">NO SLACK APP · ANY STDIO MCP CLIENT</text>
+  <rect x="748" y="544" width="408" height="32" rx="16" fill="#131315" stroke="#e5482f" stroke-width="1.4"/>
+  <text x="952" y="565" class="mono stamp" font-size="11" text-anchor="middle">NO SLACK APP · NO ADMIN QUEUE · ANY STDIO MCP CLIENT</text>
 
-  <rect x="54" y="626" width="1172" height="54" rx="14" fill="#161619" stroke="#323237"/>
-  <text x="80" y="659" class="display coral" font-size="14">NEED PERMANENCE LATER?</text>
-  <text x="308" y="659" class="body paper" font-size="14">Keep the product surface and move to hosted OAuth, indexed search, and scheduled workflow briefs.</text>
-  <text x="1198" y="659" class="mono teal" font-size="12" text-anchor="end">@jtalk22/slack-mcp</text>
+  <rect x="54" y="626" width="1172" height="54" rx="14" fill="#131315" stroke="#2b2b30"/>
+  <text x="80" y="659" class="mono paper" font-size="13" letter-spacing="1">NEED PERMANENCE LATER?</text>
+  <text x="308" y="659" class="body muted" font-size="14">Keep the product surface and move to hosted OAuth, indexed search, and scheduled workflow briefs.</text>
+  <text x="1198" y="659" class="mono muted" font-size="12" text-anchor="end">@jtalk22/slack-mcp</text>
 </svg>
