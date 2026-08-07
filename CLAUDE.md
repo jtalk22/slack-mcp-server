@@ -93,6 +93,20 @@ Tokens load from `~/.slack-mcp-tokens.json` or `SLACK_TOKEN`/`SLACK_COOKIE` env 
 
 ## Gotchas
 
+- **`main` is branch-protected.** Direct pushes are rejected
+  (`remote rejected ... protected branch hook declined`) regardless of what a
+  generic "push straight to main" doctrine says. Every change goes through a PR,
+  including one-line doc fixes. Squash-merge means the feature branch is not an
+  ancestor of `main` afterwards, so `git branch -d` refuses it — use `-D` once
+  the PR is merged.
+- **Tool profiles must agree with the README's counts.** `SLACK_MCP_TOOLS`
+  selects `all` (21) / `read` (12) / `essentials` (6) or a custom list.
+  `READ_TOOLS` is an explicit list, deliberately NOT derived from the
+  `readOnlyHint` annotation — that annotation is also true of the three hosted
+  stubs, so deriving from it shipped paid-tier upsell tools to users who
+  narrowed their surface to save schema cost. `check-public-surface-integrity.js`
+  now gates counts, stub leakage, and name rot; `npm run measure:tools` prints
+  the schema cost per profile.
 - **Branch names must not contain "claude"** (or other AI-tool markers). The
   attribution guardrail scans commit messages; `gh pr update-branch` writes
   "Merge branch 'main' into <branch>", so a marker in the branch name fails CI
