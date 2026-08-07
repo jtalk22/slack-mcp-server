@@ -1,5 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import {
   TOOLS,
   ESSENTIALS_TOOLS,
@@ -67,6 +69,26 @@ test("getActiveToolProfile: cli --tools beats env, env beats default", () => {
   const dflt = getActiveToolProfile(["node", "server.js"], {});
   assert.equal(dflt.profile, "all");
   assert.equal(dflt.source, "default");
+});
+
+test("--tools with a missing operand never swallows the following option", () => {
+  for (const trailing of ["--setup", "--profile=work", "--doctor"]) {
+    const r = getActiveToolProfile(["node", "server.js", "--tools", trailing], {});
+    assert.equal(r.profile, "all", `--tools ${trailing} must not resolve a profile`);
+    assert.equal(r.source, "default", `--tools ${trailing} must not count as a cli value`);
+  }
+  // Trailing --tools with nothing after it is equally a missing operand.
+  const bare = getActiveToolProfile(["node", "server.js", "--tools"], {});
+  assert.equal(bare.source, "default");
+});
+
+test("cli rejects --tools/--profile with a missing operand instead of eating the next flag", () => {
+  const cli = fileURLToPath(new URL("../src/cli.js", import.meta.url));
+  for (const argv of [["--tools", "--setup"], ["--profile", "--setup"], ["--tools"]]) {
+    const r = spawnSync(process.execPath, [cli, ...argv], { encoding: "utf8", timeout: 20000 });
+    assert.equal(r.status, 1, `${argv.join(" ")} must exit 1`);
+    assert.match(r.stderr, /requires a value/, `${argv.join(" ")} must explain the missing value`);
+  }
 });
 
 test("essentials tool names all exist in the canonical surface (no rot)", () => {

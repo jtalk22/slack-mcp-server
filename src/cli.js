@@ -21,17 +21,36 @@ const rawArgs = process.argv.slice(2);
 // web, http, token refresh — honors the same workspace namespace.
 // `--tools <profile>` / `--tools=<profile>` maps to SLACK_MCP_TOOLS the same
 // way, so the advertised tool surface can be narrowed from the launch command.
+// A separated operand (`--flag value`) must not swallow the following option:
+// `--tools --setup` used to consume `--setup` as the value AND drop it from
+// args, so the wizard silently never ran. Reject the missing value instead.
+function takeOperand(flag, rawArgs, index) {
+  const next = rawArgs[index + 1];
+  if (next === undefined || next.startsWith("--")) {
+    console.error(`${flag} requires a value.`);
+    if (flag === "--tools") {
+      console.error("  Use: --tools essentials | read | all | <comma-separated tool names>");
+    } else {
+      console.error("  Use: --profile <workspace-namespace-name>");
+    }
+    process.exit(1);
+  }
+  return next;
+}
+
 const args = [];
 let cliProfile = null;
 let cliTools = null;
 for (let i = 0; i < rawArgs.length; i++) {
   const arg = rawArgs[i];
   if (arg === "--profile") {
-    cliProfile = rawArgs[++i] ?? "";
+    cliProfile = takeOperand("--profile", rawArgs, i);
+    i++;
   } else if (arg.startsWith("--profile=")) {
     cliProfile = arg.slice("--profile=".length);
   } else if (arg === "--tools") {
-    cliTools = rawArgs[++i] ?? "";
+    cliTools = takeOperand("--tools", rawArgs, i);
+    i++;
   } else if (arg.startsWith("--tools=")) {
     cliTools = arg.slice("--tools=".length);
   } else {

@@ -49,7 +49,16 @@ test("a rejecting task releases its slot (no deadlock)", async () => {
   assert.equal(result, "ok");
 });
 
-test("default pacing is conservative and on by default", () => {
+test("default pacing is conservative and on by default", (t) => {
+  // REQUEST_PACING reads the environment at module load, and disabling pacing
+  // is a supported configuration — so only assert the defaults when neither
+  // override is set.
+  const overridden = ["SLACK_MCP_MIN_REQUEST_INTERVAL_MS", "SLACK_MCP_MAX_CONCURRENCY"]
+    .some((name) => process.env[name] !== undefined && process.env[name] !== "");
+  if (overridden) {
+    t.skip("pacing overridden in this environment");
+    return;
+  }
   assert.ok(REQUEST_PACING.minIntervalMs > 0, "spacing is on by default");
   assert.ok(REQUEST_PACING.maxConcurrency >= 1, "concurrency cap is set");
 });
