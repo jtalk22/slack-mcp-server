@@ -110,7 +110,9 @@ Tokens load from `~/.slack-mcp-tokens.json` or `SLACK_TOKEN`/`SLACK_COOKIE` env 
 - **Never `gh pr merge --delete-branch` a PR whose branch is the BASE of a
   stacked PR.** GitHub closes the child PR unrecoverably (a closed PR whose base
   branch died cannot be retargeted or reopened). Recover with
-  `git rebase --onto origin/main <old-base> <child-branch>`, force-push-with-lease,
+  `git rebase --onto origin/main <old-base-tip-sha> <child-branch>` (use the old
+  base's tip COMMIT SHA — the deleted branch name may no longer resolve; find it
+  via the local branch, reflog, or the merged PR's head SHA), force-push-with-lease,
   and open a replacement PR. Merge stacked chains bottom-up without `--delete-branch`,
   or let the child auto-retarget first.
 - **Glama builds are not our Dockerfile.** The glama.ai listing generates its own
