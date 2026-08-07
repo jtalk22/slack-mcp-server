@@ -72,7 +72,7 @@ function main() {
       `  ${r.profile.padEnd(10)}  ${String(r.tools).padStart(5)}   ${String(r.chars).padStart(5)}   ${String(r.est_tokens).padStart(10)}   ${delta.padStart(5)}`
     );
   }
-  console.log("\n  Estimate only (~4 chars/token). Publish it as an estimate.");
+  console.log("\n  Token counts are estimates (~4 chars per token), not tokenizer-exact.");
 }
 
 main();

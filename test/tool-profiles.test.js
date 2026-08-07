@@ -17,7 +17,7 @@ test("default (empty / 'all') advertises the full canonical surface", () => {
   }
 });
 
-test("essentials is the tight six-tool job-to-be-done slice", () => {
+test("essentials is the six-tool common-case slice", () => {
   const r = resolveToolProfile("essentials");
   assert.equal(r.profile, "essentials");
   assert.deepEqual(r.tools.map((t) => t.name).sort(), [...ESSENTIALS_TOOLS].sort());

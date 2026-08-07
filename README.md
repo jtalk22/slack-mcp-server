@@ -31,7 +31,7 @@ npx -y @jtalk22/slack-mcp --setup
 <p align="center">
   <a href="#built-past-the-demo">The moat</a> ·
   <a href="#two-ways-into-slack">Why session auth</a> ·
-  <a href="#run-it-with-eyes-open">Grid & threat model</a> ·
+  <a href="#grid-credentials-and-caching">Grid & credentials</a> ·
   <a href="#install">Install</a> ·
   <a href="#21-tools-read-act-automate">21 tools</a> ·
   <a href="#typed-workflows-slack-in-json-out">Workflows</a> ·
@@ -127,17 +127,15 @@ Treat browser-session automation as an acceptable-use decision for you and your 
 
 ---
 
-## Run it with eyes open
+## Grid, credentials, and caching
 
-Grid, the threat model, and cache posture — stated up front, not found later.
+**Enterprise Grid.** Grid runs aggressive session-anomaly detection. Browser-session automation can trip it, which flags the session and kills it, regardless of which tool drives the traffic. Outbound calls are paced by default to stay under burst thresholds (`SLACK_MCP_MIN_REQUEST_INTERVAL_MS`, default 350; `SLACK_MCP_MAX_CONCURRENCY`, default 3). Pacing lowers that risk; it does not remove it. On Grid, use the [hosted OAuth tier](https://mcp.revasserlabs.com) or Slack's official MCP instead.
 
-**Enterprise Grid.** Grid runs aggressive session-anomaly detection, and browser-session automation can trip it — flagging the session and getting it killed — independent of which tool drives it. Outbound Slack calls are paced by default to stay well under burst thresholds (`SLACK_MCP_MIN_REQUEST_INTERVAL_MS`, default 350; `SLACK_MCP_MAX_CONCURRENCY`, default 3). Even so, if your workspace runs on Grid, the session-safe path is the [hosted OAuth tier](https://mcp.revasserlabs.com) or the official Slack MCP — not this local one.
+**Credential extraction.** `--setup` reads the newest `xoxc-` token from Chrome's on-disk LevelDB, snapshots the cookie SQLite database, retrieves Chrome Safe Storage from the macOS Keychain, and runs PBKDF2 + AES-128-CBC decryption locally. It writes the token file, Keychain entries, and non-secret metadata. It transmits nothing — the server talks to Slack and nowhere else.
 
-**What it touches on your machine.** `--setup` reads the newest `xoxc-` token from Chrome's on-disk LevelDB, snapshots the cookie SQLite database, retrieves Chrome Safe Storage from the macOS Keychain, and runs Chrome-compatible PBKDF2 + AES-128-CBC decryption locally. It writes only local credential state — the token file, Keychain entries, and non-secret metadata. Nothing is transmitted anywhere: the local server speaks only to Slack, as you.
+**This is the same access pattern credential stealers use.** Chrome App-Bound Encryption exists to make this class of read harder, and infostealer families (Lumma, Vidar, Meduza) bypass it to lift live sessions. The mechanism here is comparable. What differs is that you run it, on your own machine, against your own session, and nothing leaves the host. The source is plain JavaScript in this repository; audit it before handing it a live session.
 
-Name it plainly: this is the same class of local access that Chrome App-Bound Encryption exists to make harder, and that infostealer families (Lumma, Vidar, Meduza) bypass to lift live sessions. The code path is behaviorally similar; the difference is intent and locality — you run it, on your own machine, as yourself, and it exfiltrates nothing. The source is plain JavaScript in this repository. Read it before you trust it with a session.
-
-**Cache posture.** The only cache is a small user-name lookup: lazy, 500 entries maximum, one-hour TTL, minimised and dropped promptly. Reads happen on demand; the server keeps no persistent copy of your workspace.
+**User cache.** One cache exists: user-name lookups, populated on demand, 500 entries maximum, one-hour TTL. No message content, no channel history, and no persistent copy of the workspace is stored.
 
 ---
 
@@ -193,7 +191,7 @@ On macOS, setup can extract from Chrome and persist the selected storage backend
 
 The local surface ships **21 tools** today: **12 read-only** Slack operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, 2 local workflow primitives, and 3 hosted-intelligence stubs that return a structured upgrade payload without making a Slack call. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
 
-**Advertise fewer tools if the schema tax matters.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises the six core tools — unread, history, search, thread, user lookup, send — at roughly **985 estimated tokens** of schema per turn, down from about **3,600** for all 21 (`read` sits near 2,559). `--tools=slack_x,slack_y` takes an explicit set; the default stays all 21. Filtering narrows only what's advertised — every handler stays callable — and you can reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars/token estimate, stated as one).
+**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **985 estimated tokens** of schema per turn against about **3,600** for all 21; `read` sits near 2,559. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 21. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
 
 <details>
 <summary><strong>The full tool inventory</strong></summary>
@@ -328,7 +326,7 @@ When local control is enough, stop here—everything above is MIT-licensed and r
 - contract-validated workflow briefs;
 - shared profiles and managed workspace continuity.
 
-The boundary is clean. **Local mode never talks to us** — it runs on your machine and speaks only to Slack. **Hosted never sees a browser cookie** — it runs on permanent OAuth for work that must survive a rotating session (unattended schedules, Enterprise Grid). Everything above the fold is MIT-licensed and complete on its own; hosted is the paid path for continuity, not a tax on ordinary Slack access.
+Local mode never contacts us; it runs on your machine and talks only to Slack. Hosted never receives a browser cookie; it runs on permanent OAuth, for work that has to survive a rotating session — unattended schedules, Enterprise Grid. Everything above is MIT-licensed and complete on its own.
 
 [See live hosted pricing →](https://mcp.revasserlabs.com/pricing)
 

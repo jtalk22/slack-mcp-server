@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.8.0] - 2026-08-07
 
-### Earn the launch: tool profiles + conservative request pacing
+### Tool profiles and request pacing
 
-No MCP tool contracts changed. This release answers the two questions a
-technical audience asks first about a browser-session Slack server — per-turn
-schema cost and account safety — with shipped features instead of disclaimers.
+No MCP tool contracts changed. This release addresses the two running costs of
+a browser-session Slack server: the tool schema a client carries on every turn,
+and the request velocity that Slack's session-anomaly detection watches.
 
 ### Added
 
@@ -35,14 +35,15 @@ schema cost and account safety — with shipped features instead of disclaimers.
 
 ### Changed
 
-- **README** — new "Run it with eyes open" section states the Enterprise Grid
-  session-flagging caution (with the pacing answer), names the local threat
-  model (Chrome LevelDB token, cookie SQLite database, Keychain Safe Storage,
-  local PBKDF2 + AES-128-CBC decryption, local-only writes, and the infostealer
-  resemblance stated plainly), and describes the minimal user-name cache in
-  Slack-TOS terms. The local/hosted split now states the boundary explicitly:
-  local never transmits anything to us; hosted never sees a browser cookie.
-  Tool-profile and pacing configuration documented in the README and CLI help.
+- **README** — new "Grid, credentials, and caching" section documents the
+  Enterprise Grid session-anomaly risk and the pacing that mitigates it, the
+  credential extraction path (Chrome LevelDB token, cookie SQLite database,
+  Keychain Safe Storage, local PBKDF2 + AES-128-CBC decryption, local-only
+  writes), its similarity to the access pattern credential stealers use, and
+  the contents of the one user-name cache. The local/hosted split now states
+  the boundary: local never contacts us, hosted never receives a browser
+  cookie. Tool-profile and pacing configuration documented in README and CLI
+  help.
 
 ## [4.7.0] - 2026-08-07
 

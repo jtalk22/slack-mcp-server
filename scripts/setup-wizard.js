@@ -603,7 +603,7 @@ async function showHelp() {
   print("  keep credentials in a separate namespace per workspace — e.g.");
   print("  --setup --profile work, then a second server with --profile personal.");
   print();
-  print(`${colors.bold}Trim the surface:${colors.reset}`);
+  print(`${colors.bold}Tool selection:${colors.reset}`);
   print("  --tools essentials (or SLACK_MCP_TOOLS=essentials) advertises the six");
   print("  core tools to cut per-turn schema cost; 'read' advertises read-only");
   print("  tools; 'all' is the default. Every handler stays callable either way.");
