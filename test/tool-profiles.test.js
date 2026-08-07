@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import {
   TOOLS,
   ESSENTIALS_TOOLS,
+  READ_TOOLS,
   readOnlyToolNames,
   resolveToolProfile,
   getActiveToolProfile,
@@ -29,12 +30,46 @@ test("essentials is the six-tool common-case slice", () => {
   assert.ok(!names.has("slack_add_reaction"), "non-core writes are excluded");
 });
 
-test("read profile is exactly the read-only annotated tools", () => {
+test("read profile is the 12 read-only Slack operations", () => {
   const r = resolveToolProfile("read");
   assert.equal(r.profile, "read");
-  assert.deepEqual(r.tools.map((t) => t.name).sort(), readOnlyToolNames().sort());
-  assert.ok(r.tools.every((t) => t.annotations?.readOnlyHint === true));
+  assert.deepEqual(r.tools.map((t) => t.name).sort(), [...READ_TOOLS].sort());
+  assert.equal(r.tools.length, 12, "must match the README's read-only table");
   assert.ok(!r.tools.some((t) => t.name === "slack_send_message"), "no write tools in read profile");
+});
+
+test("no profile advertises a hosted upgrade stub except 'all'", () => {
+  // The hosted stubs make no Slack call and return an upgrade payload. Anyone
+  // narrowing their surface to save schema cost must not be handed paid-tier
+  // advertising in every turn.
+  const stubs = ["slack_smart_search", "slack_catch_me_up", "slack_triage"];
+  for (const profile of ["read", "essentials"]) {
+    const names = resolveToolProfile(profile).tools.map((t) => t.name);
+    for (const stub of stubs) {
+      assert.ok(!names.includes(stub), `${profile} must not advertise ${stub}`);
+    }
+  }
+  // They remain in the default surface, where discovery is the point.
+  const all = resolveToolProfile("all").tools.map((t) => t.name);
+  for (const stub of stubs) assert.ok(all.includes(stub), `all still advertises ${stub}`);
+});
+
+test("read profile excludes every tool that writes to the workspace", () => {
+  const writeTools = TOOLS
+    .filter((t) => t.annotations?.destructiveHint === true)
+    .map((t) => t.name);
+  const readNames = resolveToolProfile("read").tools.map((t) => t.name);
+  for (const name of writeTools) {
+    assert.ok(!readNames.includes(name), `read must not include write tool ${name}`);
+  }
+});
+
+test("READ_TOOLS and ESSENTIALS_TOOLS contain no unknown names (no rot)", () => {
+  const known = new Set(TOOLS.map((t) => t.name));
+  for (const name of [...READ_TOOLS, ...ESSENTIALS_TOOLS]) {
+    assert.ok(known.has(name), `${name} must exist in TOOLS`);
+  }
+  assert.equal(new Set(READ_TOOLS).size, READ_TOOLS.length, "no duplicates in READ_TOOLS");
 });
 
 test("custom comma list keeps known tools in canonical order and drops unknown", () => {

@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import { PUBLIC_METADATA, RELEASE_VERSION } from "../lib/public-metadata.js";
 import { DESIGN_TOKENS } from "../lib/public-pages.js";
+import { TOOLS, READ_TOOLS, ESSENTIALS_TOOLS, resolveToolProfile } from "../lib/tools.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -171,6 +172,42 @@ function main() {
     "README download proof",
     readme.includes("img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp"),
     "README must use the dynamic weekly npm download badge"
+  );
+
+  // Tool profiles must agree with the counts the README publishes, and must
+  // never advertise a hosted upgrade stub to someone who narrowed their surface
+  // to save schema cost. Both sides drifted once; this is the gate.
+  check(
+    results,
+    "tool profile counts match published claims",
+    TOOLS.length === PUBLIC_METADATA.selfHostedToolCount &&
+      READ_TOOLS.length === 12 &&
+      ESSENTIALS_TOOLS.length === 6,
+    `all=${TOOLS.length} (README ${PUBLIC_METADATA.selfHostedToolCount}), read=${READ_TOOLS.length} (README 12), essentials=${ESSENTIALS_TOOLS.length}`
+  );
+
+  const hostedStubs = ["slack_smart_search", "slack_catch_me_up", "slack_triage"];
+  const narrowedLeaks = ["read", "essentials"].flatMap((profile) =>
+    resolveToolProfile(profile)
+      .tools.map((tool) => tool.name)
+      .filter((name) => hostedStubs.includes(name))
+      .map((name) => `${profile}:${name}`)
+  );
+  check(
+    results,
+    "narrowed profiles carry no hosted upgrade stub",
+    narrowedLeaks.length === 0,
+    narrowedLeaks.length === 0 ? "read and essentials are Slack-only" : narrowedLeaks.join(", ")
+  );
+
+  const unknownProfileNames = [...READ_TOOLS, ...ESSENTIALS_TOOLS].filter(
+    (name) => !TOOLS.some((tool) => tool.name === name)
+  );
+  check(
+    results,
+    "profile tool names all resolve",
+    unknownProfileNames.length === 0,
+    unknownProfileNames.length === 0 ? "no rotted names" : unknownProfileNames.join(", ")
   );
 
   const cliHelpResult = runNode(["src/cli.js", "--help"]);
