@@ -12,13 +12,15 @@ const REPORT_PATH = process.env.PREPUBLISH_REPORT_PATH
   : resolve(ROOT, "output", "release-health", "prepublish-dry-run.md");
 
 function run(command, args = [], options = {}) {
-  return spawnSync(command, args, {
-    cwd: ROOT,
-    encoding: "utf8",
-    env: process.env,
-    maxBuffer: 20 * 1024 * 1024,
-    ...options
-  });
+  const opts = { cwd: ROOT, encoding: "utf8", env: process.env, maxBuffer: 20 * 1024 * 1024, shell: false, ...options };
+  switch (command) {
+    case "git":  return spawnSync("git", args, opts);
+    case "bash": return spawnSync("bash", args, opts);
+    case "rg":   return spawnSync("rg", args, opts);
+    case "node": return spawnSync("node", args, opts);
+    case "npm":  return spawnSync("npm", args, opts);
+    default: throw new Error(`Disallowed command: ${command}`);
+  }
 }
 
 function gitConfig(key) {
