@@ -5,3 +5,5 @@ node_modules
 !README.md
 .env
 .DS_Store
+# Marketing video renditions are canonical on GitHub Pages; keep the image lean.
+docs/videos

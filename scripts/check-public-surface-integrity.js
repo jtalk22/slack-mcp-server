@@ -84,23 +84,26 @@ function main() {
   );
   check(
     results,
-    "glama version parity",
-    glamaMeta.version === RELEASE_VERSION,
-    `found ${glamaMeta.version}`
-  );
-  check(
-    results,
     "description parity",
     packageJson.description === PUBLIC_METADATA.canonicalShortDescription &&
-      serverMeta.description === PUBLIC_METADATA.canonicalShortDescription &&
-      glamaMeta.description === PUBLIC_METADATA.canonicalShortDescription,
-    `package=${packageJson.description}; server=${serverMeta.description}; glama=${glamaMeta.description}`
+      serverMeta.description === PUBLIC_METADATA.canonicalShortDescription,
+    `package=${packageJson.description}; server=${serverMeta.description}`
   );
+  // Glama's live schema defines only maintainers; everything else it reads
+  // from the repository directly, so the file stays a minimal claim contract.
   check(
     results,
-    "glama tool count",
-    glamaMeta.features?.tools === PUBLIC_METADATA.selfHostedToolCount,
-    `expected ${PUBLIC_METADATA.selfHostedToolCount}, found ${glamaMeta.features?.tools ?? "n/a"}`
+    "glama minimal contract",
+    Array.isArray(glamaMeta.maintainers) && glamaMeta.maintainers.includes("jtalk22"),
+    `maintainers=${JSON.stringify(glamaMeta.maintainers ?? null)}`
+  );
+
+  const dockerfile = read("Dockerfile");
+  check(
+    results,
+    "Dockerfile LABEL description parity",
+    dockerfile.includes(`LABEL org.opencontainers.image.description="${PUBLIC_METADATA.canonicalShortDescription}"`),
+    "OCI image description label must carry the canonical short description"
   );
 
   const cliVersionResult = runNode(["src/cli.js", "--version"]);
@@ -166,8 +169,8 @@ function main() {
   check(
     results,
     "README download proof",
-    readme.includes("img.shields.io/npm/dt/%40jtalk22%2Fslack-mcp"),
-    "README must use the dynamic cumulative npm download badge"
+    readme.includes("img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp"),
+    "README must use the dynamic weekly npm download badge"
   );
 
   const cliHelpResult = runNode(["src/cli.js", "--help"]);

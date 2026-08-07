@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.7.0] - 2026-08-07
+
+### The OS comes back
+
+No MCP tool contracts changed. This release re-stages the public surface as
+what made it work in the first place—the fiction of a running application—and
+unifies every generated page on one design-token vocabulary.
+
+### Changed
+
+- **One token vocabulary** — `lib/public-pages.js` now emits a byte-identical
+  `:root` block (`{{DESIGN_TOKENS}}`) and parameterized `@font-face` rules
+  (`{{FONT_FACES}}`) into all six generated pages; CI asserts the canonical
+  block on every page and bans retired token names in templates.
+- **Proof reel re-shot as a screen-recording fiction** — the whole 42-second
+  reel now lives inside one persistent faux-macOS window on a midnight-blue
+  desktop: traffic lights, tools chip, fake input bar, timecode ticker. Grain
+  overlay, solid full-bleed poster scenes, and italic-serif numerals removed;
+  the system register (success green, link blue, clay assistant accent)
+  returns inside app chrome. Scene marks, still branches, and the
+  deterministic completion contract are unchanged.
+- **Walkthrough restyled onto the shared vocabulary** — sans type inside the
+  window, system-register accents, midnight desk bed; every scenario,
+  control, easter egg, and the pinned narrative clock preserved.
+- **App icon** — ink square, paper hashtag, one vermilion notification-badge
+  dot (3 colors, down from 7); favicon and inline copies regenerated.
+- **README rebuilt** — roughly half the visible length; deep material moved
+  into collapsible sections with anchored headings kept visible; badge row
+  re-inked (weekly-downloads badge, estate colors, registry badge linking to
+  the live server record); Glama rating card added to Security.
+- **Registry metadata unified** — `glama.json` pruned to the schema's minimal
+  claim contract; the Docker image OCI description label now carries the
+  canonical short description (CI-enforced); the publish workflow verifies the
+  live npm description matches `package.json` after publish.
+- **Docker build context** — marketing video renditions excluded via
+  `.dockerignore`; they remain canonical on GitHub Pages.
+
 ## [4.6.2] - 2026-08-05
 
 ### The public surface catches up to the system underneath
