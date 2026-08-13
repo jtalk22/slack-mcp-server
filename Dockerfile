@@ -10,7 +10,7 @@ FROM node:26-alpine
 # OCI Image Labels for registry discoverability
 LABEL maintainer="jtalk22"
 LABEL org.opencontainers.image.title="Slack MCP Server"
-LABEL org.opencontainers.image.description="Slack for AI agents: DMs, search, threads, triage, actions - browser-session or hosted OAuth."
+LABEL org.opencontainers.image.description="Catch up on Slack without reading it. Unreads, threads, search. Browser-session or hosted OAuth."
 LABEL org.opencontainers.image.source="https://github.com/jtalk22/slack-mcp-server"
 LABEL org.opencontainers.image.url="https://github.com/jtalk22/slack-mcp-server"
 LABEL org.opencontainers.image.documentation="https://github.com/jtalk22/slack-mcp-server#readme"

@@ -161,11 +161,11 @@ function main() {
   check(
     results,
     "README category thesis",
-    readme.includes("SLACK’S OPERATING LAYER FOR AI AGENTS") &&
+    readme.includes("Catch up on Slack without reading it.") &&
       readme.includes("Built past the demo") &&
       readme.includes("Two ways into Slack") &&
       readme.includes("Hosted when it must drive itself"),
-    "README must carry the category thesis, systems proof, and local/hosted value split"
+    "README must lead with the job it does, plus systems proof and the local/hosted value split"
   );
   check(
     results,

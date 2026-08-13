@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.jtalk22/slack-mcp-server",
   "title": "Slack MCP Server",
-  "description": "Slack for AI agents: DMs, search, threads, triage, actions - browser-session or hosted OAuth.",
+  "description": "Catch up on Slack without reading it. Unreads, threads, search. Browser-session or hosted OAuth.",
   "websiteUrl": "https://mcp.revasserlabs.com",
   "icons": [
     {

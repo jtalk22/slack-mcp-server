@@ -2,7 +2,7 @@
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
   "version": "4.8.0",
-  "description": "Slack for AI agents: DMs, search, threads, triage, actions - browser-session or hosted OAuth.",
+  "description": "Catch up on Slack without reading it. Unreads, threads, search. Browser-session or hosted OAuth.",
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/jtalk22"
