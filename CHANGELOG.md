@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.9.0] - 2026-08-13
+
+### Catch-up runs locally
+
+`slack_catch_me_up` was a hosted-only stub: it advertised a rich contract in
+every client's tool list and returned an upgrade payload. It runs locally now,
+against your own session, with no hosted account and no server-side model.
+
+The reason it can is structural. An MCP server is always called by something
+that is already a language model, so summarising was never the part that needed
+hosting — gathering was. This release does the gathering deterministically and
+returns evidence for the caller to compose.
+
+### Added
+
+- **`slack_catch_me_up`, local** (`lib/catch-up.js`) — reads a saved workflow
+  profile's channels since its cadence window (24h for `on_demand` and
+  `daily_8am`, 7 days for `weekly_monday`, or an explicit `since`), expands
+  active threads, and returns structured evidence:
+  - `signals.unanswered_threads` — messages nobody replied to, plus threads
+    where the only reply came from the person who opened it, ordered
+    oldest-first with an age in hours.
+  - `signals.priority_activity` and `signals.mentions_of_priority_people` —
+    what the profile's priority people said, and where they were pinned.
+  - `signals.busiest_conversations`, `signals.total_messages`.
+  - `output_contract` — the keys to compose for this `workflow_kind`. They are
+    deliberately **not** pre-filled; the payload is evidence, not a summary.
+  - `truncation` — every cap that bound the run, reported rather than applied
+    silently. A profile that names channels reads them even when Slack marks
+    nothing unread, because silence in `#incidents` is itself an answer.
+  - Work is bounded (12 conversations, 30 messages each, 8 expanded threads)
+    because outbound calls are paced by default; an unbounded sweep of a busy
+    workspace would take minutes.
+
+### Changed
+
+- **Positioning** — the hero led with a category claim. It now leads with the
+  job, and the canonical short description carries hosted OAuth, which several
+  third-party directories still deny because they scraped an older description
+  and never re-synced. Landing page, share card, and registry metadata follow.
+- **Tool inventory** — unchanged at 21 total (12 read-only, 4 write-path), but
+  the local workflow group grows to 3 and the hosted stub group shrinks to 2.
+  `slack_smart_search` and `slack_triage` remain hosted: an index and a model
+  are infrastructure this package genuinely does not ship.
+- `check-public-surface-integrity.js` no longer treats `slack_catch_me_up` as an
+  upgrade stub, so narrowed profiles may advertise it without tripping the
+  leak gate.
+
+### Fixed
+
+- `replaceTokens` in `lib/public-pages.js` declared an unused callback argument.
+- The CI badge passed no `color` and rendered shields.io default green, the one
+  palette violation in the README header.
+
 ## [4.8.0] - 2026-08-07
 
 ### Tool profiles and request pacing
