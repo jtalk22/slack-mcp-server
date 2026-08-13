@@ -74,7 +74,11 @@
     "windsurf",
     "gemini-cli",
     "codex-cli",
-    "remote-mcp"
+    "remote-mcp",
+    "triage",
+    "catch-up",
+    "unread",
+    "standup"
   ],
   "author": {
     "name": "Revasser",
