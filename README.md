@@ -1,20 +1,20 @@
-[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![npm weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly%20downloads&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-e5482f?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)
-
 <div align="center">
+
+[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![npm weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly%20downloads&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c&color=28c840)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-e5482f?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)
 
 <img src="docs/assets/icon.svg" width="88" alt="Slack MCP channel mark">
 
-<p><strong>SLACK’S OPERATING LAYER FOR AI AGENTS</strong></p>
-
 <h1>Slack MCP Server</h1>
 
-<p>Slack for AI agents: DMs, search, threads, triage, actions — browser-session or hosted OAuth.</p>
+<p><strong>Catch up on Slack without reading it.</strong></p>
 
-</div>
+<p>Unreads, threads, and search — in your agent’s context, from the session you already have.</p>
 
 ```bash
 npx -y @jtalk22/slack-mcp --setup
 ```
+
+</div>
 
 <div align="center">
 
@@ -29,7 +29,7 @@ npx -y @jtalk22/slack-mcp --setup
 </div>
 
 <p align="center">
-  <a href="#built-past-the-demo">The moat</a> ·
+  <a href="#built-past-the-demo">How it works</a> ·
   <a href="#two-ways-into-slack">Why session auth</a> ·
   <a href="#grid-credentials-and-caching">Grid & credentials</a> ·
   <a href="#install">Install</a> ·

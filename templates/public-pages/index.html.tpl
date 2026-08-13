@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Slack MCP Server — Slack’s operating layer for AI agents</title>
-  <meta name="description" content="Slack’s operating layer for AI agents: searchable workspace memory, approved actions, and typed workflows—local without an app/admin queue or hosted with permanent OAuth.">
+  <title>Slack MCP Server — Catch up on Slack without reading it</title>
+  <meta name="description" content="Catch up on Slack without reading it: unreads, threads, and search in your agent’s context, plus approved actions and typed workflows—local without an app/admin queue or hosted with permanent OAuth.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server — Ask what happened. Get receipts. Close the loop.">
@@ -14,7 +14,7 @@
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="640">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Slack’s operating layer for AI agents">
+  <meta name="twitter:title" content="Catch up on Slack without reading it">
   <meta name="twitter:description" content="Ask what happened. Get receipts. Close the loop—locally or through permanent hosted OAuth.">
   <meta name="twitter:image" content="{{SOCIAL_IMAGE_URL}}">
   <link rel="icon" href="{{ICON_URL}}" type="image/png">
@@ -187,7 +187,7 @@
     <main>
       <div class="frame hero">
         <div class="hero-copy">
-          <p class="eyebrow reveal">Slack’s operating layer for AI agents</p>
+          <p class="eyebrow reveal">Catch up on Slack without reading it</p>
           <h1 class="reveal">Ask what happened.<br><em>Get receipts.</em><br>Close the loop.</h1>
           <p class="hero-deck reveal">Turn Slack from an interruption stream into searchable operating memory and approved action. Run the <strong>{{SELF_HOSTED_TOOL_COUNT}}-tool surface available today</strong> locally with no app/admin queue, or move recurring work to hosted permanent OAuth, indexing, and schedules.</p>
           <div class="command-row reveal" aria-label="Install command">
