@@ -186,7 +186,10 @@ function main() {
     `all=${TOOLS.length} (README ${PUBLIC_METADATA.selfHostedToolCount}), read=${READ_TOOLS.length} (README 12), essentials=${ESSENTIALS_TOOLS.length}`
   );
 
-  const hostedStubs = ["slack_smart_search", "slack_catch_me_up", "slack_triage"];
+  // slack_catch_me_up is deliberately absent: it runs locally now (lib/catch-up.js),
+  // so it is no longer an upgrade stub and no longer a leak when a narrowed
+  // profile advertises it.
+  const hostedStubs = ["slack_smart_search", "slack_triage"];
   const narrowedLeaks = ["read", "essentials"].flatMap((profile) =>
     resolveToolProfile(profile)
       .tools.map((tool) => tool.name)
