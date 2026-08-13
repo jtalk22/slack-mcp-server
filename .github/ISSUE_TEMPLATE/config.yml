@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or setup help
+    url: https://github.com/jtalk22/slack-mcp-server/discussions
+    about: Ask in Discussions — setup, client configuration, and "how do I…" questions get answered faster there than in an issue.
+  - name: Token extraction or connection troubleshooting
+    url: https://github.com/jtalk22/slack-mcp-server/blob/main/docs/TROUBLESHOOTING.md
+    about: Run `npx -y @jtalk22/slack-mcp --doctor` first. The troubleshooting guide covers the common token, Keychain, and client-restart failures.
+  - name: Security vulnerability
+    url: https://github.com/jtalk22/slack-mcp-server/security/policy
+    about: Report privately by email. Do not open a public issue for anything involving credentials or session tokens.

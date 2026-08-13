@@ -134,3 +134,19 @@ Tokens load from `~/.slack-mcp-tokens.json` or `SLACK_TOKEN`/`SLACK_COOKIE` env 
   admin panel — repo `.dockerignore`/Dockerfile changes don't affect it. Build
   failures there are usually their builder's infra; re-run via admin → Dockerfile
   → Build & Release.
+- **`workers/browser-ops/` is NOT dead code — do not delete it.** It looks
+  abandoned from inside this repo: no workflow references it, nothing runs
+  `wrangler deploy`, and the only commits since it was added are Dependabot
+  bumps. It is nevertheless **deployed** as the `slack-browser-ops` Worker and
+  consumed **cross-repo** by `revereveal/portfolio` → `grant-brief`, which binds
+  it as a service (`BROWSER_OPS_KEY`, header `x-browser-key`) and budgets
+  "5–20 browser-ops calls" per agent run for portal status checks. Deleting it
+  breaks the grant pipeline. Its `@cloudflare/puppeteer` → `extract-zip` alert
+  (#51, CVE-2026-56876) was dismissed as `not_used`, not fixed: `extract-zip`
+  only loads via puppeteer's Node launcher classes, while `index.js` calls
+  `puppeteer.launch(env.BROWSER)` through the Workers entry point to remote
+  Browser Rendering, and `workerd` cannot spawn processes or unzip anyway.
+  `workers/` is absent from the npm `files` whitelist, so it never ships to
+  package consumers. Re-open the alert if this ever runs under Node.
+  (`scripts/cloudflare-browser-tool.js` is a separate path — it calls
+  Cloudflare's REST Browser Rendering API directly and is unaffected.)
