@@ -5,6 +5,83 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2026-08-24
+
+### Speaks MCP 2026-07-28, drops the hosted stubs
+
+Two changes, one release. The protocol layer moves to the 2026-07-28 revision
+without breaking anything that talks to it today, and the two tools that never
+did any work here are gone.
+
+### Breaking
+
+- **`slack_smart_search` and `slack_triage` are removed.** They made no Slack
+  call; the OSS handlers returned an upgrade payload pointing at a hosted tier.
+  Every tool this package advertises now does its work on your machine. The
+  surface is **19 tools**: 12 read-only, 4 write-path, 3 local workflow tools.
+  Clients that called either name receive the same `unknown_tool` result as
+  any other unknown name. `SLACK_MCP_TOOLS=all` advertises 19 (≈3,134 estimated
+  schema tokens per turn, down from ≈3,600); `read` (12) and `essentials` (6)
+  are unchanged.
+- **HTTP mode is per-request and stateless.** `src/server-http.js` no longer
+  mints an `Mcp-Session-Id`; every `POST /mcp` is answered by a fresh server
+  instance, and `GET` / `DELETE` — the 2025 session operations — answer `405`.
+  2025-era clients are served the same way and keep working; they simply
+  never had a session here. A client that depended on the SSE `GET` stream
+  for server-initiated messages will not receive them over HTTP.
+- **`Access-Control-Allow-Headers` changed** for the HTTP entry: `mcp-session-id`
+  is gone; `MCP-Protocol-Version`, `Mcp-Method`, `Mcp-Name`, and `Accept` are
+  allowed. A browser-originated request whose `Origin` is outside
+  `SLACK_MCP_HTTP_ALLOWED_ORIGINS` is now refused with `403` on `POST`, not
+  only on preflight.
+- **`@modelcontextprotocol/sdk` (v1) is no longer a dependency.** The runtime
+  is `@modelcontextprotocol/server` 2.x and `@modelcontextprotocol/node` 2.x.
+  Nothing in the package's public surface exposed the SDK, so this matters
+  only to anyone importing internals.
+
+### Added
+
+- **MCP 2026-07-28 support, from the same binary as every 2025 revision.**
+  stdio negotiates the era per connection (`serveStdio`, default
+  `legacy: 'serve'`); HTTP serves it per request (`createMcpHandler`, default
+  `legacy: 'stateless'`). On the 2026-07-28 era, `tools/list` carries
+  `ttlMs: 60000, cacheScope: "public"` (the advertised surface is fixed for the
+  life of a process), results carry `resultType: "complete"` and
+  `_meta["io.modelcontextprotocol/serverInfo"]`, `Mcp-Method` is enforced
+  against the body (`-32020` on disagreement), an unsupported revision is
+  refused with `-32022`, and `server/discover` names the supported revision.
+  2025-era protocol responses are byte-for-byte what they were; the one HTTP
+  change a 2025 client can observe is the `WWW-Authenticate` header on the
+  bearer `401`, noted below.
+- **`test/mcp-era.test.js`** — the proof behind the README's claim. It drives
+  the real SDK client at both eras against the in-process handler, spawns
+  `src/server-http.js` and `src/server.js`, and asserts every conformance
+  detail above. `check-public-surface-integrity.js` refuses a README that says
+  "2026-07-28" without this file, an HTTP entry that mentions
+  `sessionIdGenerator`, or any import of the v1 SDK.
+- **`WWW-Authenticate` on the HTTP entry's bearer `401`** (required since the
+  2025-06-18 revision) so a client can learn how to authenticate instead of
+  dead-ending.
+- **`lib/mcp-server.js`** — one factory both transports build from. The
+  advertised tools, prompts, resources, and dispatch path can no longer drift
+  between stdio and HTTP.
+- **`workers/mcp-worker.js` is a version-parity surface.** The in-repo worker
+  had carried `4.0.0` in three places since 4.0.0 and always answered
+  `initialize` with `2024-11-05`; it now echoes the client's supported 2025
+  revision and `check-version-parity.js` fails locally when its
+  `WORKER_VERSION` disagrees with `package.json`.
+
+### Changed
+
+- The workflow-profile tool descriptions describe what runs here:
+  `summary_cadence` sets `slack_catch_me_up`'s default window;
+  `workflow_kind` sets the `output_contract` keys. The previous copy described
+  a hosted scheduler and paid tiers inside the tool schema itself.
+- README, `docs/DEPLOYMENT-MODES.md`, `docs/TROUBLESHOOTING.md`, the CLI help,
+  `--apply-template` help, and the generated public pages state 19 tools and
+  no longer describe placeholder tools or indexed retrieval as part of the
+  local package.
+
 ## [4.9.0] - 2026-08-13
 
 ### Catch-up runs locally

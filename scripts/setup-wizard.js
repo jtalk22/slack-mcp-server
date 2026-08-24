@@ -25,7 +25,7 @@ import {
   setPersistedStorageMode,
   ACTIVE_PROFILE,
 } from "../lib/token-store.js";
-import { RELEASE_VERSION } from "../lib/public-metadata.js";
+import { PUBLIC_METADATA, RELEASE_VERSION } from "../lib/public-metadata.js";
 
 const IS_MACOS = platform() === 'darwin';
 
@@ -588,7 +588,7 @@ async function runDoctor() {
 async function showHelp() {
   print(`${colors.bold}slack-mcp-server v${VERSION}${colors.reset}`);
   print();
-  print("Turn your existing Slack browser session into 21 tools for any stdio MCP client.");
+  print(`Turn your existing Slack browser session into ${PUBLIC_METADATA.selfHostedToolCount} tools for any stdio MCP client.`);
   print();
   print(`${colors.bold}Usage:${colors.reset}`);
   print("  npx -y @jtalk22/slack-mcp             Start MCP server (stdio)");
@@ -606,7 +606,7 @@ async function showHelp() {
   print(`${colors.bold}Tool selection:${colors.reset}`);
   print("  --tools essentials (or SLACK_MCP_TOOLS=essentials) advertises the six");
   print("  core tools to cut per-turn schema cost; 'read' advertises the 12");
-  print("  read-only Slack operations; 'all' is the default (21). Every handler");
+  print(`  read-only Slack operations; 'all' is the default (${PUBLIC_METADATA.selfHostedToolCount}). Every handler`);
   print("  stays callable whichever surface is advertised.");
   print();
   print(`${colors.bold}Request pacing:${colors.reset}`);

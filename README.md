@@ -33,7 +33,7 @@ npx -y @jtalk22/slack-mcp --setup
   <a href="#two-ways-into-slack">Why session auth</a> ·
   <a href="#grid-credentials-and-caching">Grid & credentials</a> ·
   <a href="#install">Install</a> ·
-  <a href="#21-tools-read-act-automate">21 tools</a> ·
+  <a href="#19-tools-read-act-automate">19 tools</a> ·
   <a href="#typed-workflows-slack-in-json-out">Workflows</a> ·
   <a href="#free-local-when-youre-driving-hosted-when-it-must-drive-itself">Local vs hosted</a>
 </p>
@@ -111,7 +111,8 @@ Slack already knows who you are. The official path is a Slack-managed remote int
 | Client surface | Slack's supported partner integrations | **Any stdio MCP client** |
 | Authentication | OAuth | **Existing browser session** |
 | Credential lifetime | Managed OAuth | Rotating session with health checks and refresh |
-| Product surface | Broad Slack-native capabilities | **21 focused tools across read, act, and automate** |
+| Product surface | Broad Slack-native capabilities | **19 focused tools across read, act, and automate** |
+| Protocol | Slack-managed | **MCP 2026-07-28 and every 2025 revision, from the same binary** |
 | Runtime | Slack-managed | **MIT code on your machine** |
 
 </details>
@@ -187,11 +188,13 @@ On macOS, setup can extract from Chrome and persist the selected storage backend
 
 ---
 
-## 21 tools: read, act, automate
+## 19 tools: read, act, automate
 
-The local surface ships **21 tools** today: **12 read-only** Slack operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, 3 local workflow tools including the catch-up itself, and 2 hosted-intelligence stubs that return a structured upgrade payload without making a Slack call. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
+The local surface ships **19 tools** today: **12 read-only** Slack operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools including the catch-up itself. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
 
-**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **985 estimated tokens** of schema per turn against about **3,600** for all 21. `SLACK_MCP_TOOLS=read` advertises the 12 read-only Slack operations listed below, near 1,690. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 21. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
+Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-negotiated over stdio, stateless per request over HTTP (no `Mcp-Session-Id`; `GET`/`DELETE` answer 405). The claim is a test, not a sentence: [`test/mcp-era.test.js`](test/mcp-era.test.js) drives the real SDK client at both eras against the real entry points.
+
+**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **985 estimated tokens** of schema per turn against about **3,134** for all 19. `SLACK_MCP_TOOLS=read` advertises the 12 read-only Slack operations listed below, near 1,690. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 19. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
 
 <details>
 <summary><strong>The full tool inventory</strong></summary>
@@ -231,14 +234,7 @@ The local surface ships **21 tools** today: **12 read-only** Slack operations, *
 | `slack_workflows` | List saved workflow profiles |
 | `slack_catch_me_up` | Read a profile's channels since its cadence window and return structured catch-up evidence |
 
-### Discover hosted intelligence — 2 explicit stubs
-
-| Tool | Hosted result |
-|---|---|
-| `slack_smart_search` | Semantic + lexical search over indexed Slack history |
-| `slack_triage` | Prioritized action queue with routing recommendations |
-
-These two need infrastructure this package does not ship — an index and a model — so the OSS handlers return a structured upgrade payload instead of making a Slack call. `slack_catch_me_up` needs neither and runs locally. `slack_refresh_tokens` only writes local credential state.
+`slack_refresh_tokens` reads Slack and writes only local credential state.
 
 </details>
 
@@ -248,7 +244,7 @@ These two need infrastructure this package does not ship — an index and a mode
 
 Bind a workflow kind to channels, priority people, retention, and cadence. `slack_catch_me_up` then reads that scope locally and hands your agent the evidence: which threads went unanswered and for how long, what your priority people said or were pinned on, which conversations actually moved. It does the gathering; your agent writes the summary against the contract below.
 
-There is no server-side model in that path, because there does not need to be one — the client calling this server is already a language model. Hosted adds what genuinely needs infrastructure: indexed semantic retrieval, and running the same catch-up on a schedule while your laptop is shut.
+There is no server-side model in that path, because there does not need to be one — the client calling this server is already a language model. Hosted adds what genuinely needs infrastructure: running the same catch-up on a schedule while your laptop is shut, on an OAuth token that does not rotate.
 
 ```bash
 npx -y @jtalk22/slack-mcp --apply-template oncall-handoff --channels C012345,C067890
@@ -323,8 +319,7 @@ Each profile gets its own token file, Keychain entries, metadata, and lock. Add 
 When local control is enough, stop here—everything above is MIT-licensed and runs on your machine. The local product is complete, not a crippled trial: hosted earns the upgrade through continuity, intelligence, and collaboration, not by holding ordinary Slack access hostage. Hosted exists for work that must survive a rotating browser session:
 
 - permanent OAuth;
-- indexed semantic search;
-- scheduled catch-up and triage;
+- scheduled catch-up;
 - contract-validated workflow briefs;
 - shared profiles and managed workspace continuity.
 

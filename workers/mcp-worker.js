@@ -5,6 +5,15 @@
  * User credentials passed via headers or session.
  */
 
+// Release version. The worker is a self-contained bundle (no lib/ import), so
+// this literal is gated by scripts/check-version-parity.js against package.json.
+const WORKER_VERSION = "5.0.0";
+
+// 2025-era revisions this hand-rolled JSON-RPC endpoint speaks. A client's
+// requested revision is echoed when supported; otherwise the oldest common one.
+const SUPPORTED_PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
+const DEFAULT_PROTOCOL_VERSION = "2025-03-26";
+
 // MCP Prompts
 const PROMPTS = [
   {
@@ -672,13 +681,15 @@ async function handleMcpRequest(request, env, queryParams) {
     const { method, params, id } = req;
 
     switch (method) {
-      case "initialize":
+      case "initialize": {
+        const requested = params?.protocolVersion;
         responses.push(jsonRpcResponse(id, {
-          protocolVersion: "2024-11-05",
+          protocolVersion: SUPPORTED_PROTOCOL_VERSIONS.includes(requested) ? requested : DEFAULT_PROTOCOL_VERSION,
           capabilities: { tools: {}, prompts: {}, resources: {} },
-          serverInfo: { name: "slack-mcp-server", version: "4.0.0" }
+          serverInfo: { name: "slack-mcp-server", version: WORKER_VERSION }
         }));
         break;
+      }
 
       case "tools/list":
         responses.push(jsonRpcResponse(id, { tools: TOOLS }));
@@ -755,7 +766,7 @@ export default {
     // Health check
     if (url.pathname === '/health') {
       return Response.json(
-        { status: 'ok', server: 'slack-mcp-server', version: '4.0.0' },
+        { status: 'ok', server: 'slack-mcp-server', version: WORKER_VERSION },
         { headers: corsHeaders }
       );
     }
@@ -765,7 +776,7 @@ export default {
       return Response.json({
         serverInfo: {
           name: "Slack MCP",
-          version: "4.0.0"
+          version: WORKER_VERSION
         },
         authentication: {
           required: false
