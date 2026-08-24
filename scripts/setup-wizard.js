@@ -606,7 +606,7 @@ async function showHelp() {
   print(`${colors.bold}Tool selection:${colors.reset}`);
   print("  --tools essentials (or SLACK_MCP_TOOLS=essentials) advertises the six");
   print("  core tools to cut per-turn schema cost; 'read' advertises the 12");
-  print("  read-only Slack operations; 'all' is the default (21). Every handler");
+  print(`  read-only Slack operations; 'all' is the default (${PUBLIC_METADATA.selfHostedToolCount}). Every handler`);
   print("  stays callable whichever surface is advertised.");
   print();
   print(`${colors.bold}Request pacing:${colors.reset}`);

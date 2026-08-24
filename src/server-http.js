@@ -95,8 +95,24 @@ const mcpHandler = createMcpHandler(
 );
 const handleMcp = toNodeHandler(mcpHandler);
 
-// Create HTTP server
-const httpServer = http.createServer(async (req, res) => {
+// Create HTTP server. The whole request path is guarded: a rejection that
+// escaped here would be an unhandled promise rejection, which terminates the
+// process in Node — one malformed request must never take the server down.
+const httpServer = http.createServer((req, res) => {
+  handleHttpRequest(req, res).catch((error) => {
+    console.error(`request failed: ${error?.stack || error}`);
+    if (!res.headersSent) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+    }
+    if (!res.writableEnded) {
+      res.end(JSON.stringify(
+        structuredError("internal_error", "The request could not be served.", "Retry; if it persists, check the server log.")
+      ));
+    }
+  });
+});
+
+async function handleHttpRequest(req, res) {
   const allowOrigin = applyCors(req, res);
 
   if (req.method === 'OPTIONS') {
@@ -170,7 +186,7 @@ const httpServer = http.createServer(async (req, res) => {
 
   res.writeHead(404);
   res.end('Not found');
-});
+}
 
 httpServer.listen(PORT, () => {
   console.log(`${SERVER_NAME} v${SERVER_VERSION} HTTP server running on port ${PORT}`);

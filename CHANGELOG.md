@@ -50,7 +50,9 @@ did any work here are gone.
   `_meta["io.modelcontextprotocol/serverInfo"]`, `Mcp-Method` is enforced
   against the body (`-32020` on disagreement), an unsupported revision is
   refused with `-32022`, and `server/discover` names the supported revision.
-  2025-era responses are byte-for-byte what they were.
+  2025-era protocol responses are byte-for-byte what they were; the one HTTP
+  change a 2025 client can observe is the `WWW-Authenticate` header on the
+  bearer `401`, noted below.
 - **`test/mcp-era.test.js`** — the proof behind the README's claim. It drives
   the real SDK client at both eras against the in-process handler, spawns
   `src/server-http.js` and `src/server.js`, and asserts every conformance

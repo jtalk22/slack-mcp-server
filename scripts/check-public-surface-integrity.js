@@ -230,7 +230,8 @@ function main() {
     "src/server-http.js must serve per request via createMcpHandler and never mint a session"
   );
   const v1Importers = ["src", "lib"].flatMap((dir) =>
-    readdirSync(join(ROOT, dir))
+    readdirSync(join(ROOT, dir), { recursive: true })
+      .map(String)
       .filter((name) => name.endsWith(".js"))
       .map((name) => `${dir}/${name}`)
       .filter((relPath) => read(relPath).includes("@modelcontextprotocol/sdk"))
