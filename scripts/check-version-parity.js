@@ -91,9 +91,16 @@ async function main() {
     smitheryError = String(error?.message || error);
   }
 
+  // The in-repo Cloudflare worker (workers/mcp-worker.js) is a self-contained
+  // bundle and cannot import lib/public-metadata.js, so it carries a literal.
+  // It drifted to 4.0.0 once and stayed there for months; gate it here.
+  const workerSource = readFileSync(join(repoRoot, "workers", "mcp-worker.js"), "utf8");
+  const workerVersion = workerSource.match(/const WORKER_VERSION = "([^"]+)"/)?.[1] || null;
+
   const parityChecks = [
     { name: "package.json vs server.json", ok: localVersion === localServerVersion },
     { name: "package.json vs server.json package", ok: localVersion === localServerPkgVersion },
+    { name: "package.json vs workers/mcp-worker.js WORKER_VERSION", ok: workerVersion === localVersion },
     { name: "npm latest", ok: npmVersion === localVersion },
     { name: "MCP registry latest", ok: mcpRegistryVersion === localVersion },
     { name: "MCP registry websiteUrl", ok: mcpRegistryWebsiteUrl === expectedWebsiteUrl },
@@ -141,6 +148,12 @@ async function main() {
       "server.json (package entry)",
       localServerPkgVersion,
       localServerPkgVersion === localVersion ? "ok" : "mismatch"
+    ),
+    row(
+      "workers/mcp-worker.js WORKER_VERSION",
+      workerVersion,
+      workerVersion === localVersion ? "ok" : "mismatch",
+      "self-contained worker bundle carries a literal"
     ),
     row(
       "npm dist-tag latest",

@@ -14,9 +14,9 @@ Use this guide to choose the right operating mode before rollout.
 
 | Mode | Start Command | Best For | Auth Material | Exposure | Notes |
 |------|---------------|----------|---------------|----------|-------|
-| Local MCP (`stdio`) | `npx -y @jtalk22/slack-mcp` | Individual daily usage in Claude | `SLACK_TOKEN` + `SLACK_COOKIE` via token file/env | Local process | Lowest ops burden. Free. 21 tools (16 read/write + 2 workflow profile primitives + 3 discoverable upgrade stubs to hosted). |
+| Local MCP (`stdio`) | `npx -y @jtalk22/slack-mcp` | Individual daily usage in Claude | `SLACK_TOKEN` + `SLACK_COOKIE` via token file/env | Local process | Lowest ops burden. Free. 19 tools (12 read + 4 write + 3 local workflow tools). MCP 2026-07-28 and 2025 revisions, era-negotiated per connection. |
 | Local Web UI (`web`) | `npx -y @jtalk22/slack-mcp web` | Browser-first usage, manual search/send | Same as above + generated API key | `localhost` by default | Useful when MCP is not available |
-| Hosted MCP (`http`) | `node src/server-http.js` | Controlled hosted integration | Env-injected Slack token/cookie + HTTP bearer token | Remote endpoint | `/mcp` is bearer-protected by default; configure CORS allowlist |
+| Hosted MCP (`http`) | `node src/server-http.js` | Controlled hosted integration | Env-injected Slack token/cookie + HTTP bearer token | Remote endpoint | `/mcp` is bearer-protected by default (401 carries `WWW-Authenticate`); configure CORS allowlist. Stateless per request: no `Mcp-Session-Id`, `GET`/`DELETE` answer 405. |
 | Smithery/Worker | `wrangler deploy` + Smithery publish flow | Registry distribution for hosted consumers | Query/env token handoff | Remote endpoint | Keep worker version parity with npm release |
 
 ## Team Deployment Guidance

@@ -25,7 +25,7 @@ import {
   setPersistedStorageMode,
   ACTIVE_PROFILE,
 } from "../lib/token-store.js";
-import { RELEASE_VERSION } from "../lib/public-metadata.js";
+import { PUBLIC_METADATA, RELEASE_VERSION } from "../lib/public-metadata.js";
 
 const IS_MACOS = platform() === 'darwin';
 
@@ -588,7 +588,7 @@ async function runDoctor() {
 async function showHelp() {
   print(`${colors.bold}slack-mcp-server v${VERSION}${colors.reset}`);
   print();
-  print("Turn your existing Slack browser session into 21 tools for any stdio MCP client.");
+  print(`Turn your existing Slack browser session into ${PUBLIC_METADATA.selfHostedToolCount} tools for any stdio MCP client.`);
   print();
   print(`${colors.bold}Usage:${colors.reset}`);
   print("  npx -y @jtalk22/slack-mcp             Start MCP server (stdio)");

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -186,21 +186,60 @@ function main() {
     `all=${TOOLS.length} (README ${PUBLIC_METADATA.selfHostedToolCount}), read=${READ_TOOLS.length} (README 12), essentials=${ESSENTIALS_TOOLS.length}`
   );
 
-  // slack_catch_me_up is deliberately absent: it runs locally now (lib/catch-up.js),
-  // so it is no longer an upgrade stub and no longer a leak when a narrowed
-  // profile advertises it.
-  const hostedStubs = ["slack_smart_search", "slack_triage"];
-  const narrowedLeaks = ["read", "essentials"].flatMap((profile) =>
+  // 5.0.0 removed the hosted upgrade stubs. No profile — including "all" —
+  // may advertise a tool that exists to point at a paid tier, and no handler
+  // may return an upgrade payload in place of doing the work.
+  const retiredStubs = ["slack_smart_search", "slack_triage"];
+  const stubLeaks = ["all", "read", "essentials"].flatMap((profile) =>
     resolveToolProfile(profile)
       .tools.map((tool) => tool.name)
-      .filter((name) => hostedStubs.includes(name))
+      .filter((name) => retiredStubs.includes(name))
       .map((name) => `${profile}:${name}`)
+  );
+  const paidTierDescriptions = TOOLS
+    .filter((tool) => /hosted-only|upgrade to Pro|\$19\/mo|signup|free tier/i.test(tool.description))
+    .map((tool) => tool.name);
+  const handlersSource = read("lib/handlers.js");
+  const upgradePayloadMarkers = ["tool_requires_hosted", "signup_url", "pro_value_prop"].filter((m) => handlersSource.includes(m));
+  check(
+    results,
+    "no hosted upgrade stub in any profile",
+    stubLeaks.length === 0 && paidTierDescriptions.length === 0 && upgradePayloadMarkers.length === 0,
+    [
+      stubLeaks.length ? `advertised: ${stubLeaks.join(", ")}` : "",
+      paidTierDescriptions.length ? `paid-tier copy in: ${paidTierDescriptions.join(", ")}` : "",
+      upgradePayloadMarkers.length ? `upgrade payload markers in lib/handlers.js: ${upgradePayloadMarkers.join(", ")}` : "",
+    ].filter(Boolean).join("; ") || "every advertised tool does its own work"
+  );
+
+  // The protocol claim is a test, not a sentence. The README may say
+  // 2026-07-28 only while the proof exists; the HTTP entry may not mint a
+  // session; nothing may still import the retired v1 SDK.
+  const eraTestExists = existsSync(join(ROOT, "test", "mcp-era.test.js"));
+  check(
+    results,
+    "README protocol claim is backed by test/mcp-era.test.js",
+    readme.includes("2026-07-28") && eraTestExists,
+    eraTestExists ? "claim and proof both present" : "README claims 2026-07-28 without test/mcp-era.test.js"
+  );
+  const httpSource = read("src/server-http.js");
+  check(
+    results,
+    "HTTP entry is stateless",
+    !httpSource.includes("sessionIdGenerator") && httpSource.includes("createMcpHandler"),
+    "src/server-http.js must serve per request via createMcpHandler and never mint a session"
+  );
+  const v1Importers = ["src", "lib"].flatMap((dir) =>
+    readdirSync(join(ROOT, dir))
+      .filter((name) => name.endsWith(".js"))
+      .map((name) => `${dir}/${name}`)
+      .filter((relPath) => read(relPath).includes("@modelcontextprotocol/sdk"))
   );
   check(
     results,
-    "narrowed profiles carry no hosted upgrade stub",
-    narrowedLeaks.length === 0,
-    narrowedLeaks.length === 0 ? "read and essentials are Slack-only" : narrowedLeaks.join(", ")
+    "no import of the retired @modelcontextprotocol/sdk v1 package",
+    v1Importers.length === 0 && !Object.keys(packageJson.dependencies || {}).includes("@modelcontextprotocol/sdk"),
+    v1Importers.length === 0 ? "runtime is on SDK v2" : v1Importers.join(", ")
   );
 
   const unknownProfileNames = [...READ_TOOLS, ...ESSENTIALS_TOOLS].filter(
@@ -235,7 +274,7 @@ function main() {
     results,
     "CLI client-neutral help",
     cliHelpResult.status === 0 &&
-      cliHelpResult.stdout.includes("21 tools for any stdio MCP client") &&
+      cliHelpResult.stdout.includes(`${PUBLIC_METADATA.selfHostedToolCount} tools for any stdio MCP client`) &&
       !cliHelpResult.stdout.includes("Full Slack access for Claude"),
     cliHelpResult.stdout || cliHelpResult.stderr || "no output"
   );

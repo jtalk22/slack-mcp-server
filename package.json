@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "4.9.0",
+  "version": "5.0.0",
   "description": "Catch up on Slack without reading it. Unreads, threads, search. Browser-session or hosted OAuth.",
   "funding": {
     "type": "github",
@@ -98,7 +98,8 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.27.0",
+    "@modelcontextprotocol/node": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.0.0",
     "express": "^5.2.1"
   },
   "files": [
@@ -123,6 +124,7 @@
     "smithery.yaml"
   ],
   "devDependencies": {
+    "@modelcontextprotocol/client": "^2.0.0",
     "playwright": "^1.62.1"
   },
   "overrides": {
