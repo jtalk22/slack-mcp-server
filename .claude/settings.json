@@ -2,7 +2,10 @@
   "mcpServers": {
     "slack": {
       "command": "node",
-      "args": ["src/server.js"]
+      "args": [
+        "src/server.js"
+      ]
     }
-  }
+  },
+  "enabledPlugins": {}
 }
