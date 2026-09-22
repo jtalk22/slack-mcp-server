@@ -249,7 +249,7 @@ Send a message.
 **Parameters:**
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| channel_id | string | *required* | Channel or DM ID |
+| channel_id | string | *required* | Channel ID, DM ID, or user ID. User IDs are resolved to a DM automatically. |
 | text | string | *required* | Message text |
 | thread_ts | string | - | Thread to reply to |
 
