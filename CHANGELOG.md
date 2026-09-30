@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.1] - 2026-09-30
+
+### Added
+
+- Clickable starter prompts for catch-ups, finding decisions, and drafting replies,
+  with a direct path into the interactive demo and a clearer mobile install flow.
+- Complete API documentation generated from the current 19 tool schemas, with
+  a parity check that keeps examples and parameter tables current.
+- Native Windows tests alongside Linux on Node 20, 22, 24, and 26.
+
+### Changed
+
+- Setup, compatibility, workflow recipes, and hosted descriptions reflect the
+  current local catch-up and managed delivery paths.
+- Updated vulnerable query-string and browser-worker IP dependencies, the
+  browser runtime dependency, and pinned workflow actions.
+
+
 ### Fixed
 
 - Concurrent messages from the same author share a single user-name lookup,
