@@ -5,6 +5,10 @@ maintainer authorship and credited here — see [CONTRIBUTING.md](CONTRIBUTING.m
 
 ## Contributions
 
+- **[@ChocoTonic](https://github.com/ChocoTonic)** — resolving user IDs to direct-message
+  conversations before sending with browser-session credentials
+  ([#233](https://github.com/jtalk22/slack-mcp-server/pull/233)).
+
 - **[@rvandam](https://github.com/rvandam)** — rich Slack message fields: surfacing the
   `attachments`, `blocks`, `metadata`, `files`, and `reactions` that Slack stores outside the
   plain message `text` ([#143](https://github.com/jtalk22/slack-mcp-server/pull/143)).
