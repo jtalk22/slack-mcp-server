@@ -657,8 +657,25 @@ async function handleToolCall(name, args, env, queryParams) {
 }
 
 // Handle MCP JSON-RPC requests
+const MAX_MCP_BODY_BYTES = 1 * 1024 * 1024; // 1MB cap to prevent DoS via oversized/nested payloads
+
 async function handleMcpRequest(request, env, queryParams) {
-  const body = await request.json();
+  const contentLength = Number(request.headers.get("content-length") || 0);
+  if (contentLength > MAX_MCP_BODY_BYTES) {
+    return { jsonrpc: "2.0", id: null, error: { code: -32600, message: "Request body too large" } };
+  }
+
+  const rawBody = await request.text();
+  if (rawBody.length > MAX_MCP_BODY_BYTES) {
+    return { jsonrpc: "2.0", id: null, error: { code: -32600, message: "Request body too large" } };
+  }
+
+  let body;
+  try {
+    body = JSON.parse(rawBody);
+  } catch {
+    return { jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error" } };
+  }
 
   // JSON-RPC 2.0 response helper
   const jsonRpcResponse = (id, result) => ({
