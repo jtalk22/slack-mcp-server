@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Concurrent messages from the same author share a single user-name lookup,
+  reducing redundant Slack requests while preserving request pacing and cache
+  invalidation.
+
 - `slack_send_message` resolves user IDs to DM conversation IDs before posting,
   avoiding `channel_not_found` with browser-session credentials. Existing channel,
   DM, and threaded reply paths remain supported. Thanks to @ChocoTonic (#233).
