@@ -142,7 +142,7 @@ Treat browser-session automation as an acceptable-use decision for you and your 
 
 ## Install
 
-**Node 22 or 24 recommended. Node 20 remains supported for the v4 line.**
+**Node 22 or 24 recommended. Node 20+ is supported and CI-tested.**
 
 ```bash
 npx -y @jtalk22/slack-mcp --setup
@@ -316,14 +316,15 @@ Each profile gets its own token file, Keychain entries, metadata, and lock. Add 
 
 ## Free local when you’re driving. Hosted when it must drive itself.
 
-When local control is enough, stop here—everything above is MIT-licensed and runs on your machine. The local product is complete, not a crippled trial: hosted earns the upgrade through continuity, intelligence, and collaboration, not by holding ordinary Slack access hostage. Hosted exists for work that must survive a rotating browser session:
+The local package puts Slack in your agent's context: read, search, follow threads, and act from your desktop. Hosted keeps the recurring brief arriving when your laptop is closed:
 
-- permanent OAuth;
-- scheduled catch-up;
+- managed Slack OAuth;
+- scheduled catch-up in your timezone;
 - contract-validated workflow briefs;
-- shared profiles and managed workspace continuity.
+- shared workflow profiles;
+- signed webhook delivery.
 
-Local mode never contacts us; it runs on your machine and talks only to Slack. Hosted never receives a browser cookie; it runs on permanent OAuth, for work that has to survive a rotating session — unattended schedules, Enterprise Grid. Everything above is MIT-licensed and complete on its own.
+Local mode runs on your machine and talks only to Slack. The hosted OAuth connection supports unattended schedules and Enterprise Grid. The local package is MIT-licensed and works independently of hosted.
 
 [See live hosted pricing →](https://mcp.revasserlabs.com/pricing)
 

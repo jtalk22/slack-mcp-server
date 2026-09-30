@@ -1,25 +1,32 @@
 # Roadmap
 
-Next-feature priorities for slack-mcp-server, ranked by (value × differentiation) ÷ effort. The OSS package is a funnel toward the hosted brain at [mcp.revasserlabs.com](https://mcp.revasserlabs.com), so cheap, funnel-feeding moves are weighted highest.
+The local package helps an agent read Slack, find the thread behind a decision,
+and finish an approved conversation. The next improvements build on that job.
+The [latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
+and [changelog](../CHANGELOG.md) describe what is available now.
 
-## Next up — 4.5.0 candidate
+## Available now
 
-**`slack_update_message` + `slack_delete_message`** (effort: S)
+- Nineteen local tools across Slack reads, writes, workflow profiles, and catch-up.
+- Source-linked catch-up evidence gathered locally for your calling agent.
+- Six-tool `essentials` and twelve-tool `read` profiles for a smaller tool schema.
+- Automatic macOS Chrome extraction, isolated workspace profiles, and selectable
+  credential storage; manual credentials on Windows and Linux.
+- stdio and self-hosted HTTP with shared handlers and protocol conformance tests.
 
-Wraps `chat.update` and `chat.delete`. The server can post via `chat.postMessage` but cannot edit or delete — the most-felt gap for any agent that writes to Slack. The handlers are structurally identical to the existing send path; a session token can only edit or delete the user's own messages, so the blast radius is contained, and both reuse the `destructive` annotation already in place. No new auth, transport, or dependency. Maximum user-pain relief for near-zero investment.
+## Next improvements
 
-## Runners-up (all cheap, all funnel-feeding)
-
-| Feature | Effort | Why |
+| Improvement | User benefit | Delivery requirement |
 |---|---|---|
-| `slack_schedule_message` | S–M | Wraps `chat.scheduleMessage`. An OSS teaser for the hosted Safeguard "scheduled morning catch-up DM" *(in development)* — proves cadence value before the upsell. |
-| Complete pagination / cursor passthrough | S | Correctness fix across `conversations_history` / `replies` / `search` / `unreads`, not a new tool. Makes every read complete and every corpus indexed for `smart_search` complete — the cheapest thing that raises hosted quality. |
-| `slack_upload_file` | M | `files.getUploadURLExternal` → `completeUploadExternal` (legacy `files.upload` is deprecated). Indexed file content feeds `smart_search`. Heaviest of the cheap tier; defer behind the two above. |
+| Cursor support across history, threads, search, and listings | Continue a long conversation without starting over or losing the next page | Return continuation information, keep reads bounded, and test multi-page fixtures |
+| Edit and delete your own messages | Correct an agent-written reply from the same conversation | Verify session-token behavior, preserve destructive annotations, and test refused writes |
+| File upload using Slack's current upload flow | Send the report or artifact alongside the explanation | Use the external-upload API and test partial-upload recovery |
 
-## Deferred (real competitor gaps, wrong investment for a maybe-retired OSS copy)
+These are candidates, not release promises. Specific requests and reproducible
+examples belong in [GitHub issues](https://github.com/jtalk22/slack-mcp-server/issues).
 
-Read-state-preserving fetches (no read-receipts), OAuth `xoxp`/`xoxb` token modes, canvas CRUD, SSE/proxy transport, usergroups CRUD, `conversations.create`/`invite`/`join`. Note: `reminders.*` and `canvases.*` are increasingly bot-token gated — verify session-token support before touching.
+## Recurring workflows
 
----
-
-Generated 2026-06-09 from a competitive scan + feature-gap audit. Backlog tracked locally via beads (`bd list`).
+The optional [hosted service](https://mcp.revasserlabs.com/workflows) provides
+managed OAuth, read-only Shadow Reports, scheduled briefs, shared profiles,
+and signed delivery. The local package works independently of that service.

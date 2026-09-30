@@ -64,6 +64,12 @@ Prompt:
 
 ## Notes
 
+For a repeatable morning brief, save a workflow with `slack_workflow_save`
+(`profile_name="morning"`, `workflow_kind="exec_brief"`, and your channel IDs),
+then ask: `Run slack_catch_me_up with profile_name="morning". Write a concise
+brief from its evidence and link the messages behind each decision or blocker.`
+List existing profiles with `slack_workflows`.
+
 - Replace placeholders before running (`<CHANNEL_ID>`, `<THREAD_TS>`, `<USER_ID>`, `<USERNAME>`, timestamps).
 - Timestamp parameters are Unix seconds in string form.
 - For large workspaces, start with smaller limits, then expand.

@@ -143,6 +143,10 @@ function main() {
     );
   }
 
+  const apiDocs = runNode(["scripts/generate-api-docs.js", "--check"]);
+  check(results, "API reference matches tool schemas", apiDocs.status === 0,
+    apiDocs.stdout || apiDocs.stderr || "no output");
+
   const readme = read("README.md");
   check(
     results,

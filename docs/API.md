@@ -1,455 +1,217 @@
 # API Reference
 
-## Tools
+<!-- Generated from lib/tools.js by scripts/generate-api-docs.js. -->
 
-### slack_health_check
+The local package exposes 19 tools. Parameter names, required fields, and descriptions below are generated from the same schemas your MCP client receives.
 
-Check if Slack tokens are valid.
+## Reading results
 
-**Parameters:** None
+Tools return MCP text content containing JSON. Parse `result.content[0].text` to read the payload; tool errors may set `isError`. The protocol layer adds the metadata required by the negotiated MCP revision.
 
-**Returns:**
+Slack timestamps such as `oldest`, `latest`, and `thread_ts` are Unix seconds in string form. The catch-up tool's `since` accepts ISO 8601. Opt into `include_rich_message_fields` to retain attachments, blocks, metadata, files, and reactions on supported reads.
+
+## Choosing a tool profile
+
+`SLACK_MCP_TOOLS=all` advertises the full surface. `essentials` advertises six common tools; `read` advertises twelve Slack read tools. Run `npm run measure:tools` to compare estimated schema tokens. These profiles narrow discovery; use your client's approval controls to govern writes.
+
+## First useful workflow
+
+1. Run `slack_health_check` to verify the connection.
+2. Save a profile with `slack_workflow_save`, for example:
+
 ```json
-{
-  "status": "ok",
-  "code": "ok",
-  "message": "Slack auth valid",
-  "user": "james",
-  "team": "Rêvasser",
-  "token_source": "environment",
-  "token_updated": "2026-01-03T00:00:00Z"
-}
+{"profile_name":"morning","workflow_kind":"exec_brief","channels":["C012345"]}
 ```
 
----
+3. Call `slack_catch_me_up` with `profile_name="morning"`, then ask your agent to compose the brief with links to the evidence. Use `slack_workflows` to find saved profiles.
+
+## Tools
 
 ### slack_token_status
 
-Get detailed token health, age, and cache statistics.
+Check token health, age, auto-refresh status, and cache stats
 
-**Parameters:** None
+**Parameters:** None.
 
-**Returns:**
-```json
-{
-  "status": "healthy",
-  "code": "ok",
-  "message": "Token is healthy",
-  "next_action": null,
-  "token": {
-    "status": "healthy",
-    "age_hours": 2.5,
-    "source": "file",
-    "updated_at": "2026-01-08T12:00:00Z"
-  },
-  "auto_refresh": {
-    "enabled": true,
-    "interval": "4 hours",
-    "requires": "Slack tab open in Chrome"
-  },
-  "cache": {
-    "users": { "size": 25, "maxSize": 500, "ttlMs": 3600000 },
-    "dms": { "count": 10, "age_hours": 1.2 }
-  }
-}
-```
+---
+
+### slack_health_check
+
+Check if Slack tokens are valid and show authentication status
+
+**Parameters:** None.
 
 ---
 
 ### slack_refresh_tokens
 
-Force refresh tokens from Chrome.
+Force refresh tokens by extracting from Chrome (requires Slack tab open in Chrome)
 
-**Prerequisites:** Chrome must be running with a Slack tab open (app.slack.com).
+**Parameters:** None.
 
-**Parameters:** None
-
-**Returns:**
-```json
-{
-  "status": "ok",
-  "code": "refreshed",
-  "message": "Tokens refreshed from Chrome.",
-  "user": "james",
-  "team": "Rêvasser"
-}
-```
+Automatic extraction uses Slack credentials already stored in a macOS Chrome profile. A live Slack tab and browser scripting permission are not required. On Windows or Linux, refresh your manually supplied session credentials.
 
 ---
 
 ### slack_list_conversations
 
-List all DMs and channels.
+List all DMs and channels with user names resolved. Uses cached DMs by default for speed.
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| types | string | "im,mpim" | Conversation types to include |
-| limit | number | 100 | Maximum results |
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `types` | string | no | Comma-separated types: im, mpim, public_channel, private_channel |
+| `limit` | number | no | Maximum results (default 100) |
+| `discover_dms` | boolean | no | If true, actively discover all DMs (slower, may hit rate limits on large workspaces). Default false uses cached DMs. |
 
-**Types:**
-- `im` - Direct messages
-- `mpim` - Group DMs
-- `public_channel` - Public channels
-- `private_channel` - Private channels
-
-**Returns:**
-```json
-{
-  "count": 5,
-  "conversations": [
-    {
-      "id": "D063M4403MW",
-      "name": "Gwen Santos",
-      "type": "dm",
-      "user_id": "U05GPEVH7J9"
-    }
-  ]
-}
-```
+DM discovery is opt-in with `discover_dms`. Leave it off for the fastest listing; enable it when you need to find DM conversations not already cached.
 
 ---
 
 ### slack_conversations_history
 
-Get messages from a channel or DM.
+Get messages from a channel or DM with user names resolved
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| channel_id | string | *required* | Channel or DM ID |
-| limit | number | 50 | Messages to fetch (max 100) |
-| oldest | string | - | Unix timestamp, get messages after; matching boundary timestamp is included |
-| latest | string | - | Unix timestamp, get messages before; matching boundary timestamp is included |
-| resolve_users | boolean | true | Convert user IDs to names |
-| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
-| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` |
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel_id` | string | yes | Channel or DM ID (e.g., D063M4403MW) |
+| `limit` | number | no | Messages to fetch (max 100, default 50) |
+| `oldest` | string | no | Unix timestamp - get messages after this time (boundary timestamp included) |
+| `latest` | string | no | Unix timestamp - get messages before this time (boundary timestamp included) |
+| `resolve_users` | boolean | no | Convert user IDs to names (default true) |
+| `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
+| `include_all_metadata` | boolean | no | Pass Slack's include_all_metadata option to conversations.history |
 
-**Returns:**
-```json
-{
-  "channel": "D063M4403MW",
-  "message_count": 50,
-  "has_more": true,
-  "messages": [
-    {
-      "ts": "1767368030.607599",
-      "user": "Gwen Santos",
-      "user_id": "U05GPEVH7J9",
-      "text": "Hello!",
-      "datetime": "2026-01-02T15:33:50.000Z",
-      "has_thread": false,
-      "attachments": [
-        {
-          "text": "Additional message context"
-        }
-      ]
-    }
-  ]
-}
-```
-
-`include_rich_message_fields` changes this tool's **output shape only** — it surfaces fields Slack
-already returns on the message object: `attachments`, `blocks`, `files`, `reactions`, `metadata`,
-plus `subtype`, `bot_id`, `app_id` (markers that flag automated / bot / app messages) and `team`
-(the workspace id, present on all messages). Especially `blocks` can be large, so it's opt-in per
-call to keep MCP client context lean.
-
-`include_all_metadata` is a **separate, independent** Slack request flag: its only effect is to add
-the full `event_payload` inside a message's developer `metadata` (without it you still get
-`metadata.event_type`). The two are orthogonal — set `include_rich_message_fields` to see `metadata`
-in the output at all; additionally set `include_all_metadata` for the full payload.
-
-Note: `slack_search_messages` matches are thin — Slack's search API does not return these rich
-fields on matches (only `team`). To read rich content for a search hit, call
-`slack_conversations_history` or `slack_get_thread` on the match's channel/ts.
+For larger exports, use `slack_get_full_conversation`. Set `resolve_users=false` when user IDs are enough and you want to avoid name-lookup requests.
 
 ---
 
 ### slack_get_full_conversation
 
-Export full conversation with threads.
+Export FULL conversation history with all messages, threads, and user names. Can save to file.
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| channel_id | string | *required* | Channel or DM ID |
-| oldest | string | - | Unix timestamp start; matching boundary timestamp is included |
-| latest | string | - | Unix timestamp end; matching boundary timestamp is included |
-| max_messages | number | 2000 | Max messages (up to 10000) |
-| include_threads | boolean | true | Fetch thread replies |
-| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
-| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.history` and `conversations.replies` |
-| output_file | string | - | Filename (saved to ~/.slack-mcp-exports/) |
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel_id` | string | yes | Channel or DM ID |
+| `oldest` | string | no | Unix timestamp start (e.g., 1733011200 = Dec 1, 2025; boundary timestamp included) |
+| `latest` | string | no | Unix timestamp end (boundary timestamp included) |
+| `max_messages` | number | no | Maximum messages to retrieve (default 2000, max 10000) |
+| `include_threads` | boolean | no | Fetch thread replies (default true) |
+| `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
+| `include_all_metadata` | boolean | no | Pass Slack's include_all_metadata option to conversations.history and conversations.replies |
+| `output_file` | string | no | Filename to save export (saved to ~/.slack-mcp-exports/) |
 
-**Timestamps:**
-- Dec 1, 2025 = `1733011200`
-- Jan 1, 2026 = `1735689600`
-
-**Returns:**
-```json
-{
-  "channel": "D063M4403MW",
-  "exported_at": "2026-01-03T16:00:00Z",
-  "total_messages": 150,
-  "date_range": {
-    "oldest": "2025-12-01T00:00:00Z",
-    "latest": "now"
-  },
-  "saved_to": "/Users/james/export.json",
-  "messages": [...]
-}
-```
+The export reads history up to `max_messages` and can include thread replies. `output_file` writes a JSON export under `~/.slack-mcp-exports/`.
 
 ---
 
 ### slack_search_messages
 
-Search messages across the workspace.
+Search messages across the Slack workspace
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| query | string | *required* | Search query |
-| count | number | 20 | Number of results (max 100) |
-| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
-
-**Query Syntax:**
-- `from:@username` - From specific user
-- `in:#channel` - In specific channel
-- `has:link` - Has links
-- `before:2026-01-01` - Before date
-- `after:2025-12-01` - After date
-
-**Returns:**
-```json
-{
-  "query": "project update",
-  "total": 25,
-  "matches": [
-    {
-      "ts": "1767368030.607599",
-      "channel": "general",
-      "channel_id": "C05GPEVH7J9",
-      "user": "Example User",
-      "text": "Here's the project update...",
-      "datetime": "2026-01-02T15:33:50.000Z",
-      "permalink": "https://..."
-    }
-  ]
-}
-```
-
----
-
-### slack_send_message
-
-Send a message.
-
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| channel_id | string | *required* | Channel ID, DM ID, or user ID. User IDs are resolved to a DM automatically. |
-| text | string | *required* | Message text |
-| thread_ts | string | - | Thread to reply to |
-
-**Returns:**
-```json
-{
-  "status": "sent",
-  "channel": "D063M4403MW",
-  "ts": "1767368030.607599",
-  "message": "Hello!"
-}
-```
-
----
-
-### slack_get_thread
-
-Get all replies in a thread.
-
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| channel_id | string | *required* | Channel or DM ID |
-| thread_ts | string | *required* | Thread parent timestamp |
-| include_rich_message_fields | boolean | false | Include Slack attachments, blocks, metadata, files, and reactions when present |
-| include_all_metadata | boolean | false | Pass Slack's `include_all_metadata` option to `conversations.replies` |
-
-**Returns:**
-```json
-{
-  "channel": "D063M4403MW",
-  "thread_ts": "1767368030.607599",
-  "message_count": 5,
-  "messages": [
-    {
-      "ts": "1767368030.607599",
-      "user": "Example User",
-      "text": "Original message",
-      "datetime": "2026-01-02T15:33:50.000Z",
-      "is_parent": true
-    }
-  ]
-}
-```
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `query` | string | yes | Search query (supports Slack syntax like from:@user, in:#channel) |
+| `count` | number | no | Number of results (max 100, default 20) |
+| `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
 
 ---
 
 ### slack_users_info
 
-Get user details.
+Get detailed information about a Slack user
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| user_id | string | *required* | Slack user ID |
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `user_id` | string | yes | Slack user ID |
 
-**Returns:**
-```json
-{
-  "id": "U05GPEVH7J9",
-  "name": "gwen",
-  "real_name": "Gwen Santos",
-  "display_name": "Gwen",
-  "email": "gwen@example.com",
-  "title": "Assistant",
-  "timezone": "America/New_York",
-  "is_bot": false,
-  "is_admin": false
-}
-```
+---
+
+### slack_send_message
+
+Send a message to a channel or DM
+
+**Writes to Slack.** Ask your client to require approval before executing this tool.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel_id` | string | yes | Channel ID, DM ID, or user ID to send to. User IDs are resolved to a DM automatically. |
+| `text` | string | yes | Message text (supports Slack markdown) |
+| `thread_ts` | string | no | Thread timestamp to reply to (optional) |
+
+---
+
+### slack_get_thread
+
+Get all replies in a message thread
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel_id` | string | yes | Channel or DM ID |
+| `thread_ts` | string | yes | Thread parent message timestamp |
+| `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
+| `include_all_metadata` | boolean | no | Pass Slack's include_all_metadata option to conversations.replies |
 
 ---
 
 ### slack_list_users
 
-List all workspace users.
+List all users in the workspace
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| limit | number | 100 | Maximum users to return |
-
-**Returns:**
-```json
-{
-  "count": 10,
-  "users": [
-    {
-      "id": "U05GPEVH7J9",
-      "name": "gwen",
-      "real_name": "Gwen Santos",
-      "display_name": "Gwen",
-      "email": "gwen@example.com",
-      "is_admin": false
-    }
-  ]
-}
-```
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `limit` | number | no | Maximum users to return (default 500, supports pagination) |
 
 ---
 
 ### slack_add_reaction
 
-Add an emoji reaction to a message.
+Add an emoji reaction to a message
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| channel_id | string | *required* | Channel or DM ID |
-| timestamp | string | *required* | Message timestamp to react to |
-| reaction | string | *required* | Emoji name without colons (e.g. `thumbsup`, `heart`, `eyes`) |
+**Writes to Slack.** Ask your client to require approval before executing this tool.
 
-**Returns:**
-```json
-{
-  "status": "added",
-  "channel": "D063M4403MW",
-  "timestamp": "1767368030.607599",
-  "reaction": "thumbsup"
-}
-```
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel_id` | string | yes | Channel or DM ID containing the message |
+| `timestamp` | string | yes | Message timestamp to react to |
+| `reaction` | string | yes | Emoji name without colons (e.g., 'thumbsup', 'eyes', 'white_check_mark') |
 
 ---
 
 ### slack_remove_reaction
 
-Remove an emoji reaction from a message.
+Remove an emoji reaction from a message
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| channel_id | string | *required* | Channel or DM ID |
-| timestamp | string | *required* | Message timestamp |
-| reaction | string | *required* | Emoji name without colons |
+**Writes to Slack.** Ask your client to require approval before executing this tool.
 
-**Returns:**
-```json
-{
-  "status": "removed",
-  "channel": "D063M4403MW",
-  "timestamp": "1767368030.607599",
-  "reaction": "thumbsup"
-}
-```
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel_id` | string | yes | Channel or DM ID containing the message |
+| `timestamp` | string | yes | Message timestamp to remove reaction from |
+| `reaction` | string | yes | Emoji name without colons (e.g., 'thumbsup', 'eyes') |
 
 ---
 
 ### slack_conversations_mark
 
-Mark a conversation as read up to a specific message timestamp.
+Mark a conversation as read up to a specific message timestamp
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| channel_id | string | *required* | Channel or DM ID to mark as read |
-| timestamp | string | *required* | Message timestamp to mark as read up to |
+**Writes to Slack.** Ask your client to require approval before executing this tool.
 
-**Returns:**
-```json
-{
-  "status": "marked",
-  "channel": "D063M4403MW",
-  "read_up_to": "1767368030.607599"
-}
-```
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `channel_id` | string | yes | Channel or DM ID to mark as read |
+| `timestamp` | string | yes | Message timestamp to mark as read up to (all messages at or before this are marked read) |
 
 ---
 
 ### slack_conversations_unreads
 
-Get channels and DMs with unread messages, sorted by unread count (highest first).
+Get channels and DMs with unread messages, sorted by unread count (highest first)
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| types | string | "im,mpim,public_channel,private_channel" | Comma-separated conversation types |
-| limit | number | 50 | Maximum conversations to return |
-
-**Returns:**
-```json
-{
-  "total_unread_conversations": 3,
-  "conversations": [
-    {
-      "id": "C05GPEVH7J9",
-      "name": "engineering",
-      "type": "public_channel",
-      "unread_count": 12,
-      "latest_ts": "1767368030.607599"
-    },
-    {
-      "id": "D063M4403MW",
-      "name": "Gwen Santos",
-      "type": "dm",
-      "unread_count": 5,
-      "latest_ts": "1767368025.123456"
-    }
-  ]
-}
-```
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `types` | string | no | Comma-separated types: im, mpim, public_channel, private_channel (default all) |
+| `limit` | number | no | Maximum conversations to return (default 50) |
 
 ---
 
@@ -457,28 +219,52 @@ Get channels and DMs with unread messages, sorted by unread count (highest first
 
 Search workspace users by name, display name, or email. Case-insensitive partial match.
 
-**Parameters:**
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| query | string | *required* | Search term to match against name, display name, real name, or email |
-| limit | number | 20 | Maximum results to return |
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `query` | string | yes | Search term to match against name, display name, real name, or email |
+| `limit` | number | no | Maximum results to return (default 20) |
 
-**Returns:**
-```json
-{
-  "query": "gwen",
-  "count": 1,
-  "total_matches": 1,
-  "users": [
-    {
-      "id": "U05GPEVH7J9",
-      "name": "gwen",
-      "real_name": "Gwen Santos",
-      "display_name": "Gwen",
-      "email": "gwen@example.com",
-      "title": "Assistant",
-      "is_admin": false
-    }
-  ]
-}
-```
+---
+
+### slack_workflow_save
+
+Save or update a workflow profile that binds a workflow_kind (support_inbox | incident_room | exec_brief | product_launch_watch | custom) to channels, priority people, retention mode, and summary cadence. Stored locally at ~/.slack-mcp-workflows.json. slack_catch_me_up reads the profile by name and returns evidence shaped by its workflow_kind.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `profile_name` | string | yes | Unique name for this workflow profile (e.g. 'morning-exec-brief', 'on-call-rotation') |
+| `workflow_kind` | string | yes | Workflow kind. Determines the output_contract keys slack_catch_me_up returns for this profile. Values: `support_inbox`, `incident_room`, `exec_brief`, `product_launch_watch`, `custom`. |
+| `channels` | array<string> | no | Slack channel IDs to read (e.g. ['C012345', 'C067890']) |
+| `priority_people` | array<string> | no | Slack user IDs whose messages get extra weight in summaries |
+| `retention_mode` | string | no | Retention preference recorded on the profile. Default ephemeral. Values: `ephemeral`, `persistent`. |
+| `summary_cadence` | string | no | How often this profile expects to be caught up on. Sets slack_catch_me_up's default window: 24 hours for on_demand and daily_8am, 7 days for weekly_monday. Values: `on_demand`, `daily_8am`, `weekly_monday`. |
+
+Saves a local workflow profile in `~/.slack-mcp-workflows.json`. Cadence selects the default catch-up window; scheduling is provided separately by hosted. This tool does not post to Slack.
+
+---
+
+### slack_workflows
+
+List all saved workflow profiles from ~/.slack-mcp-workflows.json. Optionally filter by workflow_kind. Returns profile_name, channels, priority_people, retention_mode, summary_cadence, structured_keys, created_at, updated_at.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `workflow_kind` | string | no | Optional filter — return only profiles of this workflow_kind Values: `support_inbox`, `incident_room`, `exec_brief`, `product_launch_watch`, `custom`. |
+
+---
+
+### slack_catch_me_up
+
+Catch up on a saved workflow profile. Reads the profile's channels (or everything currently unread if the profile names none), pulls messages since the cadence window or an explicit `since`, expands active threads, and returns structured evidence: which threads are unanswered and for how long, what the profile's priority people said or were pinned on, and which conversations moved most. Runs locally against your own session — no hosted account, no server-side model. The response carries an `output_contract` naming the keys to compose for this workflow_kind; write the summary from the returned `signals` and `conversations`, citing conversation names and timestamps.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `profile_name` | string | yes | Name of a workflow profile saved via slack_workflow_save (list them with slack_workflows) |
+| `since` | string | no | Optional ISO 8601 timestamp — only consider messages newer than this. Defaults to the profile's cadence window: 24 hours for on_demand and daily_8am, 7 days for weekly_monday. |
+
+Reads a saved profile and returns `scope`, `signals`, `conversations`, `output_contract`, and `truncation`. Your calling agent composes the brief from this evidence and cites the source messages. Defaults to 24 hours, or 7 days for a weekly profile. A missing profile returns `profile_not_found` with available profiles and a next action. No hosted account or server-side model is needed.
+
+
+## Maintaining this reference
+
+Edit tool schemas in `lib/tools.js`, then run `npm run build:api-docs`. CI checks the generated reference with `npm run verify:api-docs`.

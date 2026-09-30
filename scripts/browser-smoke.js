@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { createReadStream, existsSync } from "node:fs";
+import { createReadStream, existsSync, mkdirSync } from "node:fs";
 import { stat } from "node:fs/promises";
 import http from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
@@ -36,6 +36,7 @@ const retryDelayMs = Number(argValue("--retry-delay-ms", "10000"));
 const strictVersion = process.argv.includes("--strict-version");
 const expectTagOverride = argValue("--expect-tag", null);
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || undefined;
+const screenshotsDir = argValue("--screenshots-dir");
 
 const MIME_TYPES = {
   ".css": "text/css; charset=utf-8",
@@ -229,9 +230,27 @@ async function checkRoot(page, url, { expectedNpm = `v${RELEASE_VERSION}` } = {}
   assertText(snapshot.hero, /Ask what happened\.[\s\S]*Get receipts\.[\s\S]*Close the loop\./i, "hero thesis");
   assertText(snapshot.hero, new RegExp(`${PUBLIC_METADATA.selfHostedToolCount}[- ]tool`, "i"), "hero tool count");
   assertText(snapshot.systems, /Browser-session engine/i, "systems proof");
-  assertText(snapshot.paths, /Move now\.[\s\S]*Run unattended\./i, "local-hosted decision");
+  assertText(snapshot.paths, /Move now\.[\s\S]*Have the brief waiting at 8am\./i, "local-hosted decision");
   assertText(snapshot.command, /npx -y @jtalk22\/slack-mcp --setup/, "install command");
   return { pageState: "ok" };
+}
+
+async function checkStarterPrompts(page) {
+  for (const [job, pattern] of [
+    ["search", /latest deployment decision/],
+    ["reply", /Wait for my approval before sending/],
+    ["morning", /last 24 hours/],
+  ]) {
+    await page.locator(`[data-job="${job}"]`).click();
+    const text = await page.locator("#jobPrompt").innerText();
+    assertText(text, pattern, `${job} starter prompt`);
+    const copiedText = await page.locator("#copyJob").getAttribute("data-copy");
+    if (copiedText !== text) throw new Error(`${job} copy target disagrees with displayed prompt`);
+    const selected = await page.locator('[data-job][aria-pressed="true"]').count();
+    if (selected !== 1) throw new Error(`Expected one selected starter prompt, found ${selected}`);
+  }
+  const demoHref = await page.locator('.hero-actions a[href*="demo-slack-mcp"]').getAttribute("href");
+  if (!demoHref) throw new Error("Interactive demo must be accessible from the hero");
 }
 
 async function checkStaticPage(page, url, selector, pattern, label) {
@@ -259,6 +278,17 @@ async function runLocal() {
     });
 
     await checkRoot(page, `${server.url}/`);
+    if (screenshotsDir) {
+      mkdirSync(screenshotsDir, { recursive: true });
+      for (const [name, width, height] of [["desktop", 1365, 900], ["mobile", 390, 844]]) {
+        await page.setViewportSize({ width, height });
+        await page.screenshot({ path: join(screenshotsDir, `landing-${name}.png`) });
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+        if (overflow) throw new Error(`Landing page overflows at ${width}px`);
+      }
+      await page.setViewportSize({ width: 1280, height: 720 });
+    }
+    await checkStarterPrompts(page);
     const toolCount = PUBLIC_METADATA.selfHostedToolCount;
     await checkStaticPage(page, `${server.url}/public/share.html`, ".note", /Ask what happened\. Get receipts\. Close the loop\./i, "share note");
     await checkStaticPage(page, `${server.url}/public/demo-video.html`, ".note", /Use Slack interactively for free; move unattended work to hosted/i, "demo video note");
