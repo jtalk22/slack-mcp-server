@@ -5,6 +5,10 @@ maintainer authorship and credited here — see [CONTRIBUTING.md](CONTRIBUTING.m
 
 ## Contributions
 
+- **[@anupamme](https://github.com/anupamme)** — identifying unbounded JSON request
+  bodies in the standalone Worker and proposing a request-size limit
+  ([#244](https://github.com/jtalk22/slack-mcp-server/pull/244)).
+
 - **[@ChocoTonic](https://github.com/ChocoTonic)** — resolving user IDs to direct-message
   conversations before sending with browser-session credentials
   ([#233](https://github.com/jtalk22/slack-mcp-server/pull/233)).

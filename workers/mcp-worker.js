@@ -656,9 +656,77 @@ async function handleToolCall(name, args, env, queryParams) {
   }
 }
 
+const MAX_MCP_BODY_BYTES = 1024 * 1024;
+const MAX_MCP_JSON_DEPTH = 64;
+const MAX_MCP_BATCH_SIZE = 100;
+
+class McpRequestError extends Error {
+  constructor(message, code, status) {
+    super(message);
+    this.code = code;
+    this.status = status;
+  }
+}
+
+// Bound the bytes while reading: Content-Length is optional and untrusted.
+async function readMcpBody(request) {
+  const declaredBytes = Number(request.headers.get("content-length"));
+  if (declaredBytes > MAX_MCP_BODY_BYTES) {
+    await request.body?.cancel().catch(() => {});
+    throw new McpRequestError("Request body too large", -32600, 413);
+  }
+  if (!request.body) throw new McpRequestError("Parse error", -32700, 400);
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let bytes = 0;
+  let text = "";
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > MAX_MCP_BODY_BYTES) {
+        await reader.cancel().catch(() => {});
+        throw new McpRequestError("Request body too large", -32600, 413);
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    text += decoder.decode();
+  } finally {
+    reader.releaseLock();
+  }
+
+  // Check nesting before parsing, without counting braces inside strings.
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (const char of text) {
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (char === "\\") escaped = true;
+      else if (char === '"') inString = false;
+    } else if (char === '"') inString = true;
+    else if (char === "{" || char === "[") {
+      if (++depth > MAX_MCP_JSON_DEPTH) {
+        throw new McpRequestError("Request nesting too deep", -32600, 400);
+      }
+    } else if (char === "}" || char === "]") depth--;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new McpRequestError("Parse error", -32700, 400);
+  }
+}
+
 // Handle MCP JSON-RPC requests
 async function handleMcpRequest(request, env, queryParams) {
-  const body = await request.json();
+  const body = await readMcpBody(request);
+  if (Array.isArray(body) && (body.length === 0 || body.length > MAX_MCP_BATCH_SIZE)) {
+    throw new McpRequestError("Batch must contain 1 to 100 requests", -32600, 400);
+  }
 
   // JSON-RPC 2.0 response helper
   const jsonRpcResponse = (id, result) => ({
@@ -678,6 +746,10 @@ async function handleMcpRequest(request, env, queryParams) {
   const responses = [];
 
   for (const req of requests) {
+    if (!req || typeof req !== "object" || Array.isArray(req)) {
+      responses.push(jsonRpcError(null, -32600, "Invalid request"));
+      continue;
+    }
     const { method, params, id } = req;
 
     switch (method) {
@@ -832,8 +904,11 @@ export default {
         return Response.json(result, { headers: corsHeaders });
       } catch (error) {
         return Response.json(
-          { jsonrpc: "2.0", error: { code: -32700, message: error.message } },
-          { status: 400, headers: corsHeaders }
+          { jsonrpc: "2.0", id: null, error: {
+            code: error instanceof McpRequestError ? error.code : -32700,
+            message: error.message
+          } },
+          { status: error instanceof McpRequestError ? error.status : 400, headers: corsHeaders }
         );
       }
     }
