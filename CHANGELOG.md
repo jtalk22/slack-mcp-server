@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   avoiding `channel_not_found` with browser-session credentials. Existing channel,
   DM, and threaded reply paths remain supported. Thanks to @ChocoTonic (#233).
 
+- The standalone Worker bounds streamed request bodies to 1 MiB, JSON nesting
+  to 64 levels, and batches to 100 requests. Oversized streams are cancelled
+  before parsing. Thanks to @anupamme for identifying the issue (#244).
+
 ## [5.0.0] - 2026-08-24
 
 ### Speaks MCP 2026-07-28, drops the hosted stubs
