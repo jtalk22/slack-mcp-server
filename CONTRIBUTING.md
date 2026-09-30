@@ -16,7 +16,8 @@ cd slack-mcp-server
 npm install
 ```
 
-**Requirements:** Node 20+, valid Slack session tokens for testing (`xoxc-` + `xoxd-`).
+**Requirements:** Node 20+. Unit tests use fixtures and need no Slack credentials.
+Live Slack integration checks require your own session tokens (`xoxc-` + `xoxd-`).
 
 ## Development
 
@@ -31,6 +32,7 @@ Edit templates in `templates/public-pages/`, not the generated files in `public/
 ## Testing
 
 ```bash
+npm test                       # Unit tests; no Slack credentials needed
 npm run smoke:browser          # Browser smoke tests (requires Playwright)
 npm run verify:public-pages    # Verify generated pages match templates
 npm run verify:version-parity  # Check version consistency across files
@@ -41,7 +43,7 @@ npm run verify:version-parity  # Check version consistency across files
 - One concern per PR
 - Run `node --check` on modified `.js` files
 - Generated pages (`public/*.html`) must match templates — run `npm run build:public-pages` before committing
-- PRs are validated by CI: lint, tests (Node 20 + 22), browser smoke, and attribution checks
+- PRs are validated by CI: lint, Linux tests (Node 20, 22, 24, and 26), Windows tests (Node 24), browser smoke, and attribution checks
 
 ## Architecture
 

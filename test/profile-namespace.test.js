@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 
 // SLACK_MCP_PROFILE (#164) namespaces every storage surface so multiple
@@ -61,7 +61,7 @@ test("an invalid profile name fails closed at load, naming the rule", () => {
   const probe = spawnSync(process.execPath, [
     "--input-type=module",
     "-e",
-    `await import(${JSON.stringify(join(REPO_ROOT, "lib", "token-store.js"))});`,
+    `await import(${JSON.stringify(pathToFileURL(join(REPO_ROOT, "lib", "token-store.js")).href)});`,
   ], {
     env: { ...process.env, HOME: SANDBOX, SLACK_MCP_PROFILE: "Bad Name!" },
     encoding: "utf-8",
