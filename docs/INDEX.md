@@ -23,5 +23,6 @@
 
 ## Release Notes
 
-- [v4.1.2 — LevelDB extraction, multi-profile enumeration, zero zombies](RELEASE-NOTES-v4.1.2.md)
+- [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
 - [Changelog](../CHANGELOG.md)
+- [v4.1.2 — LevelDB extraction, multi-profile enumeration, zero zombies](RELEASE-NOTES-v4.1.2.md)

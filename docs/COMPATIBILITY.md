@@ -20,7 +20,7 @@ The local package is a stdio MCP server. Client support is classified by the evi
 
 | Runtime | Posture |
 |---|---|
-| Node 20 | Supported for the v4 line; upstream end-of-life |
+| Node 20 | Supported and CI-tested; prefer Node 22 or 24 for new installations |
 | Node 22 | Recommended and CI-tested |
 | Node 24 | Recommended and CI-tested |
 | Node 26 | CI-tested current release line |

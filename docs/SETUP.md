@@ -4,7 +4,7 @@ Turn the Slack browser session you already have into 19 tools for any stdio MCP 
 
 ## Fast path
 
-**Node 22 or 24 recommended. Node 20 remains supported for the v4 line.**
+**Node 22 or 24 recommended. Node 20+ is supported and CI-tested.**
 
 On macOS, sign into Slack in Chrome once, then run:
 
