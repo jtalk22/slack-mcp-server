@@ -282,7 +282,7 @@ async function runLocal() {
       mkdirSync(screenshotsDir, { recursive: true });
       for (const [name, width, height] of [["desktop", 1365, 900], ["mobile", 390, 844]]) {
         await page.setViewportSize({ width, height });
-        await page.screenshot({ path: join(screenshotsDir, `landing-${name}.png`) });
+        await page.screenshot({ path: join(screenshotsDir, `landing-${name}.png`), animations: "disabled" });
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
         if (overflow) throw new Error(`Landing page overflows at ${width}px`);
       }
