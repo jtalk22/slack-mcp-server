@@ -42,11 +42,9 @@ function printUsage() {
   console.log("Example:");
   console.log("  slack-mcp --apply-template support-triage --channels C012345,C067890");
   console.log("");
-  console.log("Templates write to ~/.slack-mcp-workflows.json. The hosted AI brain at");
-  console.log("mcp.revasserlabs.com (free tier or Pro $19/mo) reads these profiles and");
-  console.log("returns structured JSON per the workflow_kind. The OSS package ships the");
-  console.log("profile primitives + 3 discoverable upgrade stubs (slack_smart_search,");
-  console.log("slack_catch_me_up, slack_triage). The brain is hosted-only.");
+  console.log("Templates write to ~/.slack-mcp-workflows.json. slack_catch_me_up reads a");
+  console.log("profile by name and returns structured evidence shaped by its workflow_kind,");
+  console.log("locally, against your own session.");
 }
 
 function parseFlag(flag) {

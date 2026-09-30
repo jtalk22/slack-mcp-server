@@ -38,20 +38,20 @@ test("read profile is the 12 read-only Slack operations", () => {
   assert.ok(!r.tools.some((t) => t.name === "slack_send_message"), "no write tools in read profile");
 });
 
-test("no profile advertises a hosted upgrade stub except 'all'", () => {
-  // The hosted stubs make no Slack call and return an upgrade payload. Anyone
-  // narrowing their surface to save schema cost must not be handed paid-tier
-  // advertising in every turn.
-  const stubs = ["slack_smart_search", "slack_catch_me_up", "slack_triage"];
-  for (const profile of ["read", "essentials"]) {
+test("no profile advertises a hosted upgrade stub — the surface is Slack-only", () => {
+  // 5.0.0 removed the two tools that made no Slack call and returned an
+  // upgrade payload. Nothing in any profile may point at a paid tier again.
+  const retired = ["slack_smart_search", "slack_triage"];
+  for (const profile of ["all", "read", "essentials"]) {
     const names = resolveToolProfile(profile).tools.map((t) => t.name);
-    for (const stub of stubs) {
+    for (const stub of retired) {
       assert.ok(!names.includes(stub), `${profile} must not advertise ${stub}`);
     }
   }
-  // They remain in the default surface, where discovery is the point.
-  const all = resolveToolProfile("all").tools.map((t) => t.name);
-  for (const stub of stubs) assert.ok(all.includes(stub), `all still advertises ${stub}`);
+  assert.equal(TOOLS.length, 19, "19 tools: 12 read + 4 write + 3 local workflow");
+  for (const tool of TOOLS) {
+    assert.ok(!/hosted-only|upgrade to Pro|\$19\/mo|signup/i.test(tool.description), `${tool.name} description must not advertise a paid tier`);
+  }
 });
 
 test("read profile excludes every tool that writes to the workspace", () => {

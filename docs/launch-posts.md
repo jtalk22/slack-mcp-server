@@ -16,7 +16,7 @@ Slack’s operating layer for AI agents: ask what happened, get the receipts, an
 | Support, product, and executive teams | Typed workflows, indexing, schedules, shared profiles, continuity | A fixed tool count |
 | Business buyers | Slack as operating memory; permanent OAuth; unattended workflows | `stdio` |
 
-`21 tools` is the current inventory, not the category. Say **“21 tools today”** when the count matters. The durable promise is that Slack becomes usable operating context and approved action for an agent.
+`19 tools` is the current inventory, not the category. Say **“19 tools today”** when the count matters. The durable promise is that Slack becomes usable operating context and approved action for an agent.
 
 ---
 
@@ -36,7 +36,7 @@ I built an open-source Slack MCP server for that workflow:
 npx -y @jtalk22/slack-mcp --setup
 ```
 
-The local path uses the Slack identity Chrome already has, so there is no Slack app to register, no OAuth scope review, and no admin queue. It ships 21 tools today: DMs, channels, unread inventory, search, full histories and threads, users, rich message fields, exports, replies, reactions, read-state changes, and typed workflow profiles.
+The local path uses the Slack identity Chrome already has, so there is no Slack app to register, no OAuth scope review, and no admin queue. It ships 19 tools today: DMs, channels, unread inventory, search, full histories and threads, users, rich message fields, exports, replies, reactions, read-state changes, and typed workflow profiles.
 
 The part I spent most of the time on is underneath the demo:
 
@@ -63,7 +63,7 @@ npm: https://www.npmjs.com/package/@jtalk22/slack-mcp
 
 ## r/selfhosted
 
-**Title:** Slack for local AI agents — no app registration, Keychain-only storage, 21 tools today
+**Title:** Slack for local AI agents — no app registration, Keychain-only storage, 19 tools today
 
 **Body:**
 
@@ -102,7 +102,7 @@ That means an agent should be able to answer:
 
 Slack MCP now handles that as a real operating layer. The free open-source path gives a developer or solo operator control immediately through the Slack session already in Chrome—no app-registration project and no admin queue. The hosted path exists for the business case: permanent OAuth, indexed retrieval, scheduled incident/support/exec briefs, shared workflow profiles, and continuity across workspaces.
 
-The current local surface is 21 tools. The count will change. The job does not: turn Slack into context, decisions, and approved action without making someone live in Slack.
+The current local surface is 19 tools. The count will change. The job does not: turn Slack into context, decisions, and approved action without making someone live in Slack.
 
 The new 42-second cut starts where work actually starts: Monday, 9:07 AM, a database outage, a lying runbook, and a printer PIN that has been waiting in `#facilities` for five months.
 
@@ -126,7 +126,7 @@ Local: no Slack app/admin queue.
 
 Hosted: permanent OAuth + indexing + schedules.
 
-21 tools today. One command.
+19 tools today. One command.
 
 `npx -y @jtalk22/slack-mcp --setup`
 
@@ -153,7 +153,7 @@ Do not publish “20k+ downloads” until the public npm API crosses 20,000.
 - “Slack’s operating layer for AI agents.”
 - “Ask what happened. Get receipts. Close the loop.”
 - “No Slack app or admin queue on the local path.”
-- “The current local surface ships 21 tools today.”
+- “The current local surface ships 19 tools today.”
 - “Local gives control now; hosted gives unattended continuity.”
 - “Hosted adds permanent OAuth, indexing, scheduled intelligence, shared profiles, and managed workspaces.”
 - “Session credentials carry the same effective access as the signed-in browser user.”

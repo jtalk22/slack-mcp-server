@@ -1,6 +1,6 @@
 # Setup Guide
 
-Turn the Slack browser session you already have into 21 tools for any stdio MCP client.
+Turn the Slack browser session you already have into 19 tools for any stdio MCP client.
 
 ## Fast path
 
