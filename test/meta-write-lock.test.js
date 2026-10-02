@@ -63,3 +63,29 @@ test("concurrent metadata writers do not lose each other's fields", async () => 
     "the telemetry writer's final value must survive the mode writer");
   assert.equal(meta.last_auto_heal_error, "adversarial_test");
 });
+
+test("a transient metadata rename error does not lose the storage choice", async () => {
+  const home = mkdtempSync(join(tmpdir(), "slack-mcp-meta-rename-"));
+  const script = `
+    import fs from "node:fs";
+    import { syncBuiltinESMExports } from "node:module";
+    const rename = fs.renameSync;
+    let attempts = 0;
+    fs.renameSync = (...args) => {
+      if (++attempts === 2) {
+        const error = new Error("file temporarily in use");
+        error.code = "EPERM";
+        throw error;
+      }
+      return rename(...args);
+    };
+    syncBuiltinESMExports();
+    const { setPersistedStorageMode } = await import(${JSON.stringify(STORE_URL)});
+    setPersistedStorageMode("auto");
+    setPersistedStorageMode("keychain-only");
+    if (attempts !== 3) throw new Error("rename was not retried");
+  `;
+
+  await runWriter(home, script);
+  assert.equal(JSON.parse(readFileSync(join(home, ".slack-mcp-meta.json"), "utf-8")).storage_mode, "keychain-only");
+});
