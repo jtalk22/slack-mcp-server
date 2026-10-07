@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Corrections to this record
+
+Notes below this heading are dated corrections to the entries above it.
+Historical lines are never rewritten, so a reader who acted on a claim once can
+still find the claim they acted on. Each note says what the entry asserted, what
+is true instead, and what the evidence is.
+
+### 2026-10-07 — the 4.1.0 "Stealth Mode" claim
+
+Under `## [4.1.0] - 2026-04-01`, the Highlights list reads:
+
+> - **Stealth Mode** — Session-token auth leaves zero footprint in workspace
+>   admin settings. No app install, no bot user, no audit trail.
+
+and the Changed list below it records "README: Stealth Mode framing".
+
+Two of those three clauses are accurate; the third is false, and the framing
+around all three is wrong.
+
+"No app install" and "no bot user" were true and remain true. The local path
+registers no Slack app and creates no bot identity, which is exactly why it
+needs no admin approval.
+
+"No audit trail" is false, and it states the opposite of how the server works.
+The server calls Slack's Web API with the signed-in user's own session
+credentials, as that user. There is no second identity that could be missing
+from a record. A workspace sees the same API activity from that account that it
+would see from any other client signed in as the same person, and what a
+workspace retains is set by its own plan and settings — not by this package, and
+not by anything this package could suppress if it wanted to. The sentence as
+written reads as a feature for evading oversight. That is not what shipped and
+not what the code does.
+
+The name goes the same way. `scripts/check-public-language.sh` bans that word
+outright, and the project's own messaging guardrails in
+`.github/launch-posts.md` list "Invisible to admins" and "no audit trail" among
+the phrasings never to use. The 4.1.0 entry survived both only because the
+gate's scan paths do not include this file. The name and the framing were
+removed from the README, the landing page and the generated public pages in a
+later release and appear nowhere on the public surface today; this entry was the
+last place either one was still shipping.
+
+The accurate statement, and the one the rest of the documentation uses: session
+credentials carry the same effective access as the signed-in browser user.
+
 ## [Unreleased]
 
 ## [5.0.1] - 2026-09-30
