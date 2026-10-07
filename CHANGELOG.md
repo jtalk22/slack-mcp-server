@@ -247,12 +247,16 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
 - **npm publishing uses OIDC trusted publishing.** The January attempt failed
   because Node 20 bundles npm 10, which has no OIDC support; the job runs on
   Node 24. `NPM_SECRET_TOKEN` is retired.
-- **The README moves again.** The hero is a split-screen GIF — the agent on one side, the channel
-  it searched on the other — recorded frame by frame from `docs/assets/hero-printer-pin.html` by
-  `scripts/record-hero.mjs`, so it re-records byte-identical and stays near 250 KB. GitHub plays a
-  GIF inline and shows an MP4 as a still you have to click; the early demos were GIFs, which is why
-  they felt alive. The original mark is back, the badge row is two deliberate rows, and two diagrams
-  fill the page: the trust boundary, and the schema cost per tool profile.
+- **The README moves again.** The hero opens on the joke — It's Tuesday, 9:07 AM, a jammed
+  printer, the PIN nobody knows — beside two people who asked and got zero replies. One search
+  scrolls five months back to the post that had it all along, and a yellow band joins the PIN to
+  its source. It is a GIF because GitHub plays a GIF inline and shows an MP4 as a still you have to
+  click; a dark-mode twin follows the reader's theme through `<picture>`. Both are drawn by
+  `docs/assets/hero-v2.html` and recorded frame by frame by `scripts/record-hero.mjs`, with the
+  open-licence fonts vendored in `docs/assets/fonts/`, so a re-record is byte-identical and never
+  touches the network. The commands — set up, check your setup, read-only — sit directly under it,
+  and a short "New in 5.1" leads the page. The original mark is back, the badges are two deliberate
+  rows, and two diagrams fill the page: the trust boundary, and the schema cost per tool profile.
 - **"Stealth" is back in the vocabulary**, and the claims that rode along with it are not.
   `check-public-language.sh` no longer blocks the word and now blocks "no audit trail",
   "invisible to admins" and "zero footprint" — the session is the user's own, so a workspace sees
