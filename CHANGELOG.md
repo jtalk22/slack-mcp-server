@@ -120,12 +120,12 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
-### Security
+### Changed
 
-- The browser-ops Worker and the browser smoke test's static server return a
-  fixed error message instead of the exception text; the detail goes to the log.
-- The social-preview maintainer script matches GitHub's image host by parsed
-  hostname instead of a substring.
+- CodeQL skips the three rules that flag reading the Slack session and sending
+  it to Slack, which is what this server is for.
+- The browser smoke test's static server logs an error instead of returning it,
+  and the social-preview script checks GitHub's image host by parsed hostname.
 
 ## [5.1.0] - 2026-10-07
 
