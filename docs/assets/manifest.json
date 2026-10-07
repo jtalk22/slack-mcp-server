@@ -116,11 +116,11 @@
     },
     {
       "id": "social-preview",
-      "path": "docs/images/social-preview-v3.png",
+      "path": "docs/images/social-preview-v4.png",
       "role": "social-preview",
       "format": "png",
-      "size_bytes": 104767,
-      "sha256": "86d298d0dd6d2ed70ec1a886317bf84520f5d53318c1089ecc41743bc79248c0",
+      "size_bytes": 110340,
+      "sha256": "5cc2c3f2dd28fe7590b5fb3d95f344d138727cc7a4054227ca640e6102401df9",
       "width": 1280,
       "height": 640
     },
@@ -130,7 +130,7 @@
       "role": "readme-diagram",
       "format": "svg",
       "size_bytes": 6290,
-      "sha256": "e5c17410056d6c65253a7bf2d8942708cd4264a649027274f59d63e4824234fb",
+      "sha256": "c86fd64ceb596a5e7164dd9b67dabd63fec754a440d8497b2f244a3c2641dd12",
       "width": 1280,
       "height": 720
     }

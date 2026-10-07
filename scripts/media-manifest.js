@@ -20,7 +20,7 @@ const ASSETS = [
   ["full-demo-webm", "docs/videos/demo-slack-mcp.webm", "full-walkthrough-fallback"],
   ["full-demo-hq", "docs/videos/demo-slack-mcp-hq.mp4", "full-walkthrough-master"],
   ["proof-poster", "docs/images/demo-poster.png", "readme-poster"],
-  ["social-preview", "docs/images/social-preview-v3.png", "social-preview"],
+  ["social-preview", "docs/images/social-preview-v4.png", "social-preview"],
   ["access-path-diagram", "docs/images/diagram-oauth-comparison.svg", "readme-diagram"],
 ];
 
