@@ -214,6 +214,10 @@ The local surface ships **20 tools** today: **13 read-only** operations, **4 wri
 
 Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-negotiated over stdio, stateless per request over HTTP (no `Mcp-Session-Id`; `GET`/`DELETE` answer 405). The claim is a test, not a sentence: [`test/mcp-era.test.js`](test/mcp-era.test.js) drives the real SDK client at both eras against the real entry points.
 
+<p align="center">
+  <img src="docs/images/diagram-schema-budget.svg" width="900" alt="Estimated schema tokens per turn by profile: essentials 6 tools at about 1,474 tokens or 37 percent, read 13 tools at about 2,359 or 59 percent, all 20 tools at about 4,008 or 100 percent">
+</p>
+
 **Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **1,474 estimated tokens** of schema per turn against about **3,931** for all 20. `SLACK_MCP_TOOLS=read` advertises the 13 read-only operations listed below, near 2,355. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 20. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
 
 <details>
@@ -359,6 +363,10 @@ Every message this server returns becomes text in a model's context, next to you
 - Writes are atomic and shared credential state is process-locked.
 - The local web server binds to localhost; workspace write tools carry destructive annotations.
 - Every release publishes from CI with npm provenance.
+
+<p align="center">
+  <img src="docs/images/diagram-trust-boundary.svg" width="900" alt="Four authors — you, a colleague, a Slack Connect participant and a relay app — each cross the server’s trust boundary on their own track and are stamped self, internal, external or bot. All four land in one model context beside your own instructions. On the way back out, strict mode holds a send and read-only never registers the write tool.">
+</p>
 
 <details>
 <summary><strong>Author labels on every message</strong></summary>
