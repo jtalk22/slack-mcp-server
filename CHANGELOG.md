@@ -122,15 +122,6 @@ credentials carry the same effective access as the signed-in browser user.
 
 ### Security
 
-- The web dashboard no longer offers "Remember this key on this device". The
-  local API key is a bearer for the server's Slack session; in localStorage it
-  survived browser restarts and was readable by any later page served from the
-  same localhost origin. It is now held in sessionStorage for the open tab only,
-  and a key an earlier version stored in localStorage is moved out of it on the
-  next load.
-- `SLACK_MCP_AUTH_TEST_URL`, the setup wizard's test override for the
-  `auth.test` endpoint, is refused unless it names `https://slack.com` or a
-  loopback address, because the request carries the Slack token and cookie.
 - The browser-ops Worker and the browser smoke test's static server return a
   fixed error message instead of the exception text; the detail goes to the log.
 - The social-preview maintainer script matches GitHub's image host by parsed

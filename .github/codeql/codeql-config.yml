@@ -23,6 +23,16 @@ name: "slack-mcp-server CodeQL config"
 queries:
   - uses: security-extended
 
+# This server's job is to read the user's Slack session locally and send it only
+# to Slack, so these flows are by design (alerts #3, #4, #12-#17, #19, 2026-10-07 run).
+query-filters:
+  - exclude:
+      id: js/clear-text-storage-of-sensitive-data
+  - exclude:
+      id: js/file-access-to-http
+  - exclude:
+      id: js/http-to-file-access
+
 # There is no paths-ignore, and that is a measured result rather than an
 # oversight.
 #
