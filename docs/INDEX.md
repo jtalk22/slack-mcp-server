@@ -16,6 +16,10 @@
 - [Use Case Recipes](USE_CASE_RECIPES.md)
 - [Support Boundaries](SUPPORT-BOUNDARIES.md)
 
+## Security
+
+- [Prompt-Injection Test Corpus](INJECTION-CORPUS.md)
+
 ## Issue Templates
 
 - [Bug Report](../.github/ISSUE_TEMPLATE/bug_report.md)
