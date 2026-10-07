@@ -52,6 +52,13 @@ const getSocialPreviewImageSrc = async () => {
       const match = value.match(/https:\/\/repository-images\.githubusercontent\.com\/[^")]+/);
       return match ? match[0] : null;
     };
+    const isRepoImageUrl = (value) => {
+      try {
+        return new URL(value).hostname === "repository-images.githubusercontent.com";
+      } catch {
+        return false;
+      }
+    };
 
     const headings = Array.from(document.querySelectorAll("h1, h2, h3, h4, strong"));
     const socialHeading = headings.find((el) => el.textContent?.trim() === "Social preview");
@@ -74,9 +81,7 @@ const getSocialPreviewImageSrc = async () => {
       node = node.parentElement;
     }
 
-    const fallback = Array.from(document.querySelectorAll("img")).find((img) =>
-      img.src.includes("repository-images.githubusercontent.com")
-    );
+    const fallback = Array.from(document.querySelectorAll("img")).find((img) => isRepoImageUrl(img.src));
     if (fallback?.src) return fallback.src;
 
     const bgFallback = Array.from(document.querySelectorAll("*"))

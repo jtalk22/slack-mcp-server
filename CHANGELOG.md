@@ -120,6 +120,13 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+### Changed
+
+- CodeQL skips the three rules that flag reading the Slack session and sending
+  it to Slack, which is what this server is for.
+- The browser smoke test's static server logs an error instead of returning it,
+  and the social-preview script checks GitHub's image host by parsed hostname.
+
 ## [5.1.0] - 2026-10-07
 
 ### The catch-up could not see what it was for
