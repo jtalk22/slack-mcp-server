@@ -405,6 +405,37 @@ async function runManualSetup(rl) {
   return persistTokens(token, cookie);
 }
 
+/**
+ * The stdio command an MCP client has to register, printed on the last screen
+ * of setup instead of linked from it. Setup used to end with a URL to
+ * docs/SETUP.md, which means the one thing the user still needs is the one
+ * thing the screen does not have.
+ *
+ * `--profile` is appended whenever a profile is active: src/cli.js maps it to
+ * SLACK_MCP_PROFILE for the child process, so the client must pass it on every
+ * start or the server reads the default namespace instead of the one the
+ * credentials were just written to.
+ */
+function clientConfigArgs() {
+  const args = ["-y", "@jtalk22/slack-mcp"];
+  if (ACTIVE_PROFILE) args.push("--profile", ACTIVE_PROFILE);
+  return args;
+}
+
+function printClientConfig() {
+  const args = clientConfigArgs();
+  print("Register this stdio command in your MCP client:");
+  print();
+  print(`  ${colors.cyan}{${colors.reset}`);
+  print(`  ${colors.cyan}  "command": "npx",${colors.reset}`);
+  print(`  ${colors.cyan}  "args": [${args.map(a => `"${a}"`).join(", ")}]${colors.reset}`);
+  print(`  ${colors.cyan}}${colors.reset}`);
+  print();
+  print("Claude Code does it in one command:");
+  print();
+  print(`  ${colors.cyan}claude mcp add slack -- npx ${args.join(" ")}${colors.reset}`);
+}
+
 async function showStatus() {
   const creds = getDoctorCredentials();
 
@@ -697,11 +728,15 @@ async function main() {
     if (success) {
       print(`${colors.green}${colors.bold}Setup complete!${colors.reset}`);
       print();
-      print("Next steps:");
-      print("  • Verify: npx -y @jtalk22/slack-mcp --status");
-      print("  • Start server: npx -y @jtalk22/slack-mcp");
-      print("  • Choose your client: https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md");
-      print("  • Restart the client, then run slack_health_check");
+      printClientConfig();
+      print();
+      print("Then:");
+      print("  • Fully restart the client (quit it, do not just close the window)");
+      print("  • Ask the agent to run slack_health_check — a workspace name means it is live");
+      print();
+      print(`${colors.dim}Verify credentials any time: npx -y @jtalk22/slack-mcp --status${colors.reset}`);
+      print(`${colors.dim}Per-client config keys (Cursor, VS Code, Windsurf, Docker, HTTP):${colors.reset}`);
+      print(`${colors.dim}  https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md${colors.reset}`);
       print();
       print(`${colors.dim}Want permanent tokens, semantic search, and workflow continuity?${colors.reset}`);
       print(`${colors.dim}Hosted tier: https://mcp.revasserlabs.com — $19/mo Pro, 25 free AI calls/mo.${colors.reset}`);

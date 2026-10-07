@@ -18,7 +18,7 @@ The wizard:
 2. extracts the current Chrome Slack session locally;
 3. validates the Slack identity and workspace;
 4. persists the selected storage mode;
-5. prints the next client-configuration step.
+5. prints the stdio command to register, as a JSON object and as a `claude mcp add` one-liner.
 
 Chrome does not need to stay open after the session exists on disk. No DevTools or clipboard step is required for the normal macOS path.
 
