@@ -274,7 +274,7 @@ Reads a saved profile and returns `scope`, `signals`, `conversations`, `output_c
 
 ### slack_session_report
 
-What this server process has actually done, as counts: how many messages it read, how many of those were written by authors outside this workspace broken down by origin, how many sends were attempted, and how many were held. A provenance label is a claim about one message; this is the claim about the whole session, and it is the only way to check after the fact whether outside-authored text reached the model and whether anything tried to send on the back of it. Counts only — no message text, no channel name, no user id is recorded.
+What this server process has actually done, as counts: how many messages it read, how many of those were written by authors outside this workspace broken down by origin, how many sends were attempted, and how many were held. A provenance label is a claim about one message; this is the claim about the whole session, and it is the only way to check after the fact whether outside-authored text reached the model and whether anything tried to send on the back of it. Counts only — no message text, no channel name, no user id is recorded. The receipt and the strict hold belong to this server process, so over HTTP every client of the process shares them.
 
 **Parameters:** None.
 

@@ -108,19 +108,184 @@ not by anything this package could suppress if it wanted to. The sentence as
 written reads as a feature for evading oversight. That is not what shipped and
 not what the code does.
 
-The name goes the same way. `scripts/check-public-language.sh` bans that word
-outright, and the project's own messaging guardrails in
-`.github/launch-posts.md` list "Invisible to admins" and "no audit trail" among
-the phrasings never to use. The 4.1.0 entry survived both only because the
-gate's scan paths do not include this file. The name and the framing were
-removed from the README, the landing page and the generated public pages in a
-later release and appear nowhere on the public surface today; this entry was the
-last place either one was still shipping.
+The name stays. "Stealth Mode" describes the part that is true and unusual —
+no app to install, no bot identity, nothing in the workspace app directory, no
+admin queue — and it is the operator's word for it (2026-10-07). What was
+withdrawn on 2026-10-07 is the claim that rode along with it, not the name:
+`scripts/check-public-language.sh` now blocks "no audit trail", "invisible to
+admins" and "zero footprint" by pattern, and no longer blocks "stealth".
 
 The accurate statement, and the one the rest of the documentation uses: session
 credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
+
+## [5.1.0] - 2026-10-07
+
+### The catch-up could not see what it was for
+
+`slack_conversations_unreads` read `unread_count_display` from
+`conversations.list` and filtered on it alone. Measured against a live
+workspace before this release, that path returned **zero** conversations while
+ten mentions were outstanding: every one of them sat in a channel whose unread
+count was zero because the channel had been opened. A tool whose promise is
+catching up reported nothing waiting.
+
+It now also calls `client.counts`, the endpoint Slack's own web client uses for
+its sidebar badges, and merges the two. The shapes are the measured ones, not
+the documented ones — there is no documentation. Its items carry `has_unreads`,
+`mention_count`, `last_read`, `latest`, `updated` and `id`, and **not**
+`unread_count_display`, so `conversations.list` remains the only source of the
+unread number and of names. `threads` is an object rather than a list, and with
+`thread_counts_by_channel` it carries `unread_count_by_channel` and
+`mention_count_by_channel`.
+
+The same workspace after the change: 7 conversations, 10 mentions, and one
+conversation the 200-item listing page never reached, now reported instead of
+silently missing.
+
+### Every message says who wrote it
+
+Slack is a shared bus. A channel can hold Slack Connect participants from
+another workspace, guests, and apps relaying content from outside Slack
+entirely — and the same toolset that reads also writes. Every message now
+carries `origin` (`self`, `internal`, `external`, `bot`, `unknown`) and
+`author_trusted`, derived from fields Slack already returns, so classification
+costs no extra API call.
+
+Building the receipt for it exposed something worse than the gap it was built
+for. Slack omits `team` from a message whose author is in the reading
+workspace, so the classifier matched almost nothing: on a real 20-message
+channel, 11 messages had a user and no team and all 11 were reported unknown.
+More than half an ordinary channel read as unplaceable, which is not caution —
+it is a label that has stopped carrying information. A conversation Slack
+reports as not shared with another workspace structurally cannot hold an author
+from one, so a team-less author there is internal. Same channel, same messages,
+after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
+
+### Added
+
+- **`client.counts` in `slack_conversations_unreads`** — mention counts per
+  conversation, unread thread replies, and the conversations a single listing
+  page never reaches, under `unreachable_from_listing`. Mentions sort above
+  unread volume. A `sources` block names which endpoint answered; when
+  `client.counts` throws, returns `ok:false`, or arrives without its groups,
+  the tool degrades to exactly the previous view and says what is missing.
+- **Message provenance** (`lib/message-provenance.js`) —
+  `SLACK_MCP_PROVENANCE=off|label|strict`. `label` is the default and only adds
+  keys. A batch containing outside authors carries an `untrusted_content`
+  envelope. `strict` additionally holds `slack_send_message` once the session
+  has read outside-authored text.
+- **`slack_session_report`** — what this process did, as counts: messages read,
+  how many were outside-authored and by which origin, writes attempted, writes
+  held. No message text, channel name or user id is recorded.
+- **`--read-only` / `SLACK_MCP_READ_ONLY=1`** — the four write-path tools are
+  withheld from `tools/list` *and* refused at dispatch, because a client may
+  call a name it was never offered. Applied after the tool profile resolves, so
+  no profile or custom list widens it back.
+- **`continuity` on `slack_catch_me_up`** — commitments someone made, asks
+  nobody claimed, questions still unanswered, built from phrase and
+  reply-count rules over messages the run already read. Every row carries the
+  exact text that matched and a permalink to the message. The block states in
+  its own words that the rules are shallow.
+- **`externally_shared` on `slack_list_conversations`** — from fields
+  `conversations.list` already returned, at no extra API cost.
+- **A published prompt-injection corpus** (`test/injection-corpus/`,
+  `docs/INJECTION-CORPUS.md`) — bidi overrides, zero-width splits, tool-call
+  mimicry, attachment payloads, bot relays, Slack Connect authors, and
+  attacker-settable identity fields, so other MCP authors can test their own
+  servers.
+- **CodeQL and OSV-Scanner** over the code and the dependency tree.
+- **`--doctor --security`** — six checks with a pass, warn or fail and a one-line remedy each:
+  credential storage, the plaintext file and its permissions, provenance mode, whether the write
+  tools are registered, profile isolation, credential age. No letter grade, and it says why.
+
+### Fixed
+
+- **Five findings from the pre-release review, each with a regression test**
+  (`test/review-5.1.test.js`): the provenance walker now visits replies the
+  catch-up stores under `thread.replies`, so an outside-authored reply arms
+  the strict hold, enters the envelope and is counted in the receipt;
+  `slack_refresh_tokens` clears the identity caches before saving a new
+  credential; `discover_dms` is refused in read-only mode because
+  `conversations.open` is a write; a `client.counts` group that is not an
+  array degrades to the listing view and names the stage
+  `client.counts_missing_groups`; and the unshared-teamless branch of the
+  classifier no longer fires for a message that carries a foreign `team`.
+- **The strict hold could be switched off by the call it restrained.** The gate
+  resolved its mode from `args.provenance`, so a request asking for `label`
+  dropped out of `strict` even with `SLACK_MCP_PROVENANCE=strict` set. Both the
+  gate and the read path now take the operator's configured mode and allow a
+  request to tighten it, never to loosen it.
+- **`slack_catch_me_up` never armed the gate.** It assembles its own provenance
+  summary and returned it directly, while the session flag had a single owner
+  elsewhere — so the read serving the most outside text was the one that left
+  the hold disarmed.
+- **The first-run screens described a path the code does not run.** The wizard
+  advertised AppleScript and a live Slack tab; the default has been an on-disk
+  LevelDB read needing neither. Every user-facing instruction now follows the
+  structured reason code beside it rather than repeating one fixed line.
+- **Setup prints the client configuration** instead of linking to a page that
+  describes it.
+- **Commands an `npx` user cannot run** were removed from the troubleshooting
+  docs and the bug-report template; `--refresh-tokens` already existed and was
+  documented nowhere.
+- **A lost metadata update now retries.** The write lock gives up its wait
+  budget and proceeds unlocked rather than failing, so a concurrent writer can
+  land between a save and its read-back — an intermittent failure on Windows.
+- **`slack_catch_me_up` classified a teamless colleague as unknown** while
+  `slack_conversations_history` classified the same message as internal, so the untrusted counts
+  from the two tools were different scales. Both read paths now resolve the conversation's sharing
+  state.
+- **Identity-keyed caches are cleared on a token refresh.** Nothing called
+  `clearUserCache` or `clearWorkspaceIdentity` despite both documenting it; a
+  refresh can land on a different workspace, and a stale home team id marks
+  outside authors as colleagues.
+
+### Changed
+
+- **`--doctor --security` runs even when the credential is dead**, since four of
+  its six checks need no auth; the credential-age line says `unknown` rather
+  than vanishing when no timestamp is recorded; the Windows file-mode check no
+  longer prescribes `chmod`; the provenance and write-tool lines say they
+  describe this shell's configuration. `--security --doctor` and
+  `--doctor --security` both work: the CLI and the wizard find their command
+  anywhere among the flags.
+- **`slack_search_messages` resolves each hit's conversation sharing state**, so
+  a teamless colleague in a search result is placed the same way as in a
+  history read.
+- **`publish.yml` verifies `server.json` before `npm publish`**, not after.
+- **20 tools**, 13 read-only, 4 write-path, 3 local workflow. The read and
+  write counts now live in `lib/public-metadata.js` beside the tool count, so
+  the gate that catches drift cannot itself drift.
+- **The README states the free-Slack case** — what a free workspace does not
+  get, checked against Slack's published plans on 2026-10-07, and what this
+  gives instead at no marginal cost.
+- **Credential lifetime is measured, not asserted.** The README and SECURITY.md
+  said one to two weeks. On one real workspace a credential written on
+  2026-07-04 still authenticated 94 days later, stated as an existence proof
+  with its sample size.
+- **npm publishing uses OIDC trusted publishing.** The January attempt failed
+  because Node 20 bundles npm 10, which has no OIDC support; the job runs on
+  Node 24. `NPM_SECRET_TOKEN` is retired.
+- **The README moves again.** The hero opens on the joke — It's Tuesday, 9:07 AM, a jammed
+  printer, the PIN nobody knows — and the workspace slides in beside it: two people who asked and
+  got zero replies. One search scrolls five months back and lights up the post that had it all
+  along, and the agent answers in words. It is a GIF because GitHub plays a GIF inline and shows
+  an MP4 as a still you have to click; one purple field reads in both GitHub themes. It is drawn
+  by `docs/assets/hero-v2.html` and recorded frame by frame by `scripts/record-hero.mjs`, so a
+  re-record is byte-identical. It is set in Söhne and GT America Mono, read from the maintainer's
+  own type library at record time; the GIF carries the pixels and the repository never carries
+  the font files. Open-licence stand-ins in `docs/assets/fonts/` draw it for anyone else. The
+  commands — set up, register, check your setup, read-only — sit directly under it in a real code
+  block. The original mark is back, the badges carry one colour, and two diagrams fill the page:
+  the trust boundary, and the schema cost per tool profile.
+- **"Stealth" is back in the vocabulary**, and the claims that rode along with it are not.
+  `check-public-language.sh` no longer blocks the word and now blocks "no audit trail",
+  "invisible to admins" and "zero footprint" — the session is the user's own, so a workspace sees
+  the same activity it would from any client signed in as that person.
+- **`SECURITY.md`** lists the current versions, names two real reporting
+  channels, and states what the provenance control cannot do.
 
 ## [5.0.1] - 2026-09-30
 

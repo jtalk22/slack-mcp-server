@@ -27,6 +27,9 @@ import {
   ACTIVE_PROFILE,
 } from "../lib/token-store.js";
 import { PUBLIC_METADATA, RELEASE_VERSION } from "../lib/public-metadata.js";
+import { isReadOnlyRun, WRITE_PATH_TOOLS } from "../lib/tools.js";
+import { resolveGateMode } from "../lib/message-provenance.js";
+import { statSync } from "fs";
 
 const IS_MACOS = platform() === 'darwin';
 
@@ -543,6 +546,107 @@ function parseNodeMajor() {
   return Number.parseInt(process.versions.node.split(".")[0], 10);
 }
 
+
+// ============ --doctor --security ============
+//
+// No letter grade. A grade invites a reader to feel finished; what they need is
+// which line is wrong and the one command that fixes it. Each check reports
+// pass, warn or fail and carries its own fix.
+
+function checkLine(state, label, detail, fix) {
+  const mark = state === "pass" ? `${colors.green}\u2713${colors.reset}`
+    : state === "warn" ? `${colors.yellow}!${colors.reset}`
+    : `${colors.red}\u2717${colors.reset}`;
+  print(`${mark} ${label}`);
+  if (detail) print(`  ${colors.dim}${detail}${colors.reset}`);
+  // A passing line does not get a "Fix"; what it gets is the next notch up,
+  // which the reader may decline on purpose.
+  if (fix) print(`  ${colors.bold}${state === "pass" ? "Tighten" : "Fix"}:${colors.reset} ${fix}`);
+}
+
+async function runSecurityReport(creds) {
+  print();
+  print(`${colors.bold}Security posture${colors.reset}`);
+  print();
+
+  const storage = getStorageModeDetail();
+  if (storage.mode === "keychain-only") {
+    checkLine("pass", "Credential storage: keychain-only", "No plaintext credential file is written.");
+  } else {
+    checkLine("warn", `Credential storage: ${storage.mode}`,
+      `Credentials are written to ${TOKEN_FILE}. Anything running as you can read them.`,
+      IS_MACOS ? "SLACK_MCP_TOKEN_STORAGE=keychain-only npx -y @jtalk22/slack-mcp --setup"
+               : "Keychain-only storage is macOS only. Restrict the file and the account instead.");
+  }
+
+  let mode = null;
+  try { mode = statSync(TOKEN_FILE).mode & 0o777; } catch { /* absent is the good case for keychain-only */ }
+  if (mode !== null && process.platform === "win32") {
+    // POSIX mode bits mean nothing on Windows; the file exists, and that is all this can say.
+    checkLine(storage.mode === "keychain-only" ? "fail" : "warn", "Plaintext credential file: present",
+      `At ${TOKEN_FILE}. Restrict it with the file's own permissions; chmod does not apply here.`);
+  } else if (mode === null) {
+    checkLine("pass", "Plaintext credential file: absent", `Nothing at ${TOKEN_FILE}.`);
+  } else if (mode === 0o600) {
+    checkLine(storage.mode === "keychain-only" ? "fail" : "pass",
+      `Plaintext credential file: present, mode 600`,
+      storage.mode === "keychain-only"
+        ? "Keychain-only mode is set but the file is still here — the migration has not completed."
+        : `Owner-only at ${TOKEN_FILE}.`,
+      storage.mode === "keychain-only" ? `rm ${TOKEN_FILE}  # after confirming the Keychain entry exists` : null);
+  } else {
+    checkLine("fail", `Plaintext credential file: mode ${mode.toString(8)}`,
+      "Readable by more than you.", `chmod 600 ${TOKEN_FILE}`);
+  }
+
+  // These two read this shell's environment and flags, not the MCP client's
+  // server entry, so they describe how this doctor process is configured.
+  const provenance = resolveGateMode(process.env);
+  if (provenance === "strict") {
+    checkLine("pass", "Provenance: strict (as this shell is configured)",
+      "Messages are labelled, and a send is held once outside-authored text has been read. The hold is released by a flag the caller sets, so it records a send rather than proving a human approved it.");
+  } else if (provenance === "label") {
+    checkLine("pass", "Provenance: label (default, as this shell is configured)",
+      "Every message carries origin and author_trusted. No send is held.",
+      "SLACK_MCP_PROVENANCE=strict  # also hold sends after reading outside-authored text");
+  } else {
+    checkLine("fail", "Provenance: off",
+      "Messages reach the model with no author label at all.",
+      "unset SLACK_MCP_PROVENANCE  # the default, label, only adds keys");
+  }
+
+  if (isReadOnlyRun()) {
+    checkLine("pass", "Write tools: not registered",
+      `read-only is on, so ${WRITE_PATH_TOOLS.length} write tools are withheld and refused at dispatch.`);
+  } else {
+    checkLine("warn", "Write tools: registered (as this shell is configured)",
+      `${WRITE_PATH_TOOLS.join(", ")} are callable. Your MCP client's own env or args may differ.`,
+      "npx -y @jtalk22/slack-mcp --read-only  # or SLACK_MCP_READ_ONLY=1, if this agent only needs to read");
+  }
+
+  if (ACTIVE_PROFILE) {
+    checkLine("pass", `Profile isolation: ${ACTIVE_PROFILE}`,
+      "Credentials are namespaced, so another profile's session is a separate file.");
+  } else {
+    checkLine("warn", "Profile isolation: none",
+      "One credential set is shared by every client on this machine.",
+      "npx -y @jtalk22/slack-mcp --profile work  # keep workspaces apart");
+  }
+
+  if (creds?.updatedAt) {
+    const days = Math.round((Date.now() - new Date(creds.updatedAt).getTime()) / 86400000);
+    checkLine("pass", `Credential age: ${days} day${days === 1 ? "" : "s"}`,
+      "Age is reported, not judged. A session's real lifetime varies and this project no longer claims a number for it; what matters is whether Slack still accepts it, which the auth check above answers.");
+  } else {
+    checkLine("warn", "Credential age: unknown",
+      "No write timestamp is recorded for this credential, so its age cannot be reported.",
+      "npx -y @jtalk22/slack-mcp --setup  # re-saving records the time");
+  }
+
+  print();
+  print(`${colors.dim}Nothing above is a score. Each warn is a trade you may have made on purpose.${colors.reset}`);
+}
+
 async function runDoctor() {
   print(`${colors.bold}slack-mcp-server doctor${colors.reset}`);
   print();
@@ -599,12 +703,17 @@ async function runDoctor() {
     const exitCode = classifyAuthError(validation.error);
     error(`Slack auth failed: ${validation.error}`);
     print(`Code: ${exitCode === 2 ? "auth_invalid" : "runtime_auth_check_failed"}`);
+    if (process.argv.includes("--security")) {
+      // The posture is most useful exactly when the credential is dead; none of
+      // these checks needs Slack to answer.
+      await runSecurityReport(creds);
+    }
     print();
     print("Next action:");
     if (exitCode === 2) {
       print("  npx -y @jtalk22/slack-mcp --setup");
       print();
-      print(`${colors.dim}Tokens expire every 1-2 weeks. Hosted tier has permanent OAuth:${colors.reset}`);
+      print(`${colors.dim}Session credentials rotate on Slack\u2019s schedule, not a fixed one. Hosted tier uses permanent OAuth:${colors.reset}`);
       print(`${colors.dim}  https://mcp.revasserlabs.com${colors.reset}`);
     } else {
       print("  Check network connectivity and retry:");
@@ -615,6 +724,10 @@ async function runDoctor() {
 
   success(`Slack auth valid for ${validation.user} @ ${validation.team}`);
   print("Code: ok");
+
+  if (process.argv.includes("--security")) {
+    await runSecurityReport(creds);
+  }
   print();
   print("Ready. Next command:");
   print("  npx -y @jtalk22/slack-mcp");
@@ -631,6 +744,7 @@ async function showHelp() {
   print("  npx -y @jtalk22/slack-mcp --setup     Interactive token setup wizard");
   print("  npx -y @jtalk22/slack-mcp --status    Check token health");
   print("  npx -y @jtalk22/slack-mcp --doctor    Run runtime and auth diagnostics");
+  print("  npx -y @jtalk22/slack-mcp --doctor --security   ...and report the security posture");
   print("  npx -y @jtalk22/slack-mcp --refresh-tokens   Re-extract from Chrome only");
   print("  npx -y @jtalk22/slack-mcp --version   Print version");
   print("  npx -y @jtalk22/slack-mcp --help      Show this help");
@@ -670,7 +784,10 @@ async function showHelp() {
 
 async function main() {
   const args = process.argv.slice(2);
-  const command = args[0];
+  // The command may sit anywhere among the flags (`--security --doctor`);
+  // modifiers such as --security and --profile are read where they apply.
+  const COMMANDS = new Set(["--setup", "setup", "--status", "status", "--doctor", "doctor", "--version", "-v", "--help", "-h", "help"]);
+  const command = args.find((a) => COMMANDS.has(a)) ?? args[0];
 
   switch (command) {
     case '--setup':

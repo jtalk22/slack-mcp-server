@@ -72,7 +72,7 @@ requests, cancelling oversized streams before parsing.
 
 ## Tool surface
 
-19 tools: 12 read-only, 4 write-path, and 3 local workflow tools. Every tool
+20 tools: 13 read-only, 4 write-path, and 3 local workflow tools. Every tool
 advertised does its work on your machine; there are no placeholder tools that
 return an upgrade payload. The four write-path tools carry the MCP
 `destructive` annotation.

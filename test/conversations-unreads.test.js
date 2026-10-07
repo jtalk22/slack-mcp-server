@@ -120,9 +120,9 @@ test("client.counts answering ok:false is treated as no answer, not as empty", a
   assert.deepEqual(body.conversations.map((c) => c.id).sort(), ["C_BUSY", "D_DM"]);
 });
 
-test("a counts response missing its groups entirely does not throw", async () => {
+test("a counts response missing its groups entirely degrades and says so", async () => {
   const body = await run({}, apiReturning({ counts: { ok: true } }));
-  assert.equal(body.sources["client.counts"], "ok");
+  assert.equal(body.sources["client.counts"], "client.counts_missing_groups");
   assert.equal(body.threads, null);
   assert.deepEqual(body.conversations.map((c) => c.id).sort(), ["C_BUSY", "D_DM"]);
 });

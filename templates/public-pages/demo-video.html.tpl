@@ -7,7 +7,7 @@
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
   <meta name="description" content="Watch 47 unread Slack messages become one prioritized briefing through real Slack MCP tool calls.">
   <meta property="og:type" content="video.other">
-  <meta property="og:title" content="It’s Monday, 9:07 AM. What blew up overnight?">
+  <meta property="og:title" content="It’s Tuesday, 9:07 AM. What blew up overnight?">
   <meta property="og:description" content="{{SELF_HOSTED_TOOL_COUNT}} Slack tools. One local command. No Slack app or admin queue.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/public/demo-video.html">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
@@ -90,7 +90,7 @@
 <body>
   <header class="frame"><a class="brand" href="{{GITHUB_PAGES_ROOT}}/"><img src="../docs/assets/icon.svg" alt="">Slack MCP <span>/ proof</span></a><nav><a href="{{GITHUB_REPO_URL}}">GitHub</a><a href="{{NPM_URL}}">npm</a><a href="{{SETUP_URL}}">Install</a></nav></header>
   <main class="frame">
-    <div class="intro"><div><p class="eyebrow">Monday / 09:07 / 47 unread</p><h1>What blew up<br>overnight?</h1><p>A database outage, a runbook with a creative relationship to truth, and a printer PIN buried five months deep in <code>#facilities</code>—handled through the shipped Slack tool surface.</p></div><div class="duration" id="duration">TRAILER / 00:42</div></div>
+    <div class="intro"><div><p class="eyebrow">Tuesday / 09:07 / 47 unread</p><h1>What blew up<br>overnight?</h1><p>A database outage, a runbook with a creative relationship to truth, and a printer PIN buried five months deep in <code>#facilities</code>—handled through the shipped Slack tool surface.</p></div><div class="duration" id="duration">TRAILER / 00:42</div></div>
     <div class="video-shell">
       <video id="demo" poster="../docs/images/demo-poster.png" playsinline autoplay muted controls>
         <source src="../docs/videos/slack-mcp-proof-42s.mp4" type="video/mp4">

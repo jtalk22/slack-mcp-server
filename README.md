@@ -1,99 +1,60 @@
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![npm total downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.npmjs.org%2Fdownloads%2Fpoint%2Flast-year%2F%40jtalk22%2Fslack-mcp&query=%24.downloads&style=flat-square&logo=npm&logoColor=white&label=downloads&labelColor=0b0b0c&color=ffb224)](https://npm-stat.com/charts.html?package=%40jtalk22%2Fslack-mcp)&nbsp;[![npm weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c&color=28c840)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-e5482f?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)&nbsp;[![Security policy](https://img.shields.io/badge/security-policy_%2B_private_reporting-28c840?style=flat-square&labelColor=0b0b0c)](SECURITY.md)&nbsp;[![Node](https://img.shields.io/node/v/%40jtalk22%2Fslack-mcp?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=0b0b0c&color=28c840)](https://nodejs.org)&nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-e5482f?style=flat-square&labelColor=0b0b0c)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=1D1C1D&color=4A154B)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![downloads per year](https://img.shields.io/npm/dy/%40jtalk22%2Fslack-mcp?style=flat-square&logo=npm&logoColor=white&label=downloads&labelColor=1D1C1D&color=4A154B)](https://npm-stat.com/charts.html?package=%40jtalk22%2Fslack-mcp)&nbsp;[![weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly&labelColor=1D1C1D&color=4A154B)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![Node](https://img.shields.io/node/v/%40jtalk22%2Fslack-mcp?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=1D1C1D&color=4A154B)](https://nodejs.org)&nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-4A154B?style=flat-square&labelColor=1D1C1D)](LICENSE)
+
+[![Docker image](https://img.shields.io/badge/ghcr.io-published-4A154B?style=flat-square&logo=docker&logoColor=white&labelColor=1D1C1D)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-4A154B?style=flat-square&labelColor=1D1C1D)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=1D1C1D)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-4A154B?style=flat-square&labelColor=1D1C1D)](#provenance-dont-take-my-word-for-it)
 
 <img src="docs/assets/icon.svg" width="88" alt="Slack MCP channel mark">
 
 <h1>Slack MCP Server</h1>
 
-<p><strong>Catch up on Slack without reading it.</strong></p>
+<h3>Catch up on Slack without reading it.</h3>
 
 <p>Unreads, threads, and search — in your agent’s context, from the session you already have.</p>
 
-```bash
+<p><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html"><img src="docs/images/hero-v2.gif" width="720" alt="On purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. The workspace slides in beside it: two people asked the same question and got zero replies. You type: after the weekend I had, and now the bloody printer is acting up, find the admin PIN. One search, slack_search_messages, scrolls five months back and lights up Dave’s post in #facilities from 12 October, zero reactions. The agent answers: found it, 4729. Five months, three people, one printer. Tape it to the printer."></a></p>
+
+</div>
+
+**Set it up, then register it with your client.**
+
+```sh
 npx -y @jtalk22/slack-mcp --setup
 ```
 
-</div>
+```sh
+claude mcp add slack -- npx -y @jtalk22/slack-mcp
+```
 
-<div align="center">
+**Two flags worth knowing.** Check your own setup, or run it so it can read Slack and never write to it. On **Enterprise Grid**, session automation can trip Slack's anomaly detection and get the session killed; use the [hosted OAuth route](https://mcp.revasserlabs.com) or Slack's official MCP there.
 
-<p><kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd> <kbd>any stdio MCP client</kbd></p>
+```sh
+npx -y @jtalk22/slack-mcp --doctor --security
+```
 
-<a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-  <img src="docs/images/demo-poster.png" width="900" alt="47 unread Slack messages across four conversations become one prioritized morning briefing">
-</a>
+```sh
+npx -y @jtalk22/slack-mcp --read-only
+```
 
-<p><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ It’s Monday, 9:07—watch what blew up overnight</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
+<p align="center"><kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd> <kbd>any stdio MCP client</kbd></p>
 
-</div>
-
-<p align="center">
-  <a href="#built-past-the-demo">How it works</a> ·
-  <a href="#two-ways-into-slack">Why session auth</a> ·
-  <a href="#if-your-workspace-is-on-slacks-free-plan">Free Slack</a> ·
-  <a href="#grid-credentials-and-caching">Grid & credentials</a> ·
-  <a href="#install">Install</a> ·
-  <a href="#security-and-provenance">Security</a> ·
-  <a href="#20-tools-read-act-automate">20 tools</a> ·
-  <a href="#typed-workflows-slack-in-json-out">Workflows</a> ·
-  <a href="#free-local-when-youre-driving-hosted-when-it-must-drive-itself">Local vs hosted</a>
-</p>
+<p align="center"><a href="CHANGELOG.md#510---2026-10-07"><strong>What’s new in 5.1</strong></a> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ the whole morning in three minutes</a> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
 
 ---
 
-## It’s Monday, 9:07. Slack has already formed opinions.
+## If your workspace is on Slack's free plan
 
-You ask “what blew up overnight?” and the agent reads the workspace instead of you. It reconstructs the 2 AM P1 from `#incidents`—owner, resolution, and the runbook step that is still wrong. It finds the printer PIN that has been waiting in `#facilities` for five months. Then it closes the handled loops—replies, reactions, read-state changes—only where you approve.
+Checked against Slack's published plans and pricing on 2026-10-07.
 
-This is not screenshot automation. The agent calls Slack through a real MCP tool surface and receives typed results it can search, summarize, export, or act on.
+A free workspace keeps 90 days of message history, allows 10 app integrations, and gets only Slack's basic AI. The AI people actually want — AI search across the workspace, channel recaps, Slackbot acting as an agent, AI workflow generation — starts on Business+ at $12.50 per user per month on annual billing. Pro, at $7.25, buys unlimited history and unlimited apps, not the advanced AI. So a ten-person free workspace that wants an AI it can ask about its own Slack is looking at roughly $1,500 a year, and the cheaper upgrade does not get them there.
 
----
+This package gives that workspace an agent over the same Slack for nothing, running on the AI subscription its people already pay for. Three things follow from how it works:
 
-## Built past the demo
+- **It installs no Slack app, so it uses none of your 10 app slots.** If your workspace is already at the cap, this is the only way left to add an integration at all.
+- **It needs no admin approval**, because it is not an app anyone has to approve. It reads Slack through your own browser session, with exactly the access you already have and nothing more.
+- **It can export what you can still see.** On a free plan, history older than 90 days stops being reachable — Slack's own free export covers public channels only and is admin-only, so DMs and private channels are not in it. `slack_get_full_conversation` writes them out with their threads while they are still inside the window. It cannot retrieve anything already past the line; nothing can.
 
-The difficult part is not another chat tool. It is the operating layer underneath: browser-session extraction that names its failure stages, a credential lifecycle built for rotation, full-fidelity reads, guarded writes, and typed workflow output. The code is plain JavaScript in this repository—audit it before trusting it with a session.
-
-<details>
-<summary><strong>The engineering underneath — extraction, credential lifecycle, reads, guarded writes, typed output</strong></summary>
-<br>
-
-### 1. The browser-session engine
-
-`--setup` turns the Slack identity Chrome already holds into a local MCP server:
-
-- finds the newest `xoxc-` token in Chrome's on-disk LevelDB;
-- snapshots the cookie SQLite database with its WAL sidecars;
-- retrieves Chrome Safe Storage from the macOS Keychain;
-- runs Chrome-compatible PBKDF2 + AES-128-CBC decryption locally;
-- requires no DevTools, clipboard step, browser flag, or live Slack tab;
-- names the failed extraction stage—`keychain_timeout`, `no_slack_cookie_row`, `cookie_decrypt_failed`, and more—instead of returning one opaque error.
-
-### 2. Credential lifecycle, not credential paste
-
-Session credentials rotate. The server is built around that reality:
-
-- `auto`, `keychain-only`, and `file` storage backends;
-- owner-only token files and a Keychain-only path with no plaintext credentials on disk;
-- atomic file writes, verified Keychain migration, cross-process locks, and refresh mutexes;
-- proactive health checks and automatic macOS refresh;
-- last-known-good in-memory credentials when persistence is temporarily unavailable;
-- isolated profiles for work and personal Slack;
-- fail-closed handling for invalid storage or profile configuration.
-
-### 3. Full-fidelity Slack reads
-
-Read DMs and channels, search the workspace, export complete histories with threads, inspect unread state, and resolve users. Opt into blocks, attachments, files, reactions, metadata, and bot/app markers when text alone is not the real message.
-
-### 4. The agent can finish the job
-
-Send a reply, add or remove a reaction, and mark a conversation read. Every workspace write path carries an MCP destructive annotation so compatible clients can put approval where it belongs.
-
-### 5. Slack in, typed JSON out
-
-Save workflow profiles for incident rooms, executive briefs, support inboxes, launch watches, and custom operations. The OSS primitives are local JSON; the optional hosted brain renders them into contract-shaped briefs.
-
-</details>
+The browser-session route is not a workaround to apologise for. For a workspace Slack's own AI does not serve, it is the only route there is.
 
 ---
 
@@ -127,32 +88,6 @@ Treat browser-session automation as an acceptable-use decision for you and your 
 
 "No admin request" means there is no Slack app installation to approve. It does not mean workspace activity disappears from Slack's systems. If your policy requires a sanctioned OAuth integration, use the official MCP or the optional [hosted OAuth path](https://mcp.revasserlabs.com).
 </details>
-
----
-
-## If your workspace is on Slack's free plan
-
-Checked against Slack's published plans and pricing on 2026-10-07.
-
-A free workspace keeps 90 days of message history, allows 10 app integrations, and gets only Slack's basic AI. The AI people actually want — AI search across the workspace, channel recaps, Slackbot acting as an agent, AI workflow generation — starts on Business+ at $12.50 per user per month on annual billing. Pro, at $7.25, buys unlimited history and unlimited apps, not the advanced AI. So a ten-person free workspace that wants an AI it can ask about its own Slack is looking at roughly $1,500 a year, and the cheaper upgrade does not get them there.
-
-This package gives that workspace an agent over the same Slack for nothing, running on the AI subscription its people already pay for. Three things follow from how it works:
-
-- **It installs no Slack app, so it uses none of your 10 app slots.** If your workspace is already at the cap, this is the only way left to add an integration at all.
-- **It needs no admin approval**, because it is not an app anyone has to approve. It reads Slack through your own browser session, with exactly the access you already have and nothing more.
-- **It can export what you can still see.** On a free plan, history older than 90 days stops being reachable — Slack's own free export covers public channels only and is admin-only, so DMs and private channels are not in it. `slack_get_full_conversation` writes them out with their threads while they are still inside the window. It cannot retrieve anything already past the line; nothing can.
-
-The browser-session route is not a workaround to apologise for. For a workspace Slack's own AI does not serve, it is the only route there is.
-
-## Grid, credentials, and caching
-
-**Enterprise Grid.** Grid runs aggressive session-anomaly detection. Browser-session automation can trip it, which flags the session and kills it, regardless of which tool drives the traffic. Outbound calls are paced by default to stay under burst thresholds (`SLACK_MCP_MIN_REQUEST_INTERVAL_MS`, default 350; `SLACK_MCP_MAX_CONCURRENCY`, default 3). Pacing lowers that risk; it does not remove it. On Grid, use the [hosted OAuth tier](https://mcp.revasserlabs.com) or Slack's official MCP instead.
-
-**Credential extraction.** `--setup` reads the newest `xoxc-` token from Chrome's on-disk LevelDB, snapshots the cookie SQLite database, retrieves Chrome Safe Storage from the macOS Keychain, and runs PBKDF2 + AES-128-CBC decryption locally. It writes the token file, Keychain entries, and non-secret metadata. It transmits nothing — the server talks to Slack and nowhere else.
-
-**This is the same access pattern credential stealers use.** Chrome App-Bound Encryption exists to make this class of read harder, and infostealer families (Lumma, Vidar, Meduza) bypass it to lift live sessions. The mechanism here is comparable. What differs is that you run it, on your own machine, against your own session, and nothing leaves the host. The source is plain JavaScript in this repository; audit it before handing it a live session.
-
-**User cache.** One cache exists: user-name lookups, populated on demand, 500 entries maximum, one-hour TTL. No message content, no channel history, and no persistent copy of the workspace is stored.
 
 ---
 
@@ -208,11 +143,16 @@ On macOS, setup can extract from Chrome and persist the selected storage backend
 
 ## 20 tools: read, act, automate
 
-The local surface ships **20 tools** today: **13 read-only** operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools including the catch-up itself. One of the reads is `slack_session_report`, which reads nothing from Slack: it returns what this process has done, as counts. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
+Read channels, DMs, threads and search; act with a reply, a reaction or a read-state change; run the catch-up and typed workflows locally. The surface is **20 tools** today: **13 read-only** operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools. One of the reads is `slack_session_report`, which reads nothing from Slack: it returns what this process has done, as counts. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
 
 Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-negotiated over stdio, stateless per request over HTTP (no `Mcp-Session-Id`; `GET`/`DELETE` answer 405). The claim is a test, not a sentence: [`test/mcp-era.test.js`](test/mcp-era.test.js) drives the real SDK client at both eras against the real entry points.
 
-**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **1,474 estimated tokens** of schema per turn against about **3,931** for all 20. `SLACK_MCP_TOOLS=read` advertises the 13 read-only operations listed below, near 2,355. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 20. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
+<p align="center">
+</p>
+
+**Advertising fewer tools.** Every tool the server advertises sends its schema to the model on every turn, before you ask anything. `SLACK_MCP_TOOLS=essentials` advertises six (unread, history, search, thread, user lookup, send); `SLACK_MCP_TOOLS=read` the 13 read-only operations; `--tools=slack_x,slack_y` an explicit set. The default is all 20. Filtering changes what is advertised, not what is callable.
+
+<img src="docs/images/diagram-schema-budget.svg" width="900" alt="Estimated schema tokens per turn by profile: essentials 6 tools at about 1,474 tokens or 37 percent, read 13 tools at about 2,359 or 59 percent, all 20 tools at about 4,008 or 100 percent">
 
 <details>
 <summary><strong>The full tool inventory</strong></summary>
@@ -286,16 +226,143 @@ Six editable templates ship in the package: `oncall-handoff`, `support-triage`, 
 
 ---
 
+## Security and provenance
+
+Every message this server returns becomes text in a model's context, next to your own instructions. Slack is a shared bus: a channel can hold Slack Connect participants from another workspace, guests, and apps relaying content from outside Slack entirely — and the same toolset that reads also writes. That adjacency is the risk worth naming.
+
+- Credential files are owner-only; Keychain-only mode keeps plaintext credentials off disk.
+- Configuration fails closed for unknown storage modes and invalid profiles.
+- Writes are atomic and shared credential state is process-locked.
+- The local web server binds to localhost; workspace write tools carry destructive annotations.
+- Every release publishes from CI with npm provenance.
+
+<p align="center">
+  <img src="docs/images/diagram-trust-boundary.svg" width="900" alt="Four authors — you, a colleague, a Slack Connect participant and a relay app — each cross the server’s trust boundary on their own track and are stamped self, internal, external or bot. All four land in one model context beside your own instructions. On the way back out, strict mode holds a send and read-only never registers the write tool.">
+</p>
+
+<details>
+<summary><strong>Author labels on every message</strong></summary>
+
+Each message carries `origin` (`self`, `internal`, `external`, `bot`, `unknown`) and `author_trusted`, derived from fields Slack already returns, so it costs no extra API call. `bot` outranks workspace membership, because an app inside your workspace routinely relays words written outside it. A batch containing outside authors carries an `untrusted_content` envelope naming the count.
+
+It fails closed: an author this server cannot positively place inside your workspace is reported untrusted. The exception is a conversation Slack reports as not shared with any other workspace — one of those structurally cannot hold an outside author, so a colleague with no team id on their message is called internal rather than unknown. When that lookup fails, the label stays unknown.
+
+`SLACK_MCP_PROVENANCE=off|label|strict`. `label` is the default and only adds keys. A per-call `provenance` argument may tighten the mode and never loosen it, because a caller asking for fewer labels may be repeating something it read.
+
+</details>
+
+<details>
+<summary><strong>What the labels cannot do</strong></summary>
+
+A label is advice to the model reading it. It is unsigned, it can be stripped by anything downstream, and it raises the cost of an injected instruction without making one impossible.
+
+`strict` mode additionally holds `slack_send_message` once the session has read outside-authored text. The hold is released by `confirm_untrusted_context`, which the caller sets — so it interrupts the send and puts it on the record, but it cannot prove a human approved it.
+
+Two surfaces are still unlabelled, and knowing that is better than assuming otherwise: user display names, real names and titles from the user tools, and channel topics and purposes from `slack_list_conversations`, are attacker-settable free text that reaches the model without an origin stamp.
+
+</details>
+
+<details>
+<summary><strong>Read-only mode, for when a label is not enough</strong></summary>
+
+```bash
+npx -y @jtalk22/slack-mcp --read-only          # or SLACK_MCP_READ_ONLY=1
+```
+
+The four write-path tools are withheld from `tools/list` *and* refused at dispatch, because a client can call a name it was never offered. The filter is applied after the tool profile resolves, so no profile or custom tool list widens it back. An absent tool needs no trust in the model that would have called it.
+
+</details>
+
+<details>
+<summary><strong>The receipt</strong></summary>
+
+`slack_session_report` returns what this process actually did: messages read, how many were outside-authored and by which origin, writes attempted, writes held. Counts only — no message text, no channel name, no user id. A label is a claim about one message; this is the claim about the session, and it is how you check afterwards whether outside text reached the model and whether anything tried to send on the back of it.
+
+</details>
+
+### Provenance: don't take my word for it
+
+```bash
+npm audit signatures
+```
+
+A clean result verifies that the package signatures and attestations trace back through the published release chain. Inspect the package before handing it a live Slack session. Full policy: [SECURITY.md](SECURITY.md).
+
+---
+
+## Built past the demo
+
+The difficult part is not another chat tool. It is the operating layer underneath: browser-session extraction that names its failure stages, a credential lifecycle built for rotation, full-fidelity reads, guarded writes, and typed workflow output. The code is plain JavaScript in this repository—audit it before trusting it with a session.
+
+<details>
+<summary><strong>The engineering underneath — extraction, credential lifecycle, reads, guarded writes, typed output</strong></summary>
+<br>
+
+### 1. The browser-session engine
+
+`--setup` turns the Slack identity Chrome already holds into a local MCP server:
+
+- finds the newest `xoxc-` token in Chrome's on-disk LevelDB;
+- snapshots the cookie SQLite database with its WAL sidecars;
+- retrieves Chrome Safe Storage from the macOS Keychain;
+- runs Chrome-compatible PBKDF2 + AES-128-CBC decryption locally;
+- requires no DevTools, clipboard step, browser flag, or live Slack tab;
+- names the failed extraction stage—`keychain_timeout`, `no_slack_cookie_row`, `cookie_decrypt_failed`, and more—instead of returning one opaque error.
+
+### 2. Credential lifecycle, not credential paste
+
+Session credentials rotate. The server is built around that reality:
+
+- `auto`, `keychain-only`, and `file` storage backends;
+- owner-only token files and a Keychain-only path with no plaintext credentials on disk;
+- atomic file writes, verified Keychain migration, cross-process locks, and refresh mutexes;
+- proactive health checks and automatic macOS refresh;
+- last-known-good in-memory credentials when persistence is temporarily unavailable;
+- isolated profiles for work and personal Slack;
+- fail-closed handling for invalid storage or profile configuration.
+
+### 3. Full-fidelity Slack reads
+
+Read DMs and channels, search the workspace, export complete histories with threads, inspect unread state, and resolve users. Opt into blocks, attachments, files, reactions, metadata, and bot/app markers when text alone is not the real message.
+
+### 4. The agent can finish the job
+
+Send a reply, add or remove a reaction, and mark a conversation read. Every workspace write path carries an MCP destructive annotation so compatible clients can put approval where it belongs.
+
+### 5. Slack in, typed JSON out
+
+Save workflow profiles for incident rooms, executive briefs, support inboxes, launch watches, and custom operations. The OSS primitives are local JSON; the optional hosted brain renders them into contract-shaped briefs.
+
+</details>
+
+---
+
 ## Where credentials live
 
-Resolution is deterministic; first hit wins:
+Resolution is deterministic; the first hit wins.
 
-1. `SLACK_TOKEN` + `SLACK_COOKIE`
-2. token file (`chmod 600`)
-3. macOS Keychain
-4. Chrome extraction on macOS
+| | Source | Where it comes from |
+|---|---|---|
+| 1 | `SLACK_TOKEN` + `SLACK_COOKIE` | your client's environment configuration |
+| 2 | Token file | written by `--setup`, `chmod 600` |
+| 3 | macOS Keychain | written by `--setup` |
+| 4 | Chrome extraction | macOS only, run on demand |
 
 How long a session credential lasts is worth measuring rather than assuming. The two halves have different lifetimes — the `d` cookie is long-lived, the `xoxc` token is the volatile one — and this project previously quoted one or two weeks for both. On one real workspace a credential written on 2026-07-04 still authenticated on 2026-10-07, 94 days later. One credential is not a distribution, so treat that as an existence proof rather than a promise: yours may rotate sooner. `slack_token_status` reports the age of what you actually have. When Slack returns `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or HTTP 401, run `npx -y @jtalk22/slack-mcp --setup` to recover locally. On macOS, `slack_refresh_tokens` or `--refresh-tokens` refreshes without leaving the client; the optional LaunchAgent in [docs/SETUP.md](docs/SETUP.md) keeps long-idle installations healthy.
+
+<details>
+<summary><strong>Enterprise Grid, how extraction works, and the one cache</strong></summary>
+<br>
+
+**Enterprise Grid.** Grid runs aggressive session-anomaly detection. Browser-session automation can trip it, which flags the session and kills it, regardless of which tool drives the traffic. Outbound calls are paced by default to stay under burst thresholds (`SLACK_MCP_MIN_REQUEST_INTERVAL_MS`, default 350; `SLACK_MCP_MAX_CONCURRENCY`, default 3). Pacing lowers that risk; it does not remove it. On Grid, use the [hosted OAuth tier](https://mcp.revasserlabs.com) or Slack's official MCP instead.
+
+**Credential extraction.** `--setup` reads the newest `xoxc-` token from Chrome's on-disk LevelDB, snapshots the cookie SQLite database, retrieves Chrome Safe Storage from the macOS Keychain, and runs PBKDF2 + AES-128-CBC decryption locally. It writes the token file, Keychain entries, and non-secret metadata. It transmits nothing — the server talks to Slack and nowhere else.
+
+**This is the same access pattern credential stealers use.** Chrome App-Bound Encryption exists to make this class of read harder, and infostealer families (Lumma, Vidar, Meduza) bypass it to lift live sessions. The mechanism here is comparable. What differs is that you run it, on your own machine, against your own session, and nothing leaves the host. The source is plain JavaScript in this repository; audit it before handing it a live session.
+
+**User cache.** One cache exists: user-name lookups, populated on demand, 500 entries maximum, one-hour TTL. No message content, no channel history, and no persistent copy of the workspace is stored.
+
+</details>
 
 <details>
 <summary><strong>Storage modes and multi-workspace profiles</strong></summary>
@@ -348,68 +415,6 @@ Local mode runs on your machine and talks only to Slack. The hosted OAuth connec
 
 ---
 
-## Security and provenance
-
-Every message this server returns becomes text in a model's context, next to your own instructions. Slack is a shared bus: a channel can hold Slack Connect participants from another workspace, guests, and apps relaying content from outside Slack entirely — and the same toolset that reads also writes. That adjacency is the risk worth naming.
-
-- Credential files are owner-only; Keychain-only mode keeps plaintext credentials off disk.
-- Configuration fails closed for unknown storage modes and invalid profiles.
-- Writes are atomic and shared credential state is process-locked.
-- The local web server binds to localhost; workspace write tools carry destructive annotations.
-- Every release publishes from CI with npm provenance.
-
-<details>
-<summary><strong>Author labels on every message</strong></summary>
-
-Each message carries `origin` (`self`, `internal`, `external`, `bot`, `unknown`) and `author_trusted`, derived from fields Slack already returns, so it costs no extra API call. `bot` outranks workspace membership, because an app inside your workspace routinely relays words written outside it. A batch containing outside authors carries an `untrusted_content` envelope naming the count.
-
-It fails closed: an author this server cannot positively place inside your workspace is reported untrusted. The exception is a conversation Slack reports as not shared with any other workspace — one of those structurally cannot hold an outside author, so a colleague with no team id on their message is called internal rather than unknown. When that lookup fails, the label stays unknown.
-
-`SLACK_MCP_PROVENANCE=off|label|strict`. `label` is the default and only adds keys. A per-call `provenance` argument may tighten the mode and never loosen it, because a caller asking for fewer labels may be repeating something it read.
-
-</details>
-
-<details>
-<summary><strong>What the labels cannot do</strong></summary>
-
-A label is advice to the model reading it. It is unsigned, it can be stripped by anything downstream, and it raises the cost of an injected instruction without making one impossible.
-
-`strict` mode additionally holds `slack_send_message` once the session has read outside-authored text. The hold is released by `confirm_untrusted_context`, which the caller sets — so it interrupts the send and puts it on the record, but it cannot prove a human approved it.
-
-Two surfaces are still unlabelled, and knowing that is better than assuming otherwise: user display names, real names and titles from the user tools, and channel topics and purposes from `slack_list_conversations`, are attacker-settable free text that reaches the model without an origin stamp.
-
-</details>
-
-<details>
-<summary><strong>Read-only mode, for when a label is not enough</strong></summary>
-
-```bash
-npx -y @jtalk22/slack-mcp --read-only          # or SLACK_MCP_READ_ONLY=1
-```
-
-The four write-path tools are withheld from `tools/list` *and* refused at dispatch, because a client can call a name it was never offered. The filter is applied after the tool profile resolves, so no profile or custom tool list widens it back. An absent tool needs no trust in the model that would have called it.
-
-</details>
-
-<details>
-<summary><strong>The receipt</strong></summary>
-
-`slack_session_report` returns what this process actually did: messages read, how many were outside-authored and by which origin, writes attempted, writes held. Counts only — no message text, no channel name, no user id. A label is a claim about one message; this is the claim about the session, and it is how you check afterwards whether outside text reached the model and whether anything tried to send on the back of it.
-
-</details>
-
-### Provenance: don't take my word for it
-
-```bash
-npm audit signatures
-```
-
-A clean result verifies that the package signatures and attestations trace back through the published release chain. Inspect the package before handing it a live Slack session. Full policy: [SECURITY.md](SECURITY.md).
-
-<a href="https://glama.ai/mcp/servers/jtalk22/slack-mcp-server"><img src="https://glama.ai/mcp/servers/jtalk22/slack-mcp-server/badge" width="380" alt="Slack MCP Server security, license, and quality rating on Glama"></a>
-
----
-
 ## Documentation
 
 [Setup](docs/SETUP.md) · [API](docs/API.md) · [Architecture](docs/ARCHITECTURE.md) · [Compatibility](docs/COMPATIBILITY.md) · [Deployment modes](docs/DEPLOYMENT-MODES.md) · [Recipes](docs/USE_CASE_RECIPES.md) · [Troubleshooting](docs/TROUBLESHOOTING.md) · [Roadmap](docs/ROADMAP.md)
@@ -430,11 +435,7 @@ Not affiliated with Slack Technologies, Inc. This server uses browser-session cr
 
 <div align="center">
 
-### Your Slack. Your agent. One command.
-
-```bash
-npx -y @jtalk22/slack-mcp --setup
-```
+**Your Slack. Your agent. One command.**
 
 If this removes a Slack tab from your day, [star the repository](https://github.com/jtalk22/slack-mcp-server). Stars are how the next admin-blocked developer finds the local path.
 

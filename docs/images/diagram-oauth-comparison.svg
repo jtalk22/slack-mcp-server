@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
   <title id="title">Two ways into Slack</title>
-  <desc id="desc">The official integration path uses workspace policy, OAuth, and a managed remote MCP. Slack MCP Server uses one-command local Chrome session extraction, a Keychain-backed credential lifecycle, and 19 tools over stdio.</desc>
+  <desc id="desc">The official integration path uses workspace policy, OAuth, and a managed remote MCP. Slack MCP Server uses one-command local Chrome session extraction, a Keychain-backed credential lifecycle, and 20 tools over stdio.</desc>
   <defs>
     <marker id="arrowMuted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#6f6c64"/>
@@ -74,7 +74,7 @@
 
     <text x="717" y="487" class="mono paper" font-size="13">04</text>
     <rect x="748" y="461" width="408" height="58" rx="11" class="step-right"/>
-    <text x="952" y="488" class="mono paper" font-size="16" letter-spacing="1" text-anchor="middle">21 TOOLS · LOCAL STDIO</text>
+    <text x="952" y="488" class="mono paper" font-size="16" letter-spacing="1" text-anchor="middle">20 TOOLS · LOCAL STDIO</text>
     <text x="952" y="509" class="mono muted" font-size="11" text-anchor="middle">DMS · SEARCH · THREADS · ACTIONS · WORKFLOWS</text>
   </g>
 

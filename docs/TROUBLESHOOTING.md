@@ -73,7 +73,7 @@ slack_list_conversations limit=50
 
 **Symptom:** `invalid_auth` or `token_expired` errors.
 
-**Cause:** Browser tokens (xoxc/xoxd) expire after 1-2 weeks.
+**Cause:** Slack rotated or revoked the browser session. How long one lasts varies; on one real workspace a credential stayed valid for over 90 days, and yours may rotate sooner.
 
 **Solution:** The server has 4 layers of token recovery:
 
@@ -309,7 +309,7 @@ Browser tokens (xoxc/xoxd) provide the same access you have in Slack's web inter
 **Trade-offs:**
 - ✅ Full access to all your conversations
 - ✅ No per-conversation authorization needed
-- ❌ Tokens expire every 1-2 weeks
+- ❌ Session credentials rotate on Slack's schedule, not yours
 - ❌ Requires Chrome for token extraction
 
 ---

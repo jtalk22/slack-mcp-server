@@ -81,25 +81,22 @@ jobs:
             exit 1
           fi
 
-      # Authentication is GitHub OIDC (npm trusted publishing), not a token.
-      # The id-token: write permission above is what lets npm exchange an
-      # Actions OIDC token for a short-lived publish credential, so there is no
-      # long-lived NPM_SECRET_TOKEN in the release chain any more.
+      # Authentication is GitHub OIDC (npm trusted publishing) first. The
+      # id-token: write permission above lets npm exchange an Actions OIDC token
+      # for a short-lived publish credential; the registry-side trust for
+      # repository jtalk22/slack-mcp-server, workflow publish.yml, was created on
+      # 2026-10-07 and confirmed with `npm trust list @jtalk22/slack-mcp`.
       #
-      # This requires a one-time registry-side setting that cannot be made from
-      # this repository: npmjs.com -> @jtalk22/slack-mcp -> Settings ->
-      # Trusted Publisher -> GitHub Actions, with organization/user "jtalk22",
-      # repository "slack-mcp-server", workflow "publish.yml", environment
-      # blank. Until that exists the publish step fails; it already fails
-      # today, so this does not trade a working release for a broken one.
+      # NPM_TOKEN is a fallback, not the route. npm's OIDC step sets the token it
+      # receives over whatever the .npmrc holds, and on any failure leaves the
+      # stored token in place (npm/lib/utils/oidc.js), so a broken exchange still
+      # publishes instead of repeating 5.0.1. The token is a granular one that
+      # expires 2027-01-05; once a release has gone out through OIDC alone, the
+      # fallback can be removed.
       #
       # --provenance is kept deliberately. npm's docs say provenance is
       # generated automatically under trusted publishing, but keeping the flag
       # states the guarantee explicitly rather than depending on a default.
-      - name: Publish to npm
-        if: steps.npm_check.outputs.already_published != 'true'
-        run: npm publish --provenance --access public
-
       - name: Verify server.json matches release version
         shell: bash
         env:
@@ -111,6 +108,12 @@ jobs:
             echo "server.json version ($SJ_VERSION) does not match release version ($VERSION)" >&2
             exit 1
           fi
+
+      - name: Publish to npm
+        if: steps.npm_check.outputs.already_published != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
 
       - name: Check MCP registry for existing version
         id: registry_check

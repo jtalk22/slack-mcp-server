@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>slack-mcp — the README hero</title>
+<!--
+  The README hero, recorded frame by frame by scripts/record-hero.mjs.
+  window.__render(t) draws the exact frame for timestamp t (ms), so a recording
+  is reproducible and an unchanged frame is byte-identical to the one before it.
+  One purple field that reads in both GitHub themes. Staged data only.
+-->
+<style>
+  /* Open-licence stand-ins. The recording sets Söhne and GT America Mono from
+     James's type estate (see the script below); these only draw when it is absent. */
+  @font-face { font-family: "Text"; font-weight: 400; src: url("fonts/Lato-400.woff2") format("woff2"); }
+  @font-face { font-family: "Text"; font-weight: 700; src: url("fonts/Lato-700.woff2") format("woff2"); }
+  @font-face { font-family: "Text"; font-weight: 900; src: url("fonts/Lato-900.woff2") format("woff2"); }
+  @font-face { font-family: "Mono"; font-weight: 100 800; src: url("fonts/JetBrainsMono.woff2") format("woff2"); }
+
+  :root {
+    --field: #4A154B; --pane: #36103A; --lilac: #E8D5E9; --meta: #CDB2CF; --white: #FFFFFF;
+    --rule: rgba(255,255,255,.16); --pill: #D7B8D9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; background: var(--field); }
+  body { font-family: "Text", sans-serif; position: relative; -webkit-font-smoothing: antialiased; color: var(--white); }
+  .mono { font-family: "Mono", monospace; }
+  html.estate body { font-family: "Text Estate", sans-serif; }
+  html.estate .mono { font-family: "Mono Estate", monospace; }
+
+  /* ---------- left: what you asked, and what the agent answered ---------- */
+  #story { position: absolute; left: 56px; top: 36px; width: 500px; }
+  #headline { font-weight: 900; font-size: 72px; line-height: 76px; letter-spacing: -1.5px; }
+  #setup { position: absolute; left: 0; top: 176px; font-size: 40px; line-height: 50px; color: var(--lilac); white-space: nowrap; }
+  .stamp { position: absolute; left: 0; font-size: 21px; line-height: 26px; letter-spacing: 1.5px; color: var(--meta); }
+  #stamp { top: 2px; }
+  #you { position: absolute; left: 0; top: 34px; font-size: 28px; line-height: 36px; color: var(--white); }
+  #agent { top: 156px; }
+  #banter { position: absolute; left: 0; top: 184px; font-size: 28px; line-height: 36px; color: var(--white); }
+  #chip { position: absolute; left: 0; top: 270px; width: 488px; background: var(--white); border-radius: 12px; padding: 12px 20px; color: var(--field); }
+  #chip .tool { font-weight: 700; font-size: 24px; line-height: 32px; }
+  #chip .q { font-size: 24px; line-height: 32px; }
+  #found { position: absolute; left: 0; top: 372px; font-size: 28px; line-height: 36px; color: var(--white); }
+  #found b { font-weight: 900; }
+  #payoff { position: absolute; left: 0; top: 494px; font-size: 30px; line-height: 36px; font-weight: 900; }
+  #payoff span { font-weight: 400; color: var(--lilac); }
+
+  /* ---------- right: the workspace ---------- */
+  .right { position: absolute; left: 600px; top: 0; width: 680px; height: 640px; overflow: hidden; background: var(--pane); }
+  .hd { position: absolute; left: 0; top: 0; width: 680px; height: 62px; background: var(--pane); border-bottom: 2px solid var(--rule);
+        padding: 0 32px; display: flex; align-items: center; font-weight: 700; font-size: 30px; z-index: 2; }
+  #col { position: absolute; left: 0; top: 0; width: 680px; }
+  .divider { height: 64px; position: relative; }
+  .divider::before { content: ""; position: absolute; left: 32px; right: 32px; top: 32px; border-top: 2px solid var(--rule); }
+  .divider span { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); height: 44px; padding: 0 20px; border: 2px solid var(--rule);
+                  border-radius: 22px; background: var(--pane); font-weight: 700; font-size: 25px; line-height: 40px; color: var(--meta); white-space: nowrap; }
+  .post { display: flex; gap: 20px; padding: 20px 32px 18px; border-left: 6px solid transparent; }
+  .post.hit { background: rgba(232,213,233,.12); border-left-color: var(--lilac); }
+  .av { width: 56px; height: 56px; border-radius: 10px; flex: none; color: #fff; font-weight: 900; font-size: 23px; display: flex; align-items: center; justify-content: center; }
+  .nm { font-weight: 700; font-size: 32px; line-height: 40px; white-space: nowrap; }
+  .nm span { font-weight: 400; font-size: 24px; color: var(--meta); margin-left: 10px; }
+  .tx { font-size: 36px; line-height: 46px; color: #F3EAF4; margin-top: 2px; }
+  .tx b { font-weight: 900; color: var(--white); }
+  .pill { display: inline-flex; align-items: center; height: 48px; padding: 0 20px; border: 3px solid var(--pill); border-radius: 24px;
+          font-weight: 700; font-size: 30px; color: var(--pill); margin-top: 10px; }
+</style>
+<script>
+  // ?fonts=<file URL of the type estate> sets the recording faces: Söhne for text,
+  // GT America Mono for the tool call, the PIN and the command line. They stay on
+  // James's Mac; the GIF carries the pixels, the repository never carries the files.
+  // The parameter is only honoured as a file: URL and only ever reaches the FontFace
+  // API — never markup — so a crafted link cannot inject anything into the page.
+  window.__fontSource = "open";
+  window.__fontsLoaded = Promise.resolve();
+  (() => {
+    const raw = new URLSearchParams(location.search).get("fonts");
+    if (!raw) return;
+    let base;
+    try { base = new URL(raw.endsWith("/") ? raw : raw + "/"); } catch { return; }
+    if (base.protocol !== "file:") return;
+    const at = (...parts) => new URL(parts.map(encodeURIComponent).join("/"), base).href;
+    const faces = [
+      ["Text Estate", "400", "Söhne", "web", "soehne-buch.woff2"],
+      ["Text Estate", "700", "Söhne", "web", "soehne-halbfett.woff2"],
+      ["Text Estate", "900", "Söhne", "web", "soehne-fett.woff2"],
+      ["Mono Estate", "400", "GT America Mono", "web", "GT-America-Mono-Regular.woff2"],
+      ["Mono Estate", "500", "GT America Mono", "web", "GT-America-Mono-Medium.woff2"],
+      ["Mono Estate", "700", "GT America Mono", "web", "GT-America-Mono-Bold.woff2"],
+      ["Mono Estate", "800", "GT America Mono", "web", "GT-America-Mono-Black.woff2"],
+    ].map(([family, weight, ...path]) => new FontFace(family, `url(${JSON.stringify(at(...path))})`, { weight }));
+    window.__fontsLoaded = Promise.all(faces.map((f) => f.load().then(() => document.fonts.add(f)))).then(() => {
+      document.documentElement.classList.add("estate");
+      window.__fontSource = "estate";
+    }).catch(() => { /* the stand-ins draw; the recorder checks __fontSource and stops */ });
+  })();
+</script>
+</head>
+<body>
+<div id="story">
+  <div id="headline">It’s Tuesday,<br>9:07 AM.</div>
+  <div id="setup">A jammed printer.<br>Nobody knows the PIN.<br>The guy who did left<br>five months ago.</div>
+  <div class="stamp mono" id="stamp">YOU · TUESDAY 9:07 AM</div>
+  <div id="you">After the weekend I had… and now the bloody printer is acting up. Find the admin PIN.</div>
+  <div class="stamp mono" id="agent">AGENT</div>
+  <div id="banter">The weekend I can’t help with. The printer I can.</div>
+  <div id="chip"><div class="tool mono">slack_search_messages</div><div class="q mono">"printer admin PIN"</div></div>
+  <div id="found">Found it: <b>4729</b>. Dave in IT, #facilities, 12 October. Zero reactions. Nobody searched.</div>
+  <div id="payoff">Five months. Three people. One printer.<br><span>Tape it to the printer.</span></div>
+</div>
+
+<div class="right">
+  <div class="hd">ClusterFork Systems</div>
+  <div id="col">
+    <div class="divider"><span>12 October · #facilities</span></div>
+    <div class="post dave" id="dave"><div class="av" style="background:#E8D5E9;color:#4A154B">DC</div><div>
+      <div class="nm">Dave Chen<span>IT · 12 Oct</span></div>
+      <div class="tx">The 3rd floor printer PIN is <b>4729</b>. Posting here so nobody has to ask&nbsp;again.</div>
+      <div class="pill">0 reactions</div></div></div>
+    <div class="post priya" id="priya"><div class="av" style="background:#9B4F96">PS</div><div>
+      <div class="nm">Priya Sharma<span>#general · 3 months ago</span></div>
+      <div class="tx">I tried turning it off and on. I&nbsp;am not proud of what I&nbsp;said to&nbsp;it.</div>
+      <div class="pill">0 replies</div></div></div>
+    <div class="post marcus"><div class="av" style="background:#2F5D8A">MW</div><div>
+      <div class="nm">Marcus Webb<span>#random · 2 weeks ago</span></div>
+      <div class="tx">does anyone know the admin PIN for the printer on&nbsp;3?</div>
+      <div class="pill">0 replies</div></div></div>
+  </div>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const clamp = (x) => Math.max(0, Math.min(1, x));
+  const prog = (t, a, b) => clamp((t - a) / (b - a));
+  const ease = (x) => 1 - Math.pow(1 - x, 3);
+
+  // The column's top before and after the scroll back in time: Priya and Marcus
+  // under the header at first, then Dave's post, with its date divider, at the top.
+  const DAVE_H = 300, DIV_H = 64;
+  // at the open the two asks sit centred in the pane; the scroll brings Dave to the top
+  const COL_FROM = 62 + 54 - DIV_H - DAVE_H, COL_TO = 62;
+
+  window.__render = (t) => {
+    // frame one: the headline alone on the field. The workspace slides in beside
+    // it and the story settles into the left column.
+    const arrive = ease(prog(t, 2300, 2900));
+    $("story").style.transform = `translateX(${(1 - arrive) * 340}px)`;
+    document.querySelector(".right").style.transform = `translateX(${(1 - arrive) * 700}px)`;
+
+    // the hook makes way for the dialogue: a stamp, your message, the call
+    const out = 1 - prog(t, 3300, 3600);
+    $("headline").style.opacity = out; $("setup").style.opacity = out;
+    const inn = prog(t, 3650, 3900);
+    $("stamp").style.opacity = inn; $("you").style.opacity = inn;
+    const back = prog(t, 4200, 4450);
+    $("agent").style.opacity = back; $("banter").style.opacity = back;
+    $("chip").style.opacity = String(prog(t, 4900, 5150));
+
+    // the workspace scrolls back five months; the hit lights up
+    $("dave").style.opacity = t < 5300 ? "0" : "1";
+    $("col").style.top = `${COL_FROM + (COL_TO - COL_FROM) * ease(prog(t, 5400, 6000))}px`;
+    $("dave").classList.toggle("hit", t >= 6100);
+    $("priya").style.opacity = String(1 - 0.55 * prog(t, 6000, 6300));
+
+    // the agent answers in words
+    $("found").style.opacity = String(prog(t, 6500, 6750));
+    $("payoff").style.opacity = String(prog(t, 8100, 8350));
+  };
+  window.__render(0);
+  if (!window.__capture) {
+    const start = performance.now(), LOOP = 14500;
+    const tick = () => { window.__render((performance.now() - start) % LOOP); requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }
+</script>
+</body>
+</html>

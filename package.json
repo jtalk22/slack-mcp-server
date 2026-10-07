@@ -1,7 +1,7 @@
 {
   "name": "@jtalk22/slack-mcp",
   "mcpName": "io.github.jtalk22/slack-mcp-server",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "Catch up on Slack without reading it. Unreads, threads, search. Browser-session or hosted OAuth.",
   "funding": {
     "type": "github",
@@ -50,7 +50,8 @@
     "verify:media-manifest": "node scripts/media-manifest.js --check",
     "verify:release-dry-run": "node scripts/release-preflight.js",
     "smoke:browser": "node scripts/browser-smoke.js",
-    "smoke:browser:live": "node scripts/browser-smoke.js --mode live"
+    "smoke:browser:live": "node scripts/browser-smoke.js --mode live",
+    "merge:train": "bash scripts/merge-train.sh"
   },
   "keywords": [
     "mcp",
@@ -80,7 +81,27 @@
     "triage",
     "catch-up",
     "unread",
-    "standup"
+    "standup",
+    "security",
+    "prompt-injection",
+    "llm-security",
+    "mcp-security",
+    "agent-security",
+    "ai-guardrails",
+    "supply-chain-security",
+    "provenance",
+    "sigstore",
+    "read-only",
+    "stealth",
+    "slack-export",
+    "slack-history",
+    "mentions",
+    "thread-unreads",
+    "mcp-tools",
+    "llm-tools",
+    "claude-mcp",
+    "anthropic",
+    "model-context-protocol-server"
   ],
   "author": {
     "name": "Revasser",
