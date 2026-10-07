@@ -7,7 +7,7 @@
 
 // Release version. The worker is a self-contained bundle (no lib/ import), so
 // this literal is gated by scripts/check-version-parity.js against package.json.
-const WORKER_VERSION = "5.0.1";
+const WORKER_VERSION = "5.1.0";
 
 // 2025-era revisions this hand-rolled JSON-RPC endpoint speaks. A client's
 // requested revision is echoed when supported; otherwise the oldest common one.
