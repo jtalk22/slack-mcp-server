@@ -1,4 +1,4 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
   - name: Question or setup help
     url: https://github.com/jtalk22/slack-mcp-server/discussions
