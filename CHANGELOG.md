@@ -196,6 +196,9 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
   attacker-settable identity fields, so other MCP authors can test their own
   servers.
 - **CodeQL and OSV-Scanner** over the code and the dependency tree.
+- **`--doctor --security`** — six checks with a pass, warn or fail and a one-line remedy each:
+  credential storage, the plaintext file and its permissions, provenance mode, whether the write
+  tools are registered, profile isolation, credential age. No letter grade, and it says why.
 
 ### Fixed
 
@@ -220,6 +223,10 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
 - **A lost metadata update now retries.** The write lock gives up its wait
   budget and proceeds unlocked rather than failing, so a concurrent writer can
   land between a save and its read-back — an intermittent failure on Windows.
+- **`slack_catch_me_up` classified a teamless colleague as unknown** while
+  `slack_conversations_history` classified the same message as internal, so the untrusted counts
+  from the two tools were different scales. Both read paths now resolve the conversation's sharing
+  state.
 - **Identity-keyed caches are cleared on a token refresh.** Nothing called
   `clearUserCache` or `clearWorkspaceIdentity` despite both documenting it; a
   refresh can land on a different workspace, and a stale home team id marks
@@ -240,6 +247,16 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
 - **npm publishing uses OIDC trusted publishing.** The January attempt failed
   because Node 20 bundles npm 10, which has no OIDC support; the job runs on
   Node 24. `NPM_SECRET_TOKEN` is retired.
+- **The README moves again.** The hero is a split-screen GIF — the agent on one side, the channel
+  it searched on the other — recorded frame by frame from `docs/assets/hero-printer-pin.html` by
+  `scripts/record-hero.mjs`, so it re-records byte-identical and stays near 250 KB. GitHub plays a
+  GIF inline and shows an MP4 as a still you have to click; the early demos were GIFs, which is why
+  they felt alive. The original mark is back, the badge row is two deliberate rows, and two diagrams
+  fill the page: the trust boundary, and the schema cost per tool profile.
+- **"Stealth" is back in the vocabulary**, and the claims that rode along with it are not.
+  `check-public-language.sh` no longer blocks the word and now blocks "no audit trail",
+  "invisible to admins" and "zero footprint" — the session is the user's own, so a workspace sees
+  the same activity it would from any client signed in as that person.
 - **`SECURITY.md`** lists the current versions, names two real reporting
   channels, and states what the provenance control cannot do.
 
