@@ -45,7 +45,7 @@ Check if Slack tokens are valid and show authentication status
 
 ### slack_refresh_tokens
 
-Force refresh tokens by extracting from Chrome (requires Slack tab open in Chrome)
+Force refresh tokens by extracting from Chrome (macOS; requires having signed into Slack in Chrome)
 
 **Parameters:** None.
 

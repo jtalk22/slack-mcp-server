@@ -16,6 +16,7 @@ import {
   saveTokens,
   extractFromChrome,
   getLastExtractionError,
+  fixForExtractionCode,
   isAutoRefreshAvailable,
   TOKEN_FILE,
   getFromFile,
@@ -237,6 +238,10 @@ async function runMacOSSetup(rl) {
       }
     }
     print();
+    // The instruction comes from the reason code, so a cookie-missing failure
+    // is never answered with the AppleScript dev-flag fix for a path the run
+    // did not reach. The AppleScript box stays behind its own code.
+    print(`${colors.bold}Fix:${colors.reset} ${fixForExtractionCode(extractionError?.code)}`);
     if (extractionError?.code === "apple_events_javascript_disabled") {
       print();
       printBox([
@@ -251,10 +256,6 @@ async function runMacOSSetup(rl) {
       print("Once enabled, --setup extracts tokens automatically.");
       print("No DevTools, no copy-paste, just one command.");
     } else {
-      print("Make sure:");
-      print("  1. Chrome is running");
-      print("  2. You have a Slack tab open (app.slack.com)");
-      print("  3. You're logged into that workspace");
       print();
       print(`${colors.dim}Chrome-free or non-macOS? Hosted tier bypasses Chrome entirely:${colors.reset}`);
       print(`${colors.dim}  https://mcp.revasserlabs.com${colors.reset}`);

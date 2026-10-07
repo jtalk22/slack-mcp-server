@@ -64,7 +64,7 @@ async function showStatus() {
     warnLingeringPlaintext();
     console.log("");
     console.log("Run one of:");
-    console.log("  npm run tokens:auto    (with Slack open in Chrome)");
+    console.log("  npm run tokens:auto    (signed into Slack in Chrome)");
     console.log("  npm run tokens:refresh (manual entry)");
     return;
   }
