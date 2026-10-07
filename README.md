@@ -23,10 +23,10 @@ npx -y @jtalk22/slack-mcp --setup
 <p><kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd> <kbd>any stdio MCP client</kbd></p>
 
 <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-  <img src="docs/images/hero-printer-pin.gif" width="900" alt="The agent searches five months of Slack history for a jammed printer’s admin PIN, finds it in a #facilities post nobody read, and reports: five months, three people, same printer, the answer was there the whole time">
+  <img src="docs/images/hero-printer-pin.gif" width="900" alt="Split screen. On the left, you ask the agent for the jammed 3rd-floor printer’s admin PIN and it searches five months of Slack in one tool call. On the right, the #facilities channel lights up a message from Dave in IT dated 12 October with the PIN, 4729, and zero reactions. Two later posts from people asking the same question recede. The verdict: three people asked, nobody searched. Tape it to the printer.">
 </a>
 
-<p><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ It’s Tuesday, 9:07. A jammed printer, and nobody knows the PIN</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
+<p><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ The whole morning in three minutes — the outage, the migration, the new hire, and the printer</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
 
 </div>
 
