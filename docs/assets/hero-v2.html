@@ -21,12 +21,12 @@
     --aubergine: #4A154B; --lilac: #E8D5E9; --band: #EAD9EC; --tape: #FFFFFF; --tape-edge: #D9C2DC;
     --pane: #FFFFFF; --ink: #1D1C1D; --meta: #6B6B73; --rule: #ECECEE; --link: #6B6B73;
     --divider-bg: #FFFFFF; --divider-line: #DDDDDD;
-    --strip: #111318; --strip-ink: #E6EDF3;
+    --strip: #F6F8FA; --strip-ink: #1F2328;
   }
   html[data-theme="dark"] {
     --pane: #1A1D21; --ink: #D1D2D3; --meta: #ABABAD; --rule: #2C2D30; --link: #8B8B93;
     --divider-bg: #1A1D21; --divider-line: #3A3B3E;
-    --strip: #111318; --strip-ink: #E6EDF3;
+    --strip: #151B23; --strip-ink: #F0F6FC;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--pane); }
@@ -82,7 +82,7 @@
   /* ---------- the hand-off strip: your command line ---------- */
   .strip { position: absolute; left: 0; top: 648px; width: 1280px; height: 72px; background: var(--strip); display: flex; align-items: center;
            padding: 0 24px; font-family: "Mono", monospace; font-size: 30px; color: var(--strip-ink); z-index: 5; }
-  .strip .prompt { color: #C9A6CC; font-weight: 700; }
+  .strip .prompt { color: var(--strip-ink); font-weight: 700; }
   #cur { display: inline-block; width: 18px; height: 34px; background: var(--strip-ink); margin-left: 14px; }
   .mark { margin-left: auto; display: flex; align-items: center; gap: 14px; font-weight: 500; font-size: 28px; }
   .sq { width: 40px; height: 40px; border-radius: 9px; background: var(--aubergine); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 26px; }

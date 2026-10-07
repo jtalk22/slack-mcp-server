@@ -18,27 +18,20 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/hero-v2-dark.gif">
     <source media="(prefers-color-scheme: light)" srcset="docs/images/hero-v2-light.gif">
-    <img src="docs/images/hero-v2-light.gif" width="900" alt="Split screen. On the left, on purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. On the right, in the workspace, two people asked the same question and got zero replies. One search, slack_search_messages, scrolls five months back to Dave’s post in #facilities from 12 October, and a lilac band joins the PIN, 4729, on the left to his message on the right. Zero reactions. Five months. Three people. One printer. Tape it to the printer.">
+    <img src="docs/images/hero-v2-light.gif" alt="Split screen. On the left, on purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. On the right, in the workspace, two people asked the same question and got zero replies. One search, slack_search_messages, scrolls five months back to Dave’s post in #facilities from 12 October, and a lilac band joins the PIN, 4729, on the left to his message on the right. Zero reactions. Five months. Three people. One printer. Tape it to the printer.">
   </picture>
 </a></p>
 
-<p><a href="#install"><img src="docs/images/quickstart-terminal.svg" width="560" alt="Quick start. Set up once, then register it with your client: npx -y @jtalk22/slack-mcp --setup, then claude mcp add slack -- npx -y @jtalk22/slack-mcp. Check your own setup: npx -y @jtalk22/slack-mcp --doctor --security. Read Slack, never write to it: npx -y @jtalk22/slack-mcp --read-only."></a></p>
-
 </div>
 
-<p align="center"><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ The whole morning in three minutes</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
+```sh
+npx -y @jtalk22/slack-mcp --setup                   # set up once
+claude mcp add slack -- npx -y @jtalk22/slack-mcp   # register it with your client
+npx -y @jtalk22/slack-mcp --doctor --security       # check your own setup
+npx -y @jtalk22/slack-mcp --read-only               # read Slack, never write to it
+```
 
-<p align="center">
-  <a href="#new-in-51">New in 5.1</a> ·
-  <a href="#if-your-workspace-is-on-slacks-free-plan">Free Slack</a> ·
-  <a href="#two-ways-into-slack">Why session auth</a> ·
-  <a href="#install">Install</a> ·
-  <a href="#20-tools-read-act-automate">20 tools</a> ·
-  <a href="#typed-workflows-slack-in-json-out">Workflows</a> ·
-  <a href="#security-and-provenance">Security</a> ·
-  <a href="#built-past-the-demo">How it works</a> ·
-  <a href="#free-local-when-youre-driving-hosted-when-it-must-drive-itself">Local vs hosted</a>
-</p>
+<p align="center"><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ The whole morning in three minutes</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
 
 ---
 
@@ -347,18 +340,6 @@ Save workflow profiles for incident rooms, executive briefs, support inboxes, la
 
 ---
 
-## Grid, credentials, and caching
-
-**Enterprise Grid.** Grid runs aggressive session-anomaly detection. Browser-session automation can trip it, which flags the session and kills it, regardless of which tool drives the traffic. Outbound calls are paced by default to stay under burst thresholds (`SLACK_MCP_MIN_REQUEST_INTERVAL_MS`, default 350; `SLACK_MCP_MAX_CONCURRENCY`, default 3). Pacing lowers that risk; it does not remove it. On Grid, use the [hosted OAuth tier](https://mcp.revasserlabs.com) or Slack's official MCP instead.
-
-**Credential extraction.** `--setup` reads the newest `xoxc-` token from Chrome's on-disk LevelDB, snapshots the cookie SQLite database, retrieves Chrome Safe Storage from the macOS Keychain, and runs PBKDF2 + AES-128-CBC decryption locally. It writes the token file, Keychain entries, and non-secret metadata. It transmits nothing — the server talks to Slack and nowhere else.
-
-**This is the same access pattern credential stealers use.** Chrome App-Bound Encryption exists to make this class of read harder, and infostealer families (Lumma, Vidar, Meduza) bypass it to lift live sessions. The mechanism here is comparable. What differs is that you run it, on your own machine, against your own session, and nothing leaves the host. The source is plain JavaScript in this repository; audit it before handing it a live session.
-
-**User cache.** One cache exists: user-name lookups, populated on demand, 500 entries maximum, one-hour TTL. No message content, no channel history, and no persistent copy of the workspace is stored.
-
----
-
 ## Where credentials live
 
 Resolution is deterministic; first hit wins:
@@ -369,6 +350,20 @@ Resolution is deterministic; first hit wins:
 4. Chrome extraction on macOS
 
 How long a session credential lasts is worth measuring rather than assuming. The two halves have different lifetimes — the `d` cookie is long-lived, the `xoxc` token is the volatile one — and this project previously quoted one or two weeks for both. On one real workspace a credential written on 2026-07-04 still authenticated on 2026-10-07, 94 days later. One credential is not a distribution, so treat that as an existence proof rather than a promise: yours may rotate sooner. `slack_token_status` reports the age of what you actually have. When Slack returns `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or HTTP 401, run `npx -y @jtalk22/slack-mcp --setup` to recover locally. On macOS, `slack_refresh_tokens` or `--refresh-tokens` refreshes without leaving the client; the optional LaunchAgent in [docs/SETUP.md](docs/SETUP.md) keeps long-idle installations healthy.
+
+<details>
+<summary><strong>Enterprise Grid, how extraction works, and the one cache</strong></summary>
+<br>
+
+**Enterprise Grid.** Grid runs aggressive session-anomaly detection. Browser-session automation can trip it, which flags the session and kills it, regardless of which tool drives the traffic. Outbound calls are paced by default to stay under burst thresholds (`SLACK_MCP_MIN_REQUEST_INTERVAL_MS`, default 350; `SLACK_MCP_MAX_CONCURRENCY`, default 3). Pacing lowers that risk; it does not remove it. On Grid, use the [hosted OAuth tier](https://mcp.revasserlabs.com) or Slack's official MCP instead.
+
+**Credential extraction.** `--setup` reads the newest `xoxc-` token from Chrome's on-disk LevelDB, snapshots the cookie SQLite database, retrieves Chrome Safe Storage from the macOS Keychain, and runs PBKDF2 + AES-128-CBC decryption locally. It writes the token file, Keychain entries, and non-secret metadata. It transmits nothing — the server talks to Slack and nowhere else.
+
+**This is the same access pattern credential stealers use.** Chrome App-Bound Encryption exists to make this class of read harder, and infostealer families (Lumma, Vidar, Meduza) bypass it to lift live sessions. The mechanism here is comparable. What differs is that you run it, on your own machine, against your own session, and nothing leaves the host. The source is plain JavaScript in this repository; audit it before handing it a live session.
+
+**User cache.** One cache exists: user-name lookups, populated on demand, 500 entries maximum, one-hour TTL. No message content, no channel history, and no persistent copy of the workspace is stored.
+
+</details>
 
 <details>
 <summary><strong>Storage modes and multi-workspace profiles</strong></summary>
