@@ -93,12 +93,16 @@ npx -y @jtalk22/slack-mcp --setup
 # Option 3: Diagnostics check
 npx -y @jtalk22/slack-mcp --doctor
 
-# Option 4: Repo CLI
-npm run tokens:auto
+# Option 4: Chrome extraction only, no prompts
+npx -y @jtalk22/slack-mcp --refresh-tokens
 
-# Option 5: Manual
-npm run tokens:refresh
+# Option 5: Read-only credential check (never extracts from Chrome)
+npx -y @jtalk22/slack-mcp --status
 ```
+
+`--setup` extracts from Chrome and falls back to manual entry if that finds nothing. `--refresh-tokens` does the extraction alone and prints the reason code when it fails.
+
+From a git checkout the same work is `npm run tokens:auto`, `npm run tokens:refresh`, and `npm run tokens:status`. Those scripts do not exist for an `npx` install.
 
 ---
 
@@ -147,7 +151,7 @@ API Key:   smcp_xxxxxxxxxxxx
 
 You can also set a custom key:
 ```bash
-SLACK_API_KEY=your-custom-key npm run web
+SLACK_API_KEY=your-custom-key npx -y @jtalk22/slack-mcp web
 ```
 
 ### Can't Connect to localhost:3000
@@ -316,13 +320,19 @@ Browser tokens (xoxc/xoxd) provide the same access you have in Slack's web inter
    - MCP: `~/Library/Logs/Claude/mcp-server-slack.log`
    - Web: `/tmp/slack-web-api.log`
 
-2. Test manually:
+2. Check the runtime and the credential in one pass:
    ```bash
-   cd ~/slack-mcp-server
-   node src/server.js  # Should say "running"
+   npx -y @jtalk22/slack-mcp --doctor
    ```
 
-3. Verify tokens:
+3. Verify the credential without touching Chrome:
    ```bash
-   npm run tokens:status
+   npx -y @jtalk22/slack-mcp --status
+   ```
+
+4. Start the server by hand. On stderr it prints the credential source, the
+   active tool profile, and a `slack-mcp-server v… running` line; it then waits
+   on stdin for an MCP client:
+   ```bash
+   npx -y @jtalk22/slack-mcp
    ```

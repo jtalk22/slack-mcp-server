@@ -35,8 +35,14 @@ Paste any relevant error messages or logs here
 ```
 
 ## Token Status
-- [ ] I have verified my tokens are valid using `npm run tokens:status`
+- [ ] I have checked my credentials with `npx -y @jtalk22/slack-mcp --status`
 - [ ] Tokens were refreshed within the last week
+
+Output of `npx -y @jtalk22/slack-mcp --doctor`, if you have it (it classifies
+the failure and exits 0 ready / 1 missing / 2 invalid / 3 runtime):
+
+```
+```
 
 ## Support Expectation
 - Is this blocking a team rollout? [yes/no]

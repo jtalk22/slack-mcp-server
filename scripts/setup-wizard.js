@@ -631,6 +631,7 @@ async function showHelp() {
   print("  npx -y @jtalk22/slack-mcp --setup     Interactive token setup wizard");
   print("  npx -y @jtalk22/slack-mcp --status    Check token health");
   print("  npx -y @jtalk22/slack-mcp --doctor    Run runtime and auth diagnostics");
+  print("  npx -y @jtalk22/slack-mcp --refresh-tokens   Re-extract from Chrome only");
   print("  npx -y @jtalk22/slack-mcp --version   Print version");
   print("  npx -y @jtalk22/slack-mcp --help      Show this help");
   print();
@@ -650,7 +651,10 @@ async function showHelp() {
   print("  SLACK_MCP_MIN_REQUEST_INTERVAL_MS (default 350, 0 disables) and");
   print("  SLACK_MCP_MAX_CONCURRENCY (default 3).");
   print();
-  print(`${colors.bold}npm scripts:${colors.reset}`);
+  // These are git-checkout scripts. Labelled as such because the documented
+  // install is `npx -y @jtalk22/slack-mcp`, where no package.json scripts
+  // exist and `npm run …` cannot work.
+  print(`${colors.bold}From a git checkout (not available to an npx install):${colors.reset}`);
   print("  npm start              Start MCP server");
   print("  npm run web            Start REST API + Web UI (port 3000)");
   print("  npm run tokens:auto    Auto-extract from Chrome (macOS)");

@@ -44,7 +44,13 @@ npx -y @jtalk22/slack-mcp --doctor
 - `2`: credentials invalid or expired;
 - `3`: network or runtime failure.
 
-`--status` is read-only and does not trigger Chrome extraction.
+`--status` is read-only and does not trigger Chrome extraction. `--refresh-tokens` runs the Chrome extraction on its own, without the wizard's prompts, and prints the reason code if it fails:
+
+```bash
+npx -y @jtalk22/slack-mcp --refresh-tokens
+```
+
+These flags are the whole supported surface for an `npx` install. The `npm run tokens:*` scripts exist only in a git checkout.
 
 ## Pick your client
 
