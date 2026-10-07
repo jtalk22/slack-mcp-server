@@ -469,30 +469,38 @@ test("fails closed: with no workspace identity, no author is placed and none is 
   }
 });
 
-test("the two read paths hold different references, so the same message labels differently", async () => {
+test("both read paths place a teamless colleague the same way", async () => {
   // classifyMessageOrigin treats a message with a user, no `team`, and a
-  // conversation known NOT to be externally shared as internal. That is a
-  // documented, measured tradeoff: Slack omits `team` for same-workspace
-  // authors, so without it more than half an ordinary channel reads as
-  // unplaceable. lib/handlers.js resolves that sharing state and passes it;
-  // lib/catch-up.js does not.
+  // conversation known NOT to be externally shared as internal. Slack omits
+  // `team` for same-workspace authors, so without the sharing state more than
+  // half an ordinary channel reads as unplaceable.
+  //
+  // This test replaced one that recorded an asymmetry: lib/handlers.js resolved
+  // the sharing state and lib/catch-up.js did not, so the identical message was
+  // internal through slack_conversations_history and unknown through
+  // slack_catch_me_up. That test was written to retire itself the day catch-up
+  // started passing the state. It has, so this asserts the parity instead.
   const { classifyMessageOrigin } = await import("../lib/message-provenance.js");
   const home = { homeTeamId: "T_HOME", selfUserId: "U_ME" };
   const teamless = { user: "U_COLLEAGUE", text: "ordinary internal message" };
 
   assert.equal(classifyMessageOrigin(teamless, { ...home, conversationExternallyShared: false }),
-    "internal", "the history path can place a teamless author in a channel it knows is unshared");
+    "internal", "an unshared conversation places a teamless author");
+  assert.equal(classifyMessageOrigin(teamless, { ...home, conversationExternallyShared: true }),
+    "unknown", "a shared one cannot");
   assert.equal(classifyMessageOrigin(teamless, home),
-    "unknown", "the catch-up path, passing no sharing state, cannot place the same message");
+    "unknown", "and no sharing state at all still fails closed");
 
-  // Not a hole: catch-up errs strict, and strict is the safe direction. It is
-  // an asymmetry worth recording, because a caller comparing untrusted counts
-  // between slack_catch_me_up and slack_conversations_history is comparing two
-  // different scales, not two readings of the same workspace.
-  const source = readFileSync(join(HERE, "..", "lib", "catch-up.js"), "utf-8");
-  assert.ok(!source.includes("conversationExternallyShared"),
-    "if catch-up starts passing the sharing state this asymmetry is closed, and this test should go with it");
+  // The wiring, not just the classifier: both read paths must resolve it, so a
+  // caller comparing untrusted counts between the two tools is comparing two
+  // readings of one workspace rather than two different scales.
+  for (const file of ["lib/catch-up.js", "lib/handlers.js"]) {
+    const source = readFileSync(join(HERE, "..", file), "utf-8");
+    assert.ok(source.includes("conversationExternallyShared"),
+      `${file} must resolve the conversation's sharing state`);
+  }
 });
+
 
 test("a foreign team id alone cannot place an author, and the sharing state is what holds the line", async () => {
   // `external` requires BOTH msg.team and homeTeamId, because it is a

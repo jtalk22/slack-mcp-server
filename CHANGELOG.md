@@ -108,14 +108,12 @@ not by anything this package could suppress if it wanted to. The sentence as
 written reads as a feature for evading oversight. That is not what shipped and
 not what the code does.
 
-The name goes the same way. `scripts/check-public-language.sh` bans that word
-outright, and the project's own messaging guardrails in
-`.github/launch-posts.md` list "Invisible to admins" and "no audit trail" among
-the phrasings never to use. The 4.1.0 entry survived both only because the
-gate's scan paths do not include this file. The name and the framing were
-removed from the README, the landing page and the generated public pages in a
-later release and appear nowhere on the public surface today; this entry was the
-last place either one was still shipping.
+The name stays. "Stealth Mode" describes the part that is true and unusual —
+no app to install, no bot identity, nothing in the workspace app directory, no
+admin queue — and it is the operator's word for it (2026-10-07). What was
+withdrawn on 2026-10-07 is the claim that rode along with it, not the name:
+`scripts/check-public-language.sh` now blocks "no audit trail", "invisible to
+admins" and "zero footprint" by pattern, and no longer blocks "stealth".
 
 The accurate statement, and the one the rest of the documentation uses: session
 credentials carry the same effective access as the signed-in browser user.

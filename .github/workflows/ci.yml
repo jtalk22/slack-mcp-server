@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Required before a merge queue can be turned on: a queued pull request is
+  # tested on a temporary `gh-readonly-queue/...` ref, and without this trigger
+  # the queue waits forever for checks that never run. Harmless until then.
+  merge_group:
 
 jobs:
   test:

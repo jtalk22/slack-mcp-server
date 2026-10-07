@@ -162,7 +162,12 @@ Do not publish “20k+ downloads” until the public npm API crosses 20,000.
 **Do not say:**
 
 - “20k+ downloads” before the public count reaches it.
-- “Invisible to admins” or “no audit trail.”
+- Any claim that the local path is unseen by a workspace or leaves no record. It calls Slack as the
+  signed-in user with that user’s own session, so a workspace sees the same API activity it would see
+  from any client signed in as that person. `check-public-language.sh` blocks the three usual phrasings
+  by pattern, which is why they are described here rather than quoted.
+- **“Stealth” is allowed and is the right word** for what is true: no app to install, no bot identity,
+  nothing in the workspace app directory, no admin queue. Say that; never say unseen.
 - “Steals,” “captures,” “hack,” or “exploit.”
 - “Unlimited” without the live fair-use qualifier.
 - “Hosted fixes token refresh.” Hosted replaces browser-session rotation with permanent OAuth; that distinction matters.
