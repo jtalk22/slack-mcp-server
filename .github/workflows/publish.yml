@@ -97,12 +97,6 @@ jobs:
       # --provenance is kept deliberately. npm's docs say provenance is
       # generated automatically under trusted publishing, but keeping the flag
       # states the guarantee explicitly rather than depending on a default.
-      - name: Publish to npm
-        if: steps.npm_check.outputs.already_published != 'true'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --provenance --access public
-
       - name: Verify server.json matches release version
         shell: bash
         env:
@@ -114,6 +108,12 @@ jobs:
             echo "server.json version ($SJ_VERSION) does not match release version ($VERSION)" >&2
             exit 1
           fi
+
+      - name: Publish to npm
+        if: steps.npm_check.outputs.already_published != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
 
       - name: Check MCP registry for existing version
         id: registry_check

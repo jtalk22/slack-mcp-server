@@ -91,7 +91,7 @@
     window.__fontsLoaded = Promise.all(faces.map((f) => f.load().then(() => document.fonts.add(f)))).then(() => {
       document.documentElement.classList.add("estate");
       window.__fontSource = "estate";
-    });
+    }).catch(() => { /* the stand-ins draw; the recorder checks __fontSource and stops */ });
   })();
 </script>
 </head>

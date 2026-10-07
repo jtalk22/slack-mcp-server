@@ -202,6 +202,16 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
 
 ### Fixed
 
+- **Five findings from the pre-release review, each with a regression test**
+  (`test/review-5.1.test.js`): the provenance walker now visits replies the
+  catch-up stores under `thread.replies`, so an outside-authored reply arms
+  the strict hold, enters the envelope and is counted in the receipt;
+  `slack_refresh_tokens` clears the identity caches before saving a new
+  credential; `discover_dms` is refused in read-only mode because
+  `conversations.open` is a write; a `client.counts` group that is not an
+  array degrades to the listing view and names the stage
+  `client.counts_missing_groups`; and the unshared-teamless branch of the
+  classifier no longer fires for a message that carries a foreign `team`.
 - **The strict hold could be switched off by the call it restrained.** The gate
   resolved its mode from `args.provenance`, so a request asking for `label`
   dropped out of `strict` even with `SLACK_MCP_PROVENANCE=strict` set. Both the
@@ -234,6 +244,17 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
 
 ### Changed
 
+- **`--doctor --security` runs even when the credential is dead**, since four of
+  its six checks need no auth; the credential-age line says `unknown` rather
+  than vanishing when no timestamp is recorded; the Windows file-mode check no
+  longer prescribes `chmod`; the provenance and write-tool lines say they
+  describe this shell's configuration. `--security --doctor` and
+  `--doctor --security` both work: the CLI and the wizard find their command
+  anywhere among the flags.
+- **`slack_search_messages` resolves each hit's conversation sharing state**, so
+  a teamless colleague in a search result is placed the same way as in a
+  history read.
+- **`publish.yml` verifies `server.json` before `npm publish`**, not after.
 - **20 tools**, 13 read-only, 4 write-path, 3 local workflow. The read and
   write counts now live in `lib/public-metadata.js` beside the tool count, so
   the gate that catches drift cannot itself drift.

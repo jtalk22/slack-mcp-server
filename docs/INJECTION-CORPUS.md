@@ -368,7 +368,9 @@ Two consequences worth testing on any server that labels this way:
   same-workspace authors — that fallback must not fire for a message that
   carries a foreign `team` the classifier simply had nothing to compare to. The
   state to re-check is: identity lookup failed, and the channel is reported
-  unshared.
+  unshared. As of 5.1.0 this server's fallback requires the message to be
+  genuinely teamless, so that state yields `unknown`; `test/review-5.1.test.js`
+  pins it.
 - **A failed lookup is not a negative answer.** "Not externally shared" and
   "could not determine whether it is shared" must stay distinct. Collapsing
   `null` into `false` turns every lookup failure into a trust promotion.

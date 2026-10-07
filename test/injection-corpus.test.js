@@ -516,16 +516,15 @@ test("a foreign team id alone cannot place an author, and the sharing state is w
   assert.equal(classifyMessageOrigin(outsider, { ...noIdentity, conversationExternallyShared: true }),
     "unknown", "a shared channel never short-circuits to internal");
 
-  // The one combination that produces a trusted label for a message carrying a
-  // foreign team id: identity lookup failed AND the channel is reported
-  // unshared. Slack should not place a foreign team in an unshared channel, so
-  // this is narrow rather than live — but it is the input set to re-check if
-  // the teamless branch is ever widened, and `null` (lookup failed) must keep
-  // falling through to unknown rather than joining the `false` case.
+  // A message that carries a foreign team id is never promoted by the
+  // teamless branch, even when the channel is reported unshared: that branch
+  // exists for messages Slack left teamless, and a failed identity lookup must
+  // not place anyone. Reachable when a formerly shared channel is disconnected
+  // (old messages keep their authors' team) and one auth.test fails.
   assert.equal(
     classifyMessageOrigin(outsider, { ...noIdentity, conversationExternallyShared: false }),
-    "internal",
-    "recorded as measured, not endorsed: see docs/INJECTION-CORPUS.md"
+    "unknown",
+    "a foreign team id with no home id to compare against stays unplaceable"
   );
   assert.equal(
     classifyMessageOrigin(outsider, { ...noIdentity, conversationExternallyShared: null }),

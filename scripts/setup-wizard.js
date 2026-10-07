@@ -581,7 +581,11 @@ async function runSecurityReport(creds) {
 
   let mode = null;
   try { mode = statSync(TOKEN_FILE).mode & 0o777; } catch { /* absent is the good case for keychain-only */ }
-  if (mode === null) {
+  if (mode !== null && process.platform === "win32") {
+    // POSIX mode bits mean nothing on Windows; the file exists, and that is all this can say.
+    checkLine(storage.mode === "keychain-only" ? "fail" : "warn", "Plaintext credential file: present",
+      `At ${TOKEN_FILE}. Restrict it with the file's own permissions; chmod does not apply here.`);
+  } else if (mode === null) {
     checkLine("pass", "Plaintext credential file: absent", `Nothing at ${TOKEN_FILE}.`);
   } else if (mode === 0o600) {
     checkLine(storage.mode === "keychain-only" ? "fail" : "pass",
@@ -595,12 +599,14 @@ async function runSecurityReport(creds) {
       "Readable by more than you.", `chmod 600 ${TOKEN_FILE}`);
   }
 
+  // These two read this shell's environment and flags, not the MCP client's
+  // server entry, so they describe how this doctor process is configured.
   const provenance = resolveGateMode(process.env);
   if (provenance === "strict") {
-    checkLine("pass", "Provenance: strict",
+    checkLine("pass", "Provenance: strict (as this shell is configured)",
       "Messages are labelled, and a send is held once outside-authored text has been read. The hold is released by a flag the caller sets, so it records a send rather than proving a human approved it.");
   } else if (provenance === "label") {
-    checkLine("pass", "Provenance: label (default)",
+    checkLine("pass", "Provenance: label (default, as this shell is configured)",
       "Every message carries origin and author_trusted. No send is held.",
       "SLACK_MCP_PROVENANCE=strict  # also hold sends after reading outside-authored text");
   } else {
@@ -613,8 +619,8 @@ async function runSecurityReport(creds) {
     checkLine("pass", "Write tools: not registered",
       `read-only is on, so ${WRITE_PATH_TOOLS.length} write tools are withheld and refused at dispatch.`);
   } else {
-    checkLine("warn", "Write tools: registered",
-      `${WRITE_PATH_TOOLS.join(", ")} are callable.`,
+    checkLine("warn", "Write tools: registered (as this shell is configured)",
+      `${WRITE_PATH_TOOLS.join(", ")} are callable. Your MCP client's own env or args may differ.`,
       "npx -y @jtalk22/slack-mcp --read-only  # or SLACK_MCP_READ_ONLY=1, if this agent only needs to read");
   }
 
@@ -631,6 +637,10 @@ async function runSecurityReport(creds) {
     const days = Math.round((Date.now() - new Date(creds.updatedAt).getTime()) / 86400000);
     checkLine("pass", `Credential age: ${days} day${days === 1 ? "" : "s"}`,
       "Age is reported, not judged. A session's real lifetime varies and this project no longer claims a number for it; what matters is whether Slack still accepts it, which the auth check above answers.");
+  } else {
+    checkLine("warn", "Credential age: unknown",
+      "No write timestamp is recorded for this credential, so its age cannot be reported.",
+      "npx -y @jtalk22/slack-mcp --setup  # re-saving records the time");
   }
 
   print();
@@ -693,6 +703,11 @@ async function runDoctor() {
     const exitCode = classifyAuthError(validation.error);
     error(`Slack auth failed: ${validation.error}`);
     print(`Code: ${exitCode === 2 ? "auth_invalid" : "runtime_auth_check_failed"}`);
+    if (process.argv.includes("--security")) {
+      // The posture is most useful exactly when the credential is dead; none of
+      // these checks needs Slack to answer.
+      await runSecurityReport(creds);
+    }
     print();
     print("Next action:");
     if (exitCode === 2) {
@@ -769,7 +784,10 @@ async function showHelp() {
 
 async function main() {
   const args = process.argv.slice(2);
-  const command = args[0];
+  // The command may sit anywhere among the flags (`--security --doctor`);
+  // modifiers such as --security and --profile are read where they apply.
+  const COMMANDS = new Set(["--setup", "setup", "--status", "status", "--doctor", "doctor", "--version", "-v", "--help", "-h", "help"]);
+  const command = args.find((a) => COMMANDS.has(a)) ?? args[0];
 
   switch (command) {
     case '--setup':

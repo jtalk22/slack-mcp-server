@@ -63,8 +63,6 @@ const childEnv = {
   ...(cliTools !== null ? { SLACK_MCP_TOOLS: cliTools } : {}),
 };
 
-const firstArg = args[0];
-
 const WIZARD_ARGS = new Set([
   "--setup", "setup",
   "--status", "status",
@@ -73,18 +71,24 @@ const WIZARD_ARGS = new Set([
   "--help", "-h", "help",
 ]);
 
+// The mode token may sit anywhere among the flags (`--read-only http`,
+// `--security --doctor`), so dispatch looks for it rather than reading args[0].
+const MODE_TOKENS = new Set(["web", "http", "--apply-template", "apply-template", "--refresh-tokens", "refresh-tokens"]);
+const firstArg = args.find((a) => MODE_TOKENS.has(a)) ?? args.find((a) => WIZARD_ARGS.has(a)) ?? args[0];
+
+
 let scriptPath = join(__dirname, "server.js");
 let scriptArgs = args;
 
 if (firstArg === "web") {
   scriptPath = join(__dirname, "web-server.js");
-  scriptArgs = args.slice(1);
+  scriptArgs = args.filter((a) => a !== firstArg);
 } else if (firstArg === "http") {
   scriptPath = join(__dirname, "server-http.js");
-  scriptArgs = args.slice(1);
+  scriptArgs = args.filter((a) => a !== firstArg);
 } else if (firstArg === "--apply-template" || firstArg === "apply-template") {
   scriptPath = join(__dirname, "../scripts/apply-template.js");
-  scriptArgs = args.slice(1);
+  scriptArgs = args.filter((a) => a !== firstArg);
 } else if (firstArg === "--refresh-tokens" || firstArg === "refresh-tokens") {
   scriptPath = join(__dirname, "../scripts/token-cli.js");
   scriptArgs = ["auto"];
