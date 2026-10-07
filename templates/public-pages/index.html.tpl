@@ -219,7 +219,7 @@
             <source src="docs/videos/slack-mcp-proof-42s.webm" type="video/webm">
           </video>
           <div class="proof-caption">
-            <strong>Monday, 9:07. Slack has already formed opinions.</strong>
+            <strong>Tuesday, 9:07. Slack has already formed opinions.</strong>
             <span>47 → 1 → 0 · SAMPLE WORKSPACE</span>
           </div>
         </a>

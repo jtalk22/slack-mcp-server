@@ -1,6 +1,8 @@
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![npm total downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.npmjs.org%2Fdownloads%2Fpoint%2Flast-year%2F%40jtalk22%2Fslack-mcp&query=%24.downloads&style=flat-square&logo=npm&logoColor=white&label=downloads&labelColor=0b0b0c&color=ffb224)](https://npm-stat.com/charts.html?package=%40jtalk22%2Fslack-mcp)&nbsp;[![npm weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c&color=28c840)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-e5482f?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)&nbsp;[![Security policy](https://img.shields.io/badge/security-policy_%2B_private_reporting-28c840?style=flat-square&labelColor=0b0b0c)](SECURITY.md)&nbsp;[![Node](https://img.shields.io/node/v/%40jtalk22%2Fslack-mcp?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=0b0b0c&color=28c840)](https://nodejs.org)&nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-e5482f?style=flat-square&labelColor=0b0b0c)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![total downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.npmjs.org%2Fdownloads%2Fpoint%2Flast-year%2F%40jtalk22%2Fslack-mcp&query=%24.downloads&style=flat-square&logo=npm&logoColor=white&label=downloads&labelColor=0b0b0c&color=ffb224)](https://npm-stat.com/charts.html?package=%40jtalk22%2Fslack-mcp)&nbsp;[![weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![Node](https://img.shields.io/node/v/%40jtalk22%2Fslack-mcp?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=0b0b0c&color=28c840)](https://nodejs.org)&nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-e5482f?style=flat-square&labelColor=0b0b0c)](LICENSE)
+
+[![Docker image](https://img.shields.io/badge/ghcr.io-published-2496ed?style=flat-square&logo=docker&logoColor=white&labelColor=0b0b0c)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c&color=28c840)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-28c840?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)
 
 <img src="docs/assets/icon.svg" width="88" alt="Slack MCP channel mark">
 
@@ -21,10 +23,10 @@ npx -y @jtalk22/slack-mcp --setup
 <p><kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd> <kbd>any stdio MCP client</kbd></p>
 
 <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-  <img src="docs/images/demo-poster.png" width="900" alt="47 unread Slack messages across four conversations become one prioritized morning briefing">
+  <img src="docs/images/hero-printer-pin.gif" width="900" alt="The agent searches five months of Slack history for a jammed printer’s admin PIN, finds it in a #facilities post nobody read, and reports: five months, three people, same printer, the answer was there the whole time">
 </a>
 
-<p><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ It’s Monday, 9:07—watch what blew up overnight</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
+<p><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ It’s Tuesday, 9:07. A jammed printer, and nobody knows the PIN</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
 
 </div>
 
@@ -42,7 +44,7 @@ npx -y @jtalk22/slack-mcp --setup
 
 ---
 
-## It’s Monday, 9:07. Slack has already formed opinions.
+## It’s Tuesday, 9:07. Slack has already formed opinions.
 
 You ask “what blew up overnight?” and the agent reads the workspace instead of you. It reconstructs the 2 AM P1 from `#incidents`—owner, resolution, and the runbook step that is still wrong. It finds the printer PIN that has been waiting in `#facilities` for five months. Then it closes the handled loops—replies, reactions, read-state changes—only where you approve.
 
