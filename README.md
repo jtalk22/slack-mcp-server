@@ -66,8 +66,8 @@ This is not screenshot automation. The agent calls Slack through a real MCP tool
 - **Commitments, owner gaps and open questions — free and local.** `slack_catch_me_up` returns who said they would do what, the requests nobody answered and the questions left open, each with the text that matched and a link to the message.
 - **Every message says who wrote it.** `self`, `internal`, `external` or `bot`, so text written outside your workspace reaches the model labelled. An author the server cannot place says `unknown` rather than guessing.
 - **`--read-only`.** The write tools are never registered, and a call to one is refused. The one guarantee that does not depend on the model behaving.
-- **`--doctor --security`.** Six checks of your own setup, each with the one command that tightens it.
-- **A session receipt and signed releases.** `slack_session_report` counts what this process read and tried to send — never the text. Every release carries signed npm provenance you can check with `npm audit signatures`, and CodeQL and OSV-Scanner run on every change.
+- **`--doctor --security`.** Six checks of your own setup — whether the token sits in your Keychain or in a plaintext file, that file's permissions, the credential's age, whether the write tools are registered — each with the one command that tightens it.
+- **No stored token on our side.** Your Slack session is decrypted on your Mac — Chrome's own Safe Storage key, from your Keychain — and goes nowhere but Slack. We never see it, and `keychain-only` storage keeps it off your disk too. `slack_session_report` counts what this process read and tried to send — never the text.
 
 ---
 
