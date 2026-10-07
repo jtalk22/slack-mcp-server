@@ -19,7 +19,7 @@
     --sans: -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--bg); }
+  html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--bg); position: relative; }
   body { color: var(--ink); font-family: var(--sans); font-size: 15px; }
 
   .stage { display: grid; grid-template-columns: 540px 1fr; width: 1280px; height: 720px; }
@@ -33,53 +33,53 @@
   .bar { height: 46px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid var(--line); }
   .dot { width: 11px; height: 11px; border-radius: 50%; }
   .r1 { background: #FF5F57; } .y1 { background: #FEBC2E; } .g1 { background: #28C840; }
-  .bar .who { margin-left: 8px; font-size: 13px; font-weight: 600; }
-  .bar .tools { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--faint); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; }
+  .bar .who { margin-left: 8px; font-size: 16px; font-weight: 600; }
+  .bar .tools { margin-left: auto; font-family: var(--mono); font-size: 13px; color: var(--dim); border: 1px solid var(--line); border-radius: 6px; padding: 3px 9px; }
 
-  .thread { flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 20px 22px; min-height: 0; }
-  .nm { font-size: 11px; font-weight: 700; letter-spacing: .9px; text-transform: uppercase; margin-bottom: 6px; }
+  .thread { flex: 1; display: flex; flex-direction: column; gap: 18px; padding: 22px 26px; min-height: 0; }
+  .nm { font-size: 13.5px; font-weight: 700; letter-spacing: .9px; text-transform: uppercase; margin-bottom: 6px; }
   .you { color: #7FA7FF; }
   .cl  { color: var(--accent); }
-  .thread p { font-size: 15px; line-height: 1.52; }
+  .thread p { font-size: 20px; line-height: 1.42; }
   .thread p + p { margin-top: 8px; }
   .quiet { color: var(--dim); }
 
-  .tool { border: 1px solid var(--line); border-radius: 9px; background: var(--pane2); font-family: var(--mono); font-size: 12px; }
+  .tool { border: 1px solid var(--line); border-radius: 9px; background: var(--pane2); font-family: var(--mono); font-size: 15px; }
   .tool .hd { padding: 8px 12px; border-bottom: 1px solid var(--line); color: var(--accent); display: flex; }
-  .tool .hd span { margin-left: auto; color: var(--faint); font-size: 10.5px; }
+  .tool .hd span { margin-left: auto; color: var(--dim); font-size: 13px; }
   .tool .bd { padding: 10px 12px; color: var(--dim); line-height: 1.65; }
   .k { color: #8FB8FF; } .s { color: #9BD4A8; }
 
-  .pin { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--green); letter-spacing: 2px; vertical-align: -3px; }
+  .pin { font-family: var(--mono); font-size: 34px; font-weight: 700; color: var(--green); letter-spacing: 2px; vertical-align: -3px; }
   .kicker { font-weight: 600; }
 
-  .tally { margin-top: auto; font-family: var(--mono); font-size: 11.5px; color: var(--faint);
+  .tally { margin-top: auto; font-family: var(--mono); font-size: 14px; color: var(--dim);
            border-top: 1px solid var(--line); padding-top: 14px; display: flex; gap: 18px; }
   .tally b { color: var(--dim); font-weight: 600; }
 
   /* ================= right: the workspace ================= */
   .slack { display: grid; grid-template-columns: 196px 1fr; height: 720px; }
   .rail { background: var(--slack); padding: 14px 0; }
-  .ws { padding: 0 14px 14px; font-weight: 700; font-size: 14px; color: #fff; border-bottom: 1px solid rgba(255,255,255,.14); margin-bottom: 12px; }
-  .sec { padding: 0 14px; font-size: 10.5px; letter-spacing: .9px; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 7px; }
-  .ch { padding: 5px 14px; font-size: 13.5px; color: rgba(255,255,255,.72); transition: background .25s ease; }
+  .ws { padding: 0 16px 16px; font-weight: 700; font-size: 18px; color: #fff; border-bottom: 1px solid rgba(255,255,255,.14); margin-bottom: 12px; }
+  .sec { padding: 0 16px; font-size: 12.5px; letter-spacing: .9px; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 7px; }
+  .ch { padding: 7px 16px; font-size: 17px; color: rgba(255,255,255,.72); transition: background .25s ease; }
   .ch .h { opacity: .55; margin-right: 6px; }
-  .ch.on { background: rgba(255,255,255,.18); color: #fff; font-weight: 600; }
+  .ch.on { background: #1164A3; color: #fff; font-weight: 700; }
   .ch .badge { float: right; background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; border-radius: 9px; padding: 0 6px; line-height: 17px; }
 
   .chan { background: var(--pane2); display: flex; flex-direction: column; height: 720px; min-width: 0; }
   .chan .hd { padding: 13px 22px; border-bottom: 1px solid var(--line); flex: none; }
-  .chan h2 { font-size: 15.5px; font-weight: 700; }
-  .chan .meta { font-size: 12px; color: var(--faint); margin-top: 3px; }
+  .chan h2 { font-size: 20px; font-weight: 700; }
+  .chan .meta { font-size: 14.5px; color: var(--dim); margin-top: 3px; }
 
-  .feed { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; min-height: 0; }
+  .feed { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 20px 24px; min-height: 0; }
 
-  .post { display: flex; gap: 11px; padding: 10px 12px; border-radius: 9px; position: relative; transition: background .3s ease, opacity .4s ease; }
-  .av { width: 34px; height: 34px; border-radius: 7px; flex: none; font-weight: 700; font-size: 12.5px; color: #fff; display: flex; align-items: center; justify-content: center; }
-  .post .who { font-size: 13.5px; font-weight: 700; }
-  .post .who span { font-weight: 400; color: var(--faint); font-size: 11.5px; margin-left: 7px; }
-  .post .tx { font-size: 13.5px; line-height: 1.5; color: #D3D3D8; margin-top: 3px; }
-  .post .rx { margin-top: 7px; font-size: 11px; color: var(--faint); font-family: var(--mono); }
+  .post { display: flex; gap: 14px; padding: 12px 14px; border-radius: 9px; position: relative; transition: background .3s ease, opacity .4s ease; }
+  .av { width: 42px; height: 42px; border-radius: 9px; flex: none; font-weight: 700; font-size: 15px; color: #fff; display: flex; align-items: center; justify-content: center; }
+  .post .who { font-size: 18px; font-weight: 700; }
+  .post .who span { font-weight: 400; color: var(--dim); font-size: 14.5px; margin-left: 7px; }
+  .post .tx { font-size: 18px; line-height: 1.42; color: #D3D3D8; margin-top: 3px; }
+  .post .rx { margin-top: 8px; font-size: 14px; color: var(--dim); font-family: var(--mono); }
   .post.hit { background: rgba(229,72,47,.11); box-shadow: inset 3px 0 0 var(--accent); }
   .post.dim { opacity: .38; }
 
@@ -87,12 +87,65 @@
           font-size: 10.5px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
           padding: 3px 9px; border-radius: 5px; }
 
-  .verdict { margin-top: auto; border: 1px solid var(--line); background: var(--pane); border-radius: 10px; padding: 14px 17px; }
+  .verdict { margin-top: 14px; border: 1px solid var(--line); background: var(--pane); border-radius: 10px; padding: 14px 17px; }
   .verdict .big { font-size: 15px; font-weight: 700; }
   .verdict .sm { font-size: 12.5px; color: var(--dim); margin-top: 4px; line-height: 1.5; }
+
+  /* ================= the title card: frame one is the hook ================= */
+  .title {
+    position: absolute; inset: 0; z-index: 10;
+    background: radial-gradient(120% 90% at 18% 20%, #5B1D5C 0%, #4A154B 45%, #34103A 100%);
+    display: flex; flex-direction: column; justify-content: center; padding: 0 110px;
+  }
+  .title .eyebrow { font-family: var(--mono); font-size: 15px; letter-spacing: 3px; text-transform: uppercase;
+                    color: #FFB224; margin-bottom: 26px; }
+  .title h1 { font-size: 82px; line-height: 1.02; font-weight: 800; letter-spacing: -2.5px; color: #fff; }
+  .title h1 .time { color: #FFB224; }
+  .title .beat { font-size: 31px; line-height: 1.32; font-weight: 500; color: rgba(255,255,255,.92); margin-top: 34px; letter-spacing: -.4px; }
+  .title .beat .dim { color: rgba(255,255,255,.58); }
+  .title .mark { position: absolute; left: 110px; bottom: 56px; display: flex; align-items: center; gap: 12px;
+                 font-family: var(--mono); font-size: 14px; color: rgba(255,255,255,.62); letter-spacing: .4px; }
+  .title .mark b { color: #fff; font-weight: 600; }
+  .title .hash { width: 30px; height: 30px; border-radius: 8px; background: rgba(255,255,255,.12);
+                 display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 18px; }
+
+  /* the printer, waiting */
+  .printer { position: absolute; right: 104px; top: 50%; transform: translateY(-50%); width: 400px;
+             background: linear-gradient(180deg, #55555F, #3E3E47); border-radius: 22px; padding: 26px 26px 22px;
+             box-shadow: 0 30px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08); }
+  .printer .model { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; color: #C4C4CC; margin-bottom: 12px; }
+  .lcd { background: #18120A; border-radius: 10px; padding: 18px 20px; font-family: var(--mono);
+         color: #FFB224; box-shadow: inset 0 0 0 1px rgba(255,178,36,.18), inset 0 0 24px rgba(255,178,36,.08); }
+  .lcd .err { font-size: 17px; font-weight: 700; letter-spacing: 1px; }
+  .lcd .err .bang { display: inline-block; background: #FFB224; color: #18120A; border-radius: 4px; padding: 0 6px; margin-right: 8px; }
+  .lcd .ask { font-size: 15px; margin-top: 14px; opacity: .82; letter-spacing: .6px; }
+  .lcd .pin { font-size: 30px; margin-top: 8px; letter-spacing: 10px; color: #FFB224; }
+  .lcd .cur { display: inline-block; width: 17px; height: 26px; background: #FFB224; vertical-align: -4px; margin-right: 10px; }
+  .printer .keys { display: flex; gap: 12px; margin-top: 18px; align-items: center; }
+  .printer .key { width: 34px; height: 34px; border-radius: 50%; background: #34343A; box-shadow: inset 0 -2px 0 rgba(0,0,0,.35); }
+  .printer .key.red { background: #E5482F; }
+  .printer .led { margin-left: auto; width: 10px; height: 10px; border-radius: 50%; background: #FFB224; box-shadow: 0 0 10px #FFB224; }
+  .printer .tray { margin-top: 18px; height: 10px; border-radius: 3px; background: #121215; position: relative; overflow: visible; }
+  .printer .tray::after { content: ""; position: absolute; left: 70px; top: -14px; width: 120px; height: 26px; background: #F4F1EA;
+                          transform: rotate(-8deg); border-radius: 2px; box-shadow: 0 2px 6px rgba(0,0,0,.4); }
 </style>
 </head>
 <body>
+<div class="title" id="title">
+  <h1>It&rsquo;s Tuesday,<br><span class="time">9:07 AM.</span></h1>
+  <div class="beat">A jammed printer. Nobody knows the PIN.<br><span class="dim">The guy who did left five months ago.</span></div>
+  <div class="mark"><span class="hash">#</span><span><b>slack-mcp</b> · catch up on Slack without reading it</span></div>
+  <div class="printer" aria-hidden="true">
+    <div class="model">LASERJET · 3RD FLOOR</div>
+    <div class="lcd">
+      <div class="err"><span class="bang">!</span>PAPER JAM · TRAY 3</div>
+      <div class="ask">ENTER ADMIN PIN</div>
+      <div class="pin"><span class="cur" id="cur"></span>_ _ _</div>
+    </div>
+    <div class="keys"><span class="key"></span><span class="key"></span><span class="key red"></span><span class="led" id="led"></span></div>
+    <div class="tray"></div>
+  </div>
+</div>
 <div class="stage">
 
   <!-- ================= agent ================= -->
@@ -130,7 +183,7 @@
 
       <div class="r" id="m5">
         <p class="kicker">Five months. Three people. One printer.<br>The answer was there the whole time.</p>
-        <p class="quiet">Tape it to the printer.</p>
+        <p class="kicker" style="color:#2BB673">Tape it to the printer.</p>
       </div>
 
       <div class="tally r" id="m6">
@@ -142,7 +195,7 @@
   <!-- ================= workspace ================= -->
   <section class="slack">
     <div class="rail">
-      <div class="ws">Banjaxed Ltd.</div>
+      <div class="ws">Toner Deaf Ltd.</div>
       <div class="sec">Channels</div>
       <div class="ch"><span class="h">#</span>incidents</div>
       <div class="ch"><span class="h">#</span>engineering</div>
@@ -166,7 +219,7 @@
               Menu → Admin Settings → enter PIN to clear jams. Posting here so nobody has to ask again.</div>
             <div class="rx">0 reactions · 0 replies · seen by nobody, apparently</div>
           </div>
-          <div class="flag r" id="flag">the answer, all along</div>
+          
         </div>
 
         <div class="post r" id="p2">
@@ -187,10 +240,6 @@
           </div>
         </div>
 
-        <div class="verdict r" id="verdict">
-          <div class="big">Three people asked. Nobody searched.</div>
-          <div class="sm">The PIN sat in a three-person channel for five months, under a message that got no reactions at all.</div>
-        </div>
       </div>
     </div>
   </section>
@@ -203,27 +252,36 @@
   // byte-identical to the last one.
   const FADE = 340;
   const BEATS = [
-    { at: 300,   show: ['m1'] },
-    { at: 1500,  show: ['m2'] },
-    { at: 2600,  show: ['m3'] },
-    { at: 3300,  cls: [['chF', 'on']] },
-    { at: 4000,  show: ['p1'], cls: [['p1', 'hit']] },
-    { at: 4700,  show: ['flag'] },
-    { at: 5600,  show: ['p2'] },
-    { at: 6300,  show: ['p3'] },
-    { at: 7300,  show: ['m4'] },
-    { at: 8700,  show: ['verdict'], dim: ['p2', 'p3'] },
-    { at: 10000, show: ['m5'] },
-    { at: 11200, show: ['m6'] },
+    { at: 5100,  show: ['m1'] },
+    { at: 5700,  show: ['m2'] },
+    { at: 6200,  show: ['m3'] },
+    { at: 6500,  cls: [['chF', 'on']] },
+    { at: 6800,  show: ['p1'], cls: [['p1', 'hit']] },
+    { at: 7200,  show: ['m4'] },
+    { at: 7900,  show: ['p2'] },
+    { at: 8300,  show: ['p3'] },
+    { at: 9300,  show: ['m5'] },
+    { at: 10300, show: ['m6'] },
   ];
+  const CARD_HOLD = 5000, CARD_WIPE = 1;
   const $ = (id) => document.getElementById(id);
   const ease = (x) => 1 - Math.pow(1 - x, 3);
 
   window.__render = (t) => {
+    // The card is fully drawn at t = 0, so a still frame of this page — the
+    // first frame GitHub paints, or any screenshot — is the hook, not an empty pane.
+    const card = $('title');
+    const w = Math.max(0, Math.min(1, (t - CARD_HOLD) / CARD_WIPE));
+    card.style.opacity = String(1 - ease(w));
+    card.style.transform = `translateY(${-ease(w) * 18}px)`;
+    card.style.visibility = w >= 1 ? 'hidden' : 'visible';
+    const blink = Math.floor(t / 450) % 2 === 0 ? '1' : '0';
+    $('cur').style.opacity = blink;
+    $('led').style.opacity = blink === '1' ? '1' : '0.25';
     for (const b of BEATS) {
       const k = Math.max(0, Math.min(1, (t - b.at) / FADE));
       for (const id of b.show || []) {
-        const el = $(id);
+        const el = $(id); if (!el) continue;
         el.style.transition = 'none';
         el.style.opacity = String(ease(k));
         el.style.transform = `translateY(${(1 - ease(k)) * 6}px)`;
