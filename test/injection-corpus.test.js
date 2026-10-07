@@ -157,7 +157,12 @@ const { assembleCatchUp, resolveSince } = await import("../lib/catch-up.js");
 const FIXTURE_EPOCH = 1771000000;
 const NOW = new Date((FIXTURE_EPOCH + 3600) * 1000);
 
-async function readThroughCatchUp(fixture, { authorName = "Placeholder Author" } = {}) {
+// Production resolves this from auth.test. Overridable so the corpus can also
+// read a fixture with the identity MISSING, which is how the server behaves
+// when that call fails.
+const HOME_IDENTITY = Object.freeze({ homeTeamId: "T_HOME", selfUserId: "U_ME", workspaceUrl: null });
+
+async function readThroughCatchUp(fixture, { authorName = "Placeholder Author", identity = HOME_IDENTITY } = {}) {
   const msg = fixture.slack;
   const deps = {
     structuredKeys: ["summary"],
@@ -166,7 +171,7 @@ async function readThroughCatchUp(fixture, { authorName = "Placeholder Author" }
     // reports `unknown` — correct, but it tests nothing. The corpus exists to
     // check that a foreign team id and a bot marker are told apart from a
     // colleague, which needs a workspace to be foreign to.
-    getWorkspaceIdentity: async () => ({ homeTeamId: "T_HOME", selfUserId: "U_ME", workspaceUrl: null }),
+    getWorkspaceIdentity: async () => identity,
     slackAPI: async (method) => {
       if (method === "conversations.list") {
         return { channels: [{ id: "C_FIXTURE", name: "fixture", unread_count: 1 }] };
@@ -439,5 +444,85 @@ test("the corpus runs against a real classifier, not against its absence", async
   assert.ok("origin" in out, "the read path must stamp every message");
   assert.equal(out.origin, MESSAGE_ORIGINS.EXTERNAL);
   assert.equal(out.author_trusted, false);
+});
+
+// ------------------------------------------------- the classifier's own inputs
+//
+// The three tests below are about the inputs the classifier depends on rather
+// than the message content. They are where a labelling scheme actually fails:
+// not by mislabelling a payload, but by losing the reference it needs to label
+// anything, or by two read paths holding different references.
+
+test("fails closed: with no workspace identity, no author is placed and none is trusted", async () => {
+  // auth.test can fail, and a browser session can be pointed at a workspace
+  // other than the one it was minted for. When the server cannot say which
+  // workspace is home, the honest answer is that it cannot place anyone. The
+  // direction of that failure is the whole safety property, so it is asserted
+  // rather than assumed: a false untrusted is a label, a false trusted is an
+  // injection path.
+  for (const id of ["connect-outside-team", "bidi-override", "zero-width-split"]) {
+    const out = await readThroughCatchUp(byId(id), {
+      identity: { homeTeamId: null, selfUserId: null, workspaceUrl: null },
+    });
+    assert.equal(out.origin, "unknown", `${id}: an unplaceable author is unknown`);
+    assert.equal(out.author_trusted, false, `${id}: unknown must never be trusted`);
+  }
+});
+
+test("the two read paths hold different references, so the same message labels differently", async () => {
+  // classifyMessageOrigin treats a message with a user, no `team`, and a
+  // conversation known NOT to be externally shared as internal. That is a
+  // documented, measured tradeoff: Slack omits `team` for same-workspace
+  // authors, so without it more than half an ordinary channel reads as
+  // unplaceable. lib/handlers.js resolves that sharing state and passes it;
+  // lib/catch-up.js does not.
+  const { classifyMessageOrigin } = await import("../lib/message-provenance.js");
+  const home = { homeTeamId: "T_HOME", selfUserId: "U_ME" };
+  const teamless = { user: "U_COLLEAGUE", text: "ordinary internal message" };
+
+  assert.equal(classifyMessageOrigin(teamless, { ...home, conversationExternallyShared: false }),
+    "internal", "the history path can place a teamless author in a channel it knows is unshared");
+  assert.equal(classifyMessageOrigin(teamless, home),
+    "unknown", "the catch-up path, passing no sharing state, cannot place the same message");
+
+  // Not a hole: catch-up errs strict, and strict is the safe direction. It is
+  // an asymmetry worth recording, because a caller comparing untrusted counts
+  // between slack_catch_me_up and slack_conversations_history is comparing two
+  // different scales, not two readings of the same workspace.
+  const source = readFileSync(join(HERE, "..", "lib", "catch-up.js"), "utf-8");
+  assert.ok(!source.includes("conversationExternallyShared"),
+    "if catch-up starts passing the sharing state this asymmetry is closed, and this test should go with it");
+});
+
+test("a foreign team id alone cannot place an author, and the sharing state is what holds the line", async () => {
+  // `external` requires BOTH msg.team and homeTeamId, because it is a
+  // comparison. With homeTeamId null the comparison is skipped, and a message
+  // that carries a visibly foreign team id falls through to the teamless
+  // branch — where the sharing state is the only thing left deciding.
+  const { classifyMessageOrigin } = await import("../lib/message-provenance.js");
+  const outsider = { user: "U_OUTSIDE", team: "T_OUTSIDE" };
+  const noIdentity = { homeTeamId: null, selfUserId: null };
+
+  assert.equal(classifyMessageOrigin(outsider, noIdentity), "unknown",
+    "no home id and no sharing answer: unplaceable, which is untrusted");
+  assert.equal(classifyMessageOrigin(outsider, { ...noIdentity, conversationExternallyShared: true }),
+    "unknown", "a shared channel never short-circuits to internal");
+
+  // The one combination that produces a trusted label for a message carrying a
+  // foreign team id: identity lookup failed AND the channel is reported
+  // unshared. Slack should not place a foreign team in an unshared channel, so
+  // this is narrow rather than live — but it is the input set to re-check if
+  // the teamless branch is ever widened, and `null` (lookup failed) must keep
+  // falling through to unknown rather than joining the `false` case.
+  assert.equal(
+    classifyMessageOrigin(outsider, { ...noIdentity, conversationExternallyShared: false }),
+    "internal",
+    "recorded as measured, not endorsed: see docs/INJECTION-CORPUS.md"
+  );
+  assert.equal(
+    classifyMessageOrigin(outsider, { ...noIdentity, conversationExternallyShared: null }),
+    "unknown",
+    "a failed sharing lookup must not be read as 'not shared'"
+  );
 });
 
