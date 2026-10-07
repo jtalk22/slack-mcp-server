@@ -7,7 +7,7 @@
   The README hero, recorded frame by frame by scripts/record-hero.mjs.
   window.__render(t) draws the exact frame for timestamp t (ms), so a recording
   is reproducible and an unchanged frame is byte-identical to the one before it.
-  ?theme=dark draws the twin for GitHub's dark mode. Staged data only.
+  One purple field that reads in both GitHub themes. Staged data only.
 -->
 <style>
   /* Open-licence stand-ins. The recording sets Söhne and GT America Mono from
@@ -18,77 +18,47 @@
   @font-face { font-family: "Mono"; font-weight: 100 800; src: url("fonts/JetBrainsMono.woff2") format("woff2"); }
 
   :root {
-    --aubergine: #4A154B; --lilac: #E8D5E9; --band: #EAD9EC; --tape: #FFFFFF; --tape-edge: #D9C2DC;
-    --pane: #36103A; --ink: #FFFFFF; --meta: #CDB2CF; --rule: rgba(255,255,255,.16); --link: #D7B8D9;
-    --divider-bg: #36103A; --divider-line: rgba(255,255,255,.32);
-    --strip: #F6F8FA; --strip-ink: #1F2328;
-  }
-  html[data-theme="dark"] {
-    --pane: #36103A; --ink: #FFFFFF; --meta: #CDB2CF; --rule: rgba(255,255,255,.16); --link: #D7B8D9;
-    --divider-bg: #36103A; --divider-line: rgba(255,255,255,.32);
-    --strip: #151B23; --strip-ink: #F0F6FC;
+    --field: #4A154B; --pane: #36103A; --lilac: #E8D5E9; --meta: #CDB2CF; --white: #FFFFFF;
+    --rule: rgba(255,255,255,.16); --pill: #D7B8D9;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--aubergine); }
-  body { font-family: "Text", sans-serif; position: relative; -webkit-font-smoothing: antialiased; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; background: var(--field); }
+  body { font-family: "Text", sans-serif; position: relative; -webkit-font-smoothing: antialiased; color: var(--white); }
   .mono { font-family: "Mono", monospace; }
   html.estate body { font-family: "Text Estate", sans-serif; }
-  html.estate .mono, html.estate .strip { font-family: "Mono Estate", monospace; }
+  html.estate .mono { font-family: "Mono Estate", monospace; }
 
-  /* ---------- left: what you asked, on aubergine ---------- */
-  .left { position: absolute; left: 0; top: 0; width: 600px; height: 648px; background: var(--aubergine); overflow: hidden; }
-  #story { position: absolute; left: 56px; top: 76px; width: 500px; transform-origin: 0 0; }
-  #headline { position: absolute; left: 0; top: 0; font-weight: 900; font-size: 72px; line-height: 76px; color: #fff; letter-spacing: -1.5px; }
-  #setup { position: absolute; left: 0; top: 178px; white-space: nowrap; font-size: 44px; line-height: 54px; color: var(--lilac); }
-
-  #chip { position: absolute; left: 56px; top: 506px; width: 488px; height: 128px; z-index: 3; }
-  #chip .bg { position: absolute; inset: 0; background: #fff; border-radius: 14px; }
-  #chip .tool { position: absolute; left: 24px; top: 20px; font-weight: 700; font-size: 32px; line-height: 40px; color: var(--aubergine); }
-  #chip .q { position: absolute; left: 24px; top: 68px; font-size: 32px; line-height: 40px; color: var(--aubergine); }
-  #chip .pin { position: absolute; left: 20px; top: 52px; font-weight: 800; font-size: 120px; line-height: 140px; color: var(--aubergine); letter-spacing: 4px; }
-  .tapes { position: absolute; left: 20px; top: 74px; width: 300px; height: 140px; }
-  .tape { position: absolute; width: 90px; height: 34px; background: var(--tape); box-shadow: 0 0 0 2px var(--tape-edge); }
-  #tape1 { left: -26px; top: 6px; transform: rotate(-30deg); }
-  #tape2 { left: 236px; top: 6px; transform: rotate(30deg); }
-
-  #tri { position: absolute; left: 56px; top: 12px; font-weight: 900; font-size: 60px; line-height: 62px; color: #fff; letter-spacing: -.5px; }
-  #tape-line { position: absolute; left: 56px; top: 528px; font-weight: 700; font-size: 44px; color: #FFFFFF; }
-
-  /* ---------- the band: the answer and its source on one line ---------- */
-  #band { position: absolute; left: 0; top: 210px; width: 1280px; height: 304px; background: var(--band); z-index: 1; }
+  /* ---------- left: what you asked, and what the agent answered ---------- */
+  #story { position: absolute; left: 56px; top: 56px; width: 500px; }
+  #headline { font-weight: 900; font-size: 72px; line-height: 76px; letter-spacing: -1.5px; }
+  #setup { position: absolute; left: 0; top: 176px; font-size: 40px; line-height: 50px; color: var(--lilac); white-space: nowrap; }
+  #chip { position: absolute; left: 0; top: 176px; width: 488px; background: var(--white); border-radius: 14px; padding: 18px 24px; color: var(--field); }
+  #chip .tool { font-weight: 700; font-size: 30px; line-height: 38px; }
+  #chip .q { font-size: 30px; line-height: 38px; }
+  #found { position: absolute; left: 0; top: 302px; font-size: 40px; line-height: 48px; }
+  #found b { font-weight: 900; }
+  #detail { position: absolute; left: 0; top: 354px; font-size: 27px; line-height: 35px; color: var(--meta); white-space: nowrap; }
+  #payoff { position: absolute; left: 0; top: 432px; font-size: 38px; line-height: 46px; font-weight: 900; }
+  #tape { position: absolute; left: 0; top: 530px; font-size: 32px; line-height: 40px; color: var(--lilac); }
 
   /* ---------- right: the workspace ---------- */
-  .right-bg { position: absolute; left: 600px; top: 0; width: 680px; height: 630px; background: var(--pane); }
-  .right { position: absolute; left: 600px; top: 0; width: 680px; height: 630px; overflow: hidden; z-index: 2; }
-  .hd { position: absolute; left: 0; top: 0; width: 680px; height: 64px; background: var(--pane); border-bottom: 2px solid var(--rule);
-        padding: 0 32px; display: flex; align-items: center; font-weight: 700; font-size: 32px; color: var(--ink); z-index: 4; }
-  #col { position: absolute; left: 0; top: 0; width: 680px; z-index: 2; }
-  .divider { height: 70px; position: relative; }
-  .divider::before { content: ""; position: absolute; left: 32px; right: 32px; top: 35px; border-top: 2px solid var(--divider-line); }
-  .divider span { position: absolute; left: 50%; top: 11px; transform: translateX(-50%); height: 48px; padding: 0 22px; border: 2px solid var(--divider-line);
-                  border-radius: 24px; background: var(--divider-bg); font-weight: 700; font-size: 28px; line-height: 44px; color: var(--ink); white-space: nowrap; }
-  .post { display: flex; gap: 22px; padding: 22px 32px 0; }
-  .post.dave { height: 300px; } .post.priya { height: 296px; } .post.marcus { height: 240px; }
-  .av { width: 64px; height: 64px; border-radius: 10px; flex: none; color: #fff; font-weight: 900; font-size: 26px; display: flex; align-items: center; justify-content: center; }
-  .nm { font-weight: 700; font-size: 36px; line-height: 44px; color: var(--ink); white-space: nowrap; }
-  .nm span { font-weight: 400; font-size: 28px; color: var(--meta); margin-left: 12px; }
-  .tx { font-size: 40px; line-height: 52px; color: var(--ink); margin-top: 2px; }
-  .tx b { font-weight: 900; }
-  .pill { display: inline-flex; align-items: center; height: 56px; padding: 0 24px; border: 3px solid var(--link); border-radius: 28px;
-          font-weight: 900; font-size: 40px; color: var(--link); margin-top: 12px; }
-  /* once the band reaches Dave's post it reads dark-on-lilac in either theme;
-     before that it is an ordinary post on the pane */
-  .dave.on-band .nm, .dave.on-band .tx { color: #1D1C1D; } .dave.on-band .nm span { color: #4E4452; }
-  .dave.on-band .pill { border-color: var(--aubergine); color: var(--aubergine); }
-  .dave.on-band .av { background: #4A154B !important; color: #FFFFFF !important; }
-
-  /* ---------- the hand-off strip: your command line ---------- */
-  .strip { position: absolute; left: 0; top: 648px; width: 1280px; height: 72px; background: var(--strip); display: flex; align-items: center;
-           padding: 0 24px; font-family: "Mono", monospace; font-size: 30px; color: var(--strip-ink); z-index: 5; }
-  .strip .prompt { color: var(--strip-ink); font-weight: 700; }
-  #cur { display: inline-block; width: 18px; height: 34px; background: var(--strip-ink); margin-left: 14px; }
-  .mark { margin-left: auto; display: flex; align-items: center; gap: 14px; font-weight: 500; font-size: 28px; }
-  .sq { width: 40px; height: 40px; border-radius: 9px; background: var(--aubergine); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 26px; }
+  .right { position: absolute; left: 600px; top: 0; width: 680px; height: 640px; overflow: hidden; background: var(--pane); }
+  .hd { position: absolute; left: 0; top: 0; width: 680px; height: 62px; background: var(--pane); border-bottom: 2px solid var(--rule);
+        padding: 0 32px; display: flex; align-items: center; font-weight: 700; font-size: 30px; z-index: 2; }
+  #col { position: absolute; left: 0; top: 0; width: 680px; }
+  .divider { height: 64px; position: relative; }
+  .divider::before { content: ""; position: absolute; left: 32px; right: 32px; top: 32px; border-top: 2px solid var(--rule); }
+  .divider span { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); height: 44px; padding: 0 20px; border: 2px solid var(--rule);
+                  border-radius: 22px; background: var(--pane); font-weight: 700; font-size: 25px; line-height: 40px; color: var(--meta); white-space: nowrap; }
+  .post { display: flex; gap: 20px; padding: 20px 32px 18px; border-left: 6px solid transparent; }
+  .post.hit { background: rgba(232,213,233,.12); border-left-color: var(--lilac); }
+  .av { width: 56px; height: 56px; border-radius: 10px; flex: none; color: #fff; font-weight: 900; font-size: 23px; display: flex; align-items: center; justify-content: center; }
+  .nm { font-weight: 700; font-size: 32px; line-height: 40px; white-space: nowrap; }
+  .nm span { font-weight: 400; font-size: 24px; color: var(--meta); margin-left: 10px; }
+  .tx { font-size: 36px; line-height: 46px; color: #F3EAF4; margin-top: 2px; }
+  .tx b { font-weight: 900; color: var(--white); }
+  .pill { display: inline-flex; align-items: center; height: 48px; padding: 0 20px; border: 3px solid var(--pill); border-radius: 24px;
+          font-weight: 700; font-size: 30px; color: var(--pill); margin-top: 10px; }
 </style>
 <script>
   // ?fonts=<file URL of the type estate> sets the recording faces: Söhne for text,
@@ -122,28 +92,14 @@
 </script>
 </head>
 <body>
-<div class="left">
-  <div id="tri"><div id="tri1">Five months.</div><div id="tri2">Three people.</div><div id="tri3">One printer.</div></div>
-  <div id="tape-line">Tape it to the printer.</div>
-</div>
-
 <div id="story">
   <div id="headline">It’s Tuesday,<br>9:07 AM.</div>
   <div id="setup">A jammed printer.<br>Nobody knows the PIN.<br>The guy who did left<br>five months ago.</div>
-</div>
-
-<div class="right-bg"></div>
-
-<div id="band"></div>
-
-<div class="left" style="background:transparent;z-index:3;pointer-events:none">
-  <div id="chip">
-    <div class="bg" id="chipbg"></div>
-    <div class="tool mono">slack_search_messages</div>
-    <div class="q mono" id="q">"printer admin PIN"</div>
-    <div class="pin mono" id="pin">4729</div>
-    <div class="tapes"><div class="tape" id="tape1"></div><div class="tape" id="tape2"></div></div>
-  </div>
+  <div id="chip"><div class="tool mono">slack_search_messages</div><div class="q mono">"printer admin PIN"</div></div>
+  <div id="found">Found it: <b>4729</b>.</div>
+  <div id="detail">Dave in IT, #facilities, 12 October.<br>Zero reactions. Nobody searched.</div>
+  <div id="payoff">Five months. Three people. One printer.</div>
+  <div id="tape">Tape it to the printer.</div>
 </div>
 
 <div class="right">
@@ -152,7 +108,7 @@
     <div class="divider"><span>12 October · #facilities</span></div>
     <div class="post dave" id="dave"><div class="av" style="background:#E8D5E9;color:#4A154B">DC</div><div>
       <div class="nm">Dave Chen<span>IT · 12 Oct</span></div>
-      <div class="tx">The 3rd floor printer PIN is <b>4729</b>. Posting here so nobody has to ask again.</div>
+      <div class="tx">The 3rd floor printer PIN is <b>4729</b>. Posting here so nobody has to ask&nbsp;again.</div>
       <div class="pill">0 reactions</div></div></div>
     <div class="post priya" id="priya"><div class="av" style="background:#9B4F96">PS</div><div>
       <div class="nm">Priya Sharma<span>#general · 3 months ago</span></div>
@@ -165,62 +121,42 @@
   </div>
 </div>
 
-<div class="strip"><span class="prompt">$</span><span id="cur"></span><div class="mark">slack-mcp<div class="sq">#</div></div></div>
-
 <script>
-  if (new URLSearchParams(location.search).get("theme") === "dark") document.documentElement.dataset.theme = "dark";
-
   const $ = (id) => document.getElementById(id);
   const clamp = (x) => Math.max(0, Math.min(1, x));
   const prog = (t, a, b) => clamp((t - a) / (b - a));
   const ease = (x) => 1 - Math.pow(1 - x, 3);
 
-  // The column's top before and after the scroll back in time: Priya under the
-  // header at first, then Dave's post exactly inside the band (top 210 = 140 + 70).
-  // Dave stays hidden until the scroll starts, so nothing of him shows under the header.
-  const COL_FROM = 84 - 70 - 300, COL_TO = 140;
-  // The chip rises out of the command line, then climbs into the band.
-  const CHIP_TOP = 506, CHIP_BAND_TOP = 222;
+  // The column's top before and after the scroll back in time: Priya and Marcus
+  // under the header at first, then Dave's post, with its date divider, at the top.
+  const DAVE_H = 300, DIV_H = 64;
+  // at the open the two asks sit centred in the pane; the scroll brings Dave to the top
+  const COL_FROM = 62 + 54 - DIV_H - DAVE_H, COL_TO = 62;
 
   window.__render = (t) => {
-    // frame one is complete at t = 0: the joke, two unanswered asks, a waiting prompt
-    // frame one: one purple field, the headline alone. Then the workspace slides in
-    // from the right and the story settles into the left column.
+    // frame one: the headline alone on the field. The workspace slides in beside
+    // it and the story settles into the left column.
     const arrive = ease(prog(t, 2300, 2900));
-    const k = 1.38 - 0.38 * arrive;
-    $("story").style.transform = `translate(${(300 - 56) * (1 - arrive)}px, ${(52 - 76) * (1 - arrive)}px) scale(${k})`;
-    for (const el of document.querySelectorAll(".right, .right-bg")) el.style.transform = `translateX(${(1 - arrive) * 700}px)`;
-    const setupOut = 1 - prog(t, 4700, 5050);
-    $("story").style.opacity = String(setupOut);
+    $("story").style.transform = `translateX(${(1 - arrive) * 340}px)`;
+    document.querySelector(".right").style.transform = `translateX(${(1 - arrive) * 700}px)`;
 
-    const rise = ease(prog(t, 3600, 3850));
-    const climb = ease(prog(t, 4700, 5050));
-    const jolt = (t >= 8300 && t < 8420) || (t >= 8600 && t < 8720) ? 3 : 0;
-    $("chip").style.opacity = t < 3600 ? "0" : String(Math.min(1, rise * 1.4));
-    $("chip").style.transform = `translateY(${(1 - rise) * 140 + (CHIP_BAND_TOP - CHIP_TOP) * climb + jolt}px)`;
+    // the setup lines make way for the search
+    $("setup").style.opacity = String(1 - prog(t, 3400, 3700));
+    $("chip").style.opacity = String(prog(t, 3700, 3950));
 
-    const wipe = ease(prog(t, 5100, 5400));
-    $("band").style.clipPath = `inset(0 ${(1 - wipe) * 100}% 0 0)`;
-    $("band").style.transform = `translateY(${jolt}px)`;
-    $("chipbg").style.opacity = String(1 - prog(t, 5100, 5300));
-    $("q").style.opacity = String(1 - prog(t, 5100, 5250));
-    $("pin").style.opacity = String(prog(t, 5200, 5400));
+    // the workspace scrolls back five months; the hit lights up
+    $("dave").style.opacity = t < 4200 ? "0" : "1";
+    $("col").style.top = `${COL_FROM + (COL_TO - COL_FROM) * ease(prog(t, 4300, 4900))}px`;
+    $("dave").classList.toggle("hit", t >= 5000);
+    $("priya").style.opacity = String(1 - 0.55 * prog(t, 4900, 5200));
 
-    $("dave").style.opacity = t < 4000 ? "0" : "1";
-    $("dave").classList.toggle("on-band", wipe >= 0.5);
-    $("col").style.top = `${COL_FROM + (COL_TO - COL_FROM) * ease(prog(t, 4000, 4600))}px`;
-    $("priya").style.opacity = String(1 - 0.62 * prog(t, 4600, 4900));
-
-    $("tri1").style.opacity = String(prog(t, 6200, 6350));
-    $("tri2").style.opacity = String(prog(t, 6550, 6700));
-    $("tri3").style.opacity = String(prog(t, 6900, 7050));
-    $("tape-line").style.opacity = String(prog(t, 7700, 7850));
-    $("tape1").style.opacity = t >= 8300 ? "1" : "0";
-    $("tape2").style.opacity = t >= 8600 ? "1" : "0";
-
-    $("cur").style.opacity = Math.floor(t / 450) % 2 === 0 ? "1" : "0";
+    // the agent answers in words
+    $("found").style.opacity = String(prog(t, 5400, 5650));
+    $("detail").style.opacity = String(prog(t, 5900, 6150));
+    $("payoff").style.opacity = String(prog(t, 7200, 7450));
+    $("tape").style.opacity = String(prog(t, 8200, 8450));
   };
-  window.__render(window.__capture ? 0 : 0);
+  window.__render(0);
   if (!window.__capture) {
     const start = performance.now(), LOOP = 14500;
     const tick = () => { window.__render((performance.now() - start) % LOOP); requestAnimationFrame(tick); };

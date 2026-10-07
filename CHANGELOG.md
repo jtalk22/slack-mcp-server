@@ -248,16 +248,17 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
   because Node 20 bundles npm 10, which has no OIDC support; the job runs on
   Node 24. `NPM_SECRET_TOKEN` is retired.
 - **The README moves again.** The hero opens on the joke — It's Tuesday, 9:07 AM, a jammed
-  printer, the PIN nobody knows — beside two people who asked and got zero replies. One search
-  scrolls five months back to the post that had it all along, and a lilac band joins the PIN to
-  its source. It is a GIF because GitHub plays a GIF inline and shows an MP4 as a still you have to
-  click; a dark-mode twin follows the reader's theme through `<picture>`. Both are drawn by
-  `docs/assets/hero-v2.html` and recorded frame by frame by `scripts/record-hero.mjs`, so a
+  printer, the PIN nobody knows — and the workspace slides in beside it: two people who asked and
+  got zero replies. One search scrolls five months back and lights up the post that had it all
+  along, and the agent answers in words. It is a GIF because GitHub plays a GIF inline and shows
+  an MP4 as a still you have to click; one purple field reads in both GitHub themes. It is drawn
+  by `docs/assets/hero-v2.html` and recorded frame by frame by `scripts/record-hero.mjs`, so a
   re-record is byte-identical. It is set in Söhne and GT America Mono, read from the maintainer's
-  own type library at record time; the GIF carries the pixels and the repository never carries the
-  font files. Open-licence stand-ins in `docs/assets/fonts/` draw it for anyone else. The commands — set up, check your setup, read-only — sit directly under it,
-  and a short "New in 5.1" leads the page. The original mark is back, the badges are two deliberate
-  rows, and two diagrams fill the page: the trust boundary, and the schema cost per tool profile.
+  own type library at record time; the GIF carries the pixels and the repository never carries
+  the font files. Open-licence stand-ins in `docs/assets/fonts/` draw it for anyone else. The
+  commands — set up, register, check your setup, read-only — sit directly under it in a real code
+  block. The original mark is back, the badges carry one colour, and two diagrams fill the page:
+  the trust boundary, and the schema cost per tool profile.
 - **"Stealth" is back in the vocabulary**, and the claims that rode along with it are not.
   `check-public-language.sh` no longer blocks the word and now blocks "no audit trail",
   "invisible to admins" and "zero footprint" — the session is the user's own, so a workspace sees

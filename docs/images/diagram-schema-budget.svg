@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440" width="1280" height="440"
      role="img" aria-labelledby="sb-title sb-desc">
-  <title id="sb-title">What the tool list costs before you type anything</title>
-  <desc id="sb-desc">Estimated schema tokens per turn for each tool profile, measured on 2026-10-07. Essentials advertises 6 tools at about 1,474 estimated tokens, 37 percent of the full surface. Read advertises 13 tools at about 2,359, 59 percent. All advertises 20 tools at about 4,008 tokens, the full 100 percent. Narrowing the profile changes what is advertised, not what the server can do. Figures are a four-characters-per-token estimate, reproducible with node scripts slash measure-tool-schema.js.</desc>
+  <title id="sb-title">What each tool profile costs per turn</title>
+  <desc id="sb-desc">Estimated schema tokens the model receives per turn for each tool profile, measured on 2026-10-07. Essentials advertises 6 tools at about 1,474 estimated tokens, 37 percent of the full surface. Read advertises 13 tools at about 2,359, 59 percent. All advertises 20 tools at about 4,008 tokens, the full 100 percent. Narrowing the profile changes what is advertised, not what the server can do. Figures are a four-characters-per-token estimate, reproducible with node scripts slash measure-tool-schema.js.</desc>
 
   <defs>
     <style>
@@ -19,9 +19,9 @@
       .t-mark  { font: 600 12.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.5px; }
 
       /* One hue, three steps, light to dark: this is magnitude, not identity. */
-      .bar-1 { fill: #86C8A1; }
-      .bar-2 { fill: #3E9B65; }
-      .bar-3 { fill: #15803D; }
+      .bar-1 { fill: #D7B8D9; }
+      .bar-2 { fill: #9B4F96; }
+      .bar-3 { fill: #4A154B; }
       .rail  { fill: #ECECEA; }
       .rule  { stroke: #E3E4E9; stroke-width: 1.25; }
     </style>
@@ -29,8 +29,8 @@
 
   <rect class="ground" width="1280" height="440"/>
 
-  <text class="t-title ink" x="56" y="56">What the tool list costs before you type anything</text>
-  <text class="t-lede muted" x="56" y="84">Every advertised tool ships its JSON schema on every turn. Narrowing the profile changes what is advertised, not what the server can do.</text>
+  <text class="t-title ink" x="56" y="56">What each tool profile costs per turn</text>
+  <text class="t-lede muted" x="56" y="84">Every advertised tool sends its JSON schema to the model on every turn. A narrower profile changes what is advertised, not what the server can do.</text>
 
   <!-- essentials -->
   <text class="t-name ink" x="56" y="152">essentials</text>
@@ -54,7 +54,7 @@
   <rect class="rail" x="240" y="292" width="860" height="30" rx="4"/>
   <rect class="bar-3" x="240" y="292" width="860" height="30" rx="4"/>
   <text class="t-val ink" x="1120" y="315">4,008</text>
-  <text class="t-unit" x="1080" y="314" text-anchor="end" fill="#FFFFFF" fill-opacity="0.85">100%</text>
+  <text class="t-unit" x="1080" y="314" text-anchor="end" fill="#FFFFFF">100%</text>
 
   <text class="t-mark muted" x="240" y="368">ESTIMATED SCHEMA TOKENS PER TURN</text>
 

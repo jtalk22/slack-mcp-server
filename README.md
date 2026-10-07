@@ -1,26 +1,18 @@
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![downloads per year](https://img.shields.io/npm/dy/%40jtalk22%2Fslack-mcp?style=flat-square&logo=npm&logoColor=white&label=downloads&labelColor=0b0b0c&color=ffb224)](https://npm-stat.com/charts.html?package=%40jtalk22%2Fslack-mcp)&nbsp;[![weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![Node](https://img.shields.io/node/v/%40jtalk22%2Fslack-mcp?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=0b0b0c&color=28c840)](https://nodejs.org)&nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-e5482f?style=flat-square&labelColor=0b0b0c)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=1D1C1D&color=4A154B)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![downloads per year](https://img.shields.io/npm/dy/%40jtalk22%2Fslack-mcp?style=flat-square&logo=npm&logoColor=white&label=downloads&labelColor=1D1C1D&color=4A154B)](https://npm-stat.com/charts.html?package=%40jtalk22%2Fslack-mcp)&nbsp;[![weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly&labelColor=1D1C1D&color=4A154B)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![Node](https://img.shields.io/node/v/%40jtalk22%2Fslack-mcp?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=1D1C1D&color=4A154B)](https://nodejs.org)&nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-4A154B?style=flat-square&labelColor=1D1C1D)](LICENSE)
 
-[![Docker image](https://img.shields.io/badge/ghcr.io-published-2496ed?style=flat-square&logo=docker&logoColor=white&labelColor=0b0b0c)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c&color=28c840)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-28c840?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)
+[![Docker image](https://img.shields.io/badge/ghcr.io-published-4A154B?style=flat-square&logo=docker&logoColor=white&labelColor=1D1C1D)](https://github.com/jtalk22/slack-mcp-server/pkgs/container/slack-mcp-server)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-4A154B?style=flat-square&labelColor=1D1C1D)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=1D1C1D)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-4A154B?style=flat-square&labelColor=1D1C1D)](#provenance-dont-take-my-word-for-it)
 
 <img src="docs/assets/icon.svg" width="88" alt="Slack MCP channel mark">
 
 <h1>Slack MCP Server</h1>
 
-<p><strong>Catch up on Slack without reading it.</strong></p>
+<h3>Catch up on Slack without reading it.</h3>
 
 <p>Unreads, threads, and search — in your agent’s context, from the session you already have.</p>
 
-<p><kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd> <kbd>any stdio MCP client</kbd></p>
-
-<p><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/hero-v2-dark.gif">
-    <source media="(prefers-color-scheme: light)" srcset="docs/images/hero-v2-light.gif">
-    <img src="docs/images/hero-v2-light.gif" alt="On purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. The workspace slides in beside it: two people asked the same question and got zero replies. One search, slack_search_messages, scrolls five months back to Dave’s post in #facilities from 12 October, and a lilac band joins the PIN, 4729, on the left to his message on the right. Zero reactions. Five months. Three people. One printer. Tape it to the printer.">
-  </picture>
-</a></p>
+<p><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html"><img src="docs/images/hero-v2.gif" width="720" alt="On purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. The workspace slides in beside it: two people asked the same question and got zero replies. One search, slack_search_messages, scrolls five months back and lights up Dave’s post in #facilities from 12 October, zero reactions. The agent answers: found it, 4729. Five months, three people, one printer. Tape it to the printer."></a></p>
 
 </div>
 
@@ -31,18 +23,9 @@ npx -y @jtalk22/slack-mcp --doctor --security       # check your own setup
 npx -y @jtalk22/slack-mcp --read-only               # read Slack, never write to it
 ```
 
-<p align="center"><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ The whole morning in three minutes</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
+<p align="center"><kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd> <kbd>any stdio MCP client</kbd></p>
 
----
-
-## New in 5.1
-
-- **Catch-up sees mentions and thread replies.** It reads the counts Slack’s own sidebar uses. On a real workspace that moved the answer from zero conversations to seven, with ten mentions waiting.
-- **Commitments, owner gaps and open questions — free and local.** `slack_catch_me_up` returns who said they would do what, the requests nobody answered and the questions left open, each with the text that matched and a link to the message.
-- **Every message says who wrote it.** `self`, `internal`, `external` or `bot`, so text written outside your workspace reaches the model labelled. An author the server cannot place says `unknown` rather than guessing.
-- **`--read-only`.** The write tools are never registered, and a call to one is refused. The one guarantee that does not depend on the model behaving.
-- **`--doctor --security`.** Six checks of your own setup — whether the token sits in your Keychain or in a plaintext file, that file's permissions, the credential's age, whether the write tools are registered — each with the one command that tightens it.
-- **No stored token on our side.** Your Slack session is decrypted on your Mac — Chrome's own Safe Storage key, from your Keychain — and goes nowhere but Slack. We never see it, and `keychain-only` storage keeps it off your disk too. `slack_session_report` counts what this process read and tried to send — never the text.
+<p align="center"><a href="CHANGELOG.md#510---2026-10-07"><strong>What’s new in 5.1</strong></a> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ the whole morning in three minutes</a> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
 
 ---
 
@@ -152,6 +135,8 @@ The local surface ships **20 tools** today: **13 read-only** operations, **4 wri
 Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-negotiated over stdio, stateless per request over HTTP (no `Mcp-Session-Id`; `GET`/`DELETE` answer 405). The claim is a test, not a sentence: [`test/mcp-era.test.js`](test/mcp-era.test.js) drives the real SDK client at both eras against the real entry points.
 
 <p align="center">
+Every tool the server advertises costs the model context on every turn, before you ask anything. Three profiles trade reach for room:
+
   <img src="docs/images/diagram-schema-budget.svg" width="900" alt="Estimated schema tokens per turn by profile: essentials 6 tools at about 1,474 tokens or 37 percent, read 13 tools at about 2,359 or 59 percent, all 20 tools at about 4,008 or 100 percent">
 </p>
 

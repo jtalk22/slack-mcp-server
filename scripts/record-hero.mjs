@@ -2,8 +2,7 @@
 /**
  * Re-record the README hero from its source, frame by frame.
  *
- *   node scripts/record-hero.mjs                 # both themes
- *   node scripts/record-hero.mjs dark            # one
+ *   node scripts/record-hero.mjs
  *   node scripts/record-hero.mjs --open-fonts    # without the type estate
  *
  * docs/assets/hero-v2.html renders an exact frame for any timestamp
@@ -11,15 +10,14 @@
  * byte-identical to the last — which is what keeps a 14-second GIF small instead
  * of the several MB a browser screen recording produces from codec noise.
  *
- * The README shows the light file to light-mode readers and the dark twin to
- * dark-mode readers through <picture>. The type is Söhne and GT America Mono from
+ * The type is Söhne and GT America Mono from
  * the maintainer's type estate, read from HERO_FONTS_DIR (default: the OneDrive
  * fonts folder) and never committed; the GIF carries the pixels. Without the
  * estate the recording stops, unless --open-fonts asks for the vendored
  * open-licence stand-ins in docs/assets/fonts.
  *
  * Needs playwright (a devDependency) and ffmpeg on PATH. Writes
- * docs/images/hero-v2-<theme>.gif; run `npm run build:media-manifest` after.
+ * docs/images/hero-v2.gif; run `npm run build:media-manifest` after.
  */
 import { chromium } from "playwright";
 import { execFileSync } from "node:child_process";
@@ -32,7 +30,7 @@ const ROOT = resolve(new URL("..", import.meta.url).pathname);
 const SOURCE = join(ROOT, "docs/assets/hero-v2.html");
 const args = process.argv.slice(2);
 const OPEN_FONTS = args.includes("--open-fonts");
-const THEMES = args.filter((a) => !a.startsWith("--")).length ? args.filter((a) => !a.startsWith("--")) : ["light", "dark"];
+const THEMES = ["one"];   // one purple field reads in both GitHub themes
 const FONTS_DIR = process.env.HERO_FONTS_DIR || join(homedir(), "Library/CloudStorage/OneDrive-Personal/fonts");
 if (!OPEN_FONTS && !existsSync(join(FONTS_DIR, "Söhne", "web"))) {
   console.error(`The type estate is not at ${FONTS_DIR}. Set HERO_FONTS_DIR, or pass --open-fonts to record with the stand-ins.`);
@@ -45,13 +43,13 @@ const SCALE = 2;          // capture at 2x so text stays sharp on high-density s
 const WIDTH = 1600;       // GitHub shows the hero at 900 CSS px, i.e. 1800 device px on Retina
 
 for (const theme of THEMES) {
-  const out = join(ROOT, `docs/images/hero-v2-${theme}.gif`);
+  const out = join(ROOT, "docs/images/hero-v2.gif");
   const dir = mkdtempSync(join(tmpdir(), "hero-"));
   try {
     const browser = await chromium.launch();
-    const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: SCALE });
+    const page = await browser.newPage({ viewport: { width: 1280, height: 640 }, deviceScaleFactor: SCALE });
     await page.addInitScript(() => { window.__capture = true; });
-    await page.goto(`file://${SOURCE}?theme=${theme}${FONTS_QUERY}`);
+    await page.goto(`file://${SOURCE}?${FONTS_QUERY.slice(1)}`);
     await page.evaluate(() => window.__fontsLoaded);
     await page.evaluate(() => document.fonts.ready);
     const source = await page.evaluate(() => window.__fontSource);

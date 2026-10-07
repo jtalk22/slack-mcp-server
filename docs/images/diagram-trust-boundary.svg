@@ -1,163 +1,112 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 760" width="1280" height="760"
      role="img" aria-labelledby="tb-title tb-desc">
   <title id="tb-title">The trust boundary: who wrote a Slack message, and what the server does about it</title>
-  <desc id="tb-desc">Four kinds of author put text into the same Slack channel: the operator, a colleague in the workspace, a Slack Connect participant from another workspace, and an app relaying words written outside Slack. Each crosses the server's trust boundary on its own straight track and is stamped with an origin — self and internal are stamped trusted, external and bot are labelled and passed through rather than removed. All four arrive in one model context, alongside the operator's own instructions, which is the risk: the same toolset that reads also writes. On the way back out, strict mode holds a send once outside-authored text has been read, and read-only never registers the write tool at all.</desc>
-
+  <desc id="tb-desc">Four kinds of author put text into the same Slack channel: you, a colleague in the workspace, a Slack Connect participant from another workspace, and an app relaying words written outside Slack. Each crosses the server's trust boundary on its own track and is stamped with an origin: self and internal are trusted, external and bot are labelled untrusted and passed through rather than removed. All four arrive in one model context beside your own instructions. On the way back out, strict mode holds a send once outside-authored text has been read, and read-only never registers the write tool at all.</desc>
   <defs>
     <style>
       .ground { fill: #FBFBF9; }
       .ink    { fill: #16181D; }
-      .muted  { fill: #6B7280; }
-      .faint  { fill: #9CA3AF; }
+      .muted  { fill: #5F6470; }
+      .faint  { fill: #8A8F9A; }
       .ok     { fill: #15803D; }
-      .stop   { fill: #DC2626; }
-
-      .t-title { font: 600 31px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: -0.3px; }
-      .t-lede  { font: 400 17.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-name  { font: 500 18.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-sub   { font: 400 14.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-chip  { font: 500 16px ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .t-cap   { font: 400 15px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-mark  { font: 600 12.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.5px; }
-
-      .track    { stroke-width: 2.5; fill: none; stroke-linecap: round; }
+      .amber  { fill: #B45309; }
+      .stop   { fill: #C2271D; }
+      .brand  { fill: #4A154B; }
+      .t-title { font: 600 34px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: -0.4px; }
+      .t-lede  { font: 400 19px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-name  { font: 600 22px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-sub   { font: 400 16px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-chip  { font: 500 19px ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .t-cap   { font: 500 17px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-mark  { font: 700 13px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.8px; }
+      .track    { stroke-width: 3.5; fill: none; stroke-linecap: round; }
       .track.ok { stroke: #15803D; }
-      .track.pass { stroke: #B45309; stroke-dasharray: 7 5; }
-      .who.ok   { color: #15803D; }
-      .who.pass { color: #B45309; }
-      .brand    { fill: #4A154B; }
-      .flow  { stroke: #16181D; stroke-width: 1.75; fill: none; }
-      .panel { fill: #FBF7FC; stroke: #D9C2DC; stroke-width: 1.5; }
-
-      .chip-ok   { fill: #EDF7F0; stroke: #15803D; stroke-width: 1.75; }
-      .chip-pass { fill: #FFF7ED; stroke: #B45309; stroke-width: 1.75; stroke-dasharray: 5 4; }
-      .amber { fill: #B45309; }
-
-      .glyph { fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
-      .wall  { stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+      .track.pass { stroke: #B45309; stroke-dasharray: 9 7; }
+      .who.ok   { color: #15803D; } .who.pass { color: #B45309; }
+      .glyph { fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+      .wall  { stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
+      .chip-ok   { fill: #E9F6EC; stroke: #15803D; stroke-width: 2.25; }
+      .chip-pass { fill: #FFF4E5; stroke: #B45309; stroke-width: 2.25; stroke-dasharray: 7 5; }
+      .chip-stop { fill: #FDECEB; stroke: #C2271D; stroke-width: 2.25; }
+      .panel { fill: #F8F2F9; stroke: #D9C2DC; stroke-width: 2; }
+      .flow  { stroke: #16181D; stroke-width: 2.5; fill: none; }
     </style>
-
-    <marker id="tb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+    <marker id="tb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#16181D"/>
     </marker>
-
-    <!-- One family. A dashed wall beside a glyph means the author sits outside
-         this workspace. The answer is in the icon before a word is read. -->
-    <g id="g-you">
-      <circle cx="13" cy="9" r="5.6" class="glyph"/>
-      <path d="M 3 25.5 a 10 9.5 0 0 1 20 0" class="glyph"/>
-    </g>
-    <g id="g-colleagues">
-      <circle cx="10" cy="9" r="5.1" class="glyph"/>
-      <path d="M 1 25.5 a 9 8.5 0 0 1 18 0" class="glyph"/>
-      <circle cx="22.5" cy="10.5" r="4.1" class="glyph"/>
-      <path d="M 16 25.5 a 7.2 6.8 0 0 1 14 0" class="glyph"/>
-    </g>
-    <g id="g-connect">
-      <circle cx="10" cy="9" r="5.4" class="glyph"/>
-      <path d="M 1 25.5 a 9.4 8.8 0 0 1 18.8 0" class="glyph"/>
-      <path d="M 26 1 L 26 27" class="wall" stroke-dasharray="3.5 4"/>
-    </g>
-    <g id="g-relay">
-      <rect x="1" y="5" width="18" height="17" rx="4" class="glyph"/>
-      <path d="M 6 11.5 h 8.5 M 6 16 h 5.5" class="glyph"/>
-      <path d="M 26 1 L 26 27" class="wall" stroke-dasharray="3.5 4"/>
-      <path d="M 20.5 13.5 h 3.2" class="glyph"/>
-    </g>
+    <g id="g-you"><circle cx="17" cy="11" r="7.5" class="glyph"/><path d="M 3 34 a 14 13 0 0 1 28 0" class="glyph"/></g>
+    <g id="g-colleagues"><circle cx="13" cy="11" r="6.8" class="glyph"/><path d="M 1 34 a 12 11.5 0 0 1 24 0" class="glyph"/><circle cx="30" cy="13" r="5.6" class="glyph"/><path d="M 21 34 a 9.6 9 0 0 1 19 0" class="glyph"/></g>
+    <g id="g-connect"><circle cx="13" cy="11" r="7.2" class="glyph"/><path d="M 1 34 a 12.5 11.8 0 0 1 25 0" class="glyph"/><path d="M 35 1 L 35 36" class="wall" stroke-dasharray="4.5 5"/></g>
+    <g id="g-relay"><rect x="1" y="6" width="24" height="23" rx="5" class="glyph"/><path d="M 8 15 h 11 M 8 21 h 7" class="glyph"/><path d="M 35 1 L 35 36" class="wall" stroke-dasharray="4.5 5"/><path d="M 27 17.5 h 4.5" class="glyph"/></g>
   </defs>
 
-  <rect class="ground" width="1280" height="720"/>
-
-  <text class="t-title ink" x="56" y="60">The trust boundary</text>
-  <text class="t-lede muted" x="56" y="89">Four authors, one channel. Every message is stamped on the way in — and the one that cannot be placed says so.</text>
+  <rect class="ground" width="1280" height="760"/>
+  <text class="t-title ink" x="56" y="66">The trust boundary</text>
+  <text class="t-lede muted" x="56" y="98">Four authors, one channel. Every message is stamped on the way in, and a bot inside your workspace still relays words from outside it.</text>
 
   <!-- the boundary -->
-  <line x1="408" y1="128" x2="408" y2="498" stroke="#4A154B" stroke-width="2.5" stroke-dasharray="7 5"/>
-  <text class="t-mark brand" x="408" y="118" text-anchor="middle">THE BOUNDARY</text>
+  <text class="t-mark brand" x="430" y="150" text-anchor="middle">THE BOUNDARY</text>
+  <line x1="430" y1="162" x2="430" y2="562" stroke="#4A154B" stroke-width="3" stroke-dasharray="9 7"/>
 
-  <!-- ============ four tracks, each landing on its own row ============ -->
+  <!-- the context -->
+  <rect class="panel" x="740" y="150" width="484" height="412" rx="16"/>
+  <text class="t-mark brand" x="768" y="174">ONE MODEL CONTEXT</text>
+  <rect x="768" y="184" width="428" height="36" rx="8" fill="#4A154B"/>
+  <text class="t-cap" x="788" y="208" fill="#FFFFFF">Your own instructions</text>
 
-  <g class="who ok" transform="translate(56,227)"><use href="#g-you"/></g>
-  <text class="t-name ink" x="104" y="247">You</text>
-  <line class="track ok" x1="318" y1="240" x2="452" y2="240"/>
-  <rect class="chip-ok" x="452" y="222" width="128" height="36" rx="8"/>
-  <text class="t-chip ok" x="516" y="245" text-anchor="middle">self</text>
-  <line class="track ok" x1="580" y1="240" x2="716" y2="240"/>
+  <!-- four tracks -->
+  <g class="who ok" transform="translate(56,232)"><use href="#g-you"/></g>
+  <text class="t-name ink" x="112" y="258">You</text>
+  <line class="track ok" x1="330" y1="250" x2="470" y2="250"/>
+  <rect class="chip-ok" x="470" y="226" width="150" height="48" rx="10"/><text class="t-chip ok" x="545" y="257" text-anchor="middle">self</text>
+  <line class="track ok" x1="620" y1="250" x2="740" y2="250"/>
+  <rect class="chip-ok" x="768" y="228" width="428" height="44" rx="9"/><text class="t-chip ok" x="788" y="257">self</text><text class="t-cap ok" x="1176" y="257" text-anchor="end">trusted</text>
 
-  <g class="who ok" transform="translate(56,297)"><use href="#g-colleagues"/></g>
-  <text class="t-name ink" x="104" y="317">A colleague</text>
-  <line class="track ok" x1="318" y1="310" x2="452" y2="310"/>
-  <rect class="chip-ok" x="452" y="292" width="128" height="36" rx="8"/>
-  <text class="t-chip ok" x="516" y="315" text-anchor="middle">internal</text>
-  <line class="track ok" x1="580" y1="310" x2="716" y2="310"/>
+  <g class="who ok" transform="translate(56,322)"><use href="#g-colleagues"/></g>
+  <text class="t-name ink" x="112" y="348">A colleague</text>
+  <line class="track ok" x1="330" y1="340" x2="470" y2="340"/>
+  <rect class="chip-ok" x="470" y="316" width="150" height="48" rx="10"/><text class="t-chip ok" x="545" y="347" text-anchor="middle">internal</text>
+  <line class="track ok" x1="620" y1="340" x2="740" y2="340"/>
+  <rect class="chip-ok" x="768" y="318" width="428" height="44" rx="9"/><text class="t-chip ok" x="788" y="347">internal</text><text class="t-cap ok" x="1176" y="347" text-anchor="end">trusted</text>
 
-  <g class="who pass" transform="translate(56,364)"><use href="#g-connect"/></g>
-  <text class="t-name ink" x="104" y="380">Slack Connect</text>
-  <text class="t-sub faint" x="104" y="398">someone else's workspace</text>
-  <line class="track pass" x1="318" y1="380" x2="452" y2="380"/>
-  <rect class="chip-pass" x="452" y="362" width="128" height="36" rx="8"/>
-  <text class="t-chip amber" x="516" y="385" text-anchor="middle">external</text>
-  <line class="track pass" x1="580" y1="380" x2="716" y2="380"/>
+  <g class="who pass" transform="translate(56,412)"><use href="#g-connect"/></g>
+  <text class="t-name ink" x="112" y="430">Slack Connect</text>
+  <text class="t-sub faint" x="112" y="452">someone else’s workspace</text>
+  <line class="track pass" x1="330" y1="430" x2="470" y2="430"/>
+  <rect class="chip-pass" x="470" y="406" width="150" height="48" rx="10"/><text class="t-chip amber" x="545" y="437" text-anchor="middle">external</text>
+  <line class="track pass" x1="620" y1="430" x2="740" y2="430"/>
+  <rect class="chip-pass" x="768" y="408" width="428" height="44" rx="9"/><text class="t-chip amber" x="788" y="437">external</text><text class="t-cap amber" x="1176" y="437" text-anchor="end">untrusted</text>
 
-  <g class="who pass" transform="translate(56,434)"><use href="#g-relay"/></g>
-  <text class="t-name ink" x="104" y="450">A relay app</text>
-  <text class="t-sub faint" x="104" y="468">words written somewhere else</text>
-  <line class="track pass" x1="318" y1="450" x2="452" y2="450"/>
-  <rect class="chip-pass" x="452" y="432" width="128" height="36" rx="8"/>
-  <text class="t-chip amber" x="516" y="455" text-anchor="middle">bot</text>
-  <line class="track pass" x1="580" y1="450" x2="716" y2="450"/>
+  <g class="who pass" transform="translate(56,502)"><use href="#g-relay"/></g>
+  <text class="t-name ink" x="112" y="520">A relay app</text>
+  <text class="t-sub faint" x="112" y="542">words written somewhere else</text>
+  <line class="track pass" x1="330" y1="520" x2="470" y2="520"/>
+  <rect class="chip-pass" x="470" y="496" width="150" height="48" rx="10"/><text class="t-chip amber" x="545" y="527" text-anchor="middle">bot</text>
+  <line class="track pass" x1="620" y1="520" x2="740" y2="520"/>
+  <rect class="chip-pass" x="768" y="498" width="428" height="44" rx="9"/><text class="t-chip amber" x="788" y="527">bot</text><text class="t-cap amber" x="1176" y="527" text-anchor="end">untrusted</text>
 
-  <text class="t-sub faint" x="580" y="519" text-anchor="middle">a bot inside your workspace still relays words from outside it</text>
+  <!-- the way back out -->
+  <text class="t-mark muted" x="56" y="624">THE WAY BACK OUT</text>
+  <text class="t-cap muted" x="56" y="652">Labels never remove a message, and the same</text>
+  <text class="t-cap muted" x="56" y="676">toolset reads and writes. That is the risk.</text>
 
-  <!-- ============ the context ============ -->
-  <rect class="panel" x="716" y="128" width="508" height="370" rx="14"/>
-  <text class="t-mark brand" x="744" y="160">ONE MODEL CONTEXT</text>
+  <path class="flow" d="M 982 562 L 982 606" marker-end="url(#tb-arrow)"/>
+  <rect x="862" y="606" width="240" height="48" rx="10" fill="#FFFFFF" stroke="#4A154B" stroke-width="2.25"/>
+  <text class="t-chip ink" x="982" y="637" text-anchor="middle">slack_send_message</text>
+  <path class="flow" d="M 862 630 L 790 630" marker-end="url(#tb-arrow)"/>
 
-  <rect x="744" y="172" width="452" height="38" rx="8" fill="#4A154B"/>
-  <text class="t-name" x="764" y="197" fill="#FFFFFF">Your own instructions</text>
+  <rect class="chip-stop" x="470" y="588" width="310" height="40" rx="9"/>
+  <text class="t-chip stop" x="490" y="615">strict</text><text class="t-cap stop" x="760" y="615" text-anchor="end">held</text>
+  <rect class="chip-stop" x="470" y="636" width="310" height="40" rx="9"/>
+  <text class="t-chip stop" x="490" y="663">read-only</text><text class="t-cap stop" x="760" y="663" text-anchor="end">never registered</text>
 
-  <rect x="744" y="222" width="452" height="36" rx="8" fill="#EDF7F0" stroke="#15803D" stroke-width="1.4"/>
-  <text class="t-chip ok" x="764" y="245">self</text>
-  <text class="t-cap ok" x="1176" y="245" text-anchor="end">trusted</text>
-
-  <rect x="744" y="292" width="452" height="36" rx="8" fill="#EDF7F0" stroke="#15803D" stroke-width="1.4"/>
-  <text class="t-chip ok" x="764" y="315">internal</text>
-  <text class="t-cap ok" x="1176" y="315" text-anchor="end">trusted</text>
-
-  <rect x="744" y="362" width="452" height="36" rx="8" fill="#FFF7ED" stroke="#B45309" stroke-width="1.4" stroke-dasharray="5 4"/>
-  <text class="t-chip amber" x="764" y="385">external</text>
-  <text class="t-cap amber" x="1176" y="385" text-anchor="end">untrusted</text>
-
-  <rect x="744" y="432" width="452" height="36" rx="8" fill="#FFF7ED" stroke="#B45309" stroke-width="1.4" stroke-dasharray="5 4"/>
-  <text class="t-chip amber" x="764" y="455">bot</text>
-  <text class="t-cap amber" x="1176" y="455" text-anchor="end">untrusted</text>
-
-  <!-- ============ the way back out ============ -->
-  <text class="t-mark muted" x="56" y="556">THE WAY BACK OUT</text>
-  <text class="t-cap muted" x="56" y="584">Labelled, never removed —</text>
-  <text class="t-cap muted" x="56" y="604">and read and write share</text>
-  <text class="t-cap muted" x="56" y="624">one toolset. That is the risk.</text>
-
-  <path class="flow" d="M 970 498 L 970 592 L 892 592" marker-end="url(#tb-arrow)"/>
-  <rect class="panel" x="712" y="572" width="180" height="40" rx="9"/>
-  <text class="t-chip ink" x="802" y="597" text-anchor="middle">slack_send_message</text>
-  <path class="flow" d="M 712 592 L 620 592" marker-end="url(#tb-arrow)"/>
-
-  <rect x="368" y="554" width="248" height="34" rx="8" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6"/>
-  <text class="t-chip stop" x="388" y="576">strict</text>
-  <text class="t-cap stop" x="596" y="576" text-anchor="end">held</text>
-
-  <rect x="368" y="596" width="248" height="34" rx="8" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6"/>
-  <text class="t-chip stop" x="388" y="618">read-only</text>
-  <text class="t-cap stop" x="596" y="618" text-anchor="end">never registered</text>
-
-  <!-- ============ legend ============ -->
-  <line x1="56" y1="664" x2="1224" y2="664" stroke="#E3E4E9" stroke-width="1.25"/>
-  <rect x="56" y="680" width="12" height="12" rx="3" fill="#EDF7F0" stroke="#15803D" stroke-width="1.6"/>
-  <text class="t-cap muted" x="78" y="691">placed inside your workspace</text>
-  <rect x="300" y="680" width="12" height="12" rx="3" fill="#FFF7ED" stroke="#B45309" stroke-width="1.6" stroke-dasharray="3 2.5"/>
-  <text class="t-cap muted" x="322" y="691">labelled, and passed through anyway</text>
-  <rect x="604" y="680" width="12" height="12" rx="3" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6"/>
-  <text class="t-cap muted" x="626" y="691">refused</text>
-  <text class="t-cap faint" x="1224" y="691" text-anchor="end">@jtalk22/slack-mcp</text>
+  <!-- legend -->
+  <line x1="56" y1="710" x2="1224" y2="710" stroke="#E3E4E9" stroke-width="1.5"/>
+  <rect x="56" y="728" width="14" height="14" rx="3" fill="#E9F6EC" stroke="#15803D" stroke-width="2"/>
+  <text class="t-cap muted" x="80" y="741">placed inside your workspace</text>
+  <rect x="340" y="728" width="14" height="14" rx="3" fill="#FFF4E5" stroke="#B45309" stroke-width="2" stroke-dasharray="3 2.5"/>
+  <text class="t-cap muted" x="364" y="741">labelled, and passed through anyway</text>
+  <rect x="700" y="728" width="14" height="14" rx="3" fill="#FDECEB" stroke="#C2271D" stroke-width="2"/>
+  <text class="t-cap muted" x="724" y="741">refused</text>
+  <text class="t-sub faint" x="1224" y="741" text-anchor="end">@jtalk22/slack-mcp</text>
 </svg>
