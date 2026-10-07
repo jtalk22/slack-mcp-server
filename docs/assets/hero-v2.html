@@ -19,17 +19,17 @@
 
   :root {
     --aubergine: #4A154B; --lilac: #E8D5E9; --band: #EAD9EC; --tape: #FFFFFF; --tape-edge: #D9C2DC;
-    --pane: #FFFFFF; --ink: #1D1C1D; --meta: #6B6B73; --rule: #ECECEE; --link: #6B6B73;
-    --divider-bg: #FFFFFF; --divider-line: #DDDDDD;
+    --pane: #36103A; --ink: #FFFFFF; --meta: #CDB2CF; --rule: rgba(255,255,255,.16); --link: #D7B8D9;
+    --divider-bg: #36103A; --divider-line: rgba(255,255,255,.32);
     --strip: #F6F8FA; --strip-ink: #1F2328;
   }
   html[data-theme="dark"] {
-    --pane: #1A1D21; --ink: #D1D2D3; --meta: #ABABAD; --rule: #2C2D30; --link: #8B8B93;
-    --divider-bg: #1A1D21; --divider-line: #3A3B3E;
+    --pane: #36103A; --ink: #FFFFFF; --meta: #CDB2CF; --rule: rgba(255,255,255,.16); --link: #D7B8D9;
+    --divider-bg: #36103A; --divider-line: rgba(255,255,255,.32);
     --strip: #151B23; --strip-ink: #F0F6FC;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--pane); }
+  html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--aubergine); }
   body { font-family: "Text", sans-serif; position: relative; -webkit-font-smoothing: antialiased; }
   .mono { font-family: "Mono", monospace; }
   html.estate body { font-family: "Text Estate", sans-serif; }
@@ -37,8 +37,9 @@
 
   /* ---------- left: what you asked, on aubergine ---------- */
   .left { position: absolute; left: 0; top: 0; width: 600px; height: 648px; background: var(--aubergine); overflow: hidden; }
-  #headline { position: absolute; left: 56px; top: 76px; font-weight: 900; font-size: 72px; line-height: 76px; color: #fff; letter-spacing: -1.5px; }
-  #setup { position: absolute; left: 56px; top: 254px; font-size: 44px; line-height: 54px; color: var(--lilac); }
+  #story { position: absolute; left: 56px; top: 76px; width: 500px; transform-origin: 0 0; }
+  #headline { position: absolute; left: 0; top: 0; font-weight: 900; font-size: 72px; line-height: 76px; color: #fff; letter-spacing: -1.5px; }
+  #setup { position: absolute; left: 0; top: 178px; white-space: nowrap; font-size: 44px; line-height: 54px; color: var(--lilac); }
 
   #chip { position: absolute; left: 56px; top: 506px; width: 488px; height: 128px; z-index: 3; }
   #chip .bg { position: absolute; inset: 0; background: #fff; border-radius: 14px; }
@@ -57,7 +58,8 @@
   #band { position: absolute; left: 0; top: 210px; width: 1280px; height: 304px; background: var(--band); z-index: 1; }
 
   /* ---------- right: the workspace ---------- */
-  .right { position: absolute; left: 600px; top: 0; width: 680px; height: 630px; overflow: hidden; }
+  .right-bg { position: absolute; left: 600px; top: 0; width: 680px; height: 630px; background: var(--pane); }
+  .right { position: absolute; left: 600px; top: 0; width: 680px; height: 630px; overflow: hidden; z-index: 2; }
   .hd { position: absolute; left: 0; top: 0; width: 680px; height: 64px; background: var(--pane); border-bottom: 2px solid var(--rule);
         padding: 0 32px; display: flex; align-items: center; font-weight: 700; font-size: 32px; color: var(--ink); z-index: 4; }
   #col { position: absolute; left: 0; top: 0; width: 680px; z-index: 2; }
@@ -78,6 +80,7 @@
      before that it is an ordinary post on the pane */
   .dave.on-band .nm, .dave.on-band .tx { color: #1D1C1D; } .dave.on-band .nm span { color: #4E4452; }
   .dave.on-band .pill { border-color: var(--aubergine); color: var(--aubergine); }
+  .dave.on-band .av { background: #4A154B !important; color: #FFFFFF !important; }
 
   /* ---------- the hand-off strip: your command line ---------- */
   .strip { position: absolute; left: 0; top: 648px; width: 1280px; height: 72px; background: var(--strip); display: flex; align-items: center;
@@ -120,11 +123,16 @@
 </head>
 <body>
 <div class="left">
-  <div id="headline">It’s Tuesday,<br>9:07 AM.</div>
-  <div id="setup">A jammed printer.<br>Nobody knows the PIN.<br>The guy who did left<br>five months ago.</div>
   <div id="tri"><div id="tri1">Five months.</div><div id="tri2">Three people.</div><div id="tri3">One printer.</div></div>
   <div id="tape-line">Tape it to the printer.</div>
 </div>
+
+<div id="story">
+  <div id="headline">It’s Tuesday,<br>9:07 AM.</div>
+  <div id="setup">A jammed printer.<br>Nobody knows the PIN.<br>The guy who did left<br>five months ago.</div>
+</div>
+
+<div class="right-bg"></div>
 
 <div id="band"></div>
 
@@ -142,7 +150,7 @@
   <div class="hd">ClusterFork Systems</div>
   <div id="col">
     <div class="divider"><span>12 October · #facilities</span></div>
-    <div class="post dave" id="dave"><div class="av" style="background:#4A154B">DC</div><div>
+    <div class="post dave" id="dave"><div class="av" style="background:#E8D5E9;color:#4A154B">DC</div><div>
       <div class="nm">Dave Chen<span>IT · 12 Oct</span></div>
       <div class="tx">The 3rd floor printer PIN is <b>4729</b>. Posting here so nobody has to ask again.</div>
       <div class="pill">0 reactions</div></div></div>
@@ -176,8 +184,14 @@
 
   window.__render = (t) => {
     // frame one is complete at t = 0: the joke, two unanswered asks, a waiting prompt
+    // frame one: one purple field, the headline alone. Then the workspace slides in
+    // from the right and the story settles into the left column.
+    const arrive = ease(prog(t, 2300, 2900));
+    const k = 1.38 - 0.38 * arrive;
+    $("story").style.transform = `translate(${(300 - 56) * (1 - arrive)}px, ${(52 - 76) * (1 - arrive)}px) scale(${k})`;
+    for (const el of document.querySelectorAll(".right, .right-bg")) el.style.transform = `translateX(${(1 - arrive) * 700}px)`;
     const setupOut = 1 - prog(t, 4700, 5050);
-    for (const id of ["headline", "setup"]) $(id).style.opacity = String(setupOut);
+    $("story").style.opacity = String(setupOut);
 
     const rise = ease(prog(t, 3600, 3850));
     const climb = ease(prog(t, 4700, 5050));
