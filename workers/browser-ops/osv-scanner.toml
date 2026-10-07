@@ -1,0 +1,41 @@
+# OSV-Scanner config for the browser-ops Worker.
+#
+# This file sits next to workers/browser-ops/package-lock.json because an
+# osv-scanner.toml applies to manifests in its own directory and does not
+# propagate from a parent, so a root-level config would not cover this
+# lockfile.
+
+# Both entries below are extract-zip, reached only as a transitive dependency
+# of @cloudflare/puppeteer, and both mirror a dismissal that already exists on
+# the Dependabot side rather than inventing a new disposition.
+#
+# The shared reason: extract-zip loads only via puppeteer's Node launcher
+# classes, which download and unpack a browser build. index.js never takes
+# that path -- it calls puppeteer.launch(env.BROWSER) through the Workers entry
+# point, which connects to remote Browser Rendering instead of launching a
+# local browser. workerd cannot spawn a process or unzip an archive at all, so
+# the vulnerable code is unreachable in this runtime. workers/ is also absent
+# from the npm files whitelist, so it never ships to package consumers.
+#
+# Re-open both if browser-ops ever runs under Node instead of workerd.
+
+[[IgnoredVulns]]
+id = "GHSA-jmr9-qjv8-65gv"
+# CVE-2026-56876, extract-zip unvalidated symlink path traversal.
+# Dependabot alert #51, dismissed not_used.
+reason = "Transitive via @cloudflare/puppeteer; unreachable under workerd, which cannot spawn processes or unzip. Matches the not_used dismissal on Dependabot alert #51."
+
+[[IgnoredVulns]]
+id = "GHSA-7pqw-9j4j-h8q3"
+# extract-zip arbitrary file writes through symlink archive entries.
+# Dependabot alert #57, dismissed not_used. Same package and same unreachable
+# code path as the entry above; it surfaced here because osv-scanner reports
+# every advisory against the pinned version, not only the newest one.
+reason = "Transitive via @cloudflare/puppeteer; unreachable under workerd, which cannot spawn processes or unzip. Matches the not_used dismissal on Dependabot alert #57."
+
+# Deliberately NOT ignored: GHSA-c475-qrg2-pj4r, basic-ftp quadratic-time CPU
+# denial of service. Dependabot alert #62 is OPEN, a fix exists (6.2.1), and
+# every previous basic-ftp advisory in this lockfile (#15, #16, #18, #21) was
+# resolved by a version bump rather than a dismissal. Suppressing it here
+# would contradict a live alert, so the scheduled scan stays red on it until
+# the Dependabot bump lands.

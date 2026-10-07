@@ -1,0 +1,37 @@
+name: OSV-Scanner
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Tuesday, same slot reasoning as the CodeQL schedule: away from the
+    # Friday Dependabot window.
+    - cron: '41 9 * * 2'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # On a pull request, scan only what the PR introduces. A full scan here
+  # would re-report the repository's existing advisory surface on every PR,
+  # including PRs that touch no dependency at all.
+  scan-pr:
+    if: github.event_name == 'pull_request'
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@a345acffa64b0eaede81a3d9aae6141214d9c8fc
+    permissions:
+      actions: read
+      security-events: write
+      contents: read
+
+  # On main, on the weekly schedule, and on demand, scan everything so a newly
+  # disclosed advisory against an unchanged dependency still surfaces.
+  scan-all:
+    if: github.event_name != 'pull_request'
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@a345acffa64b0eaede81a3d9aae6141214d9c8fc
+    permissions:
+      actions: read
+      security-events: write
+      contents: read
