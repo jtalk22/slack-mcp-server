@@ -212,12 +212,16 @@ async function chooseStorageMode(rl) {
 async function runMacOSSetup(rl) {
   print();
   info("Detected platform: macOS");
-  info("Auto-extraction available via AppleScript");
+  info("Auto-extraction reads Chrome's on-disk session; AppleScript is the fallback");
   print();
   print("Requirements:");
   print("  • Chrome browser installed");
-  print("  • Logged into Slack in a Chrome tab");
-  print("  • That Slack tab currently open");
+  print("  • Signed into Slack at app.slack.com in Chrome at least once");
+  print();
+  print(`${colors.dim}Chrome can be closed and no Slack tab needs to be open — the token comes${colors.reset}`);
+  print(`${colors.dim}from Chrome's Local Storage on disk and the cookie from its cookie${colors.reset}`);
+  print(`${colors.dim}database. Only the AppleScript fallback needs a live tab and the Chrome${colors.reset}`);
+  print(`${colors.dim}View > Developer > Allow JavaScript from Apple Events flag.${colors.reset}`);
 
   await pressEnterToContinue(rl);
 
