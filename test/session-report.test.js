@@ -143,3 +143,22 @@ test("a payload with no conversations does not throw or miscount", () => {
   noteUntrustedPayload({ conversations: [{ messages: null }] });
   assert.equal(sessionReport().messages_read, 0);
 });
+
+test("every write tool counts as an attempt, not only a send", async () => {
+  // The field says writes_attempted. A receipt that counted only sends would be
+  // under-reporting three of the four tools that change the workspace.
+  const { handleAddReaction, handleRemoveReaction, handleConversationsMark } =
+    await import("../lib/handlers.js");
+  resetSessionReceipt();
+  const before = sessionReport().writes_attempted;
+  for (const call of [
+    () => handleAddReaction({ channel_id: "C1", timestamp: "1", reaction: "x" }),
+    () => handleRemoveReaction({ channel_id: "C1", timestamp: "1", reaction: "x" }),
+    () => handleConversationsMark({ channel_id: "C1", timestamp: "1" }),
+  ]) {
+    // The Slack call itself will fail without a live workspace; the counter is
+    // incremented before it, which is the point — an attempt is an attempt.
+    await call().catch(() => {});
+  }
+  assert.equal(sessionReport().writes_attempted, before + 3);
+});

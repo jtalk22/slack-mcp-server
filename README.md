@@ -31,8 +31,10 @@ npx -y @jtalk22/slack-mcp --setup
 <p align="center">
   <a href="#built-past-the-demo">How it works</a> ·
   <a href="#two-ways-into-slack">Why session auth</a> ·
+  <a href="#if-your-workspace-is-on-slacks-free-plan">Free Slack</a> ·
   <a href="#grid-credentials-and-caching">Grid & credentials</a> ·
   <a href="#install">Install</a> ·
+  <a href="#security-and-provenance">Security</a> ·
   <a href="#20-tools-read-act-automate">20 tools</a> ·
   <a href="#typed-workflows-slack-in-json-out">Workflows</a> ·
   <a href="#free-local-when-youre-driving-hosted-when-it-must-drive-itself">Local vs hosted</a>
@@ -127,6 +129,20 @@ Treat browser-session automation as an acceptable-use decision for you and your 
 </details>
 
 ---
+
+## If your workspace is on Slack's free plan
+
+Checked against Slack's published plans and pricing on 2026-10-07.
+
+A free workspace keeps 90 days of message history, allows 10 app integrations, and gets only Slack's basic AI. The AI people actually want — AI search across the workspace, channel recaps, Slackbot acting as an agent, AI workflow generation — starts on Business+ at $12.50 per user per month on annual billing. Pro, at $7.25, buys unlimited history and unlimited apps, not the advanced AI. So a ten-person free workspace that wants an AI it can ask about its own Slack is looking at roughly $1,500 a year, and the cheaper upgrade does not get them there.
+
+This package gives that workspace an agent over the same Slack for nothing, running on the AI subscription its people already pay for. Three things follow from how it works:
+
+- **It installs no Slack app, so it uses none of your 10 app slots.** If your workspace is already at the cap, this is the only way left to add an integration at all.
+- **It needs no admin approval**, because it is not an app anyone has to approve. It reads Slack through your own browser session, with exactly the access you already have and nothing more.
+- **It can export what you can still see.** On a free plan, history older than 90 days stops being reachable — Slack's own free export covers public channels only and is admin-only, so DMs and private channels are not in it. `slack_get_full_conversation` writes them out with their threads while they are still inside the window. It cannot retrieve anything already past the line; nothing can.
+
+The browser-session route is not a workaround to apologise for. For a workspace Slack's own AI does not serve, it is the only route there is.
 
 ## Grid, credentials, and caching
 
