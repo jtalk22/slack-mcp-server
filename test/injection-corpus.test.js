@@ -162,6 +162,11 @@ async function readThroughCatchUp(fixture, { authorName = "Placeholder Author" }
   const deps = {
     structuredKeys: ["summary"],
     resolveUser: async () => authorName,
+    // Without a home team id every author is unplaceable and the classifier
+    // reports `unknown` — correct, but it tests nothing. The corpus exists to
+    // check that a foreign team id and a bot marker are told apart from a
+    // colleague, which needs a workspace to be foreign to.
+    getWorkspaceIdentity: async () => ({ homeTeamId: "T_HOME", selfUserId: "U_ME", workspaceUrl: null }),
     slackAPI: async (method) => {
       if (method === "conversations.list") {
         return { channels: [{ id: "C_FIXTURE", name: "fixture", unread_count: 1 }] };
@@ -383,11 +388,16 @@ test("channel topic and purpose are not surfaced: closed by omission, not by a d
   const entry = out.conversations.find((c) => c.id === fixture.slack.id);
   assert.ok(entry, "the fixture channel is listed");
 
-  // The payload does not reach the model today, because this handler builds a
-  // fixed set of keys and topic/purpose are not among them. For a channel
-  // (rather than a direct message) user_id is undefined, and JSON.stringify
-  // drops it, so three keys arrive.
-  assert.deepEqual(Object.keys(entry).sort(), ["id", "name", "type"]);
+  // The payload does not reach the model, because this handler builds a fixed
+  // set of keys and topic/purpose are not among them. For a channel (rather
+  // than a direct message) user_id is undefined and JSON.stringify drops it.
+  //
+  // externally_shared joined that set deliberately: it is the one fact about
+  // this channel a caller needs BEFORE reading it, and it is the signal that
+  // lets the classifier tell a colleague from an outsider. The whitelist is
+  // asserted exactly so that widening it stays a decision someone made here.
+  assert.deepEqual(Object.keys(entry).sort(), ["externally_shared", "id", "name", "type"]);
+  assert.equal(entry.externally_shared, true, "a Slack Connect channel says so before it is read");
   assert.ok(!("topic" in entry), "topic.value is not forwarded");
   assert.ok(!("purpose" in entry), "purpose.value is not forwarded");
   // The vector stays in the corpus because the field is one line of code away
@@ -399,20 +409,35 @@ test("channel topic and purpose are not surfaced: closed by omission, not by a d
 
 // ------------------------------------------------------------------ gap record
 
-test("GAP RECORD: lib/ has no provenance module, so no read tool labels who wrote a message", () => {
-  // One deliberate tripwire, in one place. When a provenance feature lands this
-  // test fails, and the fix is to update this baseline and re-run the corpus —
-  // every vector above already asserts the correct label if one is present.
-  const hasProvenanceModule = existsSync(join(HERE, "..", "lib", "message-provenance.js"));
+test("the corpus runs against a real classifier, not against its absence", async () => {
+  // This replaced a GAP RECORD that asserted lib/message-provenance.js did not
+  // exist. It does now, so the baseline it held is closed and the corpus has
+  // become a regression suite for the thing that closed it: each vector above
+  // asserts the label it must carry, and this asserts the module they all rely
+  // on is still wired into the read path rather than merely present on disk.
+  const { classifyMessageOrigin, MESSAGE_ORIGINS } = await import("../lib/message-provenance.js");
+  const HOME = { homeTeamId: "T_HOME", selfUserId: "U_ME" };
+
   assert.equal(
-    hasProvenanceModule,
-    false,
-    "lib/message-provenance.js now exists: re-run the corpus and update this baseline"
+    classifyMessageOrigin({ user: "U_OUTSIDE", team: "T_OUTSIDE" }, HOME),
+    MESSAGE_ORIGINS.EXTERNAL
+  );
+  assert.equal(
+    classifyMessageOrigin({ user: "U_APP", team: "T_HOME", bot_id: "B1" }, HOME),
+    MESSAGE_ORIGINS.BOT,
+    "a bot inside the workspace relays words written outside it"
+  );
+  assert.equal(
+    classifyMessageOrigin({ user: "U_X" }, HOME),
+    MESSAGE_ORIGINS.UNKNOWN,
+    "an author with no team and no known sharing state stays unplaceable"
   );
 
-  // And the shape that proves it: the default history output has seven keys,
-  // none of which says anything about the author's trust class.
-  const handlers = readFileSync(join(HERE, "..", "lib", "handlers.js"), "utf-8");
-  assert.ok(!handlers.includes("author_trusted"), "no handler stamps author_trusted");
-  assert.ok(!handlers.includes("classifyMessageOrigin"), "no handler classifies an author");
+  // And the wiring: a fixture read through the real catch-up path arrives
+  // stamped, not merely classifiable in isolation.
+  const out = await readThroughCatchUp(byId("connect-outside-team"));
+  assert.ok("origin" in out, "the read path must stamp every message");
+  assert.equal(out.origin, MESSAGE_ORIGINS.EXTERNAL);
+  assert.equal(out.author_trusted, false);
 });
+
