@@ -4,5 +4,8 @@
   "type": "module",
   "dependencies": {
     "@cloudflare/puppeteer": "^1.3.0"
+  },
+  "overrides": {
+    "basic-ftp": "^6.2.1"
   }
 }
