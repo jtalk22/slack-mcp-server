@@ -249,12 +249,13 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
   Node 24. `NPM_SECRET_TOKEN` is retired.
 - **The README moves again.** The hero opens on the joke — It's Tuesday, 9:07 AM, a jammed
   printer, the PIN nobody knows — beside two people who asked and got zero replies. One search
-  scrolls five months back to the post that had it all along, and a yellow band joins the PIN to
+  scrolls five months back to the post that had it all along, and a lilac band joins the PIN to
   its source. It is a GIF because GitHub plays a GIF inline and shows an MP4 as a still you have to
   click; a dark-mode twin follows the reader's theme through `<picture>`. Both are drawn by
-  `docs/assets/hero-v2.html` and recorded frame by frame by `scripts/record-hero.mjs`, with the
-  open-licence fonts vendored in `docs/assets/fonts/`, so a re-record is byte-identical and never
-  touches the network. The commands — set up, check your setup, read-only — sit directly under it,
+  `docs/assets/hero-v2.html` and recorded frame by frame by `scripts/record-hero.mjs`, so a
+  re-record is byte-identical. It is set in Söhne and GT America Mono, read from the maintainer's
+  own type library at record time; the GIF carries the pixels and the repository never carries the
+  font files. Open-licence stand-ins in `docs/assets/fonts/` draw it for anyone else. The commands — set up, check your setup, read-only — sit directly under it,
   and a short "New in 5.1" leads the page. The original mark is back, the badges are two deliberate
   rows, and two diagrams fill the page: the trust boundary, and the schema cost per tool profile.
 - **"Stealth" is back in the vocabulary**, and the claims that rode along with it are not.

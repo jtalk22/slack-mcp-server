@@ -18,7 +18,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/hero-v2-dark.gif">
     <source media="(prefers-color-scheme: light)" srcset="docs/images/hero-v2-light.gif">
-    <img src="docs/images/hero-v2-light.gif" width="900" alt="Split screen. On the left, on purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. On the right, in the workspace, two people asked the same question and got zero replies. One search, slack_search_messages, scrolls five months back to Dave’s post in #facilities from 12 October, and a yellow band joins the PIN, 4729, on the left to his message on the right. Zero reactions. Five months. Three people. One printer. Tape it to the printer.">
+    <img src="docs/images/hero-v2-light.gif" width="900" alt="Split screen. On the left, on purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. On the right, in the workspace, two people asked the same question and got zero replies. One search, slack_search_messages, scrolls five months back to Dave’s post in #facilities from 12 October, and a lilac band joins the PIN, 4729, on the left to his message on the right. Zero reactions. Five months. Three people. One printer. Tape it to the printer.">
   </picture>
 </a>
 

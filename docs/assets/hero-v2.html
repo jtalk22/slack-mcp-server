@@ -10,32 +10,33 @@
   ?theme=dark draws the twin for GitHub's dark mode. Staged data only.
 -->
 <style>
-  @font-face { font-family: "Lato"; font-weight: 400; src: url("fonts/Lato-400.woff2") format("woff2"); }
-  @font-face { font-family: "Lato"; font-weight: 700; src: url("fonts/Lato-700.woff2") format("woff2"); }
-  @font-face { font-family: "Lato"; font-weight: 900; src: url("fonts/Lato-900.woff2") format("woff2"); }
-  @font-face { font-family: "JetBrains Mono"; font-weight: 100 800; src: url("fonts/JetBrainsMono.woff2") format("woff2"); }
+  /* Open-licence stand-ins. The recording sets Söhne and GT America Mono from
+     James's type estate (see the script below); these only draw when it is absent. */
+  @font-face { font-family: "Text"; font-weight: 400; src: url("fonts/Lato-400.woff2") format("woff2"); }
+  @font-face { font-family: "Text"; font-weight: 700; src: url("fonts/Lato-700.woff2") format("woff2"); }
+  @font-face { font-family: "Text"; font-weight: 900; src: url("fonts/Lato-900.woff2") format("woff2"); }
+  @font-face { font-family: "Mono"; font-weight: 100 800; src: url("fonts/JetBrainsMono.woff2") format("woff2"); }
 
   :root {
-    --aubergine: #4A154B; --lilac: #E8D5E9; --amber: #FFB224; --band: #FFC94D; --tape: #F3EFD9;
-    --pane: #FFFFFF; --ink: #1D1C1D; --meta: #616061; --rule: #E8E8E8; --link: #1264A3;
+    --aubergine: #4A154B; --lilac: #E8D5E9; --band: #EAD9EC; --tape: #FFFFFF; --tape-edge: #D9C2DC;
+    --pane: #FFFFFF; --ink: #1D1C1D; --meta: #6B6B73; --rule: #ECECEE; --link: #6B6B73;
     --divider-bg: #FFFFFF; --divider-line: #DDDDDD;
     --strip: #F6F8FA; --strip-ink: #1F2328;
   }
   html[data-theme="dark"] {
-    --pane: #1A1D21; --ink: #D1D2D3; --meta: #ABABAD; --rule: #2C2D30; --link: #1D9BD1;
+    --pane: #1A1D21; --ink: #D1D2D3; --meta: #ABABAD; --rule: #2C2D30; --link: #8B8B93;
     --divider-bg: #1A1D21; --divider-line: #3A3B3E;
     --strip: #151B23; --strip-ink: #F0F6FC;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--pane); }
-  body { font-family: "Lato", sans-serif; position: relative; -webkit-font-smoothing: antialiased; }
-  .mono { font-family: "JetBrains Mono", monospace; }
+  body { font-family: "Text", sans-serif; position: relative; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: "Mono", monospace; }
 
   /* ---------- left: what you asked, on aubergine ---------- */
   .left { position: absolute; left: 0; top: 0; width: 600px; height: 648px; background: var(--aubergine); overflow: hidden; }
-  #you { position: absolute; left: 56px; top: 58px; font-weight: 700; font-size: 28px; color: var(--lilac); }
-  #headline { position: absolute; left: 56px; top: 100px; font-weight: 900; font-size: 72px; line-height: 76px; color: #fff; letter-spacing: -1px; }
-  #setup { position: absolute; left: 56px; top: 278px; font-size: 44px; line-height: 54px; color: var(--lilac); }
+  #headline { position: absolute; left: 56px; top: 76px; font-weight: 900; font-size: 72px; line-height: 76px; color: #fff; letter-spacing: -1.5px; }
+  #setup { position: absolute; left: 56px; top: 254px; font-size: 44px; line-height: 54px; color: var(--lilac); }
 
   #chip { position: absolute; left: 56px; top: 506px; width: 488px; height: 128px; z-index: 3; }
   #chip .bg { position: absolute; inset: 0; background: #fff; border-radius: 14px; }
@@ -43,18 +44,18 @@
   #chip .q { position: absolute; left: 24px; top: 68px; font-size: 32px; line-height: 40px; color: var(--aubergine); }
   #chip .pin { position: absolute; left: 20px; top: 52px; font-weight: 800; font-size: 120px; line-height: 140px; color: var(--aubergine); letter-spacing: 4px; }
   .tapes { position: absolute; left: 20px; top: 74px; width: 300px; height: 140px; }
-  .tape { position: absolute; width: 90px; height: 34px; background: var(--tape); }
+  .tape { position: absolute; width: 90px; height: 34px; background: var(--tape); box-shadow: 0 0 0 2px var(--tape-edge); }
   #tape1 { left: -26px; top: 6px; transform: rotate(-30deg); }
   #tape2 { left: 236px; top: 6px; transform: rotate(30deg); }
 
   #tri { position: absolute; left: 56px; top: 12px; font-weight: 900; font-size: 60px; line-height: 62px; color: #fff; letter-spacing: -.5px; }
-  #tape-line { position: absolute; left: 56px; top: 528px; font-weight: 700; font-size: 44px; color: var(--amber); }
+  #tape-line { position: absolute; left: 56px; top: 528px; font-weight: 700; font-size: 44px; color: #FFFFFF; }
 
   /* ---------- the band: the answer and its source on one line ---------- */
   #band { position: absolute; left: 0; top: 210px; width: 1280px; height: 304px; background: var(--band); z-index: 1; }
 
   /* ---------- right: the workspace ---------- */
-  .right { position: absolute; left: 600px; top: 0; width: 680px; height: 648px; overflow: hidden; }
+  .right { position: absolute; left: 600px; top: 0; width: 680px; height: 630px; overflow: hidden; }
   .hd { position: absolute; left: 0; top: 0; width: 680px; height: 64px; background: var(--pane); border-bottom: 2px solid var(--rule);
         padding: 0 32px; display: flex; align-items: center; font-weight: 700; font-size: 32px; color: var(--ink); z-index: 4; }
   #col { position: absolute; left: 0; top: 0; width: 680px; z-index: 2; }
@@ -71,21 +72,43 @@
   .tx b { font-weight: 900; }
   .pill { display: inline-flex; align-items: center; height: 56px; padding: 0 24px; border: 3px solid var(--link); border-radius: 28px;
           font-weight: 900; font-size: 40px; color: var(--link); margin-top: 12px; }
-  /* on the band, Dave's post always reads dark-on-yellow */
-  .dave .nm, .dave .tx { color: #1D1C1D; } .dave .nm span { color: #4A3F2A; }
-  .dave .pill { border-color: var(--aubergine); color: var(--aubergine); }
+  /* once the band reaches Dave's post it reads dark-on-lilac in either theme;
+     before that it is an ordinary post on the pane */
+  .dave.on-band .nm, .dave.on-band .tx { color: #1D1C1D; } .dave.on-band .nm span { color: #4E4452; }
+  .dave.on-band .pill { border-color: var(--aubergine); color: var(--aubergine); }
 
   /* ---------- the hand-off strip: your command line ---------- */
   .strip { position: absolute; left: 0; top: 648px; width: 1280px; height: 72px; background: var(--strip); display: flex; align-items: center;
-           padding: 0 24px; font-family: "JetBrains Mono", monospace; font-size: 30px; color: var(--strip-ink); z-index: 5; }
+           padding: 0 24px; font-family: "Mono", monospace; font-size: 30px; color: var(--strip-ink); z-index: 5; }
   #cur { display: inline-block; width: 18px; height: 34px; background: var(--strip-ink); margin-left: 14px; }
   .mark { margin-left: auto; display: flex; align-items: center; gap: 14px; font-weight: 500; font-size: 28px; }
   .sq { width: 40px; height: 40px; border-radius: 9px; background: var(--aubergine); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 26px; }
 </style>
+<script>
+  // ?fonts=<file URL of the type estate> sets the recording faces: Söhne for text,
+  // GT America Mono for the tool call, the PIN and the command line. They stay on
+  // James's Mac; the GIF carries the pixels, the repository never carries the files.
+  window.__fontSource = "open";
+  (() => {
+    const dir = new URLSearchParams(location.search).get("fonts");
+    if (!dir) return;
+    const at = (...parts) => dir.replace(/\/$/, "") + "/" + parts.map(encodeURIComponent).join("/");
+    const face = (family, weight, ...path) => `@font-face{font-family:"${family}";font-weight:${weight};src:url("${at(...path)}") format("woff2")}`;
+    document.write("<style>" + [
+      face("Text", 400, "Söhne", "web", "soehne-buch.woff2"),
+      face("Text", 700, "Söhne", "web", "soehne-halbfett.woff2"),
+      face("Text", 900, "Söhne", "web", "soehne-fett.woff2"),
+      face("Mono", 400, "GT America Mono", "web", "GT-America-Mono-Regular.woff2"),
+      face("Mono", 500, "GT America Mono", "web", "GT-America-Mono-Medium.woff2"),
+      face("Mono", 700, "GT America Mono", "web", "GT-America-Mono-Bold.woff2"),
+      face("Mono", 800, "GT America Mono", "web", "GT-America-Mono-Black.woff2"),
+    ].join("") + "</style>");
+    window.__fontSource = "estate";
+  })();
+</script>
 </head>
 <body>
 <div class="left">
-  <div id="you">You</div>
   <div id="headline">It’s Tuesday,<br>9:07 AM.</div>
   <div id="setup">A jammed printer.<br>Nobody knows the PIN.<br>The guy who did left<br>five months ago.</div>
   <div id="tri"><div id="tri1">Five months.</div><div id="tri2">Three people.</div><div id="tri3">One printer.</div></div>
@@ -108,17 +131,17 @@
   <div class="hd">ClusterFork Systems</div>
   <div id="col">
     <div class="divider"><span>12 October · #facilities</span></div>
-    <div class="post dave" id="dave"><div class="av" style="background:#007A5A">DC</div><div>
+    <div class="post dave" id="dave"><div class="av" style="background:#4A154B">DC</div><div>
       <div class="nm">Dave Chen<span>IT · 12 Oct</span></div>
       <div class="tx">The 3rd floor printer PIN is <b>4729</b>. Posting here so nobody has to ask again.</div>
       <div class="pill">0 reactions</div></div></div>
-    <div class="post priya" id="priya"><div class="av" style="background:#E01E5A">PS</div><div>
+    <div class="post priya" id="priya"><div class="av" style="background:#9B4F96">PS</div><div>
       <div class="nm">Priya Sharma<span>#general · 3 months ago</span></div>
-      <div class="tx">I tried turning it off and on. I am not proud of what I said to it.</div>
+      <div class="tx">I tried turning it off and on. I&nbsp;am not proud of what I&nbsp;said to&nbsp;it.</div>
       <div class="pill">0 replies</div></div></div>
-    <div class="post marcus"><div class="av" style="background:#1264A3">MW</div><div>
+    <div class="post marcus"><div class="av" style="background:#2F5D8A">MW</div><div>
       <div class="nm">Marcus Webb<span>#random · 2 weeks ago</span></div>
-      <div class="tx">does anyone know the admin PIN for the printer on 3?</div>
+      <div class="tx">does anyone know the admin PIN for the printer on&nbsp;3?</div>
       <div class="pill">0 replies</div></div></div>
   </div>
 </div>
@@ -143,7 +166,7 @@
   window.__render = (t) => {
     // frame one is complete at t = 0: the joke, two unanswered asks, a waiting prompt
     const setupOut = 1 - prog(t, 4700, 5050);
-    for (const id of ["you", "headline", "setup"]) $(id).style.opacity = String(setupOut);
+    for (const id of ["headline", "setup"]) $(id).style.opacity = String(setupOut);
 
     const rise = ease(prog(t, 3600, 3850));
     const climb = ease(prog(t, 4700, 5050));
@@ -159,6 +182,7 @@
     $("pin").style.opacity = String(prog(t, 5200, 5400));
 
     $("dave").style.opacity = t < 4000 ? "0" : "1";
+    $("dave").classList.toggle("on-band", wipe >= 0.5);
     $("col").style.top = `${COL_FROM + (COL_TO - COL_FROM) * ease(prog(t, 4000, 4600))}px`;
     $("priya").style.opacity = String(1 - 0.62 * prog(t, 4600, 4900));
 
