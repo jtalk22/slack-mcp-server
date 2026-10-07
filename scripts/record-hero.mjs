@@ -42,7 +42,7 @@ if (!OPEN_FONTS && !existsSync(join(FONTS_DIR, "Söhne", "web"))) {
 }
 const FONTS_QUERY = OPEN_FONTS ? "" : `&fonts=${encodeURIComponent(pathToFileURL(FONTS_DIR).href)}`;
 const FPS = 12;
-const TOTAL_MS = 11500;   // last beat lands at 8.75 s; final_delay holds the end frame 3.5 s more
+const TOTAL_MS = 11800;   // last beat lands at 8.35 s; final_delay holds the end frame 3.5 s more
 const SCALE = 2;          // capture at 2x so text stays sharp on high-density screens
 const WIDTH = 1600;       // GitHub shows the hero at 900 CSS px, i.e. 1800 device px on Retina
 

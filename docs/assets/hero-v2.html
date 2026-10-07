@@ -29,20 +29,21 @@
   html.estate .mono { font-family: "Mono Estate", monospace; }
 
   /* ---------- left: what you asked, and what the agent answered ---------- */
-  #story { position: absolute; left: 56px; top: 48px; width: 500px; }
+  #story { position: absolute; left: 56px; top: 36px; width: 500px; }
   #headline { font-weight: 900; font-size: 72px; line-height: 76px; letter-spacing: -1.5px; }
   #setup { position: absolute; left: 0; top: 176px; font-size: 40px; line-height: 50px; color: var(--lilac); white-space: nowrap; }
   .stamp { position: absolute; left: 0; font-size: 21px; line-height: 26px; letter-spacing: 1.5px; color: var(--meta); }
   #stamp { top: 2px; }
-  #you { position: absolute; left: 0; top: 40px; font-size: 30px; line-height: 38px; color: var(--white); }
-  #chip { position: absolute; left: 0; top: 176px; width: 488px; background: var(--white); border-radius: 12px; padding: 14px 22px; color: var(--field); }
-  #chip .tool { font-weight: 700; font-size: 26px; line-height: 34px; }
-  #chip .q { font-size: 26px; line-height: 34px; }
-  #agent { top: 292px; }
-  #found { position: absolute; left: 0; top: 324px; font-size: 30px; line-height: 38px; color: var(--white); }
+  #you { position: absolute; left: 0; top: 34px; font-size: 28px; line-height: 36px; color: var(--white); }
+  #agent { top: 156px; }
+  #banter { position: absolute; left: 0; top: 184px; font-size: 28px; line-height: 36px; color: var(--white); }
+  #chip { position: absolute; left: 0; top: 270px; width: 488px; background: var(--white); border-radius: 12px; padding: 12px 20px; color: var(--field); }
+  #chip .tool { font-weight: 700; font-size: 24px; line-height: 32px; }
+  #chip .q { font-size: 24px; line-height: 32px; }
+  #found { position: absolute; left: 0; top: 372px; font-size: 28px; line-height: 36px; color: var(--white); }
   #found b { font-weight: 900; }
-  #payoff { position: absolute; left: 0; top: 452px; font-size: 34px; line-height: 40px; font-weight: 900; }
-  #tape { position: absolute; left: 0; top: 540px; font-size: 30px; line-height: 38px; color: var(--lilac); }
+  #payoff { position: absolute; left: 0; top: 494px; font-size: 30px; line-height: 36px; font-weight: 900; }
+  #payoff span { font-weight: 400; color: var(--lilac); }
 
   /* ---------- right: the workspace ---------- */
   .right { position: absolute; left: 600px; top: 0; width: 680px; height: 640px; overflow: hidden; background: var(--pane); }
@@ -100,11 +101,11 @@
   <div id="setup">A jammed printer.<br>Nobody knows the PIN.<br>The guy who did left<br>five months ago.</div>
   <div class="stamp mono" id="stamp">YOU · TUESDAY 9:07 AM</div>
   <div id="you">After the weekend I had… and now the bloody printer is acting up. Find the admin PIN.</div>
-  <div id="chip"><div class="tool mono">slack_search_messages</div><div class="q mono">"printer admin PIN"</div></div>
   <div class="stamp mono" id="agent">AGENT</div>
+  <div id="banter">The weekend I can’t help with. The printer I can.</div>
+  <div id="chip"><div class="tool mono">slack_search_messages</div><div class="q mono">"printer admin PIN"</div></div>
   <div id="found">Found it: <b>4729</b>. Dave in IT, #facilities, 12 October. Zero reactions. Nobody searched.</div>
-  <div id="payoff">Five months. Three people. One printer.</div>
-  <div id="tape">Tape it to the printer.</div>
+  <div id="payoff">Five months. Three people. One printer.<br><span>Tape it to the printer.</span></div>
 </div>
 
 <div class="right">
@@ -150,19 +151,19 @@
     $("headline").style.opacity = out; $("setup").style.opacity = out;
     const inn = prog(t, 3650, 3900);
     $("stamp").style.opacity = inn; $("you").style.opacity = inn;
-    $("chip").style.opacity = String(prog(t, 4400, 4650));
+    const back = prog(t, 4200, 4450);
+    $("agent").style.opacity = back; $("banter").style.opacity = back;
+    $("chip").style.opacity = String(prog(t, 4900, 5150));
 
     // the workspace scrolls back five months; the hit lights up
-    $("dave").style.opacity = t < 4800 ? "0" : "1";
-    $("col").style.top = `${COL_FROM + (COL_TO - COL_FROM) * ease(prog(t, 4900, 5500))}px`;
-    $("dave").classList.toggle("hit", t >= 5600);
-    $("priya").style.opacity = String(1 - 0.55 * prog(t, 5500, 5800));
+    $("dave").style.opacity = t < 5300 ? "0" : "1";
+    $("col").style.top = `${COL_FROM + (COL_TO - COL_FROM) * ease(prog(t, 5400, 6000))}px`;
+    $("dave").classList.toggle("hit", t >= 6100);
+    $("priya").style.opacity = String(1 - 0.55 * prog(t, 6000, 6300));
 
     // the agent answers in words
-    const ans = prog(t, 6000, 6250);
-    $("agent").style.opacity = ans; $("found").style.opacity = ans;
-    $("payoff").style.opacity = String(prog(t, 7600, 7850));
-    $("tape").style.opacity = String(prog(t, 8500, 8750));
+    $("found").style.opacity = String(prog(t, 6500, 6750));
+    $("payoff").style.opacity = String(prog(t, 8100, 8350));
   };
   window.__render(0);
   if (!window.__capture) {

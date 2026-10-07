@@ -26,7 +26,7 @@ npx -y @jtalk22/slack-mcp --setup
 claude mcp add slack -- npx -y @jtalk22/slack-mcp
 ```
 
-**Two flags worth knowing.** Check your own setup, or run it so it can read Slack and never write to it.
+**Two flags worth knowing.** Check your own setup, or run it so it can read Slack and never write to it. On **Enterprise Grid**, session automation can trip Slack's anomaly detection and get the session killed; use the [hosted OAuth route](https://mcp.revasserlabs.com) or Slack's official MCP there.
 
 ```sh
 npx -y @jtalk22/slack-mcp --doctor --security
@@ -143,17 +143,16 @@ On macOS, setup can extract from Chrome and persist the selected storage backend
 
 ## 20 tools: read, act, automate
 
-The local surface ships **20 tools** today: **13 read-only** operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools including the catch-up itself. One of the reads is `slack_session_report`, which reads nothing from Slack: it returns what this process has done, as counts. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
+Read channels, DMs, threads and search; act with a reply, a reaction or a read-state change; run the catch-up and typed workflows locally. The surface is **20 tools** today: **13 read-only** operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools. One of the reads is `slack_session_report`, which reads nothing from Slack: it returns what this process has done, as counts. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
 
 Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-negotiated over stdio, stateless per request over HTTP (no `Mcp-Session-Id`; `GET`/`DELETE` answer 405). The claim is a test, not a sentence: [`test/mcp-era.test.js`](test/mcp-era.test.js) drives the real SDK client at both eras against the real entry points.
 
 <p align="center">
-Every tool the server advertises costs the model context on every turn, before you ask anything. Three profiles trade reach for room:
-
-  <img src="docs/images/diagram-schema-budget.svg" width="900" alt="Estimated schema tokens per turn by profile: essentials 6 tools at about 1,474 tokens or 37 percent, read 13 tools at about 2,359 or 59 percent, all 20 tools at about 4,008 or 100 percent">
 </p>
 
-**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **1,474 estimated tokens** of schema per turn against about **4,008** for all 20. `SLACK_MCP_TOOLS=read` advertises the 13 read-only operations listed below, near 2,359. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 20. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
+**Advertising fewer tools.** Every tool the server advertises sends its schema to the model on every turn, before you ask anything. `SLACK_MCP_TOOLS=essentials` advertises six (unread, history, search, thread, user lookup, send); `SLACK_MCP_TOOLS=read` the 13 read-only operations; `--tools=slack_x,slack_y` an explicit set. The default is all 20. Filtering changes what is advertised, not what is callable.
+
+<img src="docs/images/diagram-schema-budget.svg" width="900" alt="Estimated schema tokens per turn by profile: essentials 6 tools at about 1,474 tokens or 37 percent, read 13 tools at about 2,359 or 59 percent, all 20 tools at about 4,008 or 100 percent">
 
 <details>
 <summary><strong>The full tool inventory</strong></summary>
@@ -436,11 +435,7 @@ Not affiliated with Slack Technologies, Inc. This server uses browser-session cr
 
 <div align="center">
 
-### Your Slack. Your agent. One command.
-
-```bash
-npx -y @jtalk22/slack-mcp --setup
-```
+**Your Slack. Your agent. One command.**
 
 If this removes a Slack tab from your day, [star the repository](https://github.com/jtalk22/slack-mcp-server). Stars are how the next admin-blocked developer finds the local path.
 
