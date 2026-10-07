@@ -12,6 +12,76 @@ Historical lines are never rewritten, so a reader who acted on a claim once can
 still find the claim they acted on. Each note says what the entry asserted, what
 is true instead, and what the evidence is.
 
+### 2026-10-07 — gaps in the release record
+
+Checked against `git for-each-ref refs/tags`, `git log`, the npm registry's
+publish times, and the MCP Registry, all read on 2026-10-07. Nothing below is
+fixed by rewriting an entry; the two items that are safely derivable are fixed
+in the same change as this note, and the rest are recorded for a decision.
+
+**Five entries are dated 2025 and the work is in 2026.** `## [1.0.0]`,
+`## [1.0.5]`, `## [1.0.6]`, `## [1.1.0]` and `## [1.1.1]` carry 2025 dates.
+Every other entry in the file carries 2026 and matches its tag. The repository
+contains no commit dated earlier than 2026-01-03 17:23:26 +0000, which is the
+initial commit, subject "Initial release: Slack MCP Server v1.0.0";
+`git log --all --until=2025-12-31` returns nothing. Tag `v1.0.0` was created
+2026-01-03. The npm registry, an independent record, gives 1.0.0 as published
+2026-01-03T20:26:39Z, 1.0.6 as 2026-01-08T12:38:38Z, 1.1.0 as
+2026-01-08T13:01:11Z and 1.1.1 as 2026-01-08T13:04:05Z.
+
+For 1.0.6, 1.1.0 and 1.1.1 the month and day already match the publish record
+exactly and only the year is wrong, so those three are year typos with
+independent proof. 1.0.0 differs in both year and day: the entry says 01-06
+where the tag and the publish both say 01-03. 1.1.1 is also dated before
+`## [1.1.2] - 2026-01-08` while both were published within three minutes of
+each other on the same day, so as written the file claims a year passed between
+them. 1.0.5 was never tagged and never published — npm goes 1.0.4 to 1.0.6 —
+so there is nothing independent to date it against.
+
+Recommended correction, for the maintainer to apply or decline: set those five
+years to 2026, and 1.0.0's day to 01-03. That edits five historical lines, so
+it is not done here.
+
+**Eight compare links point at tags that do not exist.** `[1.0.5]`, `[1.0.6]`,
+`[1.1.0]`, `[1.1.1]`, `[1.1.2]`, `[4.1.1]`, `[4.1.2]` and `[4.2.0]` reference
+one or both of `v1.0.5`, `v1.0.6`, `v1.1.0`, `v1.1.1`, `v4.1.1`, `v4.1.2`, none
+of which was ever created. They resolve to a 404. They are left as they are,
+because repointing a link at a different pair of tags would change what the
+record says those releases contained.
+
+**Fourteen compare links were missing and are added here.** 4.4.0 through 5.0.1
+and Unreleased had none; the block stopped at 4.3.0. Every endpoint used is a
+tag that exists, so these are derived, not asserted. The whole block is now in
+descending order, which it was not — it ran 1.2.4 down to 1.0.0 and then
+restarted at 4.3.0.
+
+**4.2.1 and 4.2.2 have compare links and no entries.** Both were tagged
+2026-04-26 and published to npm the same day. 4.2.0 had the same gap until this
+change set, where its entry was reconstructed from its release-notes file; for
+4.2.1 and 4.2.2 the only surviving record is the tag diff.
+
+**Ten published versions have no entry at all**: 1.0.3, 1.0.4, 1.1.3, 1.1.8,
+1.1.9, 3.2.2, 3.2.3, 3.2.5, 4.2.1 and 4.2.2. Three entries describe versions
+that were never published to npm: 1.0.5, 4.1.1 and 5.0.1. Three entries have no
+tag: 3.2.1, 4.1.1 and 4.1.2, though 3.2.1 and 4.1.2 were both published.
+
+**There is no 5.0.1 anywhere outside this repository.** `package.json` says
+5.0.1 and tag `v5.0.1` was created 2026-09-30, but npm's highest published
+version is 5.0.0 (2026-08-24T22:56:36Z) and its `latest` tag points there. The
+MCP Registry's newest entry for `io.github.jtalk22/slack-mcp-server` is 5.0.0,
+flagged `isLatest`, published 2026-08-24T22:56:55Z. So the registry is not
+lagging behind npm — 5.0.1 was prepared, tagged and written up, and never
+shipped. Either publish it or the version in `package.json` overstates what
+users can install.
+
+**Release notes stopped being written.** `.github/` holds eight files, for
+1.2.4, 2.0.0, 3.0.0, 3.1.0, 3.2.0, 3.2.4, 3.2.5 and 4.0.0. The practice then
+moved into `docs/` for 4.1.2 and 4.2.0 — both folded into this file in the same
+change set as this note — and stopped after that. 5.0.0 and 5.0.1 have none.
+Nothing in the repository requires them, and the changelog entries from 4.6.1
+onward carry the prose a release note used to; recording the gap rather than
+back-filling eight months of notes.
+
 ### 2026-10-07 — the 4.1.0 "Stealth Mode" claim
 
 Under `## [4.1.0] - 2026-04-01`, the Highlights list reads:
@@ -1119,6 +1189,33 @@ npx @jtalk22/slack-mcp
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
+[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...HEAD
+[5.0.1]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.9.0...v5.0.0
+[4.9.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.8.0...v4.9.0
+[4.8.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.7.0...v4.8.0
+[4.7.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.6.2...v4.7.0
+[4.6.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.6.1...v4.6.2
+[4.6.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.6.0...v4.6.1
+[4.6.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.5.0...v4.6.0
+[4.5.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.3...v4.5.0
+[4.4.3]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.2...v4.4.3
+[4.4.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.1...v4.4.2
+[4.4.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.0...v4.4.1
+[4.4.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.3.0...v4.4.0
+[4.3.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.2...v4.3.0
+[4.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.1...v4.2.2
+[4.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.0...v4.2.1
+[4.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.2...v4.2.0
+[4.1.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.1...v4.1.2
+[4.1.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.0...v4.1.1
+[4.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.0.0...v4.1.0
+[4.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.5...v4.0.0
+[3.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.3...v3.2.4
+[3.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v2.0.0...v3.0.0
+[2.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.4...v2.0.0
 [1.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.1...v1.2.2
@@ -1134,16 +1231,3 @@ npx @jtalk22/slack-mcp
 [1.0.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.0...v1.0.5
 [1.0.0]: https://github.com/jtalk22/slack-mcp-server/releases/tag/v1.0.0
-[4.3.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.2...v4.3.0
-[4.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.1...v4.2.2
-[4.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.0...v4.2.1
-[4.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.2...v4.2.0
-[4.1.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.1...v4.1.2
-[4.1.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.0...v4.1.1
-[4.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.0.0...v4.1.0
-[4.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.5...v4.0.0
-[3.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.3...v3.2.4
-[3.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.1.0...v3.2.0
-[3.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.0.0...v3.1.0
-[3.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v2.0.0...v3.0.0
-[2.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.4...v2.0.0
