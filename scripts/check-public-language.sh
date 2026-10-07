@@ -12,6 +12,7 @@ SCAN_PATHS=(
   "$ROOT/docs"
   "$ROOT/public"
   "$ROOT/templates/public-pages"
+  "$ROOT/.github/launch-posts.md"
   "$ROOT/.github/ISSUE_REPLY_TEMPLATE.md"
   "$ROOT/.github/RELEASE_NOTES_TEMPLATE.md"
 )
