@@ -341,3 +341,36 @@ test("the since window is passed to Slack as an epoch oldest bound", async () =>
   assert.equal(historyCall.params.oldest, String(since.epoch));
   assert.equal(Number(historyCall.params.oldest), NOW_EPOCH - 168 * HOUR);
 });
+
+test("catch-up places a teamless colleague the same way a single-channel read does", async () => {
+  // Slack omits `team` for same-workspace authors. handlers.js resolves the
+  // conversation's sharing state and passes it; without the same dep here the
+  // identical message was `internal` through slack_conversations_history and
+  // `unknown` through slack_catch_me_up, so the untrusted counts from the two
+  // tools were different scales rather than two readings of one workspace.
+  const msg = { ts: "1700000000.000100", user: "U_COLLEAGUE", text: "ready when you are" };
+  const base = {
+    structuredKeys: ["summary"],
+    resolveUser: async () => "A Colleague",
+    getWorkspaceIdentity: async () => ({ homeTeamId: "T_HOME", selfUserId: "U_ME", workspaceUrl: null }),
+    slackAPI: async (method) => {
+      if (method === "conversations.list") return { channels: [{ id: "C1", name: "general" }] };
+      if (method === "conversations.history") return { messages: [msg] };
+      if (method === "conversations.replies") return { messages: [] };
+      throw new Error(`unexpected ${method}`);
+    },
+  };
+  const run = async (isConversationExternallyShared) => {
+    const bundle = await assembleCatchUp({
+      profile: { profile_name: "p", workflow_kind: "custom", channels: ["C1"], priority_people: [] },
+      since: resolveSince({ profile: { summary_cadence: "on_demand" } }),
+      deps: { ...base, ...(isConversationExternallyShared ? { isConversationExternallyShared } : {}) },
+    });
+    return bundle.conversations[0].messages[0];
+  };
+
+  assert.equal((await run(async () => false)).origin, "internal", "an unshared channel places the author");
+  assert.equal((await run(async () => true)).origin, "unknown", "a shared channel cannot place them");
+  assert.equal((await run(async () => null)).origin, "unknown", "a failed probe still fails closed");
+  assert.equal((await run()).origin, "unknown", "and the dep is optional, defaulting to fail-closed");
+});
