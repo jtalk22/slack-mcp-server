@@ -52,6 +52,7 @@ for (const theme of THEMES) {
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: SCALE });
     await page.addInitScript(() => { window.__capture = true; });
     await page.goto(`file://${SOURCE}?theme=${theme}${FONTS_QUERY}`);
+    await page.evaluate(() => window.__fontsLoaded);
     await page.evaluate(() => document.fonts.ready);
     const source = await page.evaluate(() => window.__fontSource);
     if (!OPEN_FONTS && source !== "estate") throw new Error(`expected the estate faces, got "${source}"`);

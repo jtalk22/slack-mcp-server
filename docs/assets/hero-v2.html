@@ -32,6 +32,8 @@
   html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--pane); }
   body { font-family: "Text", sans-serif; position: relative; -webkit-font-smoothing: antialiased; }
   .mono { font-family: "Mono", monospace; }
+  html.estate body { font-family: "Text Estate", sans-serif; }
+  html.estate .mono, html.estate .strip { font-family: "Mono Estate", monospace; }
 
   /* ---------- left: what you asked, on aubergine ---------- */
   .left { position: absolute; left: 0; top: 0; width: 600px; height: 648px; background: var(--aubergine); overflow: hidden; }
@@ -88,22 +90,30 @@
   // ?fonts=<file URL of the type estate> sets the recording faces: Söhne for text,
   // GT America Mono for the tool call, the PIN and the command line. They stay on
   // James's Mac; the GIF carries the pixels, the repository never carries the files.
+  // The parameter is only honoured as a file: URL and only ever reaches the FontFace
+  // API — never markup — so a crafted link cannot inject anything into the page.
   window.__fontSource = "open";
+  window.__fontsLoaded = Promise.resolve();
   (() => {
-    const dir = new URLSearchParams(location.search).get("fonts");
-    if (!dir) return;
-    const at = (...parts) => dir.replace(/\/$/, "") + "/" + parts.map(encodeURIComponent).join("/");
-    const face = (family, weight, ...path) => `@font-face{font-family:"${family}";font-weight:${weight};src:url("${at(...path)}") format("woff2")}`;
-    document.write("<style>" + [
-      face("Text", 400, "Söhne", "web", "soehne-buch.woff2"),
-      face("Text", 700, "Söhne", "web", "soehne-halbfett.woff2"),
-      face("Text", 900, "Söhne", "web", "soehne-fett.woff2"),
-      face("Mono", 400, "GT America Mono", "web", "GT-America-Mono-Regular.woff2"),
-      face("Mono", 500, "GT America Mono", "web", "GT-America-Mono-Medium.woff2"),
-      face("Mono", 700, "GT America Mono", "web", "GT-America-Mono-Bold.woff2"),
-      face("Mono", 800, "GT America Mono", "web", "GT-America-Mono-Black.woff2"),
-    ].join("") + "</style>");
-    window.__fontSource = "estate";
+    const raw = new URLSearchParams(location.search).get("fonts");
+    if (!raw) return;
+    let base;
+    try { base = new URL(raw.endsWith("/") ? raw : raw + "/"); } catch { return; }
+    if (base.protocol !== "file:") return;
+    const at = (...parts) => new URL(parts.map(encodeURIComponent).join("/"), base).href;
+    const faces = [
+      ["Text Estate", "400", "Söhne", "web", "soehne-buch.woff2"],
+      ["Text Estate", "700", "Söhne", "web", "soehne-halbfett.woff2"],
+      ["Text Estate", "900", "Söhne", "web", "soehne-fett.woff2"],
+      ["Mono Estate", "400", "GT America Mono", "web", "GT-America-Mono-Regular.woff2"],
+      ["Mono Estate", "500", "GT America Mono", "web", "GT-America-Mono-Medium.woff2"],
+      ["Mono Estate", "700", "GT America Mono", "web", "GT-America-Mono-Bold.woff2"],
+      ["Mono Estate", "800", "GT America Mono", "web", "GT-America-Mono-Black.woff2"],
+    ].map(([family, weight, ...path]) => new FontFace(family, `url(${JSON.stringify(at(...path))})`, { weight }));
+    window.__fontsLoaded = Promise.all(faces.map((f) => f.load().then(() => document.fonts.add(f)))).then(() => {
+      document.documentElement.classList.add("estate");
+      window.__fontSource = "estate";
+    });
   })();
 </script>
 </head>
