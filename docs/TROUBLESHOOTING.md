@@ -93,12 +93,16 @@ npx -y @jtalk22/slack-mcp --setup
 # Option 3: Diagnostics check
 npx -y @jtalk22/slack-mcp --doctor
 
-# Option 4: Repo CLI
-npm run tokens:auto
+# Option 4: Chrome extraction only, no prompts
+npx -y @jtalk22/slack-mcp --refresh-tokens
 
-# Option 5: Manual
-npm run tokens:refresh
+# Option 5: Read-only credential check (never extracts from Chrome)
+npx -y @jtalk22/slack-mcp --status
 ```
+
+`--setup` extracts from Chrome and falls back to manual entry if that finds nothing. `--refresh-tokens` does the extraction alone and prints the reason code when it fails.
+
+From a git checkout the same work is `npm run tokens:auto`, `npm run tokens:refresh`, and `npm run tokens:status`. Those scripts do not exist for an `npx` install.
 
 ---
 
@@ -147,7 +151,7 @@ API Key:   smcp_xxxxxxxxxxxx
 
 You can also set a custom key:
 ```bash
-SLACK_API_KEY=your-custom-key npm run web
+SLACK_API_KEY=your-custom-key npx -y @jtalk22/slack-mcp web
 ```
 
 ### Can't Connect to localhost:3000
@@ -244,25 +248,50 @@ tail -50 ~/Library/Logs/Claude/mcp-server-slack.log
 
 **Symptom:** `slack_refresh_tokens` returns "Could not extract from Chrome"
 
-**Requirements:**
-1. Google Chrome must be running (not just in Dock)
-2. Have a Slack tab open at `app.slack.com` (not desktop app)
-3. Be logged into Slack in that tab
-4. In Chrome menu, enable `View > Developer > Allow JavaScript from Apple Events`
-5. Grant accessibility permissions to Terminal/Claude
+**Requirements for the default path** (LevelDB — no AppleScript, no live tab):
 
-**Check permissions:**
-System Preferences → Privacy & Security → Accessibility → Ensure Terminal is enabled
+1. Google Chrome installed
+2. Signed into Slack at `app.slack.com` in a Chrome profile at least once
 
-**Read the reason code.** Extraction errors name their cause per Chrome profile — the `detail` field of the error tells you which of these you're in:
+Chrome does not need to be running and no Slack tab needs to be open. The token is read from Chrome's on-disk Local Storage and the cookie from its cookie database.
+
+**Additional requirements for the AppleScript fallback**, used only when no profile has a cached token on disk, or when forced with `SLACK_MCP_EXTRACTION_MODE=applescript`:
+
+3. Chrome running with a live Slack tab at `app.slack.com` (not the desktop app)
+4. In the Chrome menu, enable `View > Developer > Allow JavaScript from Apple Events`
+5. Automation permission granted to the terminal running the command
+
+Set `SLACK_MCP_EXTRACTION_MODE=leveldb` to skip the AppleScript fallback entirely.
+
+**Read the reason code.** Every extraction failure names its stage. Find the `code` in the error and take that row — the instruction for one code never applies to another:
+
+| Code | Meaning | Fix |
+|------|---------|-----|
+| `extraction_failed_all_paths` | No Chrome profile yielded both a cookie and a token | Sign in to Slack at app.slack.com in Chrome once, then retry |
+| `leveldb_no_matching_profile` | Same, with `SLACK_MCP_EXTRACTION_MODE=leveldb` | Sign in to Slack at app.slack.com in Chrome once, then retry. `SLACK_MCP_CHROME_PROFILE` pins one profile |
+| `no_chrome_profiles` | No Chrome profile directories found | Set `SLACK_MCP_CHROME_USER_DATA_DIR` to the Chrome user-data directory on this machine |
+| `apple_events_javascript_disabled` | The AppleScript fallback ran and Chrome refused it | In Chrome: `View > Developer > Allow JavaScript from Apple Events`, then retry. Or set `SLACK_MCP_EXTRACTION_MODE=leveldb` to skip AppleScript |
+| `chrome_not_ready` | AppleScript found Chrome not running or with no windows | Open Google Chrome with a Slack tab at app.slack.com, then retry |
+| `chrome_extraction_timeout` | The AppleScript token read timed out | Open Slack in Chrome, then retry |
+| `keychain_access_denied` | Chrome's Safe Storage key was refused | Grant this terminal Full Disk Access in System Settings → Privacy & Security, then retry |
+| `keychain_timeout` | The Safe Storage key lookup exceeded the timeout | Unlock the macOS Keychain and retry, or raise `SLACK_MCP_KEYCHAIN_TIMEOUT_MS` (default 15000) |
+| `keychain_lookup_failed` | The Keychain refused the Safe Storage key | Unlock the macOS Keychain and allow this terminal Keychain access in System Settings → Privacy & Security |
+| `unsupported_platform` | Not macOS | Enter the token manually, or set `SLACK_TOKEN` and `SLACK_COOKIE` in the environment |
+| `chrome_extraction_failed` | Chrome returned an error that fits no case above | Read the `detail` field for the underlying Chrome error, then retry |
+
+The `detail` field of `extraction_failed_all_paths` and `leveldb_no_matching_profile` breaks the failure down per Chrome profile. Those per-profile reasons are:
 
 | Reason | Meaning | Fix |
 |--------|---------|-----|
-| `keychain_timeout` | The Chrome Safe Storage key lookup exceeded the timeout | Unlock the Keychain; retry; raise `SLACK_MCP_KEYCHAIN_TIMEOUT_MS` (default 15000) |
-| `keychain_lookup_failed` | Keychain refused the Safe Storage key | Unlock the Keychain; allow this terminal Keychain access |
 | `no_cookie_db` | Profile has no Cookies database | Point `SLACK_MCP_CHROME_USER_DATA_DIR` / `SLACK_MCP_CHROME_PROFILE` at the right Chrome |
-| `no_slack_cookie_row` | No Slack `d` cookie in that profile | Log into app.slack.com in that Chrome profile |
+| `no_slack_cookie_row` | No Slack `d` cookie in that profile | Sign into app.slack.com in that Chrome profile |
+| `no_xoxd_in_cookie` | The `d` cookie decrypted but holds no `xoxd-` value | Sign in to Slack again in that profile so a `xoxd-` cookie is issued |
+| `cookie_query_timeout` | The `sqlite3` query exceeded its 5s timeout | Retry. The query runs against a copy in the temp directory, so Chrome being open is not the cause |
+| `cookie_query_failed` | The `sqlite3` query returned an error | Confirm `sqlite3` is on `PATH`; the query reads a copy of the profile's Cookies database |
+| `cookie_value_malformed` | The stored cookie value is under 4 bytes | Sign in to Slack again in that profile so the `d` cookie is written in full |
+| `unsupported_cookie_format` | The cookie lacks Chrome's `v10` prefix | Only `v10` (AES-128-CBC) is decrypted — use manual token entry for that profile |
 | `cookie_decrypt_failed` | Cookie wouldn't decrypt with the Safe Storage key | Chrome may have re-keyed — restart Chrome, sign into Slack again, retry |
+| `cookie_extraction_failed` | The cookie read failed for an unclassified reason | Retry; if it persists, use manual token entry |
 | `cookie ok, no cached xoxc token in LevelDB` | Cookie found but no cached token on disk | Open Slack in Chrome once so the token gets cached, or use AppleScript mode |
 
 The Safe Storage key is looked up once per run and cached, so a failing Keychain produces one clear error — not a password prompt per profile.
@@ -291,13 +320,19 @@ Browser tokens (xoxc/xoxd) provide the same access you have in Slack's web inter
    - MCP: `~/Library/Logs/Claude/mcp-server-slack.log`
    - Web: `/tmp/slack-web-api.log`
 
-2. Test manually:
+2. Check the runtime and the credential in one pass:
    ```bash
-   cd ~/slack-mcp-server
-   node src/server.js  # Should say "running"
+   npx -y @jtalk22/slack-mcp --doctor
    ```
 
-3. Verify tokens:
+3. Verify the credential without touching Chrome:
    ```bash
-   npm run tokens:status
+   npx -y @jtalk22/slack-mcp --status
+   ```
+
+4. Start the server by hand. On stderr it prints the credential source, the
+   active tool profile, and a `slack-mcp-server v… running` line; it then waits
+   on stdin for an MCP client:
+   ```bash
+   npx -y @jtalk22/slack-mcp
    ```

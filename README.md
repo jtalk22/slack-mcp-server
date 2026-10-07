@@ -168,11 +168,13 @@ Prefer a persistent CLI: `npm install -g @jtalk22/slack-mcp` then `slack-mcp --s
 
 Then:
 
-1. Pick your client in the [setup guide](docs/SETUP.md).
-2. Register the generated stdio command.
+1. Copy the stdio command `--setup` prints when it finishes.
+2. Paste it into your client, or run the `claude mcp add` line it prints.
 3. Fully restart the client.
 4. Ask the agent to run `slack_health_check`.
 5. A workspace name in the response means the connection is live.
+
+Per-client configuration keys are in the [setup guide](docs/SETUP.md).
 
 Use the same server command everywhere:
 

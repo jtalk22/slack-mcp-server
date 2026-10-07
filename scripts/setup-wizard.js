@@ -16,6 +16,7 @@ import {
   saveTokens,
   extractFromChrome,
   getLastExtractionError,
+  fixForExtractionCode,
   isAutoRefreshAvailable,
   TOKEN_FILE,
   getFromFile,
@@ -211,12 +212,16 @@ async function chooseStorageMode(rl) {
 async function runMacOSSetup(rl) {
   print();
   info("Detected platform: macOS");
-  info("Auto-extraction available via AppleScript");
+  info("Auto-extraction reads Chrome's on-disk session; AppleScript is the fallback");
   print();
   print("Requirements:");
   print("  • Chrome browser installed");
-  print("  • Logged into Slack in a Chrome tab");
-  print("  • That Slack tab currently open");
+  print("  • Signed into Slack at app.slack.com in Chrome at least once");
+  print();
+  print(`${colors.dim}Chrome can be closed and no Slack tab needs to be open — the token comes${colors.reset}`);
+  print(`${colors.dim}from Chrome's Local Storage on disk and the cookie from its cookie${colors.reset}`);
+  print(`${colors.dim}database. Only the AppleScript fallback needs a live tab and the Chrome${colors.reset}`);
+  print(`${colors.dim}View > Developer > Allow JavaScript from Apple Events flag.${colors.reset}`);
 
   await pressEnterToContinue(rl);
 
@@ -237,6 +242,10 @@ async function runMacOSSetup(rl) {
       }
     }
     print();
+    // The instruction comes from the reason code, so a cookie-missing failure
+    // is never answered with the AppleScript dev-flag fix for a path the run
+    // did not reach. The AppleScript box stays behind its own code.
+    print(`${colors.bold}Fix:${colors.reset} ${fixForExtractionCode(extractionError?.code)}`);
     if (extractionError?.code === "apple_events_javascript_disabled") {
       print();
       printBox([
@@ -251,10 +260,6 @@ async function runMacOSSetup(rl) {
       print("Once enabled, --setup extracts tokens automatically.");
       print("No DevTools, no copy-paste, just one command.");
     } else {
-      print("Make sure:");
-      print("  1. Chrome is running");
-      print("  2. You have a Slack tab open (app.slack.com)");
-      print("  3. You're logged into that workspace");
       print();
       print(`${colors.dim}Chrome-free or non-macOS? Hosted tier bypasses Chrome entirely:${colors.reset}`);
       print(`${colors.dim}  https://mcp.revasserlabs.com${colors.reset}`);
@@ -398,6 +403,37 @@ async function runManualSetup(rl) {
   success(`User: ${validation.user}`);
 
   return persistTokens(token, cookie);
+}
+
+/**
+ * The stdio command an MCP client has to register, printed on the last screen
+ * of setup instead of linked from it. Setup used to end with a URL to
+ * docs/SETUP.md, which means the one thing the user still needs is the one
+ * thing the screen does not have.
+ *
+ * `--profile` is appended whenever a profile is active: src/cli.js maps it to
+ * SLACK_MCP_PROFILE for the child process, so the client must pass it on every
+ * start or the server reads the default namespace instead of the one the
+ * credentials were just written to.
+ */
+function clientConfigArgs() {
+  const args = ["-y", "@jtalk22/slack-mcp"];
+  if (ACTIVE_PROFILE) args.push("--profile", ACTIVE_PROFILE);
+  return args;
+}
+
+function printClientConfig() {
+  const args = clientConfigArgs();
+  print("Register this stdio command in your MCP client:");
+  print();
+  print(`  ${colors.cyan}{${colors.reset}`);
+  print(`  ${colors.cyan}  "command": "npx",${colors.reset}`);
+  print(`  ${colors.cyan}  "args": [${args.map(a => `"${a}"`).join(", ")}]${colors.reset}`);
+  print(`  ${colors.cyan}}${colors.reset}`);
+  print();
+  print("Claude Code does it in one command:");
+  print();
+  print(`  ${colors.cyan}claude mcp add slack -- npx ${args.join(" ")}${colors.reset}`);
 }
 
 async function showStatus() {
@@ -595,6 +631,7 @@ async function showHelp() {
   print("  npx -y @jtalk22/slack-mcp --setup     Interactive token setup wizard");
   print("  npx -y @jtalk22/slack-mcp --status    Check token health");
   print("  npx -y @jtalk22/slack-mcp --doctor    Run runtime and auth diagnostics");
+  print("  npx -y @jtalk22/slack-mcp --refresh-tokens   Re-extract from Chrome only");
   print("  npx -y @jtalk22/slack-mcp --version   Print version");
   print("  npx -y @jtalk22/slack-mcp --help      Show this help");
   print();
@@ -614,7 +651,10 @@ async function showHelp() {
   print("  SLACK_MCP_MIN_REQUEST_INTERVAL_MS (default 350, 0 disables) and");
   print("  SLACK_MCP_MAX_CONCURRENCY (default 3).");
   print();
-  print(`${colors.bold}npm scripts:${colors.reset}`);
+  // These are git-checkout scripts. Labelled as such because the documented
+  // install is `npx -y @jtalk22/slack-mcp`, where no package.json scripts
+  // exist and `npm run …` cannot work.
+  print(`${colors.bold}From a git checkout (not available to an npx install):${colors.reset}`);
   print("  npm start              Start MCP server");
   print("  npm run web            Start REST API + Web UI (port 3000)");
   print("  npm run tokens:auto    Auto-extract from Chrome (macOS)");
@@ -692,11 +732,15 @@ async function main() {
     if (success) {
       print(`${colors.green}${colors.bold}Setup complete!${colors.reset}`);
       print();
-      print("Next steps:");
-      print("  • Verify: npx -y @jtalk22/slack-mcp --status");
-      print("  • Start server: npx -y @jtalk22/slack-mcp");
-      print("  • Choose your client: https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md");
-      print("  • Restart the client, then run slack_health_check");
+      printClientConfig();
+      print();
+      print("Then:");
+      print("  • Fully restart the client (quit it, do not just close the window)");
+      print("  • Ask the agent to run slack_health_check — a workspace name means it is live");
+      print();
+      print(`${colors.dim}Verify credentials any time: npx -y @jtalk22/slack-mcp --status${colors.reset}`);
+      print(`${colors.dim}Per-client config keys (Cursor, VS Code, Windsurf, Docker, HTTP):${colors.reset}`);
+      print(`${colors.dim}  https://github.com/jtalk22/slack-mcp-server/blob/main/docs/SETUP.md${colors.reset}`);
       print();
       print(`${colors.dim}Want permanent tokens, semantic search, and workflow continuity?${colors.reset}`);
       print(`${colors.dim}Hosted tier: https://mcp.revasserlabs.com — $19/mo Pro, 25 free AI calls/mo.${colors.reset}`);

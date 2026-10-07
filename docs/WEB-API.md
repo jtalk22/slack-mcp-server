@@ -14,11 +14,10 @@ References:
 ## Starting the Server
 
 ```bash
-cd ~/slack-mcp-server
-npm run web
-# Or run directly from npm:
 npx -y @jtalk22/slack-mcp web
 ```
+
+From a git checkout, `npm run web` does the same thing.
 
 The server will:
 1. Start on port 3000
@@ -88,7 +87,7 @@ Dashboard: http://localhost:3000/?key=smcp_xxxxxxxxxxxx
 
 To use a custom key:
 ```bash
-SLACK_API_KEY=your-custom-key npm run web
+SLACK_API_KEY=your-custom-key npx -y @jtalk22/slack-mcp web
 ```
 
 ---

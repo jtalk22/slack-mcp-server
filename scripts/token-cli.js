@@ -3,7 +3,7 @@
  * Token CLI - Manage Slack tokens
  */
 
-import { loadTokensReadOnly, saveTokens, extractFromChrome, getFromFile, getStorageInfo, TOKEN_FILE, META_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
+import { loadTokensReadOnly, saveTokens, extractFromChrome, getLastExtractionError, fixForExtractionCode, getFromFile, getStorageInfo, TOKEN_FILE, META_FILE, KEYCHAIN_SERVICE } from "../lib/token-store.js";
 import { slackAPI } from "../lib/slack-client.js";
 import * as readline from "readline";
 
@@ -64,7 +64,7 @@ async function showStatus() {
     warnLingeringPlaintext();
     console.log("");
     console.log("Run one of:");
-    console.log("  npm run tokens:auto    (with Slack open in Chrome)");
+    console.log("  npm run tokens:auto    (signed into Slack in Chrome)");
     console.log("  npm run tokens:refresh (manual entry)");
     return;
   }
@@ -131,18 +131,26 @@ async function manualRefresh() {
 }
 
 async function autoExtract() {
+  // Reachable from an npx install as `npx -y @jtalk22/slack-mcp
+  // --refresh-tokens` (src/cli.js), so this path may not name `npm run`, and
+  // it may not print the AppleScript requirements as if they were the default:
+  // extraction reads Chrome's on-disk session first.
   console.log("Attempting Chrome auto-extraction...");
-  console.log("");
-  console.log("Make sure:");
-  console.log("  - Chrome is running");
-  console.log("  - Slack tab is open (app.slack.com)");
-  console.log("  - You're logged in");
+  console.log("Requires: signed into Slack at app.slack.com in Chrome at least once.");
   console.log("");
 
   const tokens = extractFromChrome();
   if (!tokens) {
+    const extractionError = getLastExtractionError();
     console.log("Failed to extract tokens from Chrome.");
-    console.log("Try manual entry: npm run tokens:refresh");
+    if (extractionError) {
+      console.log("Code:", extractionError.code);
+      console.log("Reason:", extractionError.message);
+      if (extractionError.detail) console.log("Detail:", extractionError.detail);
+    }
+    console.log("Fix:", fixForExtractionCode(extractionError?.code));
+    console.log("");
+    console.log("Or enter the token by hand: npx -y @jtalk22/slack-mcp --setup");
     process.exit(1);
   }
 

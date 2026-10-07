@@ -18,7 +18,7 @@ The wizard:
 2. extracts the current Chrome Slack session locally;
 3. validates the Slack identity and workspace;
 4. persists the selected storage mode;
-5. prints the next client-configuration step.
+5. prints the stdio command to register, as a JSON object and as a `claude mcp add` one-liner.
 
 Chrome does not need to stay open after the session exists on disk. No DevTools or clipboard step is required for the normal macOS path.
 
@@ -44,7 +44,13 @@ npx -y @jtalk22/slack-mcp --doctor
 - `2`: credentials invalid or expired;
 - `3`: network or runtime failure.
 
-`--status` is read-only and does not trigger Chrome extraction.
+`--status` is read-only and does not trigger Chrome extraction. `--refresh-tokens` runs the Chrome extraction on its own, without the wizard's prompts, and prints the reason code if it fails:
+
+```bash
+npx -y @jtalk22/slack-mcp --refresh-tokens
+```
+
+These flags are the whole supported surface for an `npx` install. The `npm run tokens:*` scripts exist only in a git checkout.
 
 ## Pick your client
 
