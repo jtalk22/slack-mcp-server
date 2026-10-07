@@ -46,7 +46,7 @@ npx -y @jtalk22/slack-mcp --read-only
 
 Checked against Slack's published plans and pricing on 2026-10-07.
 
-A free workspace keeps 90 days of message history, allows 10 app integrations, and gets only Slack's basic AI. The AI people actually want — AI search across the workspace, channel recaps, Slackbot acting as an agent, AI workflow generation — starts on Business+ at $12.50 per user per month on annual billing. Pro, at $7.25, buys unlimited history and unlimited apps, not the advanced AI. So a ten-person free workspace that wants an AI it can ask about its own Slack is looking at roughly $1,500 a year, and the cheaper upgrade does not get them there.
+A free workspace keeps 90 days of message history, allows 10 app integrations, and gets only Slack's basic AI. The AI people actually want — AI search across the workspace, channel recaps, Slackbot acting as an agent, AI workflow generation — starts on Business+ at $15 per user per month on annual billing ($18 month to month). Pro, at $7.25, buys unlimited history and unlimited apps, not the advanced AI. So a ten-person free workspace that wants an AI it can ask about its own Slack is looking at $1,800 a year, and the cheaper upgrade does not get them there.
 
 This package gives that workspace an agent over the same Slack for nothing, running on the AI subscription its people already pay for. Three things follow from how it works:
 

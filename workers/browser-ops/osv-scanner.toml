@@ -33,9 +33,11 @@ id = "GHSA-7pqw-9j4j-h8q3"
 # every advisory against the pinned version, not only the newest one.
 reason = "Transitive via @cloudflare/puppeteer; unreachable under workerd, which cannot spawn processes or unzip. Matches the not_used dismissal on Dependabot alert #57."
 
-# Deliberately NOT ignored: GHSA-c475-qrg2-pj4r, basic-ftp quadratic-time CPU
-# denial of service. Dependabot alert #62 is OPEN, a fix exists (6.2.1), and
-# every previous basic-ftp advisory in this lockfile (#15, #16, #18, #21) was
-# resolved by a version bump rather than a dismissal. Suppressing it here
-# would contradict a live alert, so the scheduled scan stays red on it until
-# the Dependabot bump lands.
+# GHSA-c475-qrg2-pj4r (basic-ftp quadratic-time CPU denial of service,
+# Dependabot alert #62) is resolved by a version bump, like every earlier
+# basic-ftp advisory here (#15, #16, #18, #21), not by an ignore. The fix is
+# in 6.2.1, but get-uri (via pac-proxy-agent) still declares ^5, so
+# package.json overrides basic-ftp to ^6.2.1. The 6.x line's only breaking
+# change is refusing a separate FTP transfer host by default, which get-uri
+# does not use; FTP is unreachable under workerd in any case. Drop the
+# override once get-uri accepts basic-ftp 6.

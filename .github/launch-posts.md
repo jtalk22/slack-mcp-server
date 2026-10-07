@@ -39,7 +39,7 @@ https://github.com/jtalk22/slack-mcp-server
 
 4. --read-only. The write tools are never registered, and refused if called. The one guarantee that does not depend on the model behaving. --doctor --security runs six checks of your own setup, each with the command that tightens it.
 
-5. Slack's own AI search is a Business+ feature, about $1,500 a year for ten people. A free workspace gets none of it. This runs on the model subscription you already pay for, and installs no Slack app, so it uses none of a free plan's ten app slots.
+5. Slack's own AI search is a Business+ feature, $1,800 a year for ten people. A free workspace gets none of it. This runs on the model subscription you already pay for, and installs no Slack app, so it uses none of a free plan's ten app slots.
 
 6. npx -y @jtalk22/slack-mcp --setup · MIT · 20+ tools · signed releases · github.com/jtalk22/slack-mcp-server
 
