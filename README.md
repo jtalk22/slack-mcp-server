@@ -16,11 +16,24 @@
 
 </div>
 
+**Set it up, then register it with your client.**
+
 ```sh
-npx -y @jtalk22/slack-mcp --setup                   # set up once
-claude mcp add slack -- npx -y @jtalk22/slack-mcp   # register it with your client
-npx -y @jtalk22/slack-mcp --doctor --security       # check your own setup
-npx -y @jtalk22/slack-mcp --read-only               # read Slack, never write to it
+npx -y @jtalk22/slack-mcp --setup
+```
+
+```sh
+claude mcp add slack -- npx -y @jtalk22/slack-mcp
+```
+
+**Two flags worth knowing.** Check your own setup, or run it so it can read Slack and never write to it.
+
+```sh
+npx -y @jtalk22/slack-mcp --doctor --security
+```
+
+```sh
+npx -y @jtalk22/slack-mcp --read-only
 ```
 
 <p align="center"><kbd>Claude Code</kbd> <kbd>Claude Desktop</kbd> <kbd>Cursor</kbd> <kbd>Copilot</kbd> <kbd>Windsurf</kbd> <kbd>Gemini CLI</kbd> <kbd>Codex CLI</kbd> <kbd>any stdio MCP client</kbd></p>
@@ -327,12 +340,14 @@ Save workflow profiles for incident rooms, executive briefs, support inboxes, la
 
 ## Where credentials live
 
-Resolution is deterministic; first hit wins:
+Resolution is deterministic; the first hit wins.
 
-1. `SLACK_TOKEN` + `SLACK_COOKIE`
-2. token file (`chmod 600`)
-3. macOS Keychain
-4. Chrome extraction on macOS
+| | Source | Where it comes from |
+|---|---|---|
+| 1 | `SLACK_TOKEN` + `SLACK_COOKIE` | your client's environment configuration |
+| 2 | Token file | written by `--setup`, `chmod 600` |
+| 3 | macOS Keychain | written by `--setup` |
+| 4 | Chrome extraction | macOS only, run on demand |
 
 How long a session credential lasts is worth measuring rather than assuming. The two halves have different lifetimes — the `d` cookie is long-lived, the `xoxc` token is the volatile one — and this project previously quoted one or two weeks for both. On one real workspace a credential written on 2026-07-04 still authenticated on 2026-10-07, 94 days later. One credential is not a distribution, so treat that as an existence proof rather than a promise: yours may rotate sooner. `slack_token_status` reports the age of what you actually have. When Slack returns `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or HTTP 401, run `npx -y @jtalk22/slack-mcp --setup` to recover locally. On macOS, `slack_refresh_tokens` or `--refresh-tokens` refreshes without leaving the client; the optional LaunchAgent in [docs/SETUP.md](docs/SETUP.md) keeps long-idle installations healthy.
 
