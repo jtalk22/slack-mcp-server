@@ -79,7 +79,7 @@ Get messages from a channel or DM with user names resolved
 | `latest` | string | no | Unix timestamp - get messages before this time (boundary timestamp included) |
 | `resolve_users` | boolean | no | Convert user IDs to names (default true) |
 | `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
-| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read; off restores the pre-5.1 output shape. Defaults to SLACK_MCP_PROVENANCE, else label. Values: `off`, `label`, `strict`. |
+| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read. Defaults to SLACK_MCP_PROVENANCE, else label. This argument can only tighten labelling, never loosen it: to drop the labels entirely and get the pre-5.1 output shape, set SLACK_MCP_PROVENANCE=off on the server. Values: `off`, `label`, `strict`. |
 | `include_all_metadata` | boolean | no | Pass Slack's include_all_metadata option to conversations.history |
 
 For larger exports, use `slack_get_full_conversation`. Set `resolve_users=false` when user IDs are enough and you want to avoid name-lookup requests.
@@ -98,7 +98,7 @@ Export FULL conversation history with all messages, threads, and user names. Can
 | `max_messages` | number | no | Maximum messages to retrieve (default 2000, max 10000) |
 | `include_threads` | boolean | no | Fetch thread replies (default true) |
 | `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
-| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read; off restores the pre-5.1 output shape. Defaults to SLACK_MCP_PROVENANCE, else label. Values: `off`, `label`, `strict`. |
+| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read. Defaults to SLACK_MCP_PROVENANCE, else label. This argument can only tighten labelling, never loosen it: to drop the labels entirely and get the pre-5.1 output shape, set SLACK_MCP_PROVENANCE=off on the server. Values: `off`, `label`, `strict`. |
 | `include_all_metadata` | boolean | no | Pass Slack's include_all_metadata option to conversations.history and conversations.replies |
 | `output_file` | string | no | Filename to save export (saved to ~/.slack-mcp-exports/) |
 
@@ -115,7 +115,7 @@ Search messages across the Slack workspace
 | `query` | string | yes | Search query (supports Slack syntax like from:@user, in:#channel) |
 | `count` | number | no | Number of results (max 100, default 20) |
 | `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
-| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read; off restores the pre-5.1 output shape. Defaults to SLACK_MCP_PROVENANCE, else label. Values: `off`, `label`, `strict`. |
+| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read. Defaults to SLACK_MCP_PROVENANCE, else label. This argument can only tighten labelling, never loosen it: to drop the labels entirely and get the pre-5.1 output shape, set SLACK_MCP_PROVENANCE=off on the server. Values: `off`, `label`, `strict`. |
 
 ---
 
@@ -154,7 +154,7 @@ Get all replies in a message thread
 | `channel_id` | string | yes | Channel or DM ID |
 | `thread_ts` | string | yes | Thread parent message timestamp |
 | `include_rich_message_fields` | boolean | no | Include Slack message attachments, blocks, metadata, files, and reactions when present |
-| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read; off restores the pre-5.1 output shape. Defaults to SLACK_MCP_PROVENANCE, else label. Values: `off`, `label`, `strict`. |
+| `provenance` | string | no | Author labelling for returned messages. label (default) stamps origin and author_trusted on every message; strict also holds slack_send_message after outside-authored text has been read. Defaults to SLACK_MCP_PROVENANCE, else label. This argument can only tighten labelling, never loosen it: to drop the labels entirely and get the pre-5.1 output shape, set SLACK_MCP_PROVENANCE=off on the server. Values: `off`, `label`, `strict`. |
 | `include_all_metadata` | boolean | no | Pass Slack's include_all_metadata option to conversations.replies |
 
 ---
