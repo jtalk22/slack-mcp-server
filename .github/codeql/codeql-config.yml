@@ -2,15 +2,24 @@ name: "slack-mcp-server CodeQL config"
 
 # Why security-extended and not the default suite.
 #
-# This package's whole subject matter is Slack browser-session credentials
-# (xoxc- tokens and xoxd- cookies), so the credential-handling queries are
-# exactly the ones worth running here. Two of the three that matter are in
-# the default suite already -- js/clear-text-storage-of-sensitive-data and
-# js/clear-text-logging are both @precision high. The third,
-# js/hardcoded-credentials, is @precision low and therefore ships ONLY in
-# security-extended. Running the default suite would return a clean-looking
-# result while never evaluating the query most likely to fire on this
-# codebase, which is a worse outcome than a noisy one.
+# The difference is precision. The default code-scanning suite selects only
+# @precision high and very-high (misc/suite-helpers/code-scanning-selectors.yml);
+# security-extended adds @precision medium where the severity is error or
+# warning. On this tree that is 16 of the 103 rules that run, and it is where
+# the findings worth having came from:
+#
+#   - js/file-system-race is @precision medium, so the default suite would not
+#     have run it. It is what surfaced the API key being written under the
+#     default umask and only then chmod-ed to 0600 -- a real window in which a
+#     credential sat world-readable on disk.
+#   - js/file-access-to-http and js/http-to-file-access are also medium, and
+#     account for 6 of the 12 alerts catalogued in the pull request.
+#
+# js/type-confusion-through-parameter-tampering, the other real bug this
+# caught, is @precision high and would have been found either way.
+#
+# A full run finishes in about a minute on ~13.5k lines, so the extra queries
+# cost effectively nothing.
 queries:
   - uses: security-extended
 

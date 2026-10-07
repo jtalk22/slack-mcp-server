@@ -43,6 +43,13 @@ jobs:
       # This tree is ~13.5k lines of first-party JavaScript and a full analysis
       # finishes in about a minute, so the optimisation buys nothing here and
       # costs completeness on exactly the files worth watching.
+      #
+      # Caveat worth knowing: this is a feature flag read by the action
+      # (src/feature-flags.ts), not a documented `with:` input. Dependabot
+      # bumps the action SHA weekly, and if a future version stops honouring
+      # the flag, pull-request results quietly shrink back to diff-only --
+      # where fewer alerts looks like good news. If the alert count on a pull
+      # request drops sharply for no obvious reason, check this first.
       CODEQL_ACTION_DIFF_INFORMED_QUERIES: false
 
     steps:
