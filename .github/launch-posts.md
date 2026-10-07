@@ -10,18 +10,18 @@ Recheck live numbers before posting: `npm view @jtalk22/slack-mcp version` must 
 
 **Body:**
 
-I built this because Slack's own AI search needs a Business+ plan, and a free or Pro workspace gets none of it. This is an MCP server that gives Claude Code, Cursor or any stdio client your Slack — unreads, threads, search, catch-up — through the session you already have in Chrome. No Slack app, no bot token, no admin approval. It runs locally and talks to Slack and nowhere else.
+I built this because Slack's own AI search needs a Business+ plan, and a free or Pro workspace gets none of it. It is an MCP server that gives Claude Code, Cursor or any stdio client your Slack (unreads, threads, search, catch-up) through the session you already have in Chrome, with no Slack app and no admin approval. It runs locally and talks to Slack and nowhere else.
 
 5.1.0 is out today. What changed, measured on a real workspace:
 
 - The catch-up could not see mentions or thread replies. It filtered on `unread_count_display` from `conversations.list`, which is zero the moment a channel has been opened. Before: 0 conversations reported while 10 mentions waited. It now also reads `client.counts`, the endpoint Slack's own web client uses for its sidebar badges. After: 7 conversations, 10 mentions.
-- Every message now says who wrote it: self, internal, external (Slack Connect), bot, or unknown. Building it found that Slack omits `team` for authors inside your own workspace, so a naive classifier calls half your colleagues unknown. A conversation Slack reports as not shared cannot hold an outside author, so those are internal. On a 20-message channel: 11 unknown before, 0 after.
+- Every message now says who wrote it: you, a colleague, someone from another company over Slack Connect, or a bot. Building it found that Slack omits the team field for authors inside your own workspace, so a naive classifier calls half your colleagues unknown. A channel Slack reports as not shared cannot hold an outside author, so those are colleagues. On a 20-message channel, unknowns went from 11 to 0.
 - `--read-only`: the four write tools are not registered, and refused if a client calls one anyway. The one guarantee that does not depend on the model behaving.
 - `--doctor --security`: six checks of your own setup, each with the command that tightens it.
 - Commitments, owner gaps and open questions from the catch-up, each row with the text that matched and a permalink. The rules are shallow and the output says so.
 - A published prompt-injection corpus — bidi overrides, zero-width splits, tool-call mimicry, bot relays — so other MCP authors can test their servers.
 
-Limits, stated plainly: `client.counts` is undocumented and can change without notice. A provenance label is advice to the model, not a control. The credential is your Chrome session, decrypted on your Mac with Chrome's Safe Storage key from your Keychain — the same read infostealers do, except you run it and nothing leaves the host. The source is plain JavaScript; audit it before handing it a session.
+Limits, stated plainly: `client.counts` is undocumented and can change without notice. An author label is advice to the model; the only guarantee that does not depend on the model is `--read-only`. The credential is your Chrome session, decrypted on your Mac with Chrome's Safe Storage key from your Keychain — the same read infostealers do, except you run it and nothing leaves the host. The source is plain JavaScript; audit it before handing it a session.
 
     npx -y @jtalk22/slack-mcp --setup
 
@@ -35,7 +35,7 @@ https://github.com/jtalk22/slack-mcp-server
 
 2. The catch-up could not see mentions. It read conversations.list, which reports zero unread the moment a channel has been opened. Measured: 0 conversations while 10 mentions waited. 5.1 reads the endpoint Slack's own sidebar badges use. After: 7 conversations, 10 mentions.
 
-3. Every message now says who wrote it: self, internal, external, bot. Slack Connect text and relay bots reach your model labelled, not removed. Found on the way: Slack omits `team` for your own colleagues, so a naive classifier calls half of them unknown. 11 → 0.
+3. Every message now says who wrote it: you, a colleague, someone from another company, or a bot. Slack Connect text and relay bots reach your model with the label on. Found on the way: Slack omits the team field for your own colleagues, so a naive classifier calls half of them unknown. 11 → 0.
 
 4. --read-only. The write tools are never registered, and refused if called. The one guarantee that does not depend on the model behaving. --doctor --security runs six checks of your own setup, each with the command that tightens it.
 
@@ -47,7 +47,7 @@ https://github.com/jtalk22/slack-mcp-server
 
 slack-mcp 5.1.0 is out. It gives an AI agent — Claude Code, Cursor, any MCP client — your Slack through the browser session you already have: unreads, threads, search, catch-up. No Slack app, no bot token, no admin approval.
 
-Why it exists: Slack's own AI search needs a Business+ plan. A free or Pro workspace gets none of it. This runs locally, on the model subscription you already pay for.
+It exists because Slack's own AI search needs a Business+ plan, and a free or Pro workspace gets none of it. This runs locally, on the model subscription you already pay for.
 
 What 5.1 fixes, measured on a real workspace: the catch-up could not see mentions or thread replies — 0 reported while 10 waited; now 7 conversations and 10 mentions. Every message now says who wrote it, so text from outside your workspace reaches the model labelled. A read-only mode removes the write tools entirely. A security doctor checks your own setup and prints the command that tightens each warning.
 
