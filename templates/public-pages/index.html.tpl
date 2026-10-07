@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Slack MCP Server — Catch up on Slack without reading it</title>
-  <meta name="description" content="Catch up on Slack without reading it. Search DMs, follow threads, and draft replies from your AI client. Free, local, MIT-licensed, with 19 working tools.">
+  <meta name="description" content="Catch up on Slack without reading it. Search DMs, follow threads, and draft replies from your AI client. Free, local, MIT-licensed, with {{SELF_HOSTED_TOOL_COUNT}} working tools.">
   <link rel="canonical" href="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Slack MCP Server — Ask what happened. Get receipts. Close the loop.">
-  <meta property="og:description" content="Your Slack session, your AI client, 19 working tools. Try the interactive demo, then run the free local setup.">
+  <meta property="og:description" content="Your Slack session, your AI client, {{SELF_HOSTED_TOOL_COUNT}} working tools. Try the interactive demo, then run the free local setup.">
   <meta property="og:url" content="{{GITHUB_PAGES_ROOT}}/">
   <meta property="og:image" content="{{SOCIAL_IMAGE_URL}}">
   <meta property="og:image:width" content="1280">

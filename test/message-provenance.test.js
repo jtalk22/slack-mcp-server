@@ -122,3 +122,49 @@ test("isProvenanceEnabled is false only for off", () => {
   assert.equal(isProvenanceEnabled(PROVENANCE_MODES.LABEL), true);
   assert.equal(isProvenanceEnabled(PROVENANCE_MODES.STRICT), true);
 });
+
+// Slack omits `team` from a message whose author is in the reading workspace,
+// so without the conversation's sharing state an ordinary channel reads as
+// mostly unplaceable. Measured on a real channel before this branch existed: 11
+// of 20 messages were unknown; after it, 16 internal and 4 bot, 0 unknown.
+test("a non-shared conversation places a team-less author inside the workspace", () => {
+  const origin = classifyMessageOrigin(
+    { user: "U_COLLEAGUE" },
+    { ...HOME, conversationExternallyShared: false }
+  );
+  assert.equal(origin, MESSAGE_ORIGINS.INTERNAL);
+  assert.equal(isTrustedOrigin(origin), true);
+});
+
+test("a shared conversation keeps a team-less author unknown", () => {
+  // The channel can hold someone from another workspace, so an author with no
+  // team id could be either. Unknown is the only honest answer.
+  const origin = classifyMessageOrigin(
+    { user: "U_MAYBE_OUTSIDE" },
+    { ...HOME, conversationExternallyShared: true }
+  );
+  assert.equal(origin, MESSAGE_ORIGINS.UNKNOWN);
+  assert.equal(isTrustedOrigin(origin), false);
+});
+
+test("an unknown sharing state still fails closed", () => {
+  // null means the conversations.info probe failed. A failed probe must never
+  // read as "not shared".
+  for (const sharing of [null, undefined]) {
+    const origin = classifyMessageOrigin(
+      { user: "U_COLLEAGUE" },
+      { ...HOME, conversationExternallyShared: sharing }
+    );
+    assert.equal(origin, MESSAGE_ORIGINS.UNKNOWN, String(sharing));
+  }
+});
+
+test("the non-shared shortcut never outranks a bot marker or a real team id", () => {
+  const ctx = { ...HOME, conversationExternallyShared: false };
+  assert.equal(classifyMessageOrigin({ user: "U_BOT", bot_id: "B1" }, ctx), MESSAGE_ORIGINS.BOT);
+  assert.equal(classifyMessageOrigin({ user: "U_BOT", app_id: "A1" }, ctx), MESSAGE_ORIGINS.BOT);
+  assert.equal(classifyMessageOrigin({ user: "U_OUT", team: "T_OTHER" }, ctx), MESSAGE_ORIGINS.EXTERNAL);
+  assert.equal(classifyMessageOrigin({ user: "U_ME" }, ctx), MESSAGE_ORIGINS.SELF);
+  // No user at all is still unplaceable, shortcut or not.
+  assert.equal(classifyMessageOrigin({ subtype: "channel_join" }, ctx), MESSAGE_ORIGINS.UNKNOWN);
+});

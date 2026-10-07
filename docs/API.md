@@ -2,7 +2,7 @@
 
 <!-- Generated from lib/tools.js by scripts/generate-api-docs.js. -->
 
-The local package exposes 19 tools. Parameter names, required fields, and descriptions below are generated from the same schemas your MCP client receives.
+The local package exposes 20 tools. Parameter names, required fields, and descriptions below are generated from the same schemas your MCP client receives.
 
 ## Reading results
 
@@ -269,6 +269,14 @@ Catch up on a saved workflow profile. Reads the profile's channels (or everythin
 | `since` | string | no | Optional ISO 8601 timestamp — only consider messages newer than this. Defaults to the profile's cadence window: 24 hours for on_demand and daily_8am, 7 days for weekly_monday. |
 
 Reads a saved profile and returns `scope`, `signals`, `conversations`, `output_contract`, and `truncation`. Your calling agent composes the brief from this evidence and cites the source messages. Defaults to 24 hours, or 7 days for a weekly profile. A missing profile returns `profile_not_found` with available profiles and a next action. No hosted account or server-side model is needed.
+
+---
+
+### slack_session_report
+
+What this server process has actually done, as counts: how many messages it read, how many of those were written by authors outside this workspace broken down by origin, how many sends were attempted, and how many were held. A provenance label is a claim about one message; this is the claim about the whole session, and it is the only way to check after the fact whether outside-authored text reached the model and whether anything tried to send on the back of it. Counts only — no message text, no channel name, no user id is recorded.
+
+**Parameters:** None.
 
 
 ## Maintaining this reference

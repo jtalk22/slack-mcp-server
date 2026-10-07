@@ -33,7 +33,7 @@ npx -y @jtalk22/slack-mcp --setup
   <a href="#two-ways-into-slack">Why session auth</a> ·
   <a href="#grid-credentials-and-caching">Grid & credentials</a> ·
   <a href="#install">Install</a> ·
-  <a href="#19-tools-read-act-automate">19 tools</a> ·
+  <a href="#20-tools-read-act-automate">20 tools</a> ·
   <a href="#typed-workflows-slack-in-json-out">Workflows</a> ·
   <a href="#free-local-when-youre-driving-hosted-when-it-must-drive-itself">Local vs hosted</a>
 </p>
@@ -188,19 +188,19 @@ On macOS, setup can extract from Chrome and persist the selected storage backend
 
 ---
 
-## 19 tools: read, act, automate
+## 20 tools: read, act, automate
 
-The local surface ships **19 tools** today: **12 read-only** Slack operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools including the catch-up itself. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
+The local surface ships **20 tools** today: **13 read-only** operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools including the catch-up itself. One of the reads is `slack_session_report`, which reads nothing from Slack: it returns what this process has done, as counts. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
 
 Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-negotiated over stdio, stateless per request over HTTP (no `Mcp-Session-Id`; `GET`/`DELETE` answer 405). The claim is a test, not a sentence: [`test/mcp-era.test.js`](test/mcp-era.test.js) drives the real SDK client at both eras against the real entry points.
 
-**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **985 estimated tokens** of schema per turn against about **3,134** for all 19. `SLACK_MCP_TOOLS=read` advertises the 12 read-only Slack operations listed below, near 1,690. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 19. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
+**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **1,474 estimated tokens** of schema per turn against about **3,931** for all 20. `SLACK_MCP_TOOLS=read` advertises the 13 read-only operations listed below, near 2,355. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 20. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
 
 <details>
 <summary><strong>The full tool inventory</strong></summary>
 <br>
 
-### 12 read-only Slack operations
+### 13 read-only operations
 
 | Tool | Purpose |
 |---|---|
