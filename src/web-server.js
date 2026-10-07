@@ -11,7 +11,7 @@ import express from "express";
 import { randomBytes } from "crypto";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { existsSync, readFileSync, writeFileSync, chmodSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { homedir } from "os";
 import { loadTokensReadOnly } from "../lib/token-store.js";
 import { PUBLIC_METADATA, RELEASE_VERSION } from "../lib/public-metadata.js";
@@ -48,19 +48,36 @@ function getOrCreateAPIKey() {
     return process.env.SLACK_API_KEY;
   }
 
-  // Priority 2: Key file
-  if (existsSync(API_KEY_FILE)) {
-    try {
-      return readFileSync(API_KEY_FILE, "utf-8").trim();
-    } catch {}
-  }
+  // Priority 2: Key file. Read it and handle the failure, rather than asking
+  // existsSync first: the check cannot stay true across the gap before the
+  // read, and the read already has to cope with a missing file. The emptiness
+  // guard matters too -- a truncated key file used to be returned verbatim,
+  // which handed out an empty API key instead of generating a real one.
+  try {
+    const stored = readFileSync(API_KEY_FILE, "utf-8").trim();
+    if (stored) {
+      return stored;
+    }
+  } catch {}
 
   // Priority 3: Generate new secure key
   const newKey = `smcp_${randomBytes(24).toString('base64url')}`;
   try {
-    writeFileSync(API_KEY_FILE, newKey);
-    chmodSync(API_KEY_FILE, 0o600);
-  } catch {}
+    // Create exclusively, with the final mode set at creation time. Writing
+    // first and chmod-ing after leaves a window in which the API key sits on
+    // disk under the default umask, typically world-readable, and nothing
+    // rules out a second server start creating the file in between.
+    writeFileSync(API_KEY_FILE, newKey, { mode: 0o600, flag: "wx" });
+  } catch {
+    // Either another start won the race or the path is unwritable. Prefer what
+    // is already on disk so concurrent starts agree on one key.
+    try {
+      const existing = readFileSync(API_KEY_FILE, "utf-8").trim();
+      if (existing) {
+        return existing;
+      }
+    } catch {}
+  }
 
   return newKey;
 }
