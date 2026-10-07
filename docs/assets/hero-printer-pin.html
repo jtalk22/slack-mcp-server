@@ -99,9 +99,9 @@
   }
   .title .eyebrow { font-family: var(--mono); font-size: 15px; letter-spacing: 3px; text-transform: uppercase;
                     color: #FFB224; margin-bottom: 26px; }
-  .title h1 { font-size: 82px; line-height: 1.02; font-weight: 800; letter-spacing: -2.5px; color: #fff; }
+  .title h1 { font-size: 112px; line-height: .98; font-weight: 800; letter-spacing: -4px; color: #fff; }
   .title h1 .time { color: #FFB224; }
-  .title .beat { font-size: 31px; line-height: 1.32; font-weight: 500; color: rgba(255,255,255,.92); margin-top: 34px; letter-spacing: -.4px; }
+  .title .beat { font-size: 38px; line-height: 1.3; font-weight: 500; color: rgba(255,255,255,.94); margin-top: 40px; letter-spacing: -.6px; }
   .title .beat .dim { color: rgba(255,255,255,.58); }
   .title .mark { position: absolute; left: 110px; bottom: 56px; display: flex; align-items: center; gap: 12px;
                  font-family: var(--mono); font-size: 14px; color: rgba(255,255,255,.62); letter-spacing: .4px; }
@@ -135,16 +135,6 @@
   <h1>It&rsquo;s Tuesday,<br><span class="time">9:07 AM.</span></h1>
   <div class="beat">A jammed printer. Nobody knows the PIN.<br><span class="dim">The guy who did left five months ago.</span></div>
   <div class="mark"><span class="hash">#</span><span><b>slack-mcp</b> · catch up on Slack without reading it</span></div>
-  <div class="printer" aria-hidden="true">
-    <div class="model">LASERJET · 3RD FLOOR</div>
-    <div class="lcd">
-      <div class="err"><span class="bang">!</span>PAPER JAM · TRAY 3</div>
-      <div class="ask">ENTER ADMIN PIN</div>
-      <div class="pin"><span class="cur" id="cur"></span>_ _ _</div>
-    </div>
-    <div class="keys"><span class="key"></span><span class="key"></span><span class="key red"></span><span class="led" id="led"></span></div>
-    <div class="tray"></div>
-  </div>
 </div>
 <div class="stage">
 
@@ -275,9 +265,6 @@
     card.style.opacity = String(1 - ease(w));
     card.style.transform = `translateY(${-ease(w) * 18}px)`;
     card.style.visibility = w >= 1 ? 'hidden' : 'visible';
-    const blink = Math.floor(t / 450) % 2 === 0 ? '1' : '0';
-    $('cur').style.opacity = blink;
-    $('led').style.opacity = blink === '1' ? '1' : '0.25';
     for (const b of BEATS) {
       const k = Math.max(0, Math.min(1, (t - b.at) / FADE));
       for (const id of b.show || []) {
