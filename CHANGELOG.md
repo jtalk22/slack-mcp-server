@@ -246,9 +246,7 @@ after: internal 5 to 16, unknown 11 to 0, outside-authored 15 to 4.
   with its sample size.
 - **npm publishing uses OIDC trusted publishing.** The January attempt failed
   because Node 20 bundles npm 10, which has no OIDC support; the job runs on
-  Node 24. The expired `NPM_SECRET_TOKEN` is retired; a granular `NPM_TOKEN`
-  expiring 2027-01-05 stays as a fallback until a release has gone out through
-  OIDC alone.
+  Node 24. `NPM_SECRET_TOKEN` is retired.
 - **The README moves again.** The hero opens on the joke — It's Tuesday, 9:07 AM, a jammed
   printer, the PIN nobody knows — beside two people who asked and got zero replies. One search
   scrolls five months back to the post that had it all along, and a yellow band joins the PIN to

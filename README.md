@@ -67,7 +67,7 @@ This is not screenshot automation. The agent calls Slack through a real MCP tool
 - **Every message says who wrote it.** `self`, `internal`, `external` or `bot`, so text written outside your workspace reaches the model labelled. An author the server cannot place says `unknown` rather than guessing.
 - **`--read-only`.** The write tools are never registered, and a call to one is refused. The one guarantee that does not depend on the model behaving.
 - **`--doctor --security`.** Six checks of your own setup, each with the one command that tightens it.
-- **A session receipt and signed releases.** `slack_session_report` counts what this process read and tried to send — never the text. Releases publish from CI through npm trusted publishing with signed provenance, and CodeQL and OSV-Scanner run on every change.
+- **A session receipt and signed releases.** `slack_session_report` counts what this process read and tried to send — never the text. Every release carries signed npm provenance you can check with `npm audit signatures`, and CodeQL and OSV-Scanner run on every change.
 
 ---
 
