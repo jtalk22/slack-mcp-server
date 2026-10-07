@@ -1,0 +1,64 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Tuesday, deliberately away from the Friday 06:30-06:45 Dependabot window
+    # so a fresh advisory and a fresh code scan do not land in one review batch.
+    - cron: '17 9 * * 2'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze JavaScript
+    runs-on: ubuntu-latest
+
+    permissions:
+      # security-events: write is the one that matters. Without it the SARIF
+      # upload is rejected, and because the upload is the last thing the
+      # analyze action does, the job can still finish green -- a passing check
+      # with no analysis behind it. Confirmed by reading the uploaded analysis
+      # for this workflow's own run, not by trusting the check mark.
+      security-events: write
+      # Lets the analyze step read the workflow run it belongs to.
+      actions: read
+      contents: read
+
+    env:
+      # Scan the whole tree on a pull request, not just the PR's diff range.
+      #
+      # By default the action runs diff-informed queries on pull_request and
+      # reports only alerts on changed lines. That is a speed optimisation for
+      # large repositories, and it quietly means a PR check can come back green
+      # having never looked at lib/ at all. Measured on this branch: the first
+      # run reported 0 results against 103 rules because the only changed
+      # JavaScript was one new file.
+      #
+      # This tree is ~13.5k lines of first-party JavaScript and a full analysis
+      # finishes in about a minute, so the optimisation buys nothing here and
+      # costs completeness on exactly the files worth watching.
+      CODEQL_ACTION_DIFF_INFORMED_QUERIES: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2
+        with:
+          languages: javascript-typescript
+          config-file: ./.github/codeql/codeql-config.yml
+
+      # No build step: this is plain ESM JavaScript with no compile phase, so
+      # the JavaScript extractor reads the sources directly and autobuild would
+      # be a no-op.
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2
+        with:
+          category: "/language:javascript-typescript"

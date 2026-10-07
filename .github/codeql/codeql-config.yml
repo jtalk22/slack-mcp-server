@@ -1,0 +1,43 @@
+name: "slack-mcp-server CodeQL config"
+
+# Why security-extended and not the default suite.
+#
+# This package's whole subject matter is Slack browser-session credentials
+# (xoxc- tokens and xoxd- cookies), so the credential-handling queries are
+# exactly the ones worth running here. Two of the three that matter are in
+# the default suite already -- js/clear-text-storage-of-sensitive-data and
+# js/clear-text-logging are both @precision high. The third,
+# js/hardcoded-credentials, is @precision low and therefore ships ONLY in
+# security-extended. Running the default suite would return a clean-looking
+# result while never evaluating the query most likely to fire on this
+# codebase, which is a worse outcome than a noisy one.
+queries:
+  - uses: security-extended
+
+# There is no paths-ignore, and that is a measured result rather than an
+# oversight.
+#
+# GitHub's guidance is to minimise exclusions and justify each one, so the
+# baseline was run with no exclusions first and the alert list read before
+# anything was written here. The expectation going in was that the 17
+# token-shaped fixtures in test/ and scripts/verify-install-flow.js would each
+# raise js/hardcoded-credentials and would need excluding by path. They did
+# not raise anything, and the reason generalises: js/hardcoded-credentials is
+# @precision low, while both security-extended and security-and-quality select
+# only high, very-high, and medium. That query is in no suite, so no suite
+# config can make the fixtures fire, and excluding those files by path would
+# suppress nothing while blinding the scan to real code.
+#
+# Real Slack credentials are covered by a better-suited instrument that is
+# already on: secret scanning with push protection, whose provider patterns
+# match genuine xoxc/xoxd values and correctly ignore the fixtures. Note that
+# secret_scanning_non_provider_patterns must stay DISABLED -- enabling it is
+# what would start blocking pushes on those fixtures.
+#
+# The full baseline (17 alerts, 2 of them a deliberately planted positive)
+# and the disposition of each is recorded in the pull request that added this
+# file. Anything added below must name the alert it suppresses and the run
+# that produced it.
+#
+# node_modules/ and the CodeQL database directory are excluded by the
+# extractor itself and do not need listing.

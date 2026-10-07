@@ -16,7 +16,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: '20.x'
+          # 24.x, not 20.x, because npm trusted publishing needs npm >= 11.5.1
+          # and Node >= 22.14.0. Node 20 bundles npm 10.x, which has no OIDC
+          # support at all -- that is why the January 2026 attempt at OIDC
+          # publishing failed within two minutes and the token came straight
+          # back (4712400 -> 6bf61b4 -> 41d25c8 -> 3e58433). 24.x already runs
+          # in the CI matrix, so this adds no new surface.
+          node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
@@ -49,17 +55,50 @@ jobs:
             echo "Version $VERSION not found on npm. Proceeding with publish."
           fi
 
-      - name: Verify npm publish auth
+      # Replaces the old "Verify npm publish auth" step, which ran
+      # scripts/check-npm-publish-auth.sh -> npm whoami -> npm owner ls.
+      # Under trusted publishing there is no authenticated user to name: the
+      # OIDC exchange happens inside `npm publish`, so `npm whoami` returns
+      # E401 and that preflight would fail every release before reaching the
+      # publish. It is exactly what failed on v5.0.1 (run 36762488694,
+      # 2026-09-30) once NPM_SECRET_TOKEN expired, which is why 5.0.1 is
+      # tagged and released on GitHub but absent from npm.
+      #
+      # What is worth asserting instead is the floor that silently broke
+      # January's attempt. A publish that fails because npm is too old to do
+      # OIDC reports a misleading 404; this turns that into one readable line.
+      - name: Verify npm supports trusted publishing
         if: steps.npm_check.outputs.already_published != 'true'
-        run: bash scripts/check-npm-publish-auth.sh
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          NPM_VERSION="$(npm --version)"
+          echo "npm $NPM_VERSION / node $(node --version)"
+          # Sorted order means 11.5.1 <= installed, i.e. the floor is met.
+          if ! printf '11.5.1\n%s\n' "$NPM_VERSION" | sort -V -C; then
+            echo "npm $NPM_VERSION is below the 11.5.1 floor for trusted publishing." >&2
+            echo "Raise node-version in this workflow, or add 'npm install -g npm@latest'." >&2
+            exit 1
+          fi
 
+      # Authentication is GitHub OIDC (npm trusted publishing), not a token.
+      # The id-token: write permission above is what lets npm exchange an
+      # Actions OIDC token for a short-lived publish credential, so there is no
+      # long-lived NPM_SECRET_TOKEN in the release chain any more.
+      #
+      # This requires a one-time registry-side setting that cannot be made from
+      # this repository: npmjs.com -> @jtalk22/slack-mcp -> Settings ->
+      # Trusted Publisher -> GitHub Actions, with organization/user "jtalk22",
+      # repository "slack-mcp-server", workflow "publish.yml", environment
+      # blank. Until that exists the publish step fails; it already fails
+      # today, so this does not trade a working release for a broken one.
+      #
+      # --provenance is kept deliberately. npm's docs say provenance is
+      # generated automatically under trusted publishing, but keeping the flag
+      # states the guarantee explicitly rather than depending on a default.
       - name: Publish to npm
         if: steps.npm_check.outputs.already_published != 'true'
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET_TOKEN }}
 
       - name: Verify server.json matches release version
         shell: bash
