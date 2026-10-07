@@ -293,7 +293,7 @@ Resolution is deterministic; first hit wins:
 3. macOS Keychain
 4. Chrome extraction on macOS
 
-Session credentials commonly rotate after one or two weeks. When Slack returns `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or HTTP 401, run `npx -y @jtalk22/slack-mcp --setup` to recover locally. On macOS, `slack_refresh_tokens` or `--refresh-tokens` refreshes without leaving the client; the optional LaunchAgent in [docs/SETUP.md](docs/SETUP.md) keeps long-idle installations healthy.
+How long a session credential lasts is worth measuring rather than assuming. The two halves have different lifetimes — the `d` cookie is long-lived, the `xoxc` token is the volatile one — and this project previously quoted one or two weeks for both. On one real workspace a credential written on 2026-07-04 still authenticated on 2026-10-07, 94 days later. One credential is not a distribution, so treat that as an existence proof rather than a promise: yours may rotate sooner. `slack_token_status` reports the age of what you actually have. When Slack returns `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or HTTP 401, run `npx -y @jtalk22/slack-mcp --setup` to recover locally. On macOS, `slack_refresh_tokens` or `--refresh-tokens` refreshes without leaving the client; the optional LaunchAgent in [docs/SETUP.md](docs/SETUP.md) keeps long-idle installations healthy.
 
 <details>
 <summary><strong>Storage modes and multi-workspace profiles</strong></summary>
@@ -348,11 +348,53 @@ Local mode runs on your machine and talks only to Slack. The hosted OAuth connec
 
 ## Security and provenance
 
+Every message this server returns becomes text in a model's context, next to your own instructions. Slack is a shared bus: a channel can hold Slack Connect participants from another workspace, guests, and apps relaying content from outside Slack entirely — and the same toolset that reads also writes. That adjacency is the risk worth naming.
+
 - Credential files are owner-only; Keychain-only mode keeps plaintext credentials off disk.
 - Configuration fails closed for unknown storage modes and invalid profiles.
 - Writes are atomic and shared credential state is process-locked.
 - The local web server binds to localhost; workspace write tools carry destructive annotations.
 - Every release publishes from CI with npm provenance.
+
+<details>
+<summary><strong>Author labels on every message</strong></summary>
+
+Each message carries `origin` (`self`, `internal`, `external`, `bot`, `unknown`) and `author_trusted`, derived from fields Slack already returns, so it costs no extra API call. `bot` outranks workspace membership, because an app inside your workspace routinely relays words written outside it. A batch containing outside authors carries an `untrusted_content` envelope naming the count.
+
+It fails closed: an author this server cannot positively place inside your workspace is reported untrusted. The exception is a conversation Slack reports as not shared with any other workspace — one of those structurally cannot hold an outside author, so a colleague with no team id on their message is called internal rather than unknown. When that lookup fails, the label stays unknown.
+
+`SLACK_MCP_PROVENANCE=off|label|strict`. `label` is the default and only adds keys. A per-call `provenance` argument may tighten the mode and never loosen it, because a caller asking for fewer labels may be repeating something it read.
+
+</details>
+
+<details>
+<summary><strong>What the labels cannot do</strong></summary>
+
+A label is advice to the model reading it. It is unsigned, it can be stripped by anything downstream, and it raises the cost of an injected instruction without making one impossible.
+
+`strict` mode additionally holds `slack_send_message` once the session has read outside-authored text. The hold is released by `confirm_untrusted_context`, which the caller sets — so it interrupts the send and puts it on the record, but it cannot prove a human approved it.
+
+Two surfaces are still unlabelled, and knowing that is better than assuming otherwise: user display names, real names and titles from the user tools, and channel topics and purposes from `slack_list_conversations`, are attacker-settable free text that reaches the model without an origin stamp.
+
+</details>
+
+<details>
+<summary><strong>Read-only mode, for when a label is not enough</strong></summary>
+
+```bash
+npx -y @jtalk22/slack-mcp --read-only          # or SLACK_MCP_READ_ONLY=1
+```
+
+The four write-path tools are withheld from `tools/list` *and* refused at dispatch, because a client can call a name it was never offered. The filter is applied after the tool profile resolves, so no profile or custom tool list widens it back. An absent tool needs no trust in the model that would have called it.
+
+</details>
+
+<details>
+<summary><strong>The receipt</strong></summary>
+
+`slack_session_report` returns what this process actually did: messages read, how many were outside-authored and by which origin, writes attempted, writes held. Counts only — no message text, no channel name, no user id. A label is a claim about one message; this is the claim about the session, and it is how you check afterwards whether outside text reached the model and whether anything tried to send on the back of it.
+
+</details>
 
 ### Provenance: don't take my word for it
 
