@@ -20,15 +20,21 @@
       .t-cap   { font: 400 15px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
       .t-mark  { font: 600 12.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.5px; }
 
-      .track { stroke: #BFC1C7; stroke-width: 1.5; fill: none; }
+      .track    { stroke-width: 2.5; fill: none; stroke-linecap: round; }
+      .track.ok { stroke: #15803D; }
+      .track.pass { stroke: #B45309; stroke-dasharray: 7 5; }
+      .who.ok   { color: #15803D; }
+      .who.pass { color: #B45309; }
+      .brand    { fill: #4A154B; }
       .flow  { stroke: #16181D; stroke-width: 1.75; fill: none; }
-      .panel { fill: #FFFFFF; stroke: #E3E4E9; stroke-width: 1.25; }
+      .panel { fill: #FBF7FC; stroke: #D9C2DC; stroke-width: 1.5; }
 
       .chip-ok   { fill: #EDF7F0; stroke: #15803D; stroke-width: 1.75; }
-      .chip-pass { fill: #F1F2F4; stroke: #8A8D95; stroke-width: 1.75; stroke-dasharray: 5 4; }
+      .chip-pass { fill: #FFF7ED; stroke: #B45309; stroke-width: 1.75; stroke-dasharray: 5 4; }
+      .amber { fill: #B45309; }
 
-      .glyph { fill: none; stroke: #16181D; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-      .wall  { stroke: #8A8D95; stroke-width: 2; stroke-linecap: round; }
+      .glyph { fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+      .wall  { stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
     </style>
 
     <marker id="tb-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
@@ -66,49 +72,49 @@
   <text class="t-lede muted" x="56" y="89">Four authors, one channel. Every message is stamped on the way in — and the one that cannot be placed says so.</text>
 
   <!-- the boundary -->
-  <line x1="408" y1="128" x2="408" y2="498" stroke="#16181D" stroke-width="1.5" stroke-dasharray="6 5"/>
-  <text class="t-mark muted" x="408" y="118" text-anchor="middle">THE BOUNDARY</text>
+  <line x1="408" y1="128" x2="408" y2="498" stroke="#4A154B" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <text class="t-mark brand" x="408" y="118" text-anchor="middle">THE BOUNDARY</text>
 
   <!-- ============ four tracks, each landing on its own row ============ -->
 
-  <g transform="translate(56,227)"><use href="#g-you"/></g>
+  <g class="who ok" transform="translate(56,227)"><use href="#g-you"/></g>
   <text class="t-name ink" x="104" y="247">You</text>
-  <line class="track" x1="318" y1="240" x2="452" y2="240"/>
+  <line class="track ok" x1="318" y1="240" x2="452" y2="240"/>
   <rect class="chip-ok" x="452" y="222" width="128" height="36" rx="8"/>
   <text class="t-chip ok" x="516" y="245" text-anchor="middle">self</text>
-  <line class="track" x1="580" y1="240" x2="716" y2="240"/>
+  <line class="track ok" x1="580" y1="240" x2="716" y2="240"/>
 
-  <g transform="translate(56,297)"><use href="#g-colleagues"/></g>
+  <g class="who ok" transform="translate(56,297)"><use href="#g-colleagues"/></g>
   <text class="t-name ink" x="104" y="317">A colleague</text>
-  <line class="track" x1="318" y1="310" x2="452" y2="310"/>
+  <line class="track ok" x1="318" y1="310" x2="452" y2="310"/>
   <rect class="chip-ok" x="452" y="292" width="128" height="36" rx="8"/>
   <text class="t-chip ok" x="516" y="315" text-anchor="middle">internal</text>
-  <line class="track" x1="580" y1="310" x2="716" y2="310"/>
+  <line class="track ok" x1="580" y1="310" x2="716" y2="310"/>
 
-  <g transform="translate(56,364)"><use href="#g-connect"/></g>
+  <g class="who pass" transform="translate(56,364)"><use href="#g-connect"/></g>
   <text class="t-name ink" x="104" y="380">Slack Connect</text>
   <text class="t-sub faint" x="104" y="398">someone else's workspace</text>
-  <line class="track" x1="318" y1="380" x2="452" y2="380"/>
+  <line class="track pass" x1="318" y1="380" x2="452" y2="380"/>
   <rect class="chip-pass" x="452" y="362" width="128" height="36" rx="8"/>
-  <text class="t-chip ink" x="516" y="385" text-anchor="middle">external</text>
-  <line class="track" x1="580" y1="380" x2="716" y2="380"/>
+  <text class="t-chip amber" x="516" y="385" text-anchor="middle">external</text>
+  <line class="track pass" x1="580" y1="380" x2="716" y2="380"/>
 
-  <g transform="translate(56,434)"><use href="#g-relay"/></g>
+  <g class="who pass" transform="translate(56,434)"><use href="#g-relay"/></g>
   <text class="t-name ink" x="104" y="450">A relay app</text>
   <text class="t-sub faint" x="104" y="468">words written somewhere else</text>
-  <line class="track" x1="318" y1="450" x2="452" y2="450"/>
+  <line class="track pass" x1="318" y1="450" x2="452" y2="450"/>
   <rect class="chip-pass" x="452" y="432" width="128" height="36" rx="8"/>
-  <text class="t-chip ink" x="516" y="455" text-anchor="middle">bot</text>
-  <line class="track" x1="580" y1="450" x2="716" y2="450"/>
+  <text class="t-chip amber" x="516" y="455" text-anchor="middle">bot</text>
+  <line class="track pass" x1="580" y1="450" x2="716" y2="450"/>
 
   <text class="t-sub faint" x="580" y="519" text-anchor="middle">a bot inside your workspace still relays words from outside it</text>
 
   <!-- ============ the context ============ -->
   <rect class="panel" x="716" y="128" width="508" height="370" rx="14"/>
-  <text class="t-mark muted" x="744" y="160">ONE MODEL CONTEXT</text>
+  <text class="t-mark brand" x="744" y="160">ONE MODEL CONTEXT</text>
 
-  <rect x="744" y="172" width="452" height="38" rx="8" fill="#FFFFFF" stroke="#16181D" stroke-width="1.6"/>
-  <text class="t-name ink" x="764" y="197">Your own instructions</text>
+  <rect x="744" y="172" width="452" height="38" rx="8" fill="#4A154B"/>
+  <text class="t-name" x="764" y="197" fill="#FFFFFF">Your own instructions</text>
 
   <rect x="744" y="222" width="452" height="36" rx="8" fill="#EDF7F0" stroke="#15803D" stroke-width="1.4"/>
   <text class="t-chip ok" x="764" y="245">self</text>
@@ -118,13 +124,13 @@
   <text class="t-chip ok" x="764" y="315">internal</text>
   <text class="t-cap ok" x="1176" y="315" text-anchor="end">trusted</text>
 
-  <rect x="744" y="362" width="452" height="36" rx="8" fill="#F1F2F4" stroke="#8A8D95" stroke-width="1.4" stroke-dasharray="5 4"/>
-  <text class="t-chip ink" x="764" y="385">external</text>
-  <text class="t-cap muted" x="1176" y="385" text-anchor="end">untrusted</text>
+  <rect x="744" y="362" width="452" height="36" rx="8" fill="#FFF7ED" stroke="#B45309" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <text class="t-chip amber" x="764" y="385">external</text>
+  <text class="t-cap amber" x="1176" y="385" text-anchor="end">untrusted</text>
 
-  <rect x="744" y="432" width="452" height="36" rx="8" fill="#F1F2F4" stroke="#8A8D95" stroke-width="1.4" stroke-dasharray="5 4"/>
-  <text class="t-chip ink" x="764" y="455">bot</text>
-  <text class="t-cap muted" x="1176" y="455" text-anchor="end">untrusted</text>
+  <rect x="744" y="432" width="452" height="36" rx="8" fill="#FFF7ED" stroke="#B45309" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <text class="t-chip amber" x="764" y="455">bot</text>
+  <text class="t-cap amber" x="1176" y="455" text-anchor="end">untrusted</text>
 
   <!-- ============ the way back out ============ -->
   <text class="t-mark muted" x="56" y="556">THE WAY BACK OUT</text>
@@ -149,7 +155,7 @@
   <line x1="56" y1="664" x2="1224" y2="664" stroke="#E3E4E9" stroke-width="1.25"/>
   <rect x="56" y="680" width="12" height="12" rx="3" fill="#EDF7F0" stroke="#15803D" stroke-width="1.6"/>
   <text class="t-cap muted" x="78" y="691">placed inside your workspace</text>
-  <rect x="300" y="680" width="12" height="12" rx="3" fill="#F1F2F4" stroke="#8A8D95" stroke-width="1.6" stroke-dasharray="3 2.5"/>
+  <rect x="300" y="680" width="12" height="12" rx="3" fill="#FFF7ED" stroke="#B45309" stroke-width="1.6" stroke-dasharray="3 2.5"/>
   <text class="t-cap muted" x="322" y="691">labelled, and passed through anyway</text>
   <rect x="604" y="680" width="12" height="12" rx="3" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.6"/>
   <text class="t-cap muted" x="626" y="691">refused</text>

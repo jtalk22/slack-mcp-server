@@ -22,21 +22,12 @@
   </picture>
 </a>
 
+<br>
+<a href="#install"><img src="docs/images/quickstart-terminal.svg" width="560" alt="Quick start. Set up once, then register it with your client: npx -y @jtalk22/slack-mcp --setup, then claude mcp add slack -- npx -y @jtalk22/slack-mcp. Check your own setup: npx -y @jtalk22/slack-mcp --doctor --security. Read Slack, never write to it: npx -y @jtalk22/slack-mcp --read-only."></a>
+
 </div>
 
-```bash
-# set up once, then register it with your client
-npx -y @jtalk22/slack-mcp --setup
-claude mcp add slack -- npx -y @jtalk22/slack-mcp
-
-# check your own setup
-npx -y @jtalk22/slack-mcp --doctor --security
-
-# read Slack, never write to it
-npx -y @jtalk22/slack-mcp --read-only
-```
-
-<p align="center"><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ The whole morning in three minutes — the outage, the migration, the new hire, and the printer</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
+<p align="center"><strong><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html">▶ The whole morning in three minutes</a></strong> · <a href="https://jtalk22.github.io/slack-mcp-server/public/demo-slack-mcp.html">interactive walkthrough</a> · <a href="docs/SETUP.md">setup guide</a></p>
 
 <p align="center">
   <a href="#new-in-51">New in 5.1</a> ·
@@ -49,14 +40,6 @@ npx -y @jtalk22/slack-mcp --read-only
   <a href="#built-past-the-demo">How it works</a> ·
   <a href="#free-local-when-youre-driving-hosted-when-it-must-drive-itself">Local vs hosted</a>
 </p>
-
----
-
-## Slack has already formed opinions.
-
-You ask “what blew up overnight?” and the agent reads the workspace instead of you. It reconstructs the 2 AM P1 from `#incidents`—owner, resolution, and the runbook step that is still wrong. It finds the printer PIN that has been waiting in `#facilities` for five months. Then it closes the handled loops—replies, reactions, read-state changes—only where you approve.
-
-This is not screenshot automation. The agent calls Slack through a real MCP tool surface and receives typed results it can search, summarize, export, or act on.
 
 ---
 
