@@ -152,8 +152,8 @@ function main() {
     results,
     "README tool count",
     readme.includes(`${PUBLIC_METADATA.selfHostedToolCount} tools`) &&
-      readme.includes("12 read-only") &&
-      readme.includes("4 write-path"),
+      readme.includes(`${PUBLIC_METADATA.readOnlyToolCount} read-only`) &&
+      readme.includes(`${PUBLIC_METADATA.writePathToolCount} write-path`),
     "README must state tool count and safety annotation breakdown"
   );
   check(
@@ -185,9 +185,9 @@ function main() {
     results,
     "tool profile counts match published claims",
     TOOLS.length === PUBLIC_METADATA.selfHostedToolCount &&
-      READ_TOOLS.length === 12 &&
+      READ_TOOLS.length === PUBLIC_METADATA.readOnlyToolCount &&
       ESSENTIALS_TOOLS.length === 6,
-    `all=${TOOLS.length} (README ${PUBLIC_METADATA.selfHostedToolCount}), read=${READ_TOOLS.length} (README 12), essentials=${ESSENTIALS_TOOLS.length}`
+    `all=${TOOLS.length} (claimed ${PUBLIC_METADATA.selfHostedToolCount}), read=${READ_TOOLS.length} (claimed ${PUBLIC_METADATA.readOnlyToolCount}), essentials=${ESSENTIALS_TOOLS.length}`
   );
 
   // 5.0.0 removed the hosted upgrade stubs. No profile — including "all" —

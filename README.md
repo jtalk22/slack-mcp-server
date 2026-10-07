@@ -1,6 +1,6 @@
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![npm weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly%20downloads&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c&color=28c840)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-e5482f?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)
+[![npm version](https://img.shields.io/npm/v/@jtalk22/slack-mcp?style=flat-square&logo=npm&logoColor=white&label=npm&labelColor=0b0b0c&color=e5482f)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![npm total downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.npmjs.org%2Fdownloads%2Fpoint%2Flast-year%2F%40jtalk22%2Fslack-mcp&query=%24.downloads&style=flat-square&logo=npm&logoColor=white&label=downloads&labelColor=0b0b0c&color=ffb224)](https://npm-stat.com/charts.html?package=%40jtalk22%2Fslack-mcp)&nbsp;[![npm weekly downloads](https://img.shields.io/npm/dw/%40jtalk22%2Fslack-mcp?style=flat-square&label=weekly&labelColor=0b0b0c&color=ffb224)](https://www.npmjs.com/package/@jtalk22/slack-mcp)&nbsp;[![CI](https://img.shields.io/github/actions/workflow/status/jtalk22/slack-mcp-server/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=0b0b0c&color=28c840)](https://github.com/jtalk22/slack-mcp-server/actions/workflows/ci.yml)&nbsp;[![npm provenance signed](https://img.shields.io/badge/provenance-signed-e5482f?style=flat-square&labelColor=0b0b0c)](#provenance-dont-take-my-word-for-it)&nbsp;[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-ffb224?style=flat-square&labelColor=0b0b0c)](https://registry.modelcontextprotocol.io/v0/servers/io.github.jtalk22%2Fslack-mcp-server/versions/latest)&nbsp;[![Security policy](https://img.shields.io/badge/security-policy_%2B_private_reporting-28c840?style=flat-square&labelColor=0b0b0c)](SECURITY.md)&nbsp;[![Node](https://img.shields.io/node/v/%40jtalk22%2Fslack-mcp?style=flat-square&logo=nodedotjs&logoColor=white&labelColor=0b0b0c&color=28c840)](https://nodejs.org)&nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-e5482f?style=flat-square&labelColor=0b0b0c)](LICENSE)
 
 <img src="docs/assets/icon.svg" width="88" alt="Slack MCP channel mark">
 
@@ -31,9 +31,11 @@ npx -y @jtalk22/slack-mcp --setup
 <p align="center">
   <a href="#built-past-the-demo">How it works</a> ·
   <a href="#two-ways-into-slack">Why session auth</a> ·
+  <a href="#if-your-workspace-is-on-slacks-free-plan">Free Slack</a> ·
   <a href="#grid-credentials-and-caching">Grid & credentials</a> ·
   <a href="#install">Install</a> ·
-  <a href="#19-tools-read-act-automate">19 tools</a> ·
+  <a href="#security-and-provenance">Security</a> ·
+  <a href="#20-tools-read-act-automate">20 tools</a> ·
   <a href="#typed-workflows-slack-in-json-out">Workflows</a> ·
   <a href="#free-local-when-youre-driving-hosted-when-it-must-drive-itself">Local vs hosted</a>
 </p>
@@ -128,6 +130,20 @@ Treat browser-session automation as an acceptable-use decision for you and your 
 
 ---
 
+## If your workspace is on Slack's free plan
+
+Checked against Slack's published plans and pricing on 2026-10-07.
+
+A free workspace keeps 90 days of message history, allows 10 app integrations, and gets only Slack's basic AI. The AI people actually want — AI search across the workspace, channel recaps, Slackbot acting as an agent, AI workflow generation — starts on Business+ at $12.50 per user per month on annual billing. Pro, at $7.25, buys unlimited history and unlimited apps, not the advanced AI. So a ten-person free workspace that wants an AI it can ask about its own Slack is looking at roughly $1,500 a year, and the cheaper upgrade does not get them there.
+
+This package gives that workspace an agent over the same Slack for nothing, running on the AI subscription its people already pay for. Three things follow from how it works:
+
+- **It installs no Slack app, so it uses none of your 10 app slots.** If your workspace is already at the cap, this is the only way left to add an integration at all.
+- **It needs no admin approval**, because it is not an app anyone has to approve. It reads Slack through your own browser session, with exactly the access you already have and nothing more.
+- **It can export what you can still see.** On a free plan, history older than 90 days stops being reachable — Slack's own free export covers public channels only and is admin-only, so DMs and private channels are not in it. `slack_get_full_conversation` writes them out with their threads while they are still inside the window. It cannot retrieve anything already past the line; nothing can.
+
+The browser-session route is not a workaround to apologise for. For a workspace Slack's own AI does not serve, it is the only route there is.
+
 ## Grid, credentials, and caching
 
 **Enterprise Grid.** Grid runs aggressive session-anomaly detection. Browser-session automation can trip it, which flags the session and kills it, regardless of which tool drives the traffic. Outbound calls are paced by default to stay under burst thresholds (`SLACK_MCP_MIN_REQUEST_INTERVAL_MS`, default 350; `SLACK_MCP_MAX_CONCURRENCY`, default 3). Pacing lowers that risk; it does not remove it. On Grid, use the [hosted OAuth tier](https://mcp.revasserlabs.com) or Slack's official MCP instead.
@@ -188,19 +204,19 @@ On macOS, setup can extract from Chrome and persist the selected storage backend
 
 ---
 
-## 19 tools: read, act, automate
+## 20 tools: read, act, automate
 
-The local surface ships **19 tools** today: **12 read-only** Slack operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools including the catch-up itself. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
+The local surface ships **20 tools** today: **13 read-only** operations, **4 write-path** tools that each carry an MCP destructive annotation so clients can gate workspace writes, and 3 local workflow tools including the catch-up itself. One of the reads is `slack_session_report`, which reads nothing from Slack: it returns what this process has done, as counts. Every tool does its work here — reads Slack or local state — and none is a placeholder for something you would have to pay for. Four read tools accept `include_rich_message_fields: true` to surface attachments, blocks, files, reactions, and metadata—complete inputs and response contracts live in [docs/API.md](docs/API.md).
 
 Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-negotiated over stdio, stateless per request over HTTP (no `Mcp-Session-Id`; `GET`/`DELETE` answer 405). The claim is a test, not a sentence: [`test/mcp-era.test.js`](test/mcp-era.test.js) drives the real SDK client at both eras against the real entry points.
 
-**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **985 estimated tokens** of schema per turn against about **3,134** for all 19. `SLACK_MCP_TOOLS=read` advertises the 12 read-only Slack operations listed below, near 1,690. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 19. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
+**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **1,474 estimated tokens** of schema per turn against about **3,931** for all 20. `SLACK_MCP_TOOLS=read` advertises the 13 read-only operations listed below, near 2,355. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 20. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
 
 <details>
 <summary><strong>The full tool inventory</strong></summary>
 <br>
 
-### 12 read-only Slack operations
+### 13 read-only operations
 
 | Tool | Purpose |
 |---|---|
@@ -277,7 +293,7 @@ Resolution is deterministic; first hit wins:
 3. macOS Keychain
 4. Chrome extraction on macOS
 
-Session credentials commonly rotate after one or two weeks. When Slack returns `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or HTTP 401, run `npx -y @jtalk22/slack-mcp --setup` to recover locally. On macOS, `slack_refresh_tokens` or `--refresh-tokens` refreshes without leaving the client; the optional LaunchAgent in [docs/SETUP.md](docs/SETUP.md) keeps long-idle installations healthy.
+How long a session credential lasts is worth measuring rather than assuming. The two halves have different lifetimes — the `d` cookie is long-lived, the `xoxc` token is the volatile one — and this project previously quoted one or two weeks for both. On one real workspace a credential written on 2026-07-04 still authenticated on 2026-10-07, 94 days later. One credential is not a distribution, so treat that as an existence proof rather than a promise: yours may rotate sooner. `slack_token_status` reports the age of what you actually have. When Slack returns `invalid_auth`, `not_authed`, `token_expired`, `token_revoked`, `account_inactive`, or HTTP 401, run `npx -y @jtalk22/slack-mcp --setup` to recover locally. On macOS, `slack_refresh_tokens` or `--refresh-tokens` refreshes without leaving the client; the optional LaunchAgent in [docs/SETUP.md](docs/SETUP.md) keeps long-idle installations healthy.
 
 <details>
 <summary><strong>Storage modes and multi-workspace profiles</strong></summary>
@@ -332,11 +348,53 @@ Local mode runs on your machine and talks only to Slack. The hosted OAuth connec
 
 ## Security and provenance
 
+Every message this server returns becomes text in a model's context, next to your own instructions. Slack is a shared bus: a channel can hold Slack Connect participants from another workspace, guests, and apps relaying content from outside Slack entirely — and the same toolset that reads also writes. That adjacency is the risk worth naming.
+
 - Credential files are owner-only; Keychain-only mode keeps plaintext credentials off disk.
 - Configuration fails closed for unknown storage modes and invalid profiles.
 - Writes are atomic and shared credential state is process-locked.
 - The local web server binds to localhost; workspace write tools carry destructive annotations.
 - Every release publishes from CI with npm provenance.
+
+<details>
+<summary><strong>Author labels on every message</strong></summary>
+
+Each message carries `origin` (`self`, `internal`, `external`, `bot`, `unknown`) and `author_trusted`, derived from fields Slack already returns, so it costs no extra API call. `bot` outranks workspace membership, because an app inside your workspace routinely relays words written outside it. A batch containing outside authors carries an `untrusted_content` envelope naming the count.
+
+It fails closed: an author this server cannot positively place inside your workspace is reported untrusted. The exception is a conversation Slack reports as not shared with any other workspace — one of those structurally cannot hold an outside author, so a colleague with no team id on their message is called internal rather than unknown. When that lookup fails, the label stays unknown.
+
+`SLACK_MCP_PROVENANCE=off|label|strict`. `label` is the default and only adds keys. A per-call `provenance` argument may tighten the mode and never loosen it, because a caller asking for fewer labels may be repeating something it read.
+
+</details>
+
+<details>
+<summary><strong>What the labels cannot do</strong></summary>
+
+A label is advice to the model reading it. It is unsigned, it can be stripped by anything downstream, and it raises the cost of an injected instruction without making one impossible.
+
+`strict` mode additionally holds `slack_send_message` once the session has read outside-authored text. The hold is released by `confirm_untrusted_context`, which the caller sets — so it interrupts the send and puts it on the record, but it cannot prove a human approved it.
+
+Two surfaces are still unlabelled, and knowing that is better than assuming otherwise: user display names, real names and titles from the user tools, and channel topics and purposes from `slack_list_conversations`, are attacker-settable free text that reaches the model without an origin stamp.
+
+</details>
+
+<details>
+<summary><strong>Read-only mode, for when a label is not enough</strong></summary>
+
+```bash
+npx -y @jtalk22/slack-mcp --read-only          # or SLACK_MCP_READ_ONLY=1
+```
+
+The four write-path tools are withheld from `tools/list` *and* refused at dispatch, because a client can call a name it was never offered. The filter is applied after the tool profile resolves, so no profile or custom tool list widens it back. An absent tool needs no trust in the model that would have called it.
+
+</details>
+
+<details>
+<summary><strong>The receipt</strong></summary>
+
+`slack_session_report` returns what this process actually did: messages read, how many were outside-authored and by which origin, writes attempted, writes held. Counts only — no message text, no channel name, no user id. A label is a claim about one message; this is the claim about the session, and it is how you check afterwards whether outside text reached the model and whether anything tried to send on the back of it.
+
+</details>
 
 ### Provenance: don't take my word for it
 

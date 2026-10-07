@@ -30,11 +30,11 @@ test("essentials is the six-tool common-case slice", () => {
   assert.ok(!names.has("slack_add_reaction"), "non-core writes are excluded");
 });
 
-test("read profile is the 12 read-only Slack operations", () => {
+test("read profile is the 13 read-only operations", () => {
   const r = resolveToolProfile("read");
   assert.equal(r.profile, "read");
   assert.deepEqual(r.tools.map((t) => t.name).sort(), [...READ_TOOLS].sort());
-  assert.equal(r.tools.length, 12, "must match the README's read-only table");
+  assert.equal(r.tools.length, 13, "must match the README\'s read-only table");
   assert.ok(!r.tools.some((t) => t.name === "slack_send_message"), "no write tools in read profile");
 });
 
@@ -48,7 +48,7 @@ test("no profile advertises a hosted upgrade stub — the surface is Slack-only"
       assert.ok(!names.includes(stub), `${profile} must not advertise ${stub}`);
     }
   }
-  assert.equal(TOOLS.length, 19, "19 tools: 12 read + 4 write + 3 local workflow");
+  assert.equal(TOOLS.length, 20, "20 tools: 13 read + 4 write + 3 local workflow");
   for (const tool of TOOLS) {
     assert.ok(!/hosted-only|upgrade to Pro|\$19\/mo|signup/i.test(tool.description), `${tool.name} description must not advertise a paid tier`);
   }
