@@ -97,7 +97,9 @@ for pr in "${PRS[@]}"; do
     exit 1
   fi
 
-  gh pr merge "$pr" --squash
+  # An explicit body keeps GitHub from appending the branch's co-author
+  # trailers (a Dependabot commit adds one), which the attribution guard rejects.
+  gh pr merge "$pr" --squash --body "Merged by scripts/merge-train.sh."
   echo "  merged #${pr}"
   git checkout -q main
   git branch -D "merge-train/${branch}" -q 2>/dev/null || true
