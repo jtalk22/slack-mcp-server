@@ -5,6 +5,121 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Corrections to this record
+
+Notes below this heading are dated corrections to the entries above it.
+Historical lines are never rewritten, so a reader who acted on a claim once can
+still find the claim they acted on. Each note says what the entry asserted, what
+is true instead, and what the evidence is.
+
+### 2026-10-07 — gaps in the release record
+
+Checked against `git for-each-ref refs/tags`, `git log`, the npm registry's
+publish times, and the MCP Registry, all read on 2026-10-07. Nothing below is
+fixed by rewriting an entry; the two items that are safely derivable are fixed
+in the same change as this note, and the rest are recorded for a decision.
+
+**Five entries are dated 2025 and the work is in 2026.** `## [1.0.0]`,
+`## [1.0.5]`, `## [1.0.6]`, `## [1.1.0]` and `## [1.1.1]` carry 2025 dates.
+Every other entry in the file carries 2026 and matches its tag. The repository
+contains no commit dated earlier than 2026-01-03 17:23:26 +0000, which is the
+initial commit, subject "Initial release: Slack MCP Server v1.0.0";
+`git log --all --until=2025-12-31` returns nothing. Tag `v1.0.0` was created
+2026-01-03. The npm registry, an independent record, gives 1.0.0 as published
+2026-01-03T20:26:39Z, 1.0.6 as 2026-01-08T12:38:38Z, 1.1.0 as
+2026-01-08T13:01:11Z and 1.1.1 as 2026-01-08T13:04:05Z.
+
+For 1.0.6, 1.1.0 and 1.1.1 the month and day already match the publish record
+exactly and only the year is wrong, so those three are year typos with
+independent proof. 1.0.0 differs in both year and day: the entry says 01-06
+where the tag and the publish both say 01-03. 1.1.1 is also dated before
+`## [1.1.2] - 2026-01-08` while both were published within three minutes of
+each other on the same day, so as written the file claims a year passed between
+them. 1.0.5 was never tagged and never published — npm goes 1.0.4 to 1.0.6 —
+so there is nothing independent to date it against.
+
+Recommended correction, for the maintainer to apply or decline: set those five
+years to 2026, and 1.0.0's day to 01-03. That edits five historical lines, so
+it is not done here.
+
+**Eight compare links point at tags that do not exist.** `[1.0.5]`, `[1.0.6]`,
+`[1.1.0]`, `[1.1.1]`, `[1.1.2]`, `[4.1.1]`, `[4.1.2]` and `[4.2.0]` reference
+one or both of `v1.0.5`, `v1.0.6`, `v1.1.0`, `v1.1.1`, `v4.1.1`, `v4.1.2`, none
+of which was ever created. They resolve to a 404. They are left as they are,
+because repointing a link at a different pair of tags would change what the
+record says those releases contained.
+
+**Fourteen compare links were missing and are added here.** 4.4.0 through 5.0.1
+and Unreleased had none; the block stopped at 4.3.0. Every endpoint used is a
+tag that exists, so these are derived, not asserted. The whole block is now in
+descending order, which it was not — it ran 1.2.4 down to 1.0.0 and then
+restarted at 4.3.0.
+
+**4.2.1 and 4.2.2 have compare links and no entries.** Both were tagged
+2026-04-26 and published to npm the same day. 4.2.0 had the same gap until this
+change set, where its entry was reconstructed from its release-notes file; for
+4.2.1 and 4.2.2 the only surviving record is the tag diff.
+
+**Ten published versions have no entry at all**: 1.0.3, 1.0.4, 1.1.3, 1.1.8,
+1.1.9, 3.2.2, 3.2.3, 3.2.5, 4.2.1 and 4.2.2. Three entries describe versions
+that were never published to npm: 1.0.5, 4.1.1 and 5.0.1. Three entries have no
+tag: 3.2.1, 4.1.1 and 4.1.2, though 3.2.1 and 4.1.2 were both published.
+
+**There is no 5.0.1 anywhere outside this repository.** `package.json` says
+5.0.1 and tag `v5.0.1` was created 2026-09-30, but npm's highest published
+version is 5.0.0 (2026-08-24T22:56:36Z) and its `latest` tag points there. The
+MCP Registry's newest entry for `io.github.jtalk22/slack-mcp-server` is 5.0.0,
+flagged `isLatest`, published 2026-08-24T22:56:55Z. So the registry is not
+lagging behind npm — 5.0.1 was prepared, tagged and written up, and never
+shipped. Either publish it or the version in `package.json` overstates what
+users can install.
+
+**Release notes stopped being written.** `.github/` holds eight files, for
+1.2.4, 2.0.0, 3.0.0, 3.1.0, 3.2.0, 3.2.4, 3.2.5 and 4.0.0. The practice then
+moved into `docs/` for 4.1.2 and 4.2.0 — both folded into this file in the same
+change set as this note — and stopped after that. 5.0.0 and 5.0.1 have none.
+Nothing in the repository requires them, and the changelog entries from 4.6.1
+onward carry the prose a release note used to; recording the gap rather than
+back-filling eight months of notes.
+
+### 2026-10-07 — the 4.1.0 "Stealth Mode" claim
+
+Under `## [4.1.0] - 2026-04-01`, the Highlights list reads:
+
+> - **Stealth Mode** — Session-token auth leaves zero footprint in workspace
+>   admin settings. No app install, no bot user, no audit trail.
+
+and the Changed list below it records "README: Stealth Mode framing".
+
+Two of those three clauses are accurate; the third is false, and the framing
+around all three is wrong.
+
+"No app install" and "no bot user" were true and remain true. The local path
+registers no Slack app and creates no bot identity, which is exactly why it
+needs no admin approval.
+
+"No audit trail" is false, and it states the opposite of how the server works.
+The server calls Slack's Web API with the signed-in user's own session
+credentials, as that user. There is no second identity that could be missing
+from a record. A workspace sees the same API activity from that account that it
+would see from any other client signed in as the same person, and what a
+workspace retains is set by its own plan and settings — not by this package, and
+not by anything this package could suppress if it wanted to. The sentence as
+written reads as a feature for evading oversight. That is not what shipped and
+not what the code does.
+
+The name goes the same way. `scripts/check-public-language.sh` bans that word
+outright, and the project's own messaging guardrails in
+`.github/launch-posts.md` list "Invisible to admins" and "no audit trail" among
+the phrasings never to use. The 4.1.0 entry survived both only because the
+gate's scan paths do not include this file. The name and the framing were
+removed from the README, the landing page and the generated public pages in a
+later release and appear nowhere on the public surface today; this entry was the
+last place either one was still shipping.
+
+The accurate statement, and the one the rest of the documentation uses: session
+credentials carry the same effective access as the signed-in browser user.
+
 ## [Unreleased]
 
 ## [5.0.1] - 2026-09-30
@@ -404,12 +519,325 @@ Two community-driven improvements: run work and personal Slack side-by-side, and
 ### Fixed
 - **SETUP.md troubleshooting** — "Verify the path to server.js is correct" replaced with "Verify JSON syntax in your client's MCP config", aligning with the npx invocation pattern that's already canonical elsewhere in the docs.
 
+## [4.2.0] - 2026-04-26
+
+### Workflow profiles, templates, and a tool surface that says what it cannot do
+
+This release had no changelog entry for the first five months of its life; the
+record of it was a separate release-notes file and three compare links. The
+entry below is that file, folded in. Two workflow-profile primitives and six
+packaged templates ship free and local; three tools that needed an index and a
+model ship as stubs that name the upgrade instead of failing silently. Both of
+those stub tools were removed outright in 5.0.0.
+
+### Release notes, folded from `docs/RELEASE-NOTES-v4.2.0.md`
+
+Published as `docs/RELEASE-NOTES-v4.2.0.md` and folded in here on 2026-10-07,
+when the separate release-notes file was retired. This version had no changelog
+entry of its own until that fold, though the compare link below has always been
+here. The text is as published in April 2026: its prices, tier names, tool
+counts and roadmap dates were current then and are not current now (the surface
+is 19 tools as of 5.0.0). Client and vendor product names were replaced with the
+transport or tier they describe; no claim was changed.
+
+**Workflow primitives + paid stubs + 6 templates. Structured JSON, not message dumps.**
+
+---
+
+#### The axiom
+
+A Slack catch-up that returns a wall of recent messages is a transcript, not an answer. Operators don't ask "what was said in #incident-room?" — they ask "what is open, who owns it, what's the next action?" Two different shapes. The first is what the MCP returned for a year. The second is what every actual workflow needs.
+
+The bug class: tools that hand back narrative when the workflow needs structure. A support inbox catch-up should return `{open_threads, ack_lag, owner_gaps, escalations, next_actions}` — not paragraphs that the operator then has to re-parse into the same shape. The workflow_kind taxonomy makes the structure explicit, so the model returns it instead of the operator extracting it.
+
+v4.2.0 is the structural fix. v4.2 reorchestrates the hosted tier model around it. v4.3 (Q2 2026) adds the scheduled morning catch-up DM that turns this into a daily habit.
+
+---
+
+#### What's new — v4.2.0
+
+Three structural shifts. The OSS package gets new primitives that work standalone and gracefully degrade into discoverable upgrade stubs when the hosted retrieval tier isn't reachable.
+
+##### 1. Workflow profile primitives (free in OSS)
+
+Two new tools ship in the OSS package:
+
+- `slack_workflow_save` — define a named profile bound to a `workflow_kind` (`support_inbox`, `incident_room`, `exec_brief`, `product_launch_watch`, or `custom`), a list of channels, optional priority people, retention mode, and summary cadence. Stored at `~/.slack-mcp-workflows.json`. Local. Yours.
+- `slack_workflows` — list saved profiles.
+
+Profiles are the routing surface. Once a profile is saved, paid tools (`slack_catch_me_up`, `slack_smart_search`, `slack_triage`) target it by name and return JSON shaped to the `workflow_kind`. The shape contract is part of the tool description, so MCP clients can present structured output directly.
+
+##### 2. Six packaged templates
+
+Apply with one command at install time:
+
+```
+npx -y @jtalk22/slack-mcp --apply-template <template-name> --channels C012,C067
+```
+
+| Template | workflow_kind | Use case |
+|---|---|---|
+| `oncall-handoff` | `incident_room` | Engineering handoffs, on-call queue, postmortems |
+| `support-triage` | `support_inbox` | CX/support backlog, ack lag, owner gaps |
+| `exec-monday` | `exec_brief` | Weekly exec brief, decisions, risks, asks |
+| `sprint-tracker` | `product_launch_watch` | Launch readiness, blockers, metrics |
+| `customer-feedback` | `custom` | Voice-of-customer rollups |
+| `incident-room` | `incident_room` | Live incidents, timeline, owner gaps |
+
+Templates set sensible defaults. Channels are bound at apply time. Profile name can be overridden via `--profile-name`.
+
+##### 3. Three discoverable upgrade stubs
+
+The hosted retrieval tier (`slack_smart_search`, `slack_catch_me_up`, `slack_triage`) is hosted-only — semantic search over a Vectorize index, structured catch-up output, multi-channel triage scoring. In OSS, these tools surface as discoverable stubs that return a structured `tool_requires_hosted` payload with the signup URL, free quota details, and Pro value prop. No silent failure. The MCP client sees the stub, knows the upgrade path, and the operator can route to `mcp.revasserlabs.com` to enable the full surface.
+
+This is the right shape for OSS↔hosted boundaries: the OSS package is honest about what it can and can't do; the upgrade is one click away; the hosted tier delivers what self-host structurally cannot.
+
+##### Total tool surface
+
+**21 tools.** 16 read/write Slack tools (the existing surface from v4.1.x) + 2 workflow profile primitives (new, free) + 3 discoverable upgrade stubs (new, free OSS, paid hosted).
+
+---
+
+#### v4.2 hosted tier reorchestration
+
+This release ships alongside the v5 hosted pricing model that went live on `mcp.revasserlabs.com` this week.
+
+| Tier | Price | What it covers |
+|---|---|---|
+| Self-host (OSS) | Free (MIT) | Local stdio, all 21 tools (16 read/write + 2 primitives + 3 discoverable stubs) |
+| Hosted Free | $0 (no card) | Email signup, 1 workspace, 10 smart_search/mo + 3 catch_me_up/mo + 5 triage/day. All 5 workflow profile types. 7-day index retention. |
+| Hosted Pro | $9/mo | Unlimited hosted retrieval tools, permanent OAuth (no 2-week token rotation), 90-day Vectorize retention, 2 workspaces. Scheduled morning catch-up DM at 8am workspace tz **rolling out Q2 2026**. |
+| Hosted Team | $49/mo flat | Pro + shared workflow profiles + audit log + 24h support + scheduled catch-up to channel + 5 workspaces |
+| Ops engagement | from $199/mo (custom) | SLA, custom retention, SOC2 evidence path, multi-tenant isolation, 10+ workspaces, dedicated workflow tuning |
+
+**Rolling out Q2 2026 — explicit caveat:** the scheduled morning catch-up DM at 8am workspace time is named in the Pro tier description because it is the daily-habit lever the architecture is designed around. The Cloudflare Cron handler that posts the structured brief to your Slack DM ships in **v4.3.0 (Q2 2026)**. Until then, Pro at $9/mo unlocks unlimited hosted retrieval tools (the differentiator from Free); the morning DM is forward-looking. Free $0 is fully functional today. Pro is a real upgrade today (unlimited credits, permanent OAuth, 90-day retention, 2 workspaces). The morning DM joins in v4.3.0.
+
+We chose to ship v4.2.0 today rather than wait for the morning DM build because the workflow primitives are the structural foundation everything else depends on. Operators using Free or Pro today get real value; the morning DM lands when it lands.
+
+---
+
+#### Honest tradeoff
+
+The v4.2.0 release widens the OSS surface (16 → 21 tools) without widening what self-host can structurally do. The 3 new tools that ship paid-only as hosted features (`slack_smart_search`, `slack_catch_me_up`, `slack_triage`) land in OSS as discoverable stubs that return a `tool_requires_hosted` payload pointing at signup. No silent failure. No bait-and-switch. The reader's MCP client sees the stub, knows the upgrade path, and routes the operator to mcp.revasserlabs.com when the hosted retrieval tier is the right move.
+
+**What v4.2.0 adds to self-host (free, MIT):**
+
+- 2 new workflow profile primitives — `slack_workflow_save`, `slack_workflows`. 5 named workflow_kind shapes, each returning a 4–5-key JSON contract.
+- 6 packaged templates that bind a `workflow_kind` to a channel set in 30 seconds: `npx -y @jtalk22/slack-mcp --apply-template exec-monday --channels C012,C067`.
+- 3 discoverable upgrade stubs that surface the hosted brain at the tool-list level instead of in marketing copy.
+
+The v4.1.x carry-over (LevelDB token extraction, multi-profile Chrome enumeration, explicit shutdown handlers — all detailed under [4.1.2](#412---2026-04-12)) ships unchanged.
+
+**What self-host structurally cannot do — and where hosted picks up:**
+
+- Semantic search across Slack history. Vectorize is stateful and hosted-only.
+- Connect hosted-web MCP clients. Their MCP transport is HTTP; self-host is stdio. This is a transport contract difference, not a configuration issue.
+- Live in the Anthropic MCP Directory. The Directory's OAuth 2.1 bridge is a hosted-side surface; an npm package can't satisfy it.
+- Persist credentials in encrypted at-rest storage that the operator never touches. Self-host writes tokens to `~/.slack-mcp-tokens.json` with `chmod 600`; hosted writes to AES-256-GCM-encrypted Cloudflare D1.
+- Eliminate the 2-week token rotation cycle. Self-host re-pastes when Slack rotates the session; hosted holds an OAuth grant.
+
+**What hosted does NOT own yet:** server-side OAuth refresh for tokens that pre-date the OAuth grant — operators connecting via session paste still re-paste on rotation, just like self-host. v4.1.3 territory.
+
+**What v4.3.0 closes (Q2 2026):** the daily-habit lever. Pro tier names "scheduled morning catch-up DM at 8am workspace time" today; the Cloudflare Cron handler that posts the brief lands in v4.3.0. Until then, Pro $9/mo is real (unlimited hosted retrieval tools, permanent OAuth, 90-day Vectorize, 2 workspaces) and the morning DM is forward-looking — same shape v4.1.2 used for the `last_verified_with_slack_at` field.
+
+---
+
+#### Install
+
+```bash
+npx -y @jtalk22/slack-mcp
+```
+
+##### Apply a template at install time
+
+```bash
+npx -y @jtalk22/slack-mcp --apply-template support-triage --channels C012345,C067890
+```
+
+##### stdio client config
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
+  }
+}
+```
+
+##### Other stdio clients
+
+Same config block — all support stdio MCP.
+
+---
+
+#### Links
+
+- GitHub: https://github.com/jtalk22/slack-mcp-server
+- Hosted: https://mcp.revasserlabs.com
+- Pricing: https://mcp.revasserlabs.com/pricing
+- Full changelog: this file.
+- Previous release: [4.1.2](#412---2026-04-12)
+
 ## [4.1.2] - 2026-04-12
 
 ### Fixed
 - **LevelDB token extraction** — Reads session tokens directly from Chrome's LevelDB store (`{ChromeProfile}/Local Storage/leveldb/*.{ldb,log}`). Pure Node.js implementation, no AppleScript, no live Slack tab required. AppleScript path demoted to fallback.
 - **Multi-profile Chrome enumeration** — Walks `Local State` → `profile.info_cache`, ranks candidate profiles by Cookies file mtime (freshest wins). Three new env vars for explicit override: `SLACK_MCP_CHROME_USER_DATA_DIR`, `SLACK_MCP_CHROME_PROFILE`, `SLACK_MCP_EXTRACTION_MODE`.
 - **Explicit shutdown handlers** — SIGTERM, SIGINT, SIGHUP, stdin EOF, and stdin error all trigger clean exit. Closes the 53-orphan zombie-process bug where `unref()` on the background timer failed to exit because `StdioServerTransport` held the event loop open.
+
+### Release notes, folded from `docs/RELEASE-NOTES-v4.1.2.md`
+
+Published as `docs/RELEASE-NOTES-v4.1.2.md` and folded in here on 2026-10-07,
+when the separate release-notes file was retired. The text is as published in
+April 2026: its prices, tier names and roadmap dates were current then and are
+not current now. Client and vendor product names were replaced with the
+transport or tier they describe; no claim was changed.
+
+**LevelDB extraction, multi-profile enumeration, zero zombies.**
+
+---
+
+#### The axiom
+
+A status channel that reports without verifying against ground truth is a zombie signal. It can report green forever after the underlying reality has stopped.
+
+The bug class: status systems track `last_attempt_at`, not `last_verified_ground_truth_at`. The two are not the same. An attempt succeeds when the status update writes; ground truth changes only when the underlying action observably affects the world. When those decouple, the status layer becomes fiction with a timestamp.
+
+Three concurrent instances landed the same week: a pharmacy delivery system that "confirmed delivery with signature" for medication that was never in inventory; a Slack token-refresh loop that ran every four hours for 12 days without ever talking to Slack; and a Node process tree that grew to 53 zombie children because `unref()` was the documented exit path but `StdioServerTransport` kept the event loop open.
+
+One bug class, three skins. The fix: persist `last_verified_ground_truth_at` separately from `last_attempt_at`. Escalate when the gap crosses a threshold.
+
+---
+
+#### The empirical proof — v4.1.2
+
+Three structural fixes, each mapped to a status-channel divergence the maintainer hit and traced.
+
+##### 1. LevelDB token extraction
+
+**What broke:** AppleScript-based extraction required a live Slack tab open in Chrome and the `Allow JavaScript from Apple Events` flag enabled. Neither of those is guaranteed — and neither shows up in `slack_token_status`. The refresh loop ran. Tokens didn't change. Status said green.
+
+**What changed:** The server now reads tokens directly from Chrome's LevelDB store (`{ChromeProfile}/Local Storage/leveldb/*.{ldb,log}`) using a pure Node.js implementation. No live tab, no AppleScript flag, no platform restriction. AppleScript is demoted to fallback for cases where LevelDB is locked.
+
+##### 2. Multi-profile Chrome enumeration
+
+**What broke:** Single-profile extraction picked the wrong Chrome profile on machines with multiple profiles (work + personal). Wrong profile = stale or absent tokens.
+
+**What changed:** The server now walks `Local State` → `profile.info_cache`, ranks all candidate profiles by Cookies file mtime, and selects the freshest. Three env vars for explicit override:
+
+```
+SLACK_MCP_CHROME_USER_DATA_DIR   # path to Chrome user data dir
+SLACK_MCP_CHROME_PROFILE         # profile folder name (e.g. "Profile 1")
+SLACK_MCP_EXTRACTION_MODE        # leveldb | applescript | auto (default: auto)
+```
+
+##### 3. Explicit shutdown handlers
+
+**What broke:** The background timer used `unref()` so Node would exit when nothing else was running. `StdioServerTransport` kept the event loop alive. Exit never happened. Restart accumulated 53 orphaned Node processes, oldest running for 2+ days.
+
+**What changed:** Explicit handlers registered for SIGTERM, SIGINT, SIGHUP, stdin EOF, and stdin error. Each calls `process.exit(0)`. The process exits within milliseconds of receiving any shutdown signal. Zero zombies.
+
+##### Also in v4.1.1 (shipped same release cycle)
+
+- `last_auto_heal_attempt`, `last_auto_heal_error`, `stuck_since` fields in token store — surfaced by `slack_token_status`
+- Structured `token_auth_failed` error code with `next_action` route-to-fix payload — no more swallowed generic errors
+
+---
+
+#### Honest tradeoff
+
+This release fixes the local-machine pain points the maintainer can reach into and fix directly.
+
+**What self-host (free) owns:** LevelDB extraction (no AppleScript dependency), multi-profile enumeration, zombie-free process lifecycle, structured error codes, auto-heal telemetry. Full 16-tool surface. MIT licensed.
+
+**What hosted owns that self-host structurally cannot:**
+
+- Managed MCP endpoint on the public internet — required for hosted-web MCP clients. The stdio transport that self-host uses cannot satisfy their HTTP transport contract. This is not a configuration issue; it is a transport contract difference.
+- OAuth 2.1 bridge into the Anthropic MCP Directory — the only path for hosted-web MCP clients to connect without running a local server.
+- Encrypted credential storage (AES-256-GCM in Cloudflare D1) — credentials never touch your filesystem.
+- Stripe subscription billing and SLA guarantees.
+- Structural absence of the zombie-process class — Cloudflare Workers are stateless per-request isolates. The `unref()` race condition is impossible by construction, not because we fixed it.
+
+**What hosted does NOT own (yet):**
+
+- Token acquisition — the user still pastes `xoxc-`/`xoxd-` from DevTools Console at setup time. Same browser dependency as self-host.
+- Server-side token refresh — when Slack rotates your session, you re-paste. This is v4.1.3 territory.
+
+---
+
+#### Tier mapping (current — see v4.2 for the active model)
+
+This v4.1.2 release predates the v4.2 pricing reorchestration. As of v4.2 the
+hosted tiers are: Free $0 (no card, monthly model credits), Pro $9/mo (unlimited
++ scheduled morning catch-up DM), Team $49/mo flat (5 workspaces + shared
+profiles + audit log), Ops from $199/mo custom (SLA, retention, SOC2,
+multi-tenant isolation). See https://mcp.revasserlabs.com/pricing for live
+plans and v4.2 release notes for the workflow profile primitives + paid stub
+discoverability changes that landed alongside the pricing change.
+
+| Tier | Who it serves |
+|------|--------------|
+| Self-host (free, MIT) | Developers, power users, local-first setups, and anyone who wants the workflow profile primitives + 3 discoverable upgrade stubs without the hosted brain |
+| Hosted Free ($0, no card) | Anyone validating the hosted retrieval tier with monthly credits — 10 smart_search + 3 catch_me_up + 5 triage/day |
+| Hosted Pro ($9/mo) | Solo operators who want unlimited hosted retrieval tools and the scheduled morning catch-up DM at 8am workspace time |
+| Hosted Team ($49/mo flat) | 2-10 person ops squads needing shared workflow profiles + audit log + 24h support across 5 workspaces |
+| Ops engagement (from $199/mo, custom) | 10+ workspace organizations with SLA, custom retention, SOC2 evidence, or multi-tenant isolation requirements |
+
+---
+
+#### What's next — v4.1.3
+
+The axiom fix lands in both self-host and hosted. The missing field is `last_verified_with_slack_at` — a real Slack API call timestamp, not a refresh-function-returned timestamp.
+
+- **Self-host:** Auto-heal loop re-verifies against a live Slack API call before marking tokens healthy. `slack_token_status` reports both `last_auto_heal_attempt` and `last_verified_with_slack_at`.
+- **Hosted:** Status API exposes drift between last refresh attempt and last verified ground truth. Dashboard flags when the gap crosses threshold.
+
+This closes the feedback loop that v4.1.1 instrumented but didn't complete.
+
+---
+
+#### Install
+
+```bash
+npx @jtalk22/slack-mcp
+```
+
+##### stdio client config
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@jtalk22/slack-mcp"]
+    }
+  }
+}
+```
+
+##### Other stdio clients
+
+Same config block — all three support stdio MCP.
+
+##### Explicit Chrome profile override
+
+```bash
+SLACK_MCP_CHROME_USER_DATA_DIR="$HOME/Library/Application Support/Google/Chrome" \
+SLACK_MCP_CHROME_PROFILE="Profile 1" \
+SLACK_MCP_EXTRACTION_MODE="leveldb" \
+npx @jtalk22/slack-mcp
+```
+
+---
+
+#### Links
+
+- GitHub: https://github.com/jtalk22/slack-mcp-server
+- Hosted tiers and releases: https://mcp.revasserlabs.com/releases
+- Full changelog: this file.
 
 ## [4.1.1] - 2026-04-12
 
@@ -761,6 +1189,33 @@ Two community-driven improvements: run work and personal Slack side-by-side, and
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
+[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...HEAD
+[5.0.1]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.9.0...v5.0.0
+[4.9.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.8.0...v4.9.0
+[4.8.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.7.0...v4.8.0
+[4.7.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.6.2...v4.7.0
+[4.6.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.6.1...v4.6.2
+[4.6.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.6.0...v4.6.1
+[4.6.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.5.0...v4.6.0
+[4.5.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.3...v4.5.0
+[4.4.3]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.2...v4.4.3
+[4.4.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.1...v4.4.2
+[4.4.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.4.0...v4.4.1
+[4.4.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.3.0...v4.4.0
+[4.3.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.2...v4.3.0
+[4.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.1...v4.2.2
+[4.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.0...v4.2.1
+[4.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.2...v4.2.0
+[4.1.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.1...v4.1.2
+[4.1.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.0...v4.1.1
+[4.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.0.0...v4.1.0
+[4.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.5...v4.0.0
+[3.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.3...v3.2.4
+[3.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v2.0.0...v3.0.0
+[2.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.4...v2.0.0
 [1.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.1...v1.2.2
@@ -776,16 +1231,3 @@ Two community-driven improvements: run work and personal Slack side-by-side, and
 [1.0.6]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/jtalk22/slack-mcp-server/compare/v1.0.0...v1.0.5
 [1.0.0]: https://github.com/jtalk22/slack-mcp-server/releases/tag/v1.0.0
-[4.3.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.2...v4.3.0
-[4.2.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.1...v4.2.2
-[4.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.2.0...v4.2.1
-[4.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.2...v4.2.0
-[4.1.2]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.1...v4.1.2
-[4.1.1]: https://github.com/jtalk22/slack-mcp-server/compare/v4.1.0...v4.1.1
-[4.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.0.0...v4.1.0
-[4.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.5...v4.0.0
-[3.2.4]: https://github.com/jtalk22/slack-mcp-server/compare/v3.2.3...v3.2.4
-[3.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.1.0...v3.2.0
-[3.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v3.0.0...v3.1.0
-[3.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v2.0.0...v3.0.0
-[2.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v1.2.4...v2.0.0

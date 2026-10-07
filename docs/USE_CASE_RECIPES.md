@@ -62,6 +62,46 @@ Prompt:
 Prompt:
 `Use slack_list_users with limit=500. Return a compact list of users with admin/bot flags.`
 
+## 13) Keep Your Own Record Before the 90-Day Window Closes
+
+Prompt:
+`Use slack_list_conversations with types="im,mpim,private_channel" and limit=200 to list every DM, group DM, and private channel I belong to. Then for each one, call slack_get_full_conversation with that channel_id, include_threads=true, include_rich_message_fields=true, max_messages=10000, and output_file="<conversation-name>.json".`
+
+Exports land in `~/.slack-mcp-exports/`. Run it on a schedule — monthly is
+frequent enough against a 90-day window — so each run captures what the next
+one would otherwise lose.
+
+**Why this is the only practical route on a free workspace.** Slack's own export
+covers "messages and file links from public channels". It is available on every
+plan, and it is run by Workspace Owners and Admins. Private channels and direct
+messages need a Business+ or Enterprise plan and a separate application to
+Slack. An ordinary member of a free workspace therefore has no first-party way
+to export their own DMs or private channels at all.
+`slack_get_full_conversation` reads them through your own session, which already
+has access to exactly those conversations and no others.
+
+**What ages out.** On the free plan you "can view and search messages and files
+from the last 90 days", and Slack "will start hiding messages and files older
+than 90 days to make room for new ones". Hidden is not deleted: "when you
+upgrade, your messages and files beyond the 90-day limit will be revealed." For
+the first year, then, this is a loss of access rather than of data. After that it
+is both — since August 26, 2024, data older than one year may be deleted on a
+rolling basis from workspaces on the free plan.
+
+**The honest limit.** This cannot recover anything already past the window.
+Slack hides that history from the workspace, not merely from one client, so
+there is nothing for the API to return across that span and no parameter that
+reaches behind it — setting `oldest` earlier than the boundary does not help.
+The recipe only works forward: it preserves what you can still read, starting
+from the first time you run it.
+
+Sources, read 2026-10-07: [Usage limits for free
+workspaces](https://slack.com/help/articles/115002422943-Usage-limits-for-free-workspaces),
+[Feature limitations on the free version of
+Slack](https://slack.com/help/articles/27204752526611-Feature-limitations-on-the-free-version-of-Slack),
+[Export your workspace
+data](https://slack.com/help/articles/201658943-Export-your-workspace-data).
+
 ## Notes
 
 For a repeatable morning brief, save a workflow with `slack_workflow_save`
