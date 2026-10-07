@@ -105,8 +105,9 @@ function startStaticServer() {
       });
       createReadStream(target).pipe(res);
     } catch (error) {
+      console.error(`static server: ${req.url}`, error);
       res.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
-      res.end(String(error.message || error));
+      res.end("Internal server error");
     }
   });
 

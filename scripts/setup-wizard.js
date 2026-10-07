@@ -96,7 +96,27 @@ function persistTokens(token, cookie) {
 }
 const VERSION = RELEASE_VERSION;
 const MIN_NODE_MAJOR = 20;
-const AUTH_TEST_URL = process.env.SLACK_MCP_AUTH_TEST_URL || "https://slack.com/api/auth.test";
+const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "[::1]"]);
+const AUTH_TEST_URL = resolveAuthTestUrl(process.env.SLACK_MCP_AUTH_TEST_URL);
+
+// SLACK_MCP_AUTH_TEST_URL exists so the install-flow check can point --doctor
+// at a dead loopback port. The request carries the session token and cookie,
+// so an override is honoured only for slack.com itself or this machine.
+function resolveAuthTestUrl(override) {
+  if (!override) return "https://slack.com/api/auth.test";
+  let url = null;
+  try {
+    url = new URL(override);
+  } catch {}
+  const isSlack = url?.protocol === "https:" && url.hostname === "slack.com";
+  const isLoopback = (url?.protocol === "http:" || url?.protocol === "https:")
+    && LOOPBACK_HOSTS.has(url.hostname);
+  if (!isSlack && !isLoopback) {
+    console.error("SLACK_MCP_AUTH_TEST_URL must be an https://slack.com URL or a loopback address (127.0.0.1, localhost, ::1): the request it names carries your Slack token and cookie.");
+    process.exit(1);
+  }
+  return url.href;
+}
 
 // ANSI colors
 const colors = {

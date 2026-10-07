@@ -84,8 +84,10 @@ export default {
 
       return badRequest(`Unsupported mode: ${mode}`);
     } catch (error) {
+      // The detail stays in the Worker's logs; callers get a fixed message.
+      console.error("browser_failure", mode, target, error);
       return new Response(
-        JSON.stringify({ status: "error", code: "browser_failure", message: String(error?.message || error) }, null, 2),
+        JSON.stringify({ status: "error", code: "browser_failure", message: "The page could not be loaded or rendered." }, null, 2),
         {
           status: 500,
           headers: { "content-type": "application/json" },

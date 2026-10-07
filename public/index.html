@@ -190,16 +190,6 @@
       margin-bottom: 15px;
     }
     .modal input:focus { border-color: var(--teal); outline: none; }
-    .auth-options {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: -4px 0 16px;
-      color: var(--muted);
-      font-size: 13px;
-      text-align: left;
-    }
-    .auth-options input { width: auto; margin: 0; }
     .header-row {
       display: flex;
       justify-content: space-between;
@@ -282,7 +272,6 @@
       <h2>Enter API Key</h2>
       <p>Copy the API key from the console where you ran<br><code>npx -y @jtalk22/slack-mcp web</code></p>
       <input type="text" id="modalApiKey" placeholder="smcp_xxxxxxxxxxxx" autocomplete="off" autofocus>
-      <label class="auth-options"><input type="checkbox" id="rememberApiKey"> Remember this key on this device</label>
       <button onclick="submitApiKey()">Connect</button>
       <div id="modalError" class="error"></div>
     </div>
@@ -328,14 +317,13 @@
     let apiKey = null;
     let currentChannel = null;
 
+    // The key is a bearer for this server's Slack session, so it is held for
+    // this tab only: sessionStorage survives a reload and is discarded when the
+    // tab closes. localStorage would keep it on disk across browser restarts,
+    // readable by any later page served from the same localhost origin.
     function clearStoredApiKey() {
       sessionStorage.removeItem('slackApiKey');
       localStorage.removeItem('slackApiKey');
-    }
-
-    function rememberStoredApiKey(key) {
-      sessionStorage.removeItem('slackApiKey');
-      localStorage.setItem('slackApiKey', key);
     }
 
     function storeSessionApiKey(key) {
@@ -343,10 +331,13 @@
       sessionStorage.setItem('slackApiKey', key);
     }
 
-    // Initialize: check URL param, session storage, then remembered local storage
+    // Initialize: check URL param, then session storage
     (function init() {
       const params = new URLSearchParams(window.location.search);
       const keyFromUrl = params.get('key');
+      // Earlier versions could remember the key in localStorage. Move it into
+      // this tab's storage once and delete it from disk.
+      const legacyKey = localStorage.getItem('slackApiKey');
 
       if (keyFromUrl) {
         // Save magic-link keys for this tab only and strip them from the URL.
@@ -354,7 +345,8 @@
         storeSessionApiKey(apiKey);
         history.replaceState({}, '', window.location.pathname);
       } else {
-        apiKey = sessionStorage.getItem('slackApiKey') || localStorage.getItem('slackApiKey');
+        apiKey = sessionStorage.getItem('slackApiKey') || legacyKey;
+        if (apiKey) storeSessionApiKey(apiKey);
       }
 
       if (apiKey) {
@@ -382,11 +374,7 @@
         return;
       }
       apiKey = input;
-      if (document.getElementById('rememberApiKey').checked) {
-        rememberStoredApiKey(apiKey);
-      } else {
-        storeSessionApiKey(apiKey);
-      }
+      storeSessionApiKey(apiKey);
       hideModal();
       connect();
     }
