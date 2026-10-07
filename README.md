@@ -12,7 +12,7 @@
 
 <p>Unreads, threads, and search — in your agent’s context, from the session you already have.</p>
 
-<p><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html"><img src="docs/images/hero-v2.gif" width="720" alt="On purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. The workspace slides in beside it: two people asked the same question and got zero replies. One search, slack_search_messages, scrolls five months back and lights up Dave’s post in #facilities from 12 October, zero reactions. The agent answers: found it, 4729. Five months, three people, one printer. Tape it to the printer."></a></p>
+<p><a href="https://jtalk22.github.io/slack-mcp-server/public/demo-video.html"><img src="docs/images/hero-v2.gif" width="720" alt="On purple: It’s Tuesday, 9:07 AM. A jammed printer, nobody knows the PIN, and the guy who did left five months ago. The workspace slides in beside it: two people asked the same question and got zero replies. You type: after the weekend I had, and now the bloody printer is acting up, find the admin PIN. One search, slack_search_messages, scrolls five months back and lights up Dave’s post in #facilities from 12 October, zero reactions. The agent answers: found it, 4729. Five months, three people, one printer. Tape it to the printer."></a></p>
 
 </div>
 

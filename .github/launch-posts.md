@@ -41,7 +41,7 @@ https://github.com/jtalk22/slack-mcp-server
 
 5. Slack's own AI search is a Business+ feature, about $1,500 a year for ten people. A free workspace gets none of it. This runs on the model subscription you already pay for, and installs no Slack app, so it uses none of a free plan's ten app slots.
 
-6. npx -y @jtalk22/slack-mcp --setup · MIT · 20 tools · signed releases · github.com/jtalk22/slack-mcp-server
+6. npx -y @jtalk22/slack-mcp --setup · MIT · 20+ tools · signed releases · github.com/jtalk22/slack-mcp-server
 
 ### LinkedIn
 

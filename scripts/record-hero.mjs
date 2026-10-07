@@ -31,14 +31,18 @@ const SOURCE = join(ROOT, "docs/assets/hero-v2.html");
 const args = process.argv.slice(2);
 const OPEN_FONTS = args.includes("--open-fonts");
 const THEMES = ["one"];   // one purple field reads in both GitHub themes
-const FONTS_DIR = process.env.HERO_FONTS_DIR || join(homedir(), "Library/CloudStorage/OneDrive-Personal/fonts");
+// OneDrive evicts files it has not seen opened for a while, and an evicted font
+// fails the FontFace load with a network error. A local mirror of the seven files
+// the hero uses takes precedence; refresh it by copying from the estate.
+const LOCAL_FONTS = join(homedir(), "Library/Caches/slack-mcp-hero-fonts");
+const FONTS_DIR = process.env.HERO_FONTS_DIR || (existsSync(join(LOCAL_FONTS, "Söhne", "web")) ? LOCAL_FONTS : join(homedir(), "Library/CloudStorage/OneDrive-Personal/fonts"));
 if (!OPEN_FONTS && !existsSync(join(FONTS_DIR, "Söhne", "web"))) {
   console.error(`The type estate is not at ${FONTS_DIR}. Set HERO_FONTS_DIR, or pass --open-fonts to record with the stand-ins.`);
   process.exit(1);
 }
 const FONTS_QUERY = OPEN_FONTS ? "" : `&fonts=${encodeURIComponent(pathToFileURL(FONTS_DIR).href)}`;
 const FPS = 12;
-const TOTAL_MS = 11000;   // last beat lands at 8.6 s; final_delay holds the end frame 3.5 s more
+const TOTAL_MS = 11500;   // last beat lands at 8.75 s; final_delay holds the end frame 3.5 s more
 const SCALE = 2;          // capture at 2x so text stays sharp on high-density screens
 const WIDTH = 1600;       // GitHub shows the hero at 900 CSS px, i.e. 1800 device px on Retina
 
