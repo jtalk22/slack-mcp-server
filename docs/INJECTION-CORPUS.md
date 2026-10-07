@@ -114,7 +114,11 @@ hold is that the operator's audit and the model's input agree. Stripping is safe
 on an agent surface because no legitimate message needs an unbalanced override
 to be understood.
 
-**Today:** passed through byte for byte. No normalization, no flag.
+**Today:** the text is passed through byte for byte — no normalization, and no
+flag naming this class. The message now carries an `origin` label, so an outside
+author's bidi payload arrives marked untrusted; what is still unmarked is the
+display-versus-bytes mismatch itself, which an internal author can also create.
+This class is not closed by labelling.
 
 ### 2. Invisible character keyword splitting
 
@@ -135,8 +139,11 @@ Where text is matched at all, normalize first — NFKC, then remove the
 plus a standing rule that message bodies are never instructions; a denylist
 loses to the next unassigned invisible codepoint.
 
-**Today:** passed through byte for byte. There is no keyword filter to evade,
-which is the right posture for the wrong reason — nothing marks the text either.
+**Today:** passed through byte for byte. There is still no keyword filter to
+evade, which remains the right posture — and the message is now labelled, so the
+author is marked even though the characters are not touched. Unchanged for an
+internal author, who is labelled `internal` and whose invisible characters are
+equally invisible.
 
 ### 3. Tool-call mimicry in a message body
 
@@ -159,7 +166,10 @@ entered the session, so a misread cannot become a send by itself. This is the
 class where labelling helps least and a capability boundary helps most.
 
 **Today:** passed through byte for byte, inside the same serialized document as
-the response's real structure.
+the response's real structure. The message is labelled, and the batch carries a
+notice telling the reader to treat labelled text as data — but the imitation and
+the real structure are still the same kind of thing on arrival. This is the class
+labelling moves least.
 
 ### 4. Payload outside the `text` field
 
@@ -211,11 +221,13 @@ Surface the relaying app as the transport, never as the author. Where a bridge
 preserves an upstream sender, present it as a claim by the bridge rather than a
 verified identity.
 
-**Today:** `bot_id`, `app_id`, `subtype`, `team`, `bot_profile` and `username`
-are all present on the raw message. The catch-up path drops every one of them,
-so a reader of that bundle cannot tell the words came from outside Slack. The
-rich-fields opt-in exposes them as data, with nothing reading them to reach a
-conclusion.
+**Today:** handled. `bot_id`, `app_id` and `subtype: "bot_message"` are read by
+the classifier **before** the team comparison, so a relay inside the home
+workspace is labelled `bot` and untrusted even though its `team` matches. The
+raw marker fields are still dropped from the catch-up output and still exposed
+as inert data by the rich-fields opt-in; it is the label, not the fields, that
+carries the conclusion. An attachment's `author_name` is unchanged and remains
+poster-set text.
 
 ### 6. A participant from another workspace
 
@@ -238,9 +250,20 @@ read with no known home team id, is *unknown*, not internal. A false untrusted
 mark is a label; a false trusted mark is an injection path. Apply the same check
 to replies and count them in whatever summary the response carries.
 
-**Today:** the author's `team` is dropped by the catch-up path and by the default
-history output, so the output carries nothing to compare against a home
-workspace. The field is available on the raw message.
+**Today:** handled, with one asymmetry worth knowing. The author's `team` is
+compared against the home team id — resolved once from `auth.test` — and a
+mismatch is labelled `external` and untrusted, on replies as well as top-level
+messages. The raw `team` field is still absent from the output; the label
+replaces it.
+
+The asymmetry: Slack omits `team` on a message whose author is in the reading
+workspace, so the comparison sees it on almost nothing. The classifier
+therefore treats a message with a `user`, no `team`, and a conversation known
+**not** to be externally shared as `internal`. `slack_conversations_history`
+resolves that sharing state and passes it; `slack_catch_me_up` does not, so the
+same teamless message is `internal` read one way and `unknown` read the other.
+Catch-up errs strict, which is the safe direction — but untrusted counts from
+the two tools are different scales, not two readings of the same workspace.
 
 ### 7. Instruction in an attacker-settable identity field
 
@@ -294,11 +317,13 @@ it as untrusted outright. Prefer the channel id for identity, and never let topi
 text stand in for a channel's purpose when deciding whether an action is
 authorized.
 
-**Today:** not surfaced. `slack_list_conversations` builds a fixed set of keys —
-`id`, `name`, `type`, `user_id` — and topic and purpose are not among them. The
-vector stays in the corpus because that is closure by omission, one line of code
-away from reopening. The fixture is the answer already written down for the day
-someone adds the field.
+**Today:** still not surfaced, and now deliberately so. `slack_list_conversations`
+builds a fixed set of keys — `id`, `name`, `type`, `user_id`, `externally_shared`
+— and topic and purpose are not among them. `externally_shared` is the one piece
+of channel context that was added, and it is the right one: it says the channel
+can hold an outside author without forwarding any member-settable text. The
+vector stays in the corpus because the omission is still what closes it, and the
+fixture is the answer already written down for the day someone adds the field.
 
 ## What labelling can and cannot do
 
@@ -323,6 +348,31 @@ from data. The controls that actually bound the damage are capability-side:
   assumed internal.
 - A default that is on. A control that ships off protects nobody.
 
+### The input the label depends on
+
+A classifier is only as good as the reference it compares against, and that
+reference can go missing. `external` is a comparison between the message's
+`team` and the home team id, so it needs both. The home id comes from one
+`auth.test` call, and that call can fail — or a browser session can be pointed
+at a workspace other than the one it was minted for.
+
+The corpus asserts the direction of that failure, because it is the whole
+safety property: with no workspace identity every author is `unknown` and
+nothing is trusted. A false `unknown` costs a label; a false `internal` is the
+injection path.
+
+Two consequences worth testing on any server that labels this way:
+
+- **A missing reference must not promote anyone.** Where a classifier has a
+  fallback for "no `team`" — and it needs one, because Slack omits `team` for
+  same-workspace authors — that fallback must not fire for a message that
+  carries a foreign `team` the classifier simply had nothing to compare to. The
+  state to re-check is: identity lookup failed, and the channel is reported
+  unshared.
+- **A failed lookup is not a negative answer.** "Not externally shared" and
+  "could not determine whether it is shared" must stay distinct. Collapsing
+  `null` into `false` turns every lookup failure into a trust promotion.
+
 ## Reusing the corpus
 
 The fixtures are plain JSON in real Slack field names, so they port without
@@ -336,11 +386,18 @@ reusable:
 
 Where your server has no defence yet, assert the behaviour you measured and name
 the gap in a comment, rather than skipping the test or asserting something that
-cannot fail. The corpus test here follows that rule: each vector asserts the
-passthrough it measured, and asserts the *correct* label if a label is present at
-all, so the same test becomes a real check the day labelling lands. A single test
-named `GAP RECORD` holds the current-state baseline in one place, so closing the
-gap fails exactly one test with a message saying what to update.
+cannot fail. The corpus test here followed that rule and has now been through
+the transition it was written for. It began against a tree with no labelling at
+all: each vector asserted the passthrough it measured plus the *correct* label
+if one were ever present, and a single test held the no-labelling baseline in
+one place. When labelling landed that one test failed, with a message saying
+what to update — and the vectors around it became a regression suite for the
+feature that closed them, without being rewritten.
+
+That is the shape worth copying. Keep the baseline assertion separate from the
+vector assertions, so a defence landing fails one named test instead of
+scattering failures across the suite, and write each vector so it grades a
+defence it does not yet have.
 
 For a server on a different bus, the classes map directly. Classes 1 to 3 depend
 only on text reaching a model. Class 4 becomes any format with more than one
