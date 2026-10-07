@@ -218,7 +218,7 @@ Speaks MCP **2026-07-28** and every 2025 revision from the same binary — era-n
   <img src="docs/images/diagram-schema-budget.svg" width="900" alt="Estimated schema tokens per turn by profile: essentials 6 tools at about 1,474 tokens or 37 percent, read 13 tools at about 2,359 or 59 percent, all 20 tools at about 4,008 or 100 percent">
 </p>
 
-**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **1,474 estimated tokens** of schema per turn against about **3,931** for all 20. `SLACK_MCP_TOOLS=read` advertises the 13 read-only operations listed below, near 2,355. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 20. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
+**Advertising fewer tools.** A client pays for the tool schema on every turn that carries it. `SLACK_MCP_TOOLS=essentials` advertises six tools — unread, history, search, thread, user lookup, send — costing roughly **1,474 estimated tokens** of schema per turn against about **4,008** for all 20. `SLACK_MCP_TOOLS=read` advertises the 13 read-only operations listed below, near 2,359. `--tools=slack_x,slack_y` takes an explicit set. The default stays all 20. Filtering changes what is advertised, not what is callable. Reproduce the numbers with `node scripts/measure-tool-schema.js` (a ~4-chars-per-token estimate).
 
 <details>
 <summary><strong>The full tool inventory</strong></summary>
@@ -416,7 +416,6 @@ npm audit signatures
 
 A clean result verifies that the package signatures and attestations trace back through the published release chain. Inspect the package before handing it a live Slack session. Full policy: [SECURITY.md](SECURITY.md).
 
-<a href="https://glama.ai/mcp/servers/jtalk22/slack-mcp-server"><img src="https://glama.ai/mcp/servers/jtalk22/slack-mcp-server/badge" width="380" alt="Slack MCP Server security, license, and quality rating on Glama"></a>
 
 ---
 

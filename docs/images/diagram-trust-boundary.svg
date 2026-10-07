@@ -12,13 +12,13 @@
       .ok     { fill: #15803D; }
       .stop   { fill: #DC2626; }
 
-      .t-title { font: 600 28px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: -0.3px; }
-      .t-lede  { font: 400 15.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-name  { font: 500 16.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-sub   { font: 400 12.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-chip  { font: 500 14.5px ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .t-cap   { font: 400 13px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-mark  { font: 600 11px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.5px; }
+      .t-title { font: 600 31px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: -0.3px; }
+      .t-lede  { font: 400 17.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-name  { font: 500 18.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-sub   { font: 400 14.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-chip  { font: 500 16px ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .t-cap   { font: 400 15px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-mark  { font: 600 12.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.5px; }
 
       .track { stroke: #BFC1C7; stroke-width: 1.5; fill: none; }
       .flow  { stroke: #16181D; stroke-width: 1.75; fill: none; }
@@ -73,14 +73,14 @@
 
   <g transform="translate(56,227)"><use href="#g-you"/></g>
   <text class="t-name ink" x="104" y="247">You</text>
-  <line class="track" x1="250" y1="240" x2="452" y2="240"/>
+  <line class="track" x1="318" y1="240" x2="452" y2="240"/>
   <rect class="chip-ok" x="452" y="222" width="128" height="36" rx="8"/>
   <text class="t-chip ok" x="516" y="245" text-anchor="middle">self</text>
   <line class="track" x1="580" y1="240" x2="716" y2="240"/>
 
   <g transform="translate(56,297)"><use href="#g-colleagues"/></g>
   <text class="t-name ink" x="104" y="317">A colleague</text>
-  <line class="track" x1="250" y1="310" x2="452" y2="310"/>
+  <line class="track" x1="318" y1="310" x2="452" y2="310"/>
   <rect class="chip-ok" x="452" y="292" width="128" height="36" rx="8"/>
   <text class="t-chip ok" x="516" y="315" text-anchor="middle">internal</text>
   <line class="track" x1="580" y1="310" x2="716" y2="310"/>
@@ -88,7 +88,7 @@
   <g transform="translate(56,364)"><use href="#g-connect"/></g>
   <text class="t-name ink" x="104" y="380">Slack Connect</text>
   <text class="t-sub faint" x="104" y="398">someone else's workspace</text>
-  <line class="track" x1="250" y1="380" x2="452" y2="380"/>
+  <line class="track" x1="318" y1="380" x2="452" y2="380"/>
   <rect class="chip-pass" x="452" y="362" width="128" height="36" rx="8"/>
   <text class="t-chip ink" x="516" y="385" text-anchor="middle">external</text>
   <line class="track" x1="580" y1="380" x2="716" y2="380"/>
@@ -96,7 +96,7 @@
   <g transform="translate(56,434)"><use href="#g-relay"/></g>
   <text class="t-name ink" x="104" y="450">A relay app</text>
   <text class="t-sub faint" x="104" y="468">words written somewhere else</text>
-  <line class="track" x1="250" y1="450" x2="452" y2="450"/>
+  <line class="track" x1="318" y1="450" x2="452" y2="450"/>
   <rect class="chip-pass" x="452" y="432" width="128" height="36" rx="8"/>
   <text class="t-chip ink" x="516" y="455" text-anchor="middle">bot</text>
   <line class="track" x1="580" y1="450" x2="716" y2="450"/>
@@ -128,8 +128,9 @@
 
   <!-- ============ the way back out ============ -->
   <text class="t-mark muted" x="56" y="556">THE WAY BACK OUT</text>
-  <text class="t-cap muted" x="56" y="582">Labelled, never removed — and read and write</text>
-  <text class="t-cap muted" x="56" y="601">share one toolset. That is the whole risk.</text>
+  <text class="t-cap muted" x="56" y="584">Labelled, never removed —</text>
+  <text class="t-cap muted" x="56" y="604">and read and write share</text>
+  <text class="t-cap muted" x="56" y="624">one toolset. That is the risk.</text>
 
   <path class="flow" d="M 970 498 L 970 592 L 892 592" marker-end="url(#tb-arrow)"/>
   <rect class="panel" x="712" y="572" width="180" height="40" rx="9"/>

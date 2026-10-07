@@ -10,13 +10,13 @@
       .muted  { fill: #6B7280; }
       .faint  { fill: #9CA3AF; }
 
-      .t-title { font: 600 24px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: -0.25px; }
-      .t-lede  { font: 400 14.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-name  { font: 500 16px ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .t-sub   { font: 400 12.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-val   { font: 600 20px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-unit  { font: 400 13px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .t-mark  { font: 600 11px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.5px; }
+      .t-title { font: 600 27px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: -0.25px; }
+      .t-lede  { font: 400 16.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-name  { font: 500 18px ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .t-sub   { font: 400 14.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-val   { font: 600 22px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-unit  { font: 400 15px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .t-mark  { font: 600 12.5px ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: 1.5px; }
 
       /* One hue, three steps, light to dark: this is magnitude, not identity. */
       .bar-1 { fill: #86C8A1; }
@@ -54,12 +54,11 @@
   <rect class="rail" x="240" y="292" width="860" height="30" rx="4"/>
   <rect class="bar-3" x="240" y="292" width="860" height="30" rx="4"/>
   <text class="t-val ink" x="1120" y="315">4,008</text>
-  <text class="t-unit faint" x="1080" y="314" text-anchor="end" fill="#FFFFFF">100%</text>
+  <text class="t-unit" x="1080" y="314" text-anchor="end" fill="#FFFFFF" fill-opacity="0.85">100%</text>
 
   <text class="t-mark muted" x="240" y="368">ESTIMATED SCHEMA TOKENS PER TURN</text>
 
   <line class="rule" x1="56" y1="394" x2="1224" y2="394"/>
-  <text class="t-sub muted" x="56" y="418">Measured 2026-10-07 at roughly four characters per token, not tokenizer-exact. Reproduce with</text>
-  <text class="t-sub ink" x="592" y="418">node scripts/measure-tool-schema.js</text>
+  <text class="t-sub muted" x="56" y="420">Measured 2026-10-07, about four characters per token. Reproduce with <tspan fill="#16181D">node scripts/measure-tool-schema.js</tspan></text>
   <text class="t-sub faint" x="1224" y="418" text-anchor="end">@jtalk22/slack-mcp</text>
 </svg>
