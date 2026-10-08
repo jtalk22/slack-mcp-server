@@ -288,7 +288,7 @@ The four write-path tools are withheld from `tools/list` *and* refused at dispat
 npm audit signatures
 ```
 
-A clean result means the package you installed was built and signed by this repository's release workflow. Read the code before giving it your Slack session. Full policy: [SECURITY.md](SECURITY.md).
+A clean result means the package you installed was built and signed by this repository's release workflow. Read the code before giving it your Slack session. Full policy: [SECURITY.md](.github/SECURITY.md).
 
 ---
 
@@ -422,7 +422,7 @@ The package works without the hosted tier.
 
 ## Contributing
 
-PRs are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and run `node --check` on touched JavaScript before submitting.
+PRs are welcome. Read [CONTRIBUTING.md](.github/CONTRIBUTING.md) and run `node --check` on touched JavaScript before submitting.
 
 ## License
 
