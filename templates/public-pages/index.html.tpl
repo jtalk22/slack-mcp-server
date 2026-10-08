@@ -283,10 +283,10 @@
 
       <section id="paths">
         <div class="frame section-grid">
-          <div><span class="section-index">03 / ACCESS</span><p class="section-label">Same workspace. Different gate.</p></div>
+          <div><span class="section-index">03 / ACCESS</span><p class="section-label">Where it runs.</p></div>
           <div class="section-copy">
-            <h2>Two ways into Slack.</h2>
-            <p>The official path is a managed remote integration governed by workspace policy. The local path starts from the browser session you already have; the hosted path turns the same operating jobs into durable, unattended workflows.</p>
+            <h2>Local or hosted.</h2>
+            <p><a href="https://docs.slack.dev/ai/slack-mcp-server/">Slack's official MCP server</a> is an app your workspace admin approves; use it when your organisation wants a sanctioned integration, and on Enterprise Grid. This project runs locally from the browser session you already have, or hosted, on a schedule.</p>
             <img class="diagram" src="docs/images/diagram-oauth-comparison.svg" alt="Two paths into Slack: a managed integration path and the local browser-session path">
             <div class="decision">
               <article class="path"><small>LOCAL / MIT / FREE</small><h3>Move now.</h3><p>One-command setup, existing browser permissions, the full current tool surface, and the runtime on your machine. Best for interactive, operator-driven work.</p><a href="{{SETUP_URL}}">Run local setup →</a></article>
