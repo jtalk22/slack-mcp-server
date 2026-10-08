@@ -166,9 +166,9 @@ function main() {
     results,
     "README category thesis",
     readme.includes("Catch up on Slack without reading it.") &&
-      readme.includes("Built past the demo") &&
+      readme.includes("How it works") &&
       readme.includes("Two ways into Slack") &&
-      readme.includes("Hosted when it must drive itself"),
+      readme.includes("Local and hosted"),
     "README must lead with the job it does, plus systems proof and the local/hosted value split"
   );
   check(

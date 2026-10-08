@@ -266,7 +266,7 @@
 
       <section id="systems">
         <div class="frame section-grid">
-          <div><span class="section-index">02 / SYSTEMS</span><p class="section-label">Built past the demo.</p></div>
+          <div><span class="section-index">02 / SYSTEMS</span><p class="section-label">How it works.</p></div>
           <div class="section-copy">
             <h2>Built for the Slack session you actually have.</h2>
             <p>The local path combines browser-session extraction, a real credential lifecycle, full-fidelity Slack reads, guarded action tools, and automation-ready output.</p>
@@ -285,12 +285,12 @@
         <div class="frame section-grid">
           <div><span class="section-index">03 / ACCESS</span><p class="section-label">Same workspace. Different gate.</p></div>
           <div class="section-copy">
-            <h2>Slack already knows who you are.</h2>
+            <h2>Two ways into Slack.</h2>
             <p>The official path is a managed remote integration governed by workspace policy. The local path starts from the browser session you already have; the hosted path turns the same operating jobs into durable, unattended workflows.</p>
             <img class="diagram" src="docs/images/diagram-oauth-comparison.svg" alt="Two paths into Slack: a managed integration path and the local browser-session path">
             <div class="decision">
               <article class="path"><small>LOCAL / MIT / FREE</small><h3>Move now.</h3><p>One-command setup, existing browser permissions, the full current tool surface, and the runtime on your machine. Best for interactive, operator-driven work.</p><a href="{{SETUP_URL}}">Run local setup →</a></article>
-              <article class="path"><small>HOSTED / MANAGED OAUTH</small><h3>Have the brief waiting at 8am.</h3><p>Read-only Shadow Reports, scheduled briefs, shared workflow profiles, and signed delivery. Managed OAuth keeps recurring work running when your laptop is closed.</p><a href="{{CANONICAL_SITE_URL}}">See hosted →</a></article>
+              <article class="path"><small>HOSTED</small><h3>Have the brief waiting at 8am.</h3><p>Read-only Shadow Reports, scheduled briefs, shared workflow profiles, and signed delivery, running while your laptop is closed.</p><a href="{{CANONICAL_SITE_URL}}">See hosted →</a></article>
             </div>
           </div>
         </div>
