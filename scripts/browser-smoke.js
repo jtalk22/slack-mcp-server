@@ -115,7 +115,13 @@ function startStaticServer() {
     server.listen(0, "127.0.0.1", () => {
       const address = server.address();
       resolveServer({
-        close: () => new Promise((resolveClose) => server.close(resolveClose)),
+        // server.close() waits for every open connection to end. A page that
+        // streams media (demo-video.html) can hold one, so the caller closes the
+        // browser first, and any connection still open is dropped here.
+        close: () => new Promise((resolveClose) => {
+          server.close(resolveClose);
+          server.closeAllConnections();
+        }),
         url: `http://127.0.0.1:${address.port}`,
       });
     });
@@ -300,8 +306,10 @@ async function runLocal() {
       throw new Error(errors.join("\n"));
     }
   } finally {
-    await server.close();
+    // Browser first: closing the server while the browser still holds a
+    // connection to it hung this script on 2 of 6 local runs (2026-11-03).
     await browser.close();
+    await server.close();
   }
 }
 
