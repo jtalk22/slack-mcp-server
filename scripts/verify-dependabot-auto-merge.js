@@ -14,8 +14,18 @@ const workflow = readFileSync(WORKFLOW_PATH, "utf8");
 // dependabot/fetch-metadata emits Dependabot's internal ecosystem names, which
 // use underscores (github_actions, npm_and_yarn). dependabot.yml spells the same
 // ecosystems with hyphens, and a condition copied from there never matches.
+// Full-line YAML comments are dropped first, so a commented-out condition can
+// neither satisfy the presence check nor trip the spelling check.
+const activeWorkflow = workflow
+  .split("\n")
+  .filter((line) => !line.trimStart().startsWith("#"))
+  .join("\n");
 const ecosystemComparisons = [
-  ...workflow.matchAll(/outputs\.package-ecosystem\s*==\s*'([^']*)'/g),
+  ...activeWorkflow.matchAll(/outputs\.package-ecosystem\s*[!=]=\s*'([^']*)'/g),
+].map((match) => match[1]);
+// Only an equality can route Actions updates to auto-merge.
+const ecosystemEqualities = [
+  ...activeWorkflow.matchAll(/outputs\.package-ecosystem\s*==\s*'([^']*)'/g),
 ].map((match) => match[1]);
 
 const checks = [
@@ -45,7 +55,7 @@ const checks = [
   },
   {
     label: "GitHub Actions updates must be matched by fetch-metadata's name (github_actions)",
-    ok: ecosystemComparisons.includes("github_actions"),
+    ok: ecosystemEqualities.includes("github_actions"),
   },
   {
     label: `ecosystem conditions must use fetch-metadata names, not dependabot.yml spellings (saw: ${ecosystemComparisons.join(", ") || "none"})`,
