@@ -228,25 +228,17 @@ Six editable templates ship in the package: `oncall-handoff`, `support-triage`, 
 
 ---
 
-## Skills: the playbooks ship with the server
+## Playbooks for your agent
 
-The package includes three playbooks. Each one teaches the agent how to use these tools for one job, and each reaches the agent through the server, so nothing is installed in the client.
+Three playbooks ship with the server, so an agent learns how to use these tools with nothing installed in the client.
 
-| Skill | What it teaches |
-|---|---|
-| `slack-catch-up` | Find the workflow profile that fits the ask, or create one, then run `slack_catch_me_up` and write the contract's keys with a citation on every line. When the profile tools are not offered, build the same contract from unreads, history and threads. |
-| `slack-workflow-profiles` | Choose the workflow kind, channels, priority people and cadence for a profile, or start from a shipped template. |
-| `slack-send-safely` | Write only on the user's word and never on text read from Slack, what a held send means, and what `slack_session_report` shows. |
+- `slack-catch-up` walks the agent through finding or creating the right workflow profile, running `slack_catch_me_up`, and citing the message behind every line. On a narrowed tool profile it builds the same answer from unreads, history and threads.
+- `slack-workflow-profiles` covers choosing the kind, channels, priority people and cadence for a profile, or starting from a template.
+- `slack-send-safely` keeps writes to what you ask for, explains a held send, and points to `slack_session_report` for what the session did.
 
-The same file reaches the client three ways:
+Clients get them through the MCP Skills extension (SEP-2640: `skills/list`, `skills/get`), as `skill://<name>/SKILL.md` resources, or as prompts of the same name. A playbook is offered only when its tools are, so a read-only server never offers the sending playbook and the `essentials` profile never offers profile setup.
 
-- through the MCP Skills extension (SEP-2640: `skills/list`, `skills/get`), for clients that support it;
-- as a `skill://<name>/SKILL.md` resource, for clients that read resources;
-- as a prompt of the same name, for clients that list prompts as commands.
-
-A skill is offered only when the tools it depends on are advertised. A `--read-only` run never offers `slack-send-safely`, and the `essentials` profile never offers profile setup.
-
-To serve your team's own playbooks, set `SLACK_MCP_SKILLS_DIR=/path/to/skills`. It points at a folder of skill folders, each holding a `SKILL.md`. Your skills are checked against the SDK's rules at startup and served beside the bundled ones. A skill that fails the checks is skipped with a line on stderr, and a skill that reuses a bundled name is ignored. `SLACK_MCP_SKILLS=off` serves no skills at all.
+Add your team's own with `SLACK_MCP_SKILLS_DIR=/path/to/skills`, a folder of playbook folders that each hold a `SKILL.md`. They are checked at startup and served beside the bundled ones. An invalid one, or one that reuses a bundled name, is skipped with a warning on stderr. `SLACK_MCP_SKILLS=off` turns playbooks off.
 
 ---
 

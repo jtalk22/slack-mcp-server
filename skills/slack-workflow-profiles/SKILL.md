@@ -41,11 +41,10 @@ The kind decides which keys `slack_catch_me_up` asks you to write.
 5. `retention_mode` (`ephemeral` by default, or `persistent`) is recorded on
    the profile. This server does not act on it.
 6. Call `slack_workflow_save` with `profile_name`, `workflow_kind` and the
-   fields above. Saving an existing `profile_name` replaces that profile, and
-   any field you leave out returns to its default, so to change one setting,
-   send every field again. Confirm the result with `slack_workflows`, then run
-   `slack_catch_me_up`
-   once so the user sees what the profile returns.
+   fields above. Saving an existing `profile_name` replaces the profile, and a
+   field you leave out returns to its default, so send every field to change
+   one. Confirm with `slack_workflows`, then run `slack_catch_me_up` once so
+   the user sees what the profile returns.
 
 ## Start from a template
 

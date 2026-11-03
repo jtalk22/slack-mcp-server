@@ -46,14 +46,15 @@ resources (`slack://workspace/info`, `slack://conversations/list`).
 
 The container is the SDK's `McpServer`, because the Skills extension (SEP-2640)
 attaches to one. Tools and prompts stay on raw request handlers over
-`mcp.server`, because the tool schemas are hand-written JSON Schema and dispatch
+`mcp.server`: the tool schemas are hand-written JSON Schema, and dispatch
 carries the read-only refusal and the lifeboat. `lib/skills.js` reads `skills/`
-and `SLACK_MCP_SKILLS_DIR` once at startup and serves the result from memory.
-It offers only the skills whose `metadata.requires-tools` are all advertised.
-Any other tool a skill names is declared in `metadata.optional-tools`, and
-`test/skills.test.js` checks that on every built-in tool profile. Each offered skill goes out as a Skills-extension entry, as a `skill://`
-resource, and as a prompt of the same name. One `SkillsExtension` per surface
-is shared by every per-request server, and the SDK holds those servers weakly.
+and `SLACK_MCP_SKILLS_DIR` once at startup and serves them from memory. A skill
+is offered only when every tool in its `metadata.requires-tools` is advertised;
+any other tool it names must be in `metadata.optional-tools`, which
+`test/skills.test.js` checks on every built-in tool profile. Each offered skill
+goes out as a Skills-extension entry, a `skill://` resource and a prompt of the
+same name. One `SkillsExtension` per surface serves every per-request server,
+and the SDK holds those servers weakly.
 
 | | `src/server.js` | `src/server-http.js` |
 |---|---|---|
@@ -74,9 +75,8 @@ wrong token answers `401` with a `WWW-Authenticate` challenge), and a
 browser-originated request whose `Origin` is outside
 `SLACK_MCP_HTTP_ALLOWED_ORIGINS` is refused with `403`. An allowlist entry is
 an exact origin or a lowercase `<scheme>://*` for a non-web scheme, which admits
-browser-extension clients whose IDs vary per install. That is the rule
-`@modelcontextprotocol/server` 2.3.0 adopted, and `lib/http-origins.js`
-implements it. `SLACK_MCP_HTTP_INSECURE=1`
+browser-extension clients whose IDs change per install (`lib/http-origins.js`,
+the rule `@modelcontextprotocol/server` 2.3.0 adopted). `SLACK_MCP_HTTP_INSECURE=1`
 removes both checks and is for local testing only. The whole request path is
 wrapped, because an escaped rejection would be an unhandled promise rejection
 and would take the process down.

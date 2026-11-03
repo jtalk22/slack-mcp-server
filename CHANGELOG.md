@@ -120,61 +120,61 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-11-03
+
 ### Added
 
-- **Skills that ship with the server** (MCP Skills extension, SEP-2640, new in
-  `@modelcontextprotocol/server` 2.4.0). Three playbooks are served:
-  `slack-catch-up`, `slack-workflow-profiles` and `slack-send-safely`. Each
-  one goes out three ways from the same file: `skills/list` and `skills/get`
-  for clients with Skills support, a `skill://<name>/SKILL.md` resource for
-  clients that read resources, and a prompt of the same name for clients that
-  list prompts as commands. A skill is offered only when every tool in its
-  `metadata.requires-tools` is advertised, so a `--read-only` run never
-  offers the sending playbook. Verified with the SDK's `SkillsClient`, which
-  checks size, digest and frontmatter, on 2025-11-25 and 2026-07-28, and
-  against the spawned stdio entry under the default, `--read-only`,
-  `essentials` and `SLACK_MCP_SKILLS=off`.
-- **`SLACK_MCP_SKILLS_DIR`** adds a team's own skills from a folder of skill
-  folders. Each one is checked against the SDK's rules at startup. An invalid
-  skill, a symlinked file or a reused bundled name is skipped with a line on
-  stderr, and the server keeps running. `SLACK_MCP_SKILLS=off` serves none.
+- **Playbooks served by the server** (MCP Skills extension, SEP-2640, from
+  `@modelcontextprotocol/server` 2.4.0): `slack-catch-up`,
+  `slack-workflow-profiles` and `slack-send-safely`. Each goes out as a
+  `skills/list` entry, a `skill://<name>/SKILL.md` resource and a prompt of the
+  same name, all from one file. A playbook is offered only when every tool in
+  its `metadata.requires-tools` is advertised, so `--read-only` never offers
+  the sending one. If a later SDK refuses the experimental `attach()`, the
+  server runs without the Skills methods and warns once on stderr.
+- **`SLACK_MCP_SKILLS_DIR`** serves a team's own playbooks beside the bundled
+  ones. Invalid playbooks, symlinked files and reused bundled names are skipped
+  with a warning on stderr. `SLACK_MCP_SKILLS=off` serves none.
 - **Browser-extension clients over HTTP.** `SLACK_MCP_HTTP_ALLOWED_ORIGINS`
-  accepts `<scheme>://*` (lowercase), which admits every origin of one non-web
-  scheme, for example `moz-extension://*` or `chrome-extension://*`. Firefox
-  gives an extension a different ID on every install, so before this its MCP
-  client could not be allowlisted at all. The rule matches the one
-  `@modelcontextprotocol/server` 2.3.0 adopted. `http://*` and `https://*`,
-  and any other wildcard shape, are ignored with a startup warning. An
-  admitted origin still needs the bearer token. The allowlist had no test
-  before; `test/http-origins.test.js` now covers exact and wildcard entries,
-  unit and spawned.
+  accepts a lowercase `<scheme>://*` for a non-web scheme, such as
+  `moz-extension://*`. This is the rule `@modelcontextprotocol/server` 2.3.0
+  adopted. A Firefox extension, whose ID changes on every install, can now be
+  allowlisted. `http://*`, `https://*` and other wildcard shapes are ignored
+  with a warning. The bearer token is still required.
 
 ### Changed
 
-- The protocol server is now the SDK's `McpServer`, because the Skills
-  extension attaches to one. Tools and prompts stay on the same raw handlers,
-  so `tools/list`, `tools/call` and the three existing prompts are unchanged.
-  The two `slack://` resources are now registered through `registerResource`.
-  A client can see two differences. `resources/read` of an unknown URI now
-  answers `-32602 Resource not found` instead of `-32603`. Capabilities carry
-  `listChanged: false` on tools, prompts and resources, because `McpServer`
-  would otherwise advertise `true` for notifications this server never sends,
-  plus the Skills extension.
+- The protocol server is now the SDK's `McpServer`, which the Skills extension
+  requires. Tools and prompts keep their handlers, so `tools/list`,
+  `tools/call` and the existing prompts are unchanged. Clients can notice two
+  details. `resources/read` of an unknown URI answers `-32602 Resource not
+  found` instead of `-32603`, and the capabilities set `listChanged` to false
+  and declare the Skills extension.
+- Minor GitHub Actions updates from Dependabot auto-merge again. The workflow
+  compared against `github-actions`, but `dependabot/fetch-metadata` reports
+  `github_actions`.
 - CodeQL skips the three rules that flag reading the Slack session and sending
-  it to Slack, which is what this server is for.
+  it to Slack, which is what this server does.
 - The browser smoke test's static server logs an error instead of returning it,
   and the social-preview script checks GitHub's image host by parsed hostname.
 
+### Fixed
+
+- On Windows, a save no longer fails when antivirus or the search indexer
+  holds the file for a moment. Every local store (credentials, metadata, DM
+  cache, workflow profiles) retries the rename on `EPERM`, `EACCES` or `EBUSY`
+  for up to 310 ms. Other errors are thrown at once. 5.1.0 retried only one
+  caller.
+
 ### Security
 
-- Dependency floors rise to `@modelcontextprotocol/server` ^2.4.0,
-  `@modelcontextprotocol/node` ^2.1.2 and `express` ^5.3.0. With these floors
-  a fresh install resolves past four advisories: body-parser 2.4.0
-  (CVE-2026-111181), zod 4.6.7 (CVE-2023-54404), qs 6.17.1 (CVE-2026-110816)
-  and `@hono/node-server` 2.1.6 (CVE-2026-118663). The node floor matters most.
-  `@modelcontextprotocol/node` 2.1.1 pinned `@hono/node-server` to 1.x, and
-  every 1.x release from 1.19.10 on is affected, so no 1.x install could be fixed.
-  `npm audit` reports 0.
+- Minimum versions rise to `@modelcontextprotocol/server` ^2.4.0,
+  `@modelcontextprotocol/node` ^2.1.2 and `express` ^5.3.0. A fresh install
+  now resolves past four advisories: body-parser 2.4.0 (CVE-2026-111181), zod
+  4.6.7 (CVE-2023-54404), qs 6.17.1 (CVE-2026-110816) and `@hono/node-server`
+  2.1.6 (CVE-2026-118663). The `@hono/node-server` fix needed the new node
+  package, because 2.1.1 allowed only the affected 1.x line. `npm audit`
+  reports 0.
 
 ## [5.1.0] - 2026-10-07
 
@@ -1410,7 +1410,9 @@ npx @jtalk22/slack-mcp
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
-[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...HEAD
+[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.0...HEAD
+[5.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.1.0...v5.2.0
+[5.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...v5.1.0
 [5.0.1]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.9.0...v5.0.0
 [4.9.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.8.0...v4.9.0
