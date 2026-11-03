@@ -120,6 +120,8 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+## [5.2.0] - 2026-11-03
+
 ### Added
 
 - **Skills that ship with the server** (MCP Skills extension, SEP-2640, new in
@@ -133,7 +135,10 @@ credentials carry the same effective access as the signed-in browser user.
   offers the sending playbook. Verified with the SDK's `SkillsClient`, which
   checks size, digest and frontmatter, on 2025-11-25 and 2026-07-28, and
   against the spawned stdio entry under the default, `--read-only`,
-  `essentials` and `SLACK_MCP_SKILLS=off`.
+  `essentials` and `SLACK_MCP_SKILLS=off`. The SDK marks the extension's
+  `attach()` experimental, so if a later 2.x refuses it, the server runs
+  without the Skills methods and says so once on stderr, rather than failing
+  connections.
 - **`SLACK_MCP_SKILLS_DIR`** adds a team's own skills from a folder of skill
   folders. Each one is checked against the SDK's rules at startup. An invalid
   skill, a symlinked file or a reused bundled name is skipped with a line on
@@ -164,6 +169,21 @@ credentials carry the same effective access as the signed-in browser user.
   it to Slack, which is what this server is for.
 - The browser smoke test's static server logs an error instead of returning it,
   and the social-preview script checks GitHub's image host by parsed hostname.
+- Minor GitHub Actions updates from Dependabot auto-merge again. The workflow
+  compared `package-ecosystem` against `github-actions`, but
+  `dependabot/fetch-metadata` reports `github_actions`, so the step never
+  matched. The guardrail now fails on that spelling.
+
+### Fixed
+
+- On Windows, an antivirus scan or the search indexer can hold a file for a
+  few milliseconds, and the rename that commits an atomic write failed with
+  `EPERM`, `EACCES` or `EBUSY`. 5.1.0 retried one caller. Now every local
+  store retries the rename itself: the token file, the metadata file, the DM
+  cache and the workflow profiles. Only those three codes are retried, five
+  times with a 10 ms delay that doubles each time (310 ms at most), and any
+  other error is thrown at once. The three copies of `atomicWriteSync` are now
+  one, in `lib/atomic-write.js`.
 
 ### Security
 
@@ -1410,7 +1430,9 @@ npx @jtalk22/slack-mcp
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
-[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...HEAD
+[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.0...HEAD
+[5.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.1.0...v5.2.0
+[5.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...v5.1.0
 [5.0.1]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.9.0...v5.0.0
 [4.9.0]: https://github.com/jtalk22/slack-mcp-server/compare/v4.8.0...v4.9.0
