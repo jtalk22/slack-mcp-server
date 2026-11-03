@@ -7,9 +7,9 @@ and [changelog](../CHANGELOG.md) describe what is available now.
 
 ## Available now
 
-- Nineteen local tools across Slack reads, writes, workflow profiles, and catch-up.
+- 20 local tools across Slack reads, writes, workflow profiles, and catch-up.
 - Source-linked catch-up evidence gathered locally for your calling agent.
-- Six-tool `essentials` and twelve-tool `read` profiles for a smaller tool schema.
+- 6-tool `essentials` and 13-tool `read` profiles for a smaller tool schema.
 - Automatic macOS Chrome extraction, isolated workspace profiles, and selectable
   credential storage; manual credentials on Windows and Linux.
 - stdio and self-hosted HTTP with shared handlers and protocol conformance tests.

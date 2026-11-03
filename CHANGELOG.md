@@ -120,6 +120,14 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+### Fixed
+
+- The API reference, the architecture, deployment and roadmap docs, and the
+  share page still said 19 tools and 12 read-only after 5.1.0 added a read
+  tool. They now say 20 and 13, the API reference and the share page take the
+  numbers from `lib/tools.js`, and `check-public-surface-integrity.js` fails on
+  a stale count in any doc or public page, digits or words.
+
 ## [5.2.1] - 2026-11-03
 
 ### Fixed
