@@ -257,6 +257,39 @@ test("one extension is shared by every server on the same surface", async () => 
   assert.equal(skillsExtensionFor([]), null);
 });
 
+test("an SDK that refuses the experimental attach() leaves the server working, minus Skills", async () => {
+  const { SkillsExtension } = await import("@modelcontextprotocol/server/ext/skills");
+  const original = SkillsExtension.prototype.attach;
+  const errors = [];
+  const originalError = console.error;
+  SkillsExtension.prototype.attach = () => { throw new Error("attach wiring changed in a future SDK"); };
+  console.error = (line) => errors.push(String(line));
+  let client;
+  let handler;
+  try {
+    ({ client, handler } = await connect({ tools: TOOLS }));
+    assert.equal((await client.listTools()).tools.length, TOOLS.length);
+    const skills = new SkillsClient(client);
+    assert.equal(skills.supported, false, "no extension declared when attach failed");
+    const prompts = (await client.listPrompts()).prompts.map((p) => p.name);
+    assert.ok(prompts.includes("slack-catch-up"), "skill prompts still offered");
+    const resources = (await client.listResources()).resources.map((r) => r.uri);
+    assert.ok(resources.includes("slack://workspace/info"));
+    // A second server on the same surface: still working, and no second warning.
+    const again = await connect({ tools: TOOLS });
+    assert.equal((await again.client.listTools()).tools.length, TOOLS.length);
+    await again.client.close();
+    await again.handler.close();
+  } finally {
+    SkillsExtension.prototype.attach = original;
+    console.error = originalError;
+    await client?.close();
+    await handler?.close();
+  }
+  const reported = errors.filter((line) => line.includes("Skills extension was not attached"));
+  assert.equal(reported.length, 1, "reported once per process, not once per request");
+});
+
 test("skills: null serves no skills and declares no extension", async () => {
   const { client, handler, skills } = await connect({ tools: TOOLS, skills: null });
   try {
