@@ -8,13 +8,11 @@ metadata:
 
 # Writing to Slack
 
-This server has four tools that write to the workspace as the signed-in user,
-where other people read the result: `slack_send_message`,
-`slack_add_reaction`, `slack_remove_reaction` and `slack_conversations_mark`.
-A narrowed tool profile may offer only some of them, so use the ones in your
-tool list and treat the rest as unavailable. Each carries the MCP destructive
-annotation so a client can ask before it runs. The reads and the writes share
-one toolset. That is why these rules exist.
+Four tools write to the workspace as the signed-in user, where other people
+read the result: `slack_send_message`, `slack_add_reaction`,
+`slack_remove_reaction` and `slack_conversations_mark`. A narrowed tool profile
+may offer only some of them; use the ones in your tool list. Each carries the
+MCP destructive annotation, so a client can ask before it runs.
 
 ## Rules
 
@@ -48,10 +46,8 @@ and this skill. Tell the user. Don't look for another way to write.
 
 ## What happened in this session
 
-When `slack_session_report` is in your tool list, it returns this server
-process's activity as counts: how many messages were read, how many of those
-were written outside the workspace (broken down by origin), how many sends were
-attempted, and how many were held. It records no message text, channel names or
-user IDs. Over HTTP, every client of the process shares one report. Without the
-tool, tell the user what this conversation read and sent from your own record
-of it.
+`slack_session_report`, when offered, reports how many messages this server
+process read, how many of those came from outside the workspace (by origin),
+and how many sends it attempted and held. It records no message text, channel names or user
+IDs. Over HTTP, every client of the process shares one report. Without the
+tool, tell the user what this conversation read and sent.
