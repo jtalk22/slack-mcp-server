@@ -12,7 +12,7 @@ Slack timestamps such as `oldest`, `latest`, and `thread_ts` are Unix seconds in
 
 ## Choosing a tool profile
 
-`SLACK_MCP_TOOLS=all` advertises the full surface. `essentials` advertises six common tools; `read` advertises twelve Slack read tools. Run `npm run measure:tools` to compare estimated schema tokens. These profiles narrow discovery; use your client's approval controls to govern writes.
+`SLACK_MCP_TOOLS=all` advertises all 20 tools. `essentials` advertises 6 common tools; `read` advertises the 13 read-only tools. Run `npm run measure:tools` to compare estimated schema tokens. These profiles narrow discovery; use your client's approval controls to govern writes.
 
 ## First useful workflow
 
@@ -268,7 +268,7 @@ Catch up on a saved workflow profile. Reads the profile's channels (or everythin
 | `profile_name` | string | yes | Name of a workflow profile saved via slack_workflow_save (list them with slack_workflows) |
 | `since` | string | no | Optional ISO 8601 timestamp — only consider messages newer than this. Defaults to the profile's cadence window: 24 hours for on_demand and daily_8am, 7 days for weekly_monday. |
 
-Reads a saved profile and returns `scope`, `signals`, `conversations`, `output_contract`, and `truncation`. Your calling agent composes the brief from this evidence and cites the source messages. Defaults to 24 hours, or 7 days for a weekly profile. A missing profile returns `profile_not_found` with available profiles and a next action. No hosted account or server-side model is needed.
+Reads a saved profile and returns `scope`, `signals`, `continuity`, `conversations`, `output_contract`, and `truncation`. Your calling agent composes the brief from this evidence and cites the source messages. Defaults to 24 hours, or 7 days for a weekly profile. The whole conversation list is read; a channel the profile names that cannot be read is listed in `scope.channels_not_found` with the reason, and `scope.listing` says how much of the list was read. A missing profile returns `profile_not_found` with available profiles and a next action. No hosted account or server-side model is needed.
 
 ---
 

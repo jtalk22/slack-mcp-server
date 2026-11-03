@@ -92,8 +92,8 @@ advertised does its work on your machine; there are no placeholder tools that
 return an upgrade payload. The four write-path tools carry the MCP
 `destructive` annotation.
 
-`SLACK_MCP_TOOLS` (or `--tools=`) narrows what is advertised to `all` (19),
-`read` (12), `essentials` (6), or an explicit comma-separated list, which cuts
+`SLACK_MCP_TOOLS` (or `--tools=`) narrows what is advertised to `all` (20),
+`read` (13), `essentials` (6), or an explicit comma-separated list, which cuts
 the schema cost the client pays every turn. Handlers stay fully wired whatever
 is advertised, and the active profile is printed at startup so a narrowed
 surface is never a silent surprise. The read list is explicit in `lib/tools.js`

@@ -147,6 +147,64 @@ function main() {
   check(results, "API reference matches tool schemas", apiDocs.status === 0,
     apiDocs.stdout || apiDocs.stderr || "no output");
 
+  // Every tool count written into the docs and the generated pages, held to the
+  // code. Only the README was checked before, and after 5.1.0 added a read tool
+  // four other files kept saying 19 and 12 (found 2026-11-03).
+  const countSurfaces = [
+    "README.md",
+    "index.html",
+    ...readdirSync(join(ROOT, "docs")).filter((f) => f.endsWith(".md")).map((f) => `docs/${f}`),
+    ...readdirSync(join(ROOT, "public")).filter((f) => f.endsWith(".html")).map((f) => `public/${f}`),
+  ];
+  const expectedCounts = {
+    all: PUBLIC_METADATA.selfHostedToolCount,
+    read: PUBLIC_METADATA.readOnlyToolCount,
+    write: PUBLIC_METADATA.writePathToolCount,
+    essentials: ESSENTIALS_TOOLS.length,
+    workflow: PUBLIC_METADATA.selfHostedToolCount - PUBLIC_METADATA.readOnlyToolCount - PUBLIC_METADATA.writePathToolCount,
+  };
+  const countPhrases = [
+    [/`all` \((\d+)\)/g, ["all"]],
+    [/`read` \((\d+)\)/g, ["read"]],
+    [/`essentials` \((\d+)\)/g, ["essentials"]],
+    [/(\d+)-tool `read`/g, ["read"]],
+    [/(\d+)-tool `essentials`/g, ["essentials"]],
+    [/(\d+) tools \((\d+) read \+ (\d+) write \+ (\d+) local workflow/g, ["all", "read", "write", "workflow"]],
+    [/(\d+) read, (\d+) write, (\d+) local workflow/g, ["read", "write", "workflow"]],
+    [/advertises all (\d+) tools/g, ["all"]],
+    [/advertises the (\d+) read-only tools/g, ["read"]],
+    // Spelled-out forms ("Nineteen local tools", "twelve-tool `read`").
+    [/\b([A-Za-z]+|\d+) local tools\b/g, ["all"]],
+    [/\b([A-Za-z]+)-tool `read`/g, ["read"]],
+    [/\b([A-Za-z]+)-tool `essentials`/g, ["essentials"]],
+  ];
+  const NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+    "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen",
+    "twenty", "twenty-one", "twenty-two", "twenty-three", "twenty-four", "twenty-five"];
+  const asNumber = (token) => (/^\d+$/.test(token) ? Number(token) : NUMBER_WORDS.indexOf(token.toLowerCase()));
+  const staleCounts = [];
+  for (const file of countSurfaces) {
+    if (!existsSync(join(ROOT, file))) continue;
+    const text = read(file);
+    for (const [pattern, kinds] of countPhrases) {
+      for (const match of text.matchAll(pattern)) {
+        kinds.forEach((kind, i) => {
+          const value = asNumber(match[i + 1]);
+          if (value === -1) return; // a word that is not a number ("three local tools" counts; "the local tools" does not)
+          if (value !== expectedCounts[kind]) {
+            staleCounts.push(`${file}: "${match[0]}" (${kind} is ${expectedCounts[kind]})`);
+          }
+        });
+      }
+    }
+  }
+  check(
+    results,
+    "Tool counts in docs and public pages",
+    staleCounts.length === 0,
+    staleCounts.length ? staleCounts.join("; ") : `${countSurfaces.length} files agree with lib/tools.js`
+  );
+
   const readme = read("README.md");
   check(
     results,
