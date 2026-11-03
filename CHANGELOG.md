@@ -127,6 +127,17 @@ credentials carry the same effective access as the signed-in browser user.
 - The browser smoke test's static server logs an error instead of returning it,
   and the social-preview script checks GitHub's image host by parsed hostname.
 
+### Security
+
+- Dependency floors rise to `@modelcontextprotocol/server` ^2.4.0,
+  `@modelcontextprotocol/node` ^2.1.2 and `express` ^5.3.0. With these floors
+  a fresh install resolves past four advisories: body-parser 2.4.0
+  (CVE-2026-111181), zod 4.6.7 (CVE-2023-54404), qs 6.17.1 (CVE-2026-110816)
+  and `@hono/node-server` 2.1.6 (CVE-2026-118663). The node floor matters most.
+  `@modelcontextprotocol/node` 2.1.1 pinned `@hono/node-server` to 1.x, and
+  every 1.x release from 1.19.10 on is affected, so no 1.x install could be fixed.
+  `npm audit` reports 0.
+
 ## [5.1.0] - 2026-10-07
 
 ### The catch-up could not see what it was for

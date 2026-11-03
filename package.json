@@ -121,9 +121,9 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/node": "^2.0.0",
-    "@modelcontextprotocol/server": "^2.0.0",
-    "express": "^5.2.1"
+    "@modelcontextprotocol/node": "^2.1.2",
+    "@modelcontextprotocol/server": "^2.4.0",
+    "express": "^5.3.0"
   },
   "files": [
     "src/",
@@ -147,8 +147,8 @@
     "smithery.yaml"
   ],
   "devDependencies": {
-    "@modelcontextprotocol/client": "^2.0.0",
-    "playwright": "^1.62.1"
+    "@modelcontextprotocol/client": "^2.4.0",
+    "playwright": "^1.64.1"
   },
   "overrides": {
     "ip-address": "^10.1.1"
