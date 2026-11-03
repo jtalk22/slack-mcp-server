@@ -120,6 +120,8 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+## [5.2.1] - 2026-11-03
+
 ### Fixed
 
 - `slack_catch_me_up` reads the whole conversation list instead of its first
@@ -132,6 +134,11 @@ credentials carry the same effective access as the signed-in browser user.
   live workspace on 2026-11-03, a profile with no channels read 0 conversations
   before this change and 5 after, 4 of them conversations the listing does not
   return at all.
+
+### Changed
+
+- `truncation.caps` in the catch-up response replaces `conversationScanLimit`
+  with `listingPageSize` and `listingMaxPages`.
 
 ## [5.2.0] - 2026-11-03
 
@@ -1423,7 +1430,8 @@ npx @jtalk22/slack-mcp
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
-[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.0...HEAD
+[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.1...HEAD
+[5.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.0...v5.2.1
 [5.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.1.0...v5.2.0
 [5.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...v5.1.0
 [5.0.1]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.0...v5.0.1
