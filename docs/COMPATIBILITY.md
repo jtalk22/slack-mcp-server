@@ -34,6 +34,17 @@ The local package is a stdio MCP server. Client support is classified by the evi
 | Linux | No | environment or file |
 | Docker/CI | No | mounted file or environment |
 
+## Playbooks
+
+The bundled playbooks are served three ways. A client needs only one.
+
+- Prompts, from `prompts/list`
+- Resources at `skill://<name>/SKILL.md`, from `resources/list`
+- The MCP Skills extension (SEP-2640), from `skills/list`
+
+How a client shows them is up to the client. `test/skills.test.js` covers all
+three on the server side.
+
 ## Verification contract
 
 For every client:

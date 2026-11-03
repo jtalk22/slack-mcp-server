@@ -104,6 +104,8 @@ npx -y @jtalk22/slack-mcp --status
 
 From a git checkout the same work is `npm run tokens:auto`, `npm run tokens:refresh`, and `npm run tokens:status`. Those scripts do not exist for an `npx` install.
 
+When a call fails on an expired session, the error lists these refresh steps, then the hosted OAuth option. The full message appears once an hour per process. Later failures in that hour get one line, so an agent retrying in a loop is not flooded. `SLACK_MCP_NO_UPSELL=1` drops the hosted option and keeps the refresh steps.
+
 ---
 
 ## Web Server Issues

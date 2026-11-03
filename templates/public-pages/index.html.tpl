@@ -269,13 +269,14 @@
           <div><span class="section-index">02 / SYSTEMS</span><p class="section-label">How it works.</p></div>
           <div class="section-copy">
             <h2>Built for the Slack session you actually have.</h2>
-            <p>The local path combines browser-session extraction, a real credential lifecycle, full-fidelity Slack reads, guarded action tools, and automation-ready output.</p>
+            <p>The local path combines browser-session extraction, a real credential lifecycle, full-fidelity Slack reads, guarded action tools, automation-ready output, and agent playbooks.</p>
             <div class="systems">
               <article class="system"><span class="id">01</span><h3>Browser-session engine</h3><p>Chrome LevelDB, cookie SQLite + WAL, macOS Keychain, PBKDF2, and AES decryption—locally, with structured failure codes.</p></article>
               <article class="system"><span class="id">02</span><h3>Credential lifecycle</h3><p>Keychain-only storage, owner-only files, atomic writes, cross-process locks, health monitoring, refresh, and isolated workspace profiles.</p></article>
               <article class="system"><span class="id">03</span><h3>Full-fidelity reads</h3><p>DMs, channels, search, complete histories, threads, unread state, users, blocks, attachments, files, reactions, and metadata.</p></article>
               <article class="system"><span class="id">04</span><h3>Approved action</h3><p>Replies, reactions, and read-state changes with MCP destructive annotations so the client can gate workspace writes.</p></article>
               <article class="system"><span class="id">05</span><h3>Typed workflows</h3><p>Incident, executive, support, launch, and custom profiles that turn Slack into contract-shaped JSON rather than prompt-shaped glue.</p></article>
+              <article class="system"><span class="id">06</span><h3>Agent playbooks</h3><p>SKILL.md playbooks for catch-up, profile setup, and safe sending, served as skills, resources, or prompts, only with their tools.</p></article>
             </div>
           </div>
         </div>

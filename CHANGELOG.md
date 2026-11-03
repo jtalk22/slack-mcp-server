@@ -127,6 +127,9 @@ credentials carry the same effective access as the signed-in browser user.
   tool. They now say 20 and 13, the API reference and the share page take the
   numbers from `lib/tools.js`, and `check-public-surface-integrity.js` fails on
   a stale count in any doc or public page, digits or words.
+- The landing page, roadmap, compatibility matrix and docs index did not
+  mention the playbooks 5.2.0 shipped. They do now. The troubleshooting guide
+  now names `SLACK_MCP_NO_UPSELL`, which only this changelog had documented.
 
 ## [5.2.1] - 2026-11-03
 
