@@ -24,9 +24,9 @@ npx -y @jtalk22/slack-mcp      # package entrypoint
 docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 ```
 
-## MCP Tools (19 total)
+## MCP Tools (20 total)
 
-**Slack reads (12):**
+**Slack reads (13):**
 
 | Tool | Purpose |
 |------|---------|
@@ -42,12 +42,23 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 | `slack_list_users` | List workspace users (paginated, 500+) |
 | `slack_users_search` | Search by name, display name, or email |
 | `slack_conversations_unreads` | Channels/DMs with unread messages |
+| `slack_session_report` | What this process read, sent and held, as counts (reads no Slack data) |
 
 **Slack writes (4):** `slack_send_message`, `slack_add_reaction`, `slack_remove_reaction`, `slack_conversations_mark` — all carry MCP `destructive` safety annotation.
 
 **Workflow primitives (2):** `slack_workflow_save`, `slack_workflows` — bind a `workflow_kind` (`incident_room`, `exec_brief`, `support_inbox`, `product_launch_watch`, `custom`) to channels + priority people + retention + cadence. Stored locally at `~/.slack-mcp-workflows.json`.
 
 **Local catch-up (1):** `slack_catch_me_up` — reads a saved profile's scope and returns structured evidence (`lib/catch-up.js`). There are no hosted upgrade stubs in the package since 5.0.0; every advertised tool runs locally.
+
+**Skills (3) and prompts:** `skills/<name>/SKILL.md` (`slack-catch-up`,
+`slack-workflow-profiles`, `slack-send-safely`) go out through the MCP Skills
+extension (SEP-2640), as `skill://` resources, and as prompts of the same
+name, from `lib/skills.js`. A skill is offered only when every tool in its
+`metadata.requires-tools` is advertised. Every other tool it names must be in
+`metadata.optional-tools`, and its text must say what to do without it; the
+test checks this on every built-in surface. `SLACK_MCP_SKILLS_DIR` adds an
+operator's folder of skills, and bundled names win a collision.
+`SLACK_MCP_SKILLS=off` serves none.
 
 ## Token Persistence Layers
 
@@ -81,11 +92,13 @@ src/
   server-http.js   Streamable HTTP entry (stateless per request, MCP 2026-07-28)
   web-server.js    REST API + Web UI
 lib/
-  mcp-server.js    shared protocol-server factory both transports build from
+  mcp-server.js    shared protocol-server factory (McpServer) both transports build from
+  skills.js        loads skills/ + SLACK_MCP_SKILLS_DIR, filters by advertised tools
   token-store.js   token persistence
   slack-client.js  Slack API client and retry logic
   tools.js         MCP tool definitions
   handlers.js      MCP tool handlers
+skills/            bundled SKILL.md playbooks (shipped in the npm files list and the Docker image)
 ```
 
 ## Claude Code Integration
@@ -108,7 +121,7 @@ Tokens load from `~/.slack-mcp-tokens.json` or `SLACK_TOKEN`/`SLACK_COOKIE` env 
   package. The SDK is v2 (`@modelcontextprotocol/server` + `/node`; `/client`
   is a devDependency for the era test).
 - **Tool profiles must agree with the README's counts.** `SLACK_MCP_TOOLS`
-  selects `all` (19) / `read` (12) / `essentials` (6) or a custom list.
+  selects `all` (20) / `read` (13) / `essentials` (6) or a custom list.
   `READ_TOOLS` is an explicit list, deliberately NOT derived from the
   `readOnlyHint` annotation — that annotation is a safety signal, and deriving
   the surface from it once shipped tools that made no Slack call to users who
@@ -123,8 +136,14 @@ Tokens load from `~/.slack-mcp-tokens.json` or `SLACK_TOKEN`/`SLACK_COOKIE` env 
   directly — edit `templates/public-pages/*.tpl` + `lib/public-pages.js`, run
   `node scripts/generate-public-pages.js`, commit templates and outputs together.
 - **README claims are CI-gated.** `check-public-surface-integrity.js` greps for
-  literal "19 tools", "12 read-only", "4 write-path"; `check-public-language.sh`
-  bans hype words. Run both before pushing copy changes.
+  the counts in `lib/public-metadata.js` ("20 tools", "13 read-only",
+  "4 write-path"); `check-public-language.sh` bans hype words, in `skills/`
+  too. Run both before pushing copy changes.
+- **Skills are prose about real tools, and a test holds them to it.**
+  `test/skills.test.js` fails when a `SKILL.md` names a tool that does not
+  exist, when its workflow-kind key table differs from `structuredKeysFor()`,
+  or when its template table differs from `templates/workflow-profiles/`.
+  Renaming a tool or a key means editing the skills in the same change.
 - **Demo video is reproducible.** `scripts/record-demo.js` re-captures the whole
   demo deterministically (webm master → renditions). Chapter `data-t` values in
   `demo-video.html.tpl` and `.vtt` cue times are hand-mapped to real scene

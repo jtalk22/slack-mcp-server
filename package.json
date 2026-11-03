@@ -128,6 +128,7 @@
   "files": [
     "src/",
     "lib/",
+    "skills/",
     "public/index.html",
     "public/share.html",
     "scripts/setup-wizard.js",

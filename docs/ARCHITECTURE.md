@@ -44,6 +44,17 @@ dispatch path cannot drift apart between them. The factory also registers three
 prompts (`search-recent`, `summarize-channel`, `find-messages-from`) and two
 resources (`slack://workspace/info`, `slack://conversations/list`).
 
+The container is the SDK's `McpServer`, because the Skills extension (SEP-2640)
+attaches to one. Tools and prompts stay on raw request handlers over
+`mcp.server`, because the tool schemas are hand-written JSON Schema and dispatch
+carries the read-only refusal and the lifeboat. `lib/skills.js` reads `skills/`
+and `SLACK_MCP_SKILLS_DIR` once at startup and serves the result from memory.
+It offers only the skills whose `metadata.requires-tools` are all advertised.
+Any other tool a skill names is declared in `metadata.optional-tools`, and
+`test/skills.test.js` checks that on every built-in tool profile. Each offered skill goes out as a Skills-extension entry, as a `skill://`
+resource, and as a prompt of the same name. One `SkillsExtension` per surface
+is shared by every per-request server, and the SDK holds those servers weakly.
+
 | | `src/server.js` | `src/server-http.js` |
 |---|---|---|
 | Transport | stdio | Streamable HTTP |
