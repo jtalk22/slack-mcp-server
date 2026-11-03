@@ -232,11 +232,9 @@ Six editable templates ship in the package: `oncall-handoff`, `support-triage`, 
 
 Three playbooks ship with the server, so an agent learns how to use these tools with nothing installed in the client.
 
-| Playbook | Teaches your agent to |
-|---|---|
-| `slack-catch-up` | find or create the right workflow profile, run `slack_catch_me_up`, and cite the message behind every line. On a narrowed tool profile it builds the same answer from unreads, history and threads. |
-| `slack-workflow-profiles` | choose the kind, channels, priority people and cadence for a profile, or start from a template |
-| `slack-send-safely` | write to Slack only when you ask, handle a held send, and report what the session did with `slack_session_report` |
+- `slack-catch-up` walks the agent through finding or creating the right workflow profile, running `slack_catch_me_up`, and citing the message behind every line. On a narrowed tool profile it builds the same answer from unreads, history and threads.
+- `slack-workflow-profiles` covers choosing the kind, channels, priority people and cadence for a profile, or starting from a template.
+- `slack-send-safely` keeps writes to what you ask for, explains a held send, and points to `slack_session_report` for what the session did.
 
 Clients get them through the MCP Skills extension (SEP-2640: `skills/list`, `skills/get`), as `skill://<name>/SKILL.md` resources, or as prompts of the same name. A playbook is offered only when its tools are, so `--read-only` never offers `slack-send-safely` and `essentials` never offers profile setup.
 
