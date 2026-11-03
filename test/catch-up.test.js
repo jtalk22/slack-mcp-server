@@ -374,3 +374,132 @@ test("catch-up places a teamless colleague the same way a single-channel read do
   assert.equal((await run(async () => null)).origin, "unknown", "a failed probe still fails closed");
   assert.equal((await run()).origin, "unknown", "and the dep is optional, defaulting to fail-closed");
 });
+
+// ---------------------------------------------------------------- the whole listing
+//
+// Before 5.2.1 the catch-up read one page of conversations.list (200 items) and
+// stopped. A profile channel on page two was never read, and a no-channel
+// profile chose by the listing's unread number alone, which drops to zero once
+// a channel is opened. These tests hold the catch-up to every page, to Slack's
+// own badges, and to saying what it could not find.
+
+function pagedSlack({ pages, counts, info = {}, history = {} }) {
+  const calls = [];
+  const slackAPI = async (method, params = {}) => {
+    calls.push({ method, params });
+    if (method === "conversations.list") {
+      const index = params.cursor ? Number(params.cursor.slice(1)) : 0;
+      const page = pages[index];
+      if (!page) throw new Error(`no page ${index}`);
+      const next = index + 1 < pages.length ? `p${index + 1}` : "";
+      return { channels: page, response_metadata: { next_cursor: next } };
+    }
+    if (method === "client.counts") {
+      if (counts instanceof Error) throw counts;
+      if (counts === undefined) throw new Error("unexpected client.counts");
+      return counts;
+    }
+    if (method === "conversations.info") {
+      const answer = info[params.channel];
+      if (answer instanceof Error) throw answer;
+      if (!answer) throw new Error("channel_not_found");
+      return { channel: answer };
+    }
+    if (method === "conversations.history") return history[params.channel] || { messages: [] };
+    if (method === "conversations.replies") return { messages: [] };
+    throw new Error(`unexpected method ${method}`);
+  };
+  return { calls, slackAPI };
+}
+
+const filler = (from, count) =>
+  Array.from({ length: count }, (_, i) => ({ id: `CFILL${String(from + i).padStart(5, "0")}`, name: `fill-${from + i}` }));
+
+async function catchUp({ channels = [], caps, ...slack }) {
+  const fake = pagedSlack(slack);
+  const bundle = await assembleCatchUp({
+    profile: { profile_name: "p", workflow_kind: "custom", channels, priority_people: [] },
+    since: resolveSince({ profile: { summary_cadence: "on_demand" }, now: NOW }),
+    deps: { structuredKeys: ["summary"], resolveUser: async (id) => `user:${id}`, slackAPI: fake.slackAPI },
+    ...(caps ? { caps } : {}),
+    now: NOW,
+  });
+  return { bundle, calls: fake.calls };
+}
+
+const listCalls = (calls) => calls.filter((c) => c.method === "conversations.list").length;
+
+test("a profile channel on the second page of the listing is read, and the scan stops there", async () => {
+  const { bundle, calls } = await catchUp({
+    channels: ["incidents"],
+    pages: [filler(0, 200), [{ id: "CINCIDENT1", name: "incidents" }], filler(200, 200)],
+    history: { CINCIDENT1: { messages: [{ ts: ts(1), user: "U1", text: "db is down" }] } },
+  });
+  assert.deepEqual(bundle.conversations.map((c) => c.name), ["incidents"]);
+  assert.equal(bundle.scope.listing.pages, 2);
+  assert.equal(bundle.scope.listing.stopped, "found_what_was_needed");
+  assert.equal(listCalls(calls), 2, "page three is never requested");
+  assert.equal(bundle.scope.channels_not_found, undefined);
+  assert.ok(!calls.some((c) => c.method === "client.counts"), "a named profile does not need the badges");
+});
+
+test("a named channel id past the page cap is read through conversations.info", async () => {
+  const { bundle, calls } = await catchUp({
+    channels: ["CFARAWAY01"],
+    caps: { ...CATCH_UP_CAPS, listingMaxPages: 1 },
+    pages: [filler(0, 200), filler(200, 200)],
+    info: { CFARAWAY01: { id: "CFARAWAY01", name: "far-away" } },
+    history: { CFARAWAY01: { messages: [{ ts: ts(2), user: "U1", text: "still here" }] } },
+  });
+  assert.equal(bundle.scope.listing.stopped, "page_cap");
+  assert.deepEqual(bundle.conversations.map((c) => [c.id, c.name, c.type]), [["CFARAWAY01", "far-away", "public_channel"]]);
+  assert.equal(bundle.conversations[0].unlisted, undefined, "the internal flag never reaches the caller");
+  assert.equal(calls.filter((c) => c.method === "conversations.info").length, 1);
+});
+
+test("a named channel that cannot be found is reported, never passed off as silence", async () => {
+  const { bundle } = await catchUp({
+    channels: ["no-such-channel", "CGONE00001"],
+    pages: [filler(0, 5)],
+    info: { CGONE00001: new Error("channel_not_found") },
+  });
+  assert.equal(bundle.scope.conversations_read, 0);
+  assert.deepEqual(bundle.scope.channels_not_found, [
+    { channel: "no-such-channel", reason: "not in the conversation list Slack returned" },
+    { channel: "CGONE00001", reason: "conversations.info failed: channel_not_found" },
+  ]);
+});
+
+test("with no channels, a mention counts as waiting even when the unread number is zero", async () => {
+  const { bundle } = await catchUp({
+    pages: [[
+      { id: "CQUIET0001", name: "opened-and-mentioned", unread_count_display: 0 },
+      { id: "CBUSY00001", name: "busy", unread_count_display: 40 },
+      { id: "CIDLE00001", name: "idle", unread_count_display: 0 },
+    ]],
+    counts: { ok: true, channels: [{ id: "CQUIET0001", mention_count: 2, has_unreads: false }], ims: [], mpims: [] },
+  });
+  assert.deepEqual(bundle.conversations.map((c) => c.name), ["opened-and-mentioned", "busy"], "mentions first, then volume");
+  assert.equal(bundle.scope.listing.unread_badges, "ok");
+});
+
+test("with no channels, a waiting conversation the listing never reached is still read", async () => {
+  const { bundle } = await catchUp({
+    caps: { ...CATCH_UP_CAPS, listingMaxPages: 1 },
+    pages: [filler(0, 200), filler(200, 200)],
+    counts: { ok: true, channels: [], mpims: [], ims: [{ id: "DFARDM0001", has_unreads: true, mention_count: 0 }] },
+    info: { DFARDM0001: { id: "DFARDM0001", is_im: true, user: "U9" } },
+    history: { DFARDM0001: { messages: [{ ts: ts(1), user: "U9", text: "you around?" }] } },
+  });
+  assert.deepEqual(bundle.conversations.map((c) => [c.id, c.name, c.type]), [["DFARDM0001", "user:U9", "dm"]]);
+  assert.equal(bundle.scope.listing.waiting_beyond_listing, 1);
+});
+
+test("when Slack's badges fail, a no-channel profile keeps the listing view and says why", async () => {
+  const { bundle } = await catchUp({
+    pages: [[{ id: "CBUSY00001", name: "busy", unread_count_display: 3 }]],
+    counts: new Error("ratelimited"),
+  });
+  assert.deepEqual(bundle.conversations.map((c) => c.name), ["busy"]);
+  assert.equal(bundle.scope.listing.unread_badges, "client.counts_failed: ratelimited");
+});

@@ -120,6 +120,19 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+### Fixed
+
+- `slack_catch_me_up` reads the whole conversation list instead of its first
+  200 entries. A profile channel past the first page was never read, and
+  nothing said so. A profile with no channels also counts Slack's own unread
+  badges and mentions, the source `slack_conversations_unreads` has used since
+  5.1.0, so a channel you opened but were mentioned in is read. A named channel
+  that still cannot be read is listed in `scope.channels_not_found` with the
+  reason, and `scope.listing` says how much of the list was read. Measured on a
+  live workspace on 2026-11-03, a profile with no channels read 0 conversations
+  before this change and 5 after, 4 of them conversations the listing does not
+  return at all.
+
 ## [5.2.0] - 2026-11-03
 
 ### Added
