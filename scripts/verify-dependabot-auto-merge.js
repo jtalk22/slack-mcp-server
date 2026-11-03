@@ -5,8 +5,18 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const WORKFLOW_PATH = resolve(ROOT, ".github", "workflows", "dependabot-auto-merge.yml");
+// An explicit path lets the guardrail be proven against a known-bad copy.
+const WORKFLOW_PATH = process.argv[2]
+  ? resolve(process.argv[2])
+  : resolve(ROOT, ".github", "workflows", "dependabot-auto-merge.yml");
 const workflow = readFileSync(WORKFLOW_PATH, "utf8");
+
+// dependabot/fetch-metadata emits Dependabot's internal ecosystem names, which
+// use underscores (github_actions, npm_and_yarn). dependabot.yml spells the same
+// ecosystems with hyphens, and a condition copied from there never matches.
+const ecosystemComparisons = [
+  ...workflow.matchAll(/outputs\.package-ecosystem\s*==\s*'([^']*)'/g),
+].map((match) => match[1]);
 
 const checks = [
   {
@@ -32,6 +42,14 @@ const checks = [
   {
     label: "eligible updates must use auto-merge",
     ok: workflow.includes('gh pr merge --auto --squash "$PR_URL"'),
+  },
+  {
+    label: "GitHub Actions updates must be matched by fetch-metadata's name (github_actions)",
+    ok: ecosystemComparisons.includes("github_actions"),
+  },
+  {
+    label: `ecosystem conditions must use fetch-metadata names, not dependabot.yml spellings (saw: ${ecosystemComparisons.join(", ") || "none"})`,
+    ok: ecosystemComparisons.every((name) => /^[a-z0-9_]+$/.test(name)),
   },
 ];
 
