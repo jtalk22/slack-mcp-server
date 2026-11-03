@@ -26,8 +26,7 @@ one. Cut any line the reader cannot check.
 3. Call `slack_catch_me_up` with `profile_name`, and `since` (ISO 8601) when
    the user gives a window. Otherwise the cadence sets it: 24 hours for
    `on_demand` and `daily_8am`, 7 days for `weekly_monday`. A profile with no
-   channels reads the conversations that have unread messages, highest count
-   first.
+   channels reads the conversations waiting for the user, mentions first.
 4. Write exactly the keys in `output_contract.expected_keys`, from:
    - `signals.unanswered_threads`, oldest first. "Unanswered" is mechanical:
      nobody replied, or the last reply is from the person who opened the
@@ -45,10 +44,9 @@ one. Cut any line the reader cannot check.
    - `truncation.conversations_with_more_history`: conversations with more
      than 30 messages in the window.
    - `truncation.thread_expansion_capped`: some threads were not opened.
-   - `scope.conversations_matched` below `scope.channels_in_profile` means a
-     named channel was not found in the first 200 conversations Slack lists.
-     Name it. In a large workspace, `slack_conversations_unreads` reports such
-     conversations under `unreachable_from_listing`.
+   - `scope.channels_not_found` lists each channel the profile names that
+     could not be read, with the reason. Name every one, so its silence is not
+     mistaken for a quiet channel.
 
 | `workflow_kind` | `expected_keys` |
 |---|---|
