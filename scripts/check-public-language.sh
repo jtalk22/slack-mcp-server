@@ -20,6 +20,7 @@ SCAN_PATHS=(
   "$ROOT/README.md"
   "$ROOT/index.html"
   "$ROOT/docs"
+  "$ROOT/skills"
   "$ROOT/public"
   "$ROOT/templates/public-pages"
   "$ROOT/.github/launch-posts.md"

@@ -122,6 +122,22 @@ credentials carry the same effective access as the signed-in browser user.
 
 ### Added
 
+- **Skills that ship with the server** (MCP Skills extension, SEP-2640, new in
+  `@modelcontextprotocol/server` 2.4.0). Three playbooks are served:
+  `slack-catch-up`, `slack-workflow-profiles` and `slack-send-safely`. Each
+  one goes out three ways from the same file: `skills/list` and `skills/get`
+  for clients with Skills support, a `skill://<name>/SKILL.md` resource for
+  clients that read resources, and a prompt of the same name for clients that
+  list prompts as commands. A skill is offered only when every tool in its
+  `metadata.requires-tools` is advertised, so a `--read-only` run never
+  offers the sending playbook. Verified with the SDK's `SkillsClient`, which
+  checks size, digest and frontmatter, on 2025-11-25 and 2026-07-28, and
+  against the spawned stdio entry under the default, `--read-only`,
+  `essentials` and `SLACK_MCP_SKILLS=off`.
+- **`SLACK_MCP_SKILLS_DIR`** adds a team's own skills from a folder of skill
+  folders. Each one is checked against the SDK's rules at startup. An invalid
+  skill, a symlinked file or a reused bundled name is skipped with a line on
+  stderr, and the server keeps running. `SLACK_MCP_SKILLS=off` serves none.
 - **Browser-extension clients over HTTP.** `SLACK_MCP_HTTP_ALLOWED_ORIGINS`
   accepts `<scheme>://*` (lowercase), which admits every origin of one non-web
   scheme, for example `moz-extension://*` or `chrome-extension://*`. Firefox
@@ -135,6 +151,10 @@ credentials carry the same effective access as the signed-in browser user.
 
 ### Changed
 
+- The protocol server is now the SDK's `McpServer`, because the Skills
+  extension attaches to one. Tools and prompts stay on the same raw handlers,
+  so `tools/list`, `tools/call` and the three existing prompts are unchanged.
+  The two `slack://` resources are now registered through `registerResource`.
 - CodeQL skips the three rules that flag reading the Slack session and sending
   it to Slack, which is what this server is for.
 - The browser smoke test's static server logs an error instead of returning it,

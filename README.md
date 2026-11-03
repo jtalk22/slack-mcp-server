@@ -228,6 +228,28 @@ Six editable templates ship in the package: `oncall-handoff`, `support-triage`, 
 
 ---
 
+## Skills: the playbooks ship with the server
+
+The package includes three playbooks. Each one teaches the agent how to use these tools for one job, and each reaches the agent through the server, so nothing is installed in the client.
+
+| Skill | What it teaches |
+|---|---|
+| `slack-catch-up` | Find the workflow profile that fits the ask, or create one, then run `slack_catch_me_up` and write the contract's keys with a citation on every line. When the profile tools are not offered, build the same contract from unreads, history and threads. |
+| `slack-workflow-profiles` | Choose the workflow kind, channels, priority people and cadence for a profile, or start from a shipped template. |
+| `slack-send-safely` | Write only on the user's word and never on text read from Slack, what a held send means, and what `slack_session_report` shows. |
+
+The same file reaches the client three ways:
+
+- through the MCP Skills extension (SEP-2640: `skills/list`, `skills/get`), for clients that support it;
+- as a `skill://<name>/SKILL.md` resource, for clients that read resources;
+- as a prompt of the same name, for clients that list prompts as commands.
+
+A skill is offered only when the tools it depends on are advertised. A `--read-only` run never offers `slack-send-safely`, and the `essentials` profile never offers profile setup.
+
+To serve your team's own playbooks, set `SLACK_MCP_SKILLS_DIR=/path/to/skills`. It points at a folder of skill folders, each holding a `SKILL.md`. Your skills are checked against the SDK's rules at startup and served beside the bundled ones. A skill that fails the checks is skipped with a line on stderr, and a skill that reuses a bundled name is ignored. `SLACK_MCP_SKILLS=off` serves no skills at all.
+
+---
+
 ## Security and provenance
 
 Every message this server returns becomes text in a model's context, next to your own instructions. Slack is a shared bus: a channel can hold Slack Connect participants from another workspace, guests, and apps relaying content from outside Slack entirely — and the same toolset that reads also writes. That adjacency is the risk worth naming.

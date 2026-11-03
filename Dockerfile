@@ -27,6 +27,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Copy runtime sources
 COPY src ./src
 COPY lib ./lib
+COPY skills ./skills
 COPY scripts ./scripts
 COPY public ./public
 COPY docs ./docs
