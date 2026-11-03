@@ -9,6 +9,9 @@ and [changelog](../CHANGELOG.md) describe what is available now.
 
 - 20 local tools across Slack reads, writes, workflow profiles, and catch-up.
 - Source-linked catch-up evidence gathered locally for your calling agent.
+- Three bundled playbooks for catch-up, workflow profiles and safe sending,
+  served as MCP skills, resources and prompts. Add your own with
+  `SLACK_MCP_SKILLS_DIR`.
 - 6-tool `essentials` and 13-tool `read` profiles for a smaller tool schema.
 - Automatic macOS Chrome extraction, isolated workspace profiles, and selectable
   credential storage; manual credentials on Windows and Linux.

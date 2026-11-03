@@ -29,3 +29,4 @@
 
 - [Latest release](https://github.com/jtalk22/slack-mcp-server/releases/latest)
 - [Changelog](../CHANGELOG.md)
+- [Roadmap](ROADMAP.md)
