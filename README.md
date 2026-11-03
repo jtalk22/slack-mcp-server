@@ -236,7 +236,7 @@ Three playbooks ship with the server, so an agent learns how to use these tools 
 - `slack-workflow-profiles` covers choosing the kind, channels, priority people and cadence for a profile, or starting from a template.
 - `slack-send-safely` keeps writes to what you ask for, explains a held send, and points to `slack_session_report` for what the session did.
 
-Clients get them through the MCP Skills extension (SEP-2640: `skills/list`, `skills/get`), as `skill://<name>/SKILL.md` resources, or as prompts of the same name. A playbook is offered only when its tools are, so `--read-only` never offers `slack-send-safely` and `essentials` never offers profile setup.
+Clients get them through the MCP Skills extension (SEP-2640: `skills/list`, `skills/get`), as `skill://<name>/SKILL.md` resources, or as prompts of the same name. A playbook is offered only when its tools are, so a read-only server never offers the sending playbook and the `essentials` profile never offers profile setup.
 
 Add your team's own with `SLACK_MCP_SKILLS_DIR=/path/to/skills`, a folder of playbook folders that each hold a `SKILL.md`. They are checked at startup and served beside the bundled ones. An invalid one, or one that reuses a bundled name, is skipped with a warning on stderr. `SLACK_MCP_SKILLS=off` turns playbooks off.
 
