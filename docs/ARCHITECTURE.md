@@ -61,7 +61,11 @@ The HTTP entry guards the request path before the protocol layer sees it: a
 bearer token is required on `/mcp` (missing configuration answers `503`, a
 wrong token answers `401` with a `WWW-Authenticate` challenge), and a
 browser-originated request whose `Origin` is outside
-`SLACK_MCP_HTTP_ALLOWED_ORIGINS` is refused with `403`. `SLACK_MCP_HTTP_INSECURE=1`
+`SLACK_MCP_HTTP_ALLOWED_ORIGINS` is refused with `403`. An allowlist entry is
+an exact origin or a lowercase `<scheme>://*` for a non-web scheme, which admits
+browser-extension clients whose IDs vary per install. That is the rule
+`@modelcontextprotocol/server` 2.3.0 adopted, and `lib/http-origins.js`
+implements it. `SLACK_MCP_HTTP_INSECURE=1`
 removes both checks and is for local testing only. The whole request path is
 wrapped, because an escaped rejection would be an unhandled promise rejection
 and would take the process down.

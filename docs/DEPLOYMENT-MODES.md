@@ -52,5 +52,10 @@ If you are deploying for more than one operator:
 3. Verify CORS behavior:
    - denied by default
    - allowed origins work when listed in `SLACK_MCP_HTTP_ALLOWED_ORIGINS`
+   - for an MCP client that runs as a browser extension, list its scheme as
+     `moz-extension://*` or `chrome-extension://*`. Firefox gives each install a
+     different extension ID, so the exact origin cannot be listed ahead of time.
+     `http://*` and `https://*` are ignored with a startup warning, because they
+     would admit every website.
 4. Confirm `slack_get_thread`, `slack_search_messages`, and `slack_users_info` behavior.
 5. Confirm token handling mode (ephemeral vs env persistence) is documented.

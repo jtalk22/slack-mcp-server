@@ -18,17 +18,15 @@ import { toNodeHandler } from "@modelcontextprotocol/node";
 import { getActiveToolProfile } from "../lib/tools.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
 import { createSlackMcpServer, SERVER_NAME } from "../lib/mcp-server.js";
+import { describeAllowedOrigins, isOriginAllowed, parseAllowedOrigins } from "../lib/http-origins.js";
 
 const SERVER_VERSION = RELEASE_VERSION;
 const PORT = process.env.PORT || 3000;
 const HTTP_INSECURE = process.env.SLACK_MCP_HTTP_INSECURE === "1";
 const HTTP_AUTH_TOKEN = process.env.SLACK_MCP_HTTP_AUTH_TOKEN || process.env.SLACK_API_KEY || null;
-const HTTP_ALLOWED_ORIGINS = new Set(
-  String(process.env.SLACK_MCP_HTTP_ALLOWED_ORIGINS || "")
-    .split(",")
-    .map(origin => origin.trim())
-    .filter(Boolean)
-);
+// Exact origins, plus `<scheme>://*` for browser-extension clients
+// (lib/http-origins.js has the rules).
+const HTTP_ALLOWED_ORIGINS = parseAllowedOrigins(process.env.SLACK_MCP_HTTP_ALLOWED_ORIGINS);
 
 // The headers a 2026-07-28 client sends on every request, plus the ones a
 // 2025-era client still sends. There is no session header to allow because
@@ -59,7 +57,7 @@ function applyCors(req, res) {
   const allowOrigin =
     HTTP_INSECURE
       ? "*"
-      : (origin && HTTP_ALLOWED_ORIGINS.has(origin) ? origin : null);
+      : (isOriginAllowed(origin, HTTP_ALLOWED_ORIGINS) ? origin : null);
 
   if (allowOrigin) {
     res.setHeader("Access-Control-Allow-Origin", allowOrigin);
@@ -76,7 +74,7 @@ function denyOrigin(res) {
     structuredError(
       "cors_origin_denied",
       "Origin is not allowed.",
-      "Set SLACK_MCP_HTTP_ALLOWED_ORIGINS to a comma-separated allowlist."
+      "Set SLACK_MCP_HTTP_ALLOWED_ORIGINS to a comma-separated allowlist of origins, or <scheme>://* for a browser-extension client."
     )
   ));
 }
@@ -201,8 +199,12 @@ httpServer.listen(PORT, () => {
       console.log("HTTP auth: bearer token required for /mcp");
     }
 
-    if (HTTP_ALLOWED_ORIGINS.size > 0) {
-      console.log(`CORS allowlist: ${Array.from(HTTP_ALLOWED_ORIGINS).join(", ")}`);
+    for (const { entry, reason } of HTTP_ALLOWED_ORIGINS.refused) {
+      console.warn(`WARNING: SLACK_MCP_HTTP_ALLOWED_ORIGINS entry "${entry}" ignored: ${reason}.`);
+    }
+    const allowlist = describeAllowedOrigins(HTTP_ALLOWED_ORIGINS);
+    if (allowlist) {
+      console.log(`CORS allowlist: ${allowlist}`);
     } else {
       console.log("CORS allowlist: none (browser cross-origin requests denied by default)");
     }

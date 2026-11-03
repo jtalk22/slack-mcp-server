@@ -120,6 +120,19 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+### Added
+
+- **Browser-extension clients over HTTP.** `SLACK_MCP_HTTP_ALLOWED_ORIGINS`
+  accepts `<scheme>://*` (lowercase), which admits every origin of one non-web
+  scheme, for example `moz-extension://*` or `chrome-extension://*`. Firefox
+  gives an extension a different ID on every install, so before this its MCP
+  client could not be allowlisted at all. The rule matches the one
+  `@modelcontextprotocol/server` 2.3.0 adopted. `http://*` and `https://*`,
+  and any other wildcard shape, are ignored with a startup warning. An
+  admitted origin still needs the bearer token. The allowlist had no test
+  before; `test/http-origins.test.js` now covers exact and wildcard entries,
+  unit and spawned.
+
 ### Changed
 
 - CodeQL skips the three rules that flag reading the Slack session and sending
