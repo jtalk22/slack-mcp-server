@@ -80,8 +80,13 @@ test("the HTTP entry admits a Firefox extension origin, echoes it, and still req
   child.stderr.on("data", (d) => { log += d; });
   try {
     const base = `http://127.0.0.1:${port}/mcp`;
-    for (let i = 0; i < 50 && !log.includes("HTTP server running"); i += 1) {
-      await new Promise((r) => setTimeout(r, 100));
+    // Wait for the whole startup log, not its first line. The allowlist line
+    // follows "HTTP server running" on stdout, and the refused-entry warning
+    // goes to stderr, so the two can arrive in separate chunks and in either
+    // order. Waiting for the first line alone failed on Node 20 in CI.
+    const started = () => log.includes("CORS allowlist:") && log.includes('entry "https://*" ignored');
+    for (let i = 0; i < 100 && !started(); i += 1) {
+      await new Promise((r) => setTimeout(r, 50));
     }
     assert.match(log, /CORS allowlist: https:\/\/app\.example\.com, moz-extension:\/\/\*/);
     assert.match(log, /entry "https:\/\/\*" ignored/);
