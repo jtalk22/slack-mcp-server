@@ -50,7 +50,8 @@ attaches to one. Tools and prompts stay on raw request handlers over
 carries the read-only refusal and the lifeboat. `lib/skills.js` reads `skills/`
 and `SLACK_MCP_SKILLS_DIR` once at startup and serves the result from memory.
 It offers only the skills whose `metadata.requires-tools` are all advertised.
-Each offered skill goes out as a Skills-extension entry, as a `skill://`
+Any other tool a skill names is declared in `metadata.optional-tools`, and
+`test/skills.test.js` checks that on every built-in tool profile. Each offered skill goes out as a Skills-extension entry, as a `skill://`
 resource, and as a prompt of the same name. One `SkillsExtension` per surface
 is shared by every per-request server, and the SDK holds those servers weakly.
 

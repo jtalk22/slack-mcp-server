@@ -67,9 +67,50 @@ test("skills name only real tools, and declare only real requirements", async ()
   const loaded = await loadSkillFolder(BUNDLED_SKILLS_DIR);
   for (const skill of loaded) {
     assert.ok(skill.requires.length > 0, `${skill.name} declares no requires-tools`);
-    for (const tool of skill.requires) {
-      assert.ok(TOOL_NAMES.has(tool), `${skill.name} requires ${tool}, which is not a tool`);
+    for (const tool of [...skill.requires, ...skill.optional]) {
+      assert.ok(TOOL_NAMES.has(tool), `${skill.name} declares ${tool}, which is not a tool`);
     }
+    for (const tool of skill.optional) {
+      assert.ok(!skill.requires.includes(tool), `${skill.name} lists ${tool} as both required and optional`);
+    }
+  }
+});
+
+test("every tool a skill names is declared required or optional, on every built-in surface", async () => {
+  const loaded = await loadSkillFolder(BUNDLED_SKILLS_DIR);
+  const readOnly = TOOLS.map((t) => t.name).filter((n) => !WRITE_PATH_TOOLS.includes(n));
+  const surfaces = { all: TOOLS.map((t) => t.name), read: READ_TOOLS, essentials: ESSENTIALS_TOOLS, readOnly };
+  for (const skill of loaded) {
+    const declared = new Set([...skill.requires, ...skill.optional]);
+    const mentioned = new Set(skillText(skill.name).match(/\bslack_[a-z_]+\b/g) || []);
+    for (const tool of mentioned) {
+      assert.ok(declared.has(tool), `${skill.name} names ${tool} without declaring it in requires-tools or optional-tools`);
+    }
+    // The point of the declaration: on a surface where the skill is served, a
+    // tool it names but the surface lacks is one its text must work without.
+    for (const [surface, names] of Object.entries(surfaces)) {
+      if (!servableSkills([skill], names).length) continue;
+      for (const tool of mentioned) {
+        if (!names.includes(tool)) {
+          assert.ok(skill.optional.includes(tool), `${skill.name} on ${surface} names ${tool}, which is absent and not optional`);
+        }
+      }
+    }
+  }
+});
+
+test("initialize advertises no list_changed this server never sends, and declares Skills", async () => {
+  const { client, handler } = await connect({ tools: TOOLS });
+  try {
+    const caps = client.getServerCapabilities();
+    for (const area of ["tools", "prompts", "resources"]) {
+      assert.ok(caps[area], `${area} capability present`);
+      assert.notEqual(caps[area].listChanged, true, `${area}.listChanged`);
+    }
+    assert.ok(caps.extensions?.["io.modelcontextprotocol/skills"], "Skills extension declared");
+  } finally {
+    await client.close();
+    await handler.close();
   }
 });
 
@@ -241,6 +282,11 @@ test("SLACK_MCP_SKILLS_DIR adds a team's skills; broken, colliding and symlinked
   write("slack-catch-up", "slack-catch-up", "An attempt to replace the bundled skill.");
   write("linked", "linked");
   symlinkSync(join(dir, "team-incident-process", "SKILL.md"), join(dir, "linked", "extra.md"));
+  // A whole skill folder linked in from elsewhere: refused, and said so.
+  const elsewhere = mkdtempSync(join(tmpdir(), "slack-mcp-skills-src-"));
+  mkdirSync(join(elsewhere, "team-linked-folder"));
+  writeFileSync(join(elsewhere, "team-linked-folder", "SKILL.md"), "---\nname: team-linked-folder\ndescription: Linked in.\n---\n\nBody.\n");
+  symlinkSync(join(elsewhere, "team-linked-folder"), join(dir, "team-linked-folder"));
 
   const errors = [];
   const original = console.error;
@@ -256,7 +302,8 @@ test("SLACK_MCP_SKILLS_DIR adds a team's skills; broken, colliding and symlinked
   assert.equal(served.find((s) => s.name === "slack-catch-up").origin, "bundled");
   assert.ok(errors.some((line) => line.includes("Bad_Name")), "invalid name reported");
   assert.ok(errors.some((line) => line.includes("slack-catch-up") && line.includes("bundled one is served")), "collision reported");
-  assert.ok(errors.some((line) => line.includes("linked") && line.includes("symlink")), "symlink reported");
+  assert.ok(errors.some((line) => line.includes("linked/") && line.includes("symlink")), "symlinked file reported");
+  assert.ok(errors.some((line) => line.includes("team-linked-folder") && line.includes("symlink")), "symlinked folder reported");
 
   // A skill with no requires-tools is served on every surface, and its
   // reference file is fetched and verified like SKILL.md.

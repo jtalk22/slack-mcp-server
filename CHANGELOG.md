@@ -155,6 +155,11 @@ credentials carry the same effective access as the signed-in browser user.
   extension attaches to one. Tools and prompts stay on the same raw handlers,
   so `tools/list`, `tools/call` and the three existing prompts are unchanged.
   The two `slack://` resources are now registered through `registerResource`.
+  A client can see two differences. `resources/read` of an unknown URI now
+  answers `-32602 Resource not found` instead of `-32603`. Capabilities carry
+  `listChanged: false` on tools, prompts and resources, because `McpServer`
+  would otherwise advertise `true` for notifications this server never sends,
+  plus the Skills extension.
 - CodeQL skips the three rules that flag reading the Slack session and sending
   it to Slack, which is what this server is for.
 - The browser smoke test's static server logs an error instead of returning it,

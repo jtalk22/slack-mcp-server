@@ -54,7 +54,9 @@ docker pull ghcr.io/jtalk22/slack-mcp-server:latest
 `slack-workflow-profiles`, `slack-send-safely`) go out through the MCP Skills
 extension (SEP-2640), as `skill://` resources, and as prompts of the same
 name, from `lib/skills.js`. A skill is offered only when every tool in its
-`metadata.requires-tools` is advertised. `SLACK_MCP_SKILLS_DIR` adds an
+`metadata.requires-tools` is advertised. Every other tool it names must be in
+`metadata.optional-tools`, and its text must say what to do without it; the
+test checks this on every built-in surface. `SLACK_MCP_SKILLS_DIR` adds an
 operator's folder of skills, and bundled names win a collision.
 `SLACK_MCP_SKILLS=off` serves none.
 
