@@ -120,6 +120,8 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-11-17
+
 ### Added
 
 - **A line on stderr when a server starts that says a hosted tier exists.** It
@@ -1455,7 +1457,8 @@ npx @jtalk22/slack-mcp
 - Multi-layer token persistence (env, file, keychain)
 - Auto-refresh from Chrome
 
-[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.1...HEAD
+[Unreleased]: https://github.com/jtalk22/slack-mcp-server/compare/v5.3.0...HEAD
+[5.3.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.1...v5.3.0
 [5.2.1]: https://github.com/jtalk22/slack-mcp-server/compare/v5.2.0...v5.2.1
 [5.2.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.1.0...v5.2.0
 [5.1.0]: https://github.com/jtalk22/slack-mcp-server/compare/v5.0.1...v5.1.0
