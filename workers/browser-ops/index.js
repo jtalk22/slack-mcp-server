@@ -1,11 +1,5 @@
 import puppeteer from "@cloudflare/puppeteer";
-
-function unauthorized() {
-  return new Response(JSON.stringify({ status: "error", code: "unauthorized" }, null, 2), {
-    status: 401,
-    headers: { "content-type": "application/json" },
-  });
-}
+import { checkKey } from "./auth.js";
 
 function badRequest(message) {
   return new Response(JSON.stringify({ status: "error", code: "bad_request", message }, null, 2), {
@@ -16,9 +10,9 @@ function badRequest(message) {
 
 export default {
   async fetch(request, env) {
-    const key = env.BROWSER_OPS_KEY;
-    if (key && request.headers.get("x-browser-key") !== key) {
-      return unauthorized();
+    const refused = checkKey(request, env);
+    if (refused) {
+      return refused;
     }
 
     const url = new URL(request.url);
