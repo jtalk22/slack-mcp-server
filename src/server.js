@@ -24,6 +24,7 @@ import { checkTokenHealth } from "../lib/slack-client.js";
 import { getActiveToolProfile } from "../lib/tools.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
 import { createSlackMcpServer, SERVER_NAME } from "../lib/mcp-server.js";
+import { printHostedNoticeOnce } from "../lib/hosted-notice.js";
 
 const SERVER_VERSION = RELEASE_VERSION;
 
@@ -100,6 +101,8 @@ async function main() {
     onerror: (error) => console.error(`stdio transport: ${error?.message || error}`),
   });
   console.error(`${SERVER_NAME} v${SERVER_VERSION} running`);
+  // One line on stderr. stdout is the MCP channel and is never written to here.
+  printHostedNoticeOnce();
 }
 
 function isDirectExecution() {

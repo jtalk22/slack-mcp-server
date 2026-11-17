@@ -120,6 +120,20 @@ credentials carry the same effective access as the signed-in browser user.
 
 ## [Unreleased]
 
+### Added
+
+- **A line on stderr when a server starts that says a hosted tier exists.** It
+  reads: "Hosted tier: Runs your saved catch-up on a schedule while your laptop
+  is closed. There is a free tier; scheduled delivery is on the paid plans.
+  https://mcp.revasserlabs.com". The stdio and HTTP servers print it once per
+  process. It makes no network call and sends nothing, and nothing goes to
+  stdout, which stays the MCP channel.
+- **A `hosted_tier` field in the `slack_health_check` result** with the same
+  sentence, the link and the switch. The tool's other fields are unchanged.
+- **`SLACK_MCP_NO_UPSELL=1` hides both.** It is the switch that already drops
+  the hosted option from the expired-session message, so one setting covers
+  every mention of the hosted tier.
+
 ### Fixed
 
 - The API reference, the architecture, deployment and roadmap docs, and the

@@ -19,6 +19,7 @@ import { getActiveToolProfile } from "../lib/tools.js";
 import { RELEASE_VERSION } from "../lib/public-metadata.js";
 import { createSlackMcpServer, SERVER_NAME } from "../lib/mcp-server.js";
 import { describeAllowedOrigins, isOriginAllowed, parseAllowedOrigins } from "../lib/http-origins.js";
+import { printHostedNoticeOnce } from "../lib/hosted-notice.js";
 
 const SERVER_VERSION = RELEASE_VERSION;
 const PORT = process.env.PORT || 3000;
@@ -209,6 +210,7 @@ httpServer.listen(PORT, () => {
       console.log("CORS allowlist: none (browser cross-origin requests denied by default)");
     }
   }
+  printHostedNoticeOnce();
 });
 
 const shutdown = async () => {

@@ -424,7 +424,9 @@ The package runs on your machine, talks only to Slack, and is free under the MIT
 - profiles shared across a team;
 - delivery to Slack or a signed webhook.
 
-The package works without the hosted tier.
+The package works without the hosted tier. The hosted tier has a free plan; scheduled delivery is on the paid plans.
+
+When a server starts it prints one line on stderr that says the hosted tier exists, and `slack_health_check` returns the same sentence in a `hosted_tier` field. Neither makes a network call or sends anything, and nothing is written to stdout, which stays the MCP channel. Set `SLACK_MCP_NO_UPSELL=1` to hide both. The same setting drops the hosted option from the expired-session message.
 
 [Hosted pricing →](https://mcp.revasserlabs.com/pricing)
 
